@@ -1,11 +1,25 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Homepage from "./pages/Home";
+import LoginPage from "./pages/Authentication/login";
+import SignupPage from "./pages/Authentication/signup";
+import CreatePostPage from "./pages/Create post";
+import EditPostPage from "./pages/Edit post";
+import PostDetailsPage from "./pages/Post Details";
+import MyBlogsPage from "./pages/My blogs";
+import ProfilePage from "./pages/Profile";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<SignupPage />} />
+        <Route path="/create" element={<CreatePostPage />} />
+        <Route path="/edit/:id" element={<EditPostPage />} />
+        <Route path="/post/:id" element={<PostDetailsPage />} />
+        <Route path="/my-blogs/:id" element={<MyBlogsPage />} />
+        <Route path="/profile/:id" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );
