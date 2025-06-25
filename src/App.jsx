@@ -7,6 +7,7 @@ import EditPostPage from "./pages/Edit post";
 import PostDetailsPage from "./pages/Post Details";
 import MyBlogsPage from "./pages/My blogs";
 import ProfilePage from "./pages/Profile";
+import NotFoundPage from "./pages/Not found";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/post/:id" element={<PostDetailsPage />} />
         <Route path="/my-blogs/:id" element={<MyBlogsPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
