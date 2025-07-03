@@ -3,4 +3,58 @@
 * {
   padding: 0;
   margin: 0;
+  color: rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  margin: 0;
+}
+
+.custom-line-h-1 {
+  line-height: 20px;
+}
+
+.custom-fs-1 {
+  font-size: 14px;
+}
+
+/* padding & margin related */
+
+.custom-m-x-1 {
+  margin-inline: 64px;
+}
+
+.custom-p-y-1 {
+  padding: 25px;
+}
+
+.custom-m-r {
+  margin-right: 25px;
+}
+
+.custom-px-2 {
+  padding-block: 8px;
+}
+
+.custom-py-2 {
+  padding-inline: 16px;
+}
+
+/* width & height related */
+
+.custom-h-1 {
+  height: 75px;
+}
+
+.custom-min-h-1 {
+  min-height: 560px;
+}
+
+.custom-h-2 {
+  height: 25px;
 }
