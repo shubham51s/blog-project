@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
+import HomeDefaultComp from "../../components/Home/DefaultComp";
 
 function Homepage() {
-  return <div className="">Welcome to my Homepage, this is my very first page</div>;
+  return <HomeDefaultComp />;
 }
 
 export default Homepage;
