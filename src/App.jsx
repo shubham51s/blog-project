@@ -8,12 +8,14 @@ import PostDetailsPage from "./pages/Post Details";
 import MyBlogsPage from "./pages/My blogs";
 import ProfilePage from "./pages/Profile";
 import NotFoundPage from "./pages/Not found";
+import AboutPage from "./pages/About";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<SignupPage />} />
         <Route path="/create" element={<CreatePostPage />} />

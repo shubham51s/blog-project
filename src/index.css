@@ -5,6 +5,7 @@
   margin: 0;
   color: var(--txt-color-1);
   box-sizing: border-box;
+  font-weight: 400;
 }
 
 p {
@@ -15,25 +16,32 @@ button {
   margin: 0;
 }
 
-a {
-  text-decoration: none;
-}
-
 :root {
   /* for border colors */
   --border-1: rgb(25, 25, 25);
   --border-2: rgba(25, 25, 25, 1);
   --border-3: rgb(36, 36, 36);
+  --border-4: rgba(255, 255, 255, 0.65);
+  --border-5: rgb(242, 242, 242);
+  --border-6: rgba(255, 255, 255, 0.8);
+  --border-7: rgba(255, 255, 255, 0.9);
 
   /* for background color */
   --bg-color-1: rgb(25, 25, 25);
   --bg-color-2: rgb(247, 244, 237);
+  --bg-color-3: rgb(36, 36, 36);
+  --bg-color-4: rgba(255, 255, 255, 0.9);
+  --bg-color-5: rgba(255, 255, 255, 0.2);
 
   /* for text colors */
   --txt-color-1: rgba(0, 0, 0, 0.8);
-  --txt-color-2: white;
+  --txt-color-2: rgb(255 255 255);
   --txt-color-3: rgb(36, 36, 36);
   --txt-color-4: rgb(107 107 107);
+  --txt-color-5: rgba(255, 255, 255, 0.95);
+  --text-color-6: rgb(0, 0, 0);
+  --text-color-7: rgba(255, 255, 255, 1);
+  --text-color-8: rgba(255, 255, 255, 0.6);
 }
 
 /* for border colors */
@@ -49,6 +57,22 @@ a {
   border-color: var(--border-3);
 }
 
+.custom-bdr-4 {
+  border-color: var(--border-4);
+}
+
+.custom-bdr-5 {
+  border-color: var(--border-5);
+}
+
+.custom-bdr-6 {
+  border-color: var(--border-6);
+}
+
+.custom-bdr-7 {
+  border-color: var(--border-7);
+}
+
 /* for background colors */
 
 .custom-bg-1 {
@@ -57,6 +81,18 @@ a {
 
 .custom-bg-2 {
   background-color: var(--bg-color-2);
+}
+
+.custom-bg-3 {
+  background-color: var(--bg-color-3);
+}
+
+.custom-bg-4 {
+  background-color: var(--bg-color-4);
+}
+
+.custom-bg-5 {
+  background-color: var(--bg-color-5);
 }
 
 /* for text colors */
@@ -75,6 +111,22 @@ a {
 
 .color-4 {
   color: var(--txt-color-4);
+}
+
+.color-5 {
+  color: var(--txt-color-5);
+}
+
+.color-6 {
+  color: var(--text-color-6);
+}
+
+.color-7 {
+  color: var(--text-color-7);
+}
+
+.color-8 {
+  color: var(--text-color-8);
 }
 
 .left-unset {
@@ -158,12 +210,36 @@ a {
     letter-spacing: -0.055em;
   }
 
+  .letter-spacing-2 {
+    letter-spacing: -0.003em;
+  }
+
+  .letter-spacing-3 {
+    letter-spacing: -0.009em;
+  }
+
   .line-h-2 {
     line-height: 100px;
   }
 
   .line-h-3 {
     line-height: 28px;
+  }
+
+  .line-h-4 {
+    line-height: 88px;
+  }
+
+  .line-h-5 {
+    line-height: 32px;
+  }
+
+  .line-h-6 {
+    line-height: 40px;
+  }
+
+  .line-h-7 {
+    line-height: 16px;
   }
 
   .font-size-1 {
@@ -182,16 +258,42 @@ a {
     font-size: 13px;
   }
 
+  .font-5 {
+    font-size: 85px;
+  }
+
+  .font-6 {
+    font-size: 21px;
+  }
+
+  .font-7 {
+    font-size: 28px;
+  }
+
+  .font-8 {
+    font-size: 11px;
+  }
+
   .padding-1 {
     padding: 8px 20px;
   }
 
   .bdr-1 {
     border: 1px solid;
+    border-color: inherit;
+  }
+
+  .bdr-2 {
+    border-bottom: 1px solid;
+    border-color: inherit;
   }
 
   .max-width-2 {
     max-width: 680px;
+  }
+
+  .width-3 {
+    width: 680px;
   }
 
   .margin-2 {
@@ -202,7 +304,35 @@ a {
     padding: 24px 0;
   }
 
+  .padding-3 {
+    padding: 24px;
+  }
+
+  .padding-4 {
+    padding: 120px 32px 144px;
+  }
+
+  .padding-5 {
+    padding: 8px 16px;
+  }
+
+  .padding-6 {
+    padding: 8px;
+  }
+
   .margin-3 {
     margin-right: 16px;
+  }
+
+  .margin-4 {
+    margin-bottom: 73px;
+  }
+
+  .margin-5 {
+    margin-left: 8px;
+  }
+
+  .custom-bg-position {
+    background-position-y: 50px;
   }
 }

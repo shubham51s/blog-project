@@ -1,9 +1,18 @@
 import React from "react";
 import logo from "../../../assets/images/mediumLogo.png";
 import brandImage from "../../../assets/images/brandLogo.jpg";
+import { Link, useNavigate } from "react-router-dom";
 
 function UnauthenticatedHome() {
   const footerOptions = ["Help", "Status", "About", "Careers", "Press", "Blog", "Privacy", "Rules", "Terms", "Text to speech"];
+  const navOptions = [
+    { id: 1, name: "Our Story", path: "/about" },
+    { id: 2, name: "Membership", path: "/" },
+    { id: 3, name: "Write", path: "/create" },
+    { id: 4, name: "Sign", path: "/login" },
+  ];
+
+  const navigate = useNavigate();
 
   return (
     <div className="w-screen h-screen flex flex-col font-normal custom-bg-2">
@@ -13,45 +22,28 @@ function UnauthenticatedHome() {
             <div className="my-0 custom-m-x-1 w-full">
               <div className="flex custom-h-1 custom-p-y-1 px-0 items-center">
                 <div>
-                  <span className="cursor-pointer m-0 p-0">
+                  <span className="cursor-pointer m-0 p-0" onClick={() => navigate("/")}>
                     <img className="custom-h-2 w-auto" src={logo} />
                   </span>
                 </div>
                 <div className="grow flex-shrink-0 basis-auto"></div>
                 <div className="flex items-center font-medium">
-                  <div className="inline-block">
-                    <div className="custom-m-r">
-                      <p className="color-3 custom-fs-1 font-sans">
-                        <span className="cursor-pointer m-0 p-0 ">Our story</span>
-                      </p>
+                  {navOptions.map((item) => (
+                    <div className="inline-block" key={item.id}>
+                      <div className="custom-m-r">
+                        <p className="color-3 custom-fs-1 font-sans">
+                          <Link to={item.path} className="cursor-pointer m-0 p-0 ">
+                            {item.name}
+                          </Link>
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="inline-block">
-                    <div className="custom-m-r">
-                      <p className="color-3 custom-fs-1 font-sans">
-                        <span className="cursor-pointer m-0 p-0 ">Membership</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="inline-block">
-                    <div className="custom-m-r">
-                      <p className="color-3 custom-fs-1 font-sans">
-                        <span className="cursor-pointer m-0 p-0 ">Write</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="inline-block">
-                    <div className="custom-m-r">
-                      <p className="color-3 custom-fs-1 font-sans">
-                        <span className="cursor-pointer m-0 p-0 ">Sign in</span>
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                   <div>
                     <span>
-                      <a className="cursor-pointer m-0 p-0">
-                        <button className="transition-colors color-2 duration-300 ease-linear text-center no-underline inline-block bdr-1 rounded-full custom-bdr-1 custom-bg-1 fill-white custom-px-2 custom-py-2 custom-line-h-1 custom-fs-1">Get started</button>
-                      </a>
+                      <Link to="/register" className="cursor-pointer m-0 p-0">
+                        <button className="cursor-pointer transition-colors color-2 duration-300 ease-linear text-center no-underline inline-block bdr-1 rounded-full custom-bdr-1 custom-bg-1 fill-white custom-px-2 custom-py-2 custom-line-h-1 custom-fs-1">Get started</button>
+                      </Link>
                     </span>
                   </div>
                 </div>
