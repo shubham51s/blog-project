@@ -32,6 +32,7 @@ button {
   --bg-color-3: rgb(36, 36, 36);
   --bg-color-4: rgba(255, 255, 255, 0.9);
   --bg-color-5: rgba(255, 255, 255, 0.2);
+  --bg-color-6: rgba(18, 18, 18, 0.6);
 
   /* for text colors */
   --txt-color-1: rgba(0, 0, 0, 0.8);
@@ -93,6 +94,10 @@ button {
 
 .custom-bg-5 {
   background-color: var(--bg-color-5);
+}
+
+.custom-bg-6 {
+  background-color: var(--bg-color-6);
 }
 
 /* for text colors */
@@ -218,6 +223,10 @@ button {
     letter-spacing: -0.009em;
   }
 
+  .letter-spacing-4 {
+    letter-spacing: -0.03em;
+  }
+
   .line-h-2 {
     line-height: 100px;
   }
@@ -294,6 +303,14 @@ button {
 
   .width-3 {
     width: 680px;
+  }
+
+  .width-4 {
+    width: 50px;
+  }
+
+  .width-5 {
+    width: 750px;
   }
 
   .margin-2 {
