@@ -283,6 +283,10 @@ button {
     font-size: 11px;
   }
 
+  .font-9 {
+    font-size: 18px;
+  }
+
   .padding-1 {
     padding: 8px 20px;
   }
@@ -295,6 +299,10 @@ button {
   .bdr-2 {
     border-bottom: 1px solid;
     border-color: inherit;
+  }
+
+  .border-radius-1 {
+    border-radius: 6px;
   }
 
   .max-width-2 {
@@ -310,7 +318,7 @@ button {
   }
 
   .width-5 {
-    width: 750px;
+    width: 650px;
   }
 
   .margin-2 {
@@ -337,6 +345,10 @@ button {
     padding: 8px;
   }
 
+  .padding-7 {
+    padding-inline: 16px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -347,6 +359,10 @@ button {
 
   .margin-5 {
     margin-left: 8px;
+  }
+
+  .margin-6 {
+    margin-block: 8px;
   }
 
   .custom-bg-position {
