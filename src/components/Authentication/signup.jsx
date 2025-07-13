@@ -93,6 +93,8 @@ function SignupComp() {
     }
   };
 
+  const resetInputValues = () => {};
+
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
 

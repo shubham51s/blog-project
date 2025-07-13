@@ -3,6 +3,7 @@ import { UserContext } from "../../context/userContext";
 import HomeDefaultComp from "../../components/Home/DefaultComp";
 import SignupComp from "../../components/Authentication/signup";
 import LoginComp from "../../components/Authentication/login";
+import HomePageProtected from "./Home Protected";
 
 function Homepage() {
   const { isUserLoggedIn, isShowSignupPopup, isShowLoginPopup } = useContext(UserContext);
@@ -16,6 +17,7 @@ function Homepage() {
           <HomeDefaultComp />
         </>
       )}
+      {isUserLoggedIn && <HomePageProtected />}
     </>
   );
 }
