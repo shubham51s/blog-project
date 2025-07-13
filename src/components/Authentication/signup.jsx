@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
@@ -7,6 +7,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 function SignupComp() {
   const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn, signUpHeading } = useContext(UserContext);
+  const signupRef = useRef();
   const [isShowPass, setIsShowPass] = useState(false);
   const [isShowConfirmPass, setIsShowConfirmPass] = useState(false);
 
@@ -83,14 +84,31 @@ function SignupComp() {
     }
   };
 
+  const handleClickOutside = (e) => {
+    const writeBtn = document.getElementById("Write");
+    const signUpBtn = document.getElementById("SignupBtn");
+
+    if (writeBtn && !writeBtn.contains(e.target) && signUpBtn && !signUpBtn.contains(e.target) && signupRef.current && !signupRef.current.contains(e.target)) {
+      setIsShowSignupPopup(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="absolute z-[999] w-full custom-bg-6 h-screen flex items-center justify-center">
-      <div className="relative bg-gray-500 width-5 custom-bg-2 rounded">
+      <div ref={signupRef} className="relative bg-gray-500 width-5 custom-bg-2 rounded">
         <div className="absolute right-0 top-0 width-4 aspect-square flex items-center justify-center">
           <CloseIcon onClick={handleCloseBtnClick} className="cursor-pointer w-[50%] opacity-75" />
         </div>
         <div className="padding-9 padding-8">
-          <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-medium margin-7" style={{ marginTop: 0, marginInline: 0 }}>
+          <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-normal margin-7" style={{ marginTop: 0, marginInline: 0 }}>
             {signUpHeading}
           </h3>
           <div>
@@ -107,7 +125,7 @@ function SignupComp() {
                 <label htmlFor="email">Email</label>
               </div>
 
-              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full height-2 border border-black border-radius-1 padding-7" type="email" placeholder="Enter your email address" />
+              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full height-2 border border-black border-radius-1 padding-7" type="email" placeholder="Enter email address" />
               {validationErr.email && <p className="color-9 p-0 m-0">Please enter valid email address</p>}
             </div>
             <div>

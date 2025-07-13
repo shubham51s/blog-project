@@ -50,7 +50,7 @@ function UnauthenticatedHome() {
                     <div className="inline-block" key={item.id}>
                       <div className="custom-m-r">
                         <p className="color-3 custom-fs-1 font-sans">
-                          <a to={item.path} onClick={() => handleHeaderNavigationTabBtnClick(item.path)} className="cursor-pointer m-0 p-0 ">
+                          <a id={item.name} to={item.path} onClick={() => handleHeaderNavigationTabBtnClick(item.path)} className="cursor-pointer m-0 p-0 ">
                             {item.name}
                           </a>
                         </p>
@@ -60,7 +60,9 @@ function UnauthenticatedHome() {
                   <div>
                     <span>
                       <a className="cursor-pointer m-0 p-0" onClick={handleShowSignupBtnClick}>
-                        <button className="cursor-pointer transition-colors color-2 duration-300 ease-linear text-center no-underline inline-block bdr-1 rounded-full custom-bdr-1 custom-bg-1 fill-white custom-px-2 custom-py-2 custom-line-h-1 custom-fs-1">Get started</button>
+                        <button id="SignupBtn" className="cursor-pointer transition-colors color-2 duration-300 ease-linear text-center no-underline inline-block bdr-1 rounded-full custom-bdr-1 custom-bg-1 fill-white custom-px-2 custom-py-2 custom-line-h-1 custom-fs-1">
+                          Get started
+                        </button>
                       </a>
                     </span>
                   </div>

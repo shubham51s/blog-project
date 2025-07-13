@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
@@ -7,6 +7,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 function LoginComp() {
   const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn } = useContext(UserContext);
+  const loginRef = useRef();
+
   const [isShowPass, setIsShowPass] = useState(false);
   const [isShowConfirmPass, setIsShowConfirmPass] = useState(false);
 
@@ -55,14 +57,30 @@ function LoginComp() {
     }
   };
 
+  const handleClickOutside = (e) => {
+    const loginBtnElement = document.getElementById("Sign");
+    if (loginRef.current && !loginRef.current.contains(e.target) && loginBtnElement && !loginBtnElement.contains(e.target)) {
+      setIsShowLoginPopup(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+
+    // cleanup function
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="absolute z-[999] w-full custom-bg-6 h-screen flex items-center justify-center">
-      <div className="relative bg-gray-500 width-5 custom-bg-2 rounded">
+      <div ref={loginRef} className="relative bg-gray-500 width-5 custom-bg-2 rounded">
         <div className="absolute right-0 top-0 width-4 aspect-square flex items-center justify-center">
           <CloseIcon onClick={handleCloseBtnClick} className="cursor-pointer w-[50%] opacity-75" />
         </div>
         <div className="padding-10 padding-8">
-          <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-medium margin-8" style={{ marginTop: 0, marginInline: 0 }}>
+          <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-normal margin-8" style={{ marginTop: 0, marginInline: 0 }}>
             Welcome back.
           </h3>
           <div>
@@ -71,7 +89,7 @@ function LoginComp() {
                 <label htmlFor="email">Email</label>
               </div>
 
-              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full height-2 border border-black border-radius-1 padding-7" type="email" placeholder="Enter your email address" />
+              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full height-2 border border-black border-radius-1 padding-7" type="email" placeholder="Enter email address" />
               {validationErr.email && <p className="color-9 p-0 m-0">Please enter valid email address</p>}
             </div>
             <div className="margin-11" style={{ marginBottom: 0, marginInline: 0 }}>
