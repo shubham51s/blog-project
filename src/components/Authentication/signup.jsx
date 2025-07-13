@@ -2,9 +2,14 @@ import React, { useContext, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 function SignupComp() {
-  const { setIsShowSignupPopup, setIsShowLoginPopup } = useContext(UserContext);
+  const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn } = useContext(UserContext);
+  const [isShowPass, setIsShowPass] = useState(false);
+  const [isShowConfirmPass, setIsShowConfirmPass] = useState(false);
+
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
@@ -72,6 +77,10 @@ function SignupComp() {
       confirmPass: isValidConfirmPass,
       gender: isGenderSelected,
     });
+
+    if (!isValidName && !isValidEmail && !isValidPassword && !isValidConfirmPass && !isGenderSelected) {
+      setIsUserLoggedIn(true);
+    }
   };
 
   return (
@@ -85,33 +94,49 @@ function SignupComp() {
             Join Medium.
           </h3>
           <div>
-            <div>
+            <div className="w-full">
               <div className="margin-6">
                 <label htmlFor="name">Name</label>
               </div>
-              <input onChange={(e) => handleNameChange(e)} id="name" className="w-full h-10 border border-black border-radius-1 padding-7" type="text" placeholder="Enter full name" />
-              {validationErr.name && <p className="text-red-500 p-0 m-0">Please enter valid name</p>}
+
+              <input onChange={(e) => handleNameChange(e)} id="name" className="w-full height-2 border border-black border-radius-1 padding-7" type="text" placeholder="Enter full name" />
+              {validationErr.name && <p className="color-9 p-0 m-0">Please enter valid name</p>}
             </div>
             <div>
               <div className="margin-6">
                 <label htmlFor="email">Email</label>
               </div>
-              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full h-10 border border-black border-radius-1 padding-7" type="email" placeholder="Enter your email" />
-              {validationErr.email && <p className="text-red-500 p-0 m-0">Please enter valid email address</p>}
+
+              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full height-2 border border-black border-radius-1 padding-7" type="email" placeholder="Enter your email" />
+              {validationErr.email && <p className="color-9 p-0 m-0">Please enter valid email address</p>}
             </div>
             <div>
               <div className="margin-6">
                 <label htmlFor="password">Password</label>
               </div>
-              <input onChange={(e) => handlePassChange(e)} id="password" className="w-full h-10 border border-black border-radius-1 padding-7" type="password" placeholder="Enter password" />
-              {validationErr.pass && <p className="text-red-500 p-0 m-0">Please enter valid password</p>}
+              <div className="w-full height-2 relative">
+                <input onChange={(e) => handlePassChange(e)} id="password" className="border w-full h-full border-black border-radius-1 padding-7" type={isShowPass ? "text" : "password"} placeholder="Enter password" />
+
+                <div className="absolute right-0 top-0 bottom-0 aspect-square flex items-center justify-center">
+                  {!isShowPass && <VisibilityIcon onClick={() => setIsShowPass(true)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
+                  {isShowPass && <VisibilityOffIcon onClick={() => setIsShowPass(false)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
+                </div>
+              </div>
+              {validationErr.pass && <p className="color-9 p-0 m-0">Please enter valid password</p>}
             </div>
             <div>
               <div className="margin-6">
                 <label htmlFor="confirmPassowrd">Confirm password</label>
               </div>
-              <input onChange={(e) => handleConfirmPassChange(e)} id="confirmPassowrd" className="w-full h-10 border border-black border-radius-1 padding-7" type="password" placeholder="Confirm password" />
-              {!validationErr.pass && validationErr.confirmPass && <p className="text-red-500 p-0 m-0">Password did not match</p>}
+              <div className="w-full height-2 relative">
+                <input onChange={(e) => handleConfirmPassChange(e)} id="confirmPassowrd" className="w-full h-full border border-black border-radius-1 padding-7" type={isShowConfirmPass ? "text" : "password"} placeholder="Confirm password" />
+
+                <div className="absolute right-0 top-0 bottom-0 aspect-square flex items-center justify-center">
+                  {!isShowConfirmPass && <VisibilityIcon onClick={() => setIsShowConfirmPass(true)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
+                  {isShowConfirmPass && <VisibilityOffIcon onClick={() => setIsShowConfirmPass(false)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
+                </div>
+              </div>
+              {!validationErr.pass && validationErr.confirmPass && <p className="color-9 p-0 m-0">Password did not match</p>}
             </div>
             <div>
               <div>
@@ -130,7 +155,7 @@ function SignupComp() {
                     Other
                   </label>
                 </div>
-                {validationErr.gender && <p className="text-red-500 p-0 m-0">Please select gender</p>}
+                {validationErr.gender && <p className="color-9 p-0 m-0">Please select gender</p>}
               </div>
               <div className="margin-6 flex items-center justify-center">
                 <p className="margin-6 color-3 custom-line-h-1 m-0 font-normal custom-fs-1" style={{ marginBottom: 0 }}>
