@@ -4,10 +4,16 @@ import HomeDefaultComp from "../../components/Home/DefaultComp";
 import SignupComp from "../../components/Authentication/signup";
 
 function Homepage() {
+  const { isUserLoggedIn, isShowSignupPopup } = useContext(UserContext);
+
   return (
     <>
-      <SignupComp />
-      <HomeDefaultComp />
+      {!isUserLoggedIn && (
+        <>
+          {isShowSignupPopup && <SignupComp />}
+          <HomeDefaultComp />
+        </>
+      )}
     </>
   );
 }

@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo from "../../../assets/images/mediumLogo.png";
 import brandImage from "../../../assets/images/brandLogo.jpg";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../../context/userContext";
 
 function UnauthenticatedHome() {
+  const { setIsShowSignupPopup, setIsShowLoginPopup } = useContext(UserContext);
   const footerOptions = ["Help", "Status", "About", "Careers", "Press", "Blog", "Privacy", "Rules", "Terms", "Text to speech"];
   const navOptions = [
     { id: 1, name: "Our Story", path: "/about" },
@@ -13,6 +15,18 @@ function UnauthenticatedHome() {
   ];
 
   const navigate = useNavigate();
+
+  const handleShowSignupBtnClick = () => {
+    setIsShowSignupPopup(true);
+  };
+
+  const handleHeaderNavigationTabBtnClick = (path) => {
+    if (path === "/login") {
+      setIsShowLoginPopup(true);
+    } else {
+      navigate(path);
+    }
+  };
 
   return (
     <div className="w-screen h-screen flex flex-col font-normal custom-bg-2">
@@ -32,18 +46,18 @@ function UnauthenticatedHome() {
                     <div className="inline-block" key={item.id}>
                       <div className="custom-m-r">
                         <p className="color-3 custom-fs-1 font-sans">
-                          <Link to={item.path} className="cursor-pointer m-0 p-0 ">
+                          <a to={item.path} onClick={() => handleHeaderNavigationTabBtnClick(item.path)} className="cursor-pointer m-0 p-0 ">
                             {item.name}
-                          </Link>
+                          </a>
                         </p>
                       </div>
                     </div>
                   ))}
                   <div>
                     <span>
-                      <Link to="/register" className="cursor-pointer m-0 p-0">
+                      <a className="cursor-pointer m-0 p-0" onClick={handleShowSignupBtnClick}>
                         <button className="cursor-pointer transition-colors color-2 duration-300 ease-linear text-center no-underline inline-block bdr-1 rounded-full custom-bdr-1 custom-bg-1 fill-white custom-px-2 custom-py-2 custom-line-h-1 custom-fs-1">Get started</button>
-                      </Link>
+                      </a>
                     </span>
                   </div>
                 </div>

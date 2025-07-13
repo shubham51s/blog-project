@@ -349,6 +349,14 @@ button {
     padding-inline: 16px;
   }
 
+  .padding-8 {
+    padding-inline: 80px;
+  }
+
+  .padding-9 {
+    padding-block: 30px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -362,7 +370,19 @@ button {
   }
 
   .margin-6 {
-    margin-block: 8px;
+    margin-block: 6px;
+  }
+
+  .margin-7 {
+    margin: 12px;
+  }
+
+  .margin-8 {
+    margin: 14px;
+  }
+
+  .margin-9 {
+    margin: 8px;
   }
 
   .custom-bg-position {
