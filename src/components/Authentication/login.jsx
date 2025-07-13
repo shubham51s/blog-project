@@ -26,7 +26,7 @@ function LoginComp() {
   };
 
   const handleCloseBtnClick = () => {
-    setIsShowSignupPopup(false);
+    setIsShowLoginPopup(false);
   };
 
   const handleEmailChange = (e) => {
@@ -71,10 +71,10 @@ function LoginComp() {
                 <label htmlFor="email">Email</label>
               </div>
 
-              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full height-2 border border-black border-radius-1 padding-7" type="email" placeholder="Enter your email" />
+              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full height-2 border border-black border-radius-1 padding-7" type="email" placeholder="Enter your email address" />
               {validationErr.email && <p className="color-9 p-0 m-0">Please enter valid email address</p>}
             </div>
-            <div className="margin-8" style={{ marginBottom: 0, marginInline: 0 }}>
+            <div className="margin-11" style={{ marginBottom: 0, marginInline: 0 }}>
               <div className="margin-10">
                 <label htmlFor="password">Password</label>
               </div>
@@ -97,8 +97,8 @@ function LoginComp() {
                   </button>
                 </p>
               </div>
-              <div className="margin-8 tflex items-center w-full justify-center" style={{ marginInline: 0, marginBottom: 0 }}>
-                <button onClick={handleSubmitBtnClick} className="padding-6 px-0 w-full bg-blue-800 font-normal color-5 font-9 rounded-full opacity-75 cursor-pointer transition-all ease-in-out duration-200 hover:opacity-100">
+              <div className="margin-8 flex items-center w-full justify-center" style={{ marginInline: 0, marginBottom: 0 }}>
+                <button onClick={handleSubmitBtnClick} className="padding-6 px-0 w-full custom-bg-7 font-normal color-5 font-9 rounded-full opacity-75 cursor-pointer transition-all ease-in-out duration-200 hover:opacity-100">
                   Submit
                 </button>
               </div>

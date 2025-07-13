@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/userContext";
 
 function UnauthenticatedHome() {
-  const { setIsShowSignupPopup, setIsShowLoginPopup } = useContext(UserContext);
+  const { setIsShowSignupPopup, setIsShowLoginPopup, setSignUpHeading } = useContext(UserContext);
   const footerOptions = ["Help", "Status", "About", "Careers", "Press", "Blog", "Privacy", "Rules", "Terms", "Text to speech"];
   const navOptions = [
     { id: 1, name: "Our Story", path: "/about" },
@@ -17,12 +17,16 @@ function UnauthenticatedHome() {
   const navigate = useNavigate();
 
   const handleShowSignupBtnClick = () => {
+    setSignUpHeading("Join Medium.");
     setIsShowSignupPopup(true);
   };
 
   const handleHeaderNavigationTabBtnClick = (path) => {
     if (path === "/login") {
       setIsShowLoginPopup(true);
+    } else if (path === "/create") {
+      setSignUpHeading("Create an account to start writing.");
+      setIsShowSignupPopup(true);
     } else {
       navigate(path);
     }

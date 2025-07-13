@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 function SignupComp() {
-  const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn } = useContext(UserContext);
+  const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn, signUpHeading } = useContext(UserContext);
   const [isShowPass, setIsShowPass] = useState(false);
   const [isShowConfirmPass, setIsShowConfirmPass] = useState(false);
 
@@ -91,7 +91,7 @@ function SignupComp() {
         </div>
         <div className="padding-9 padding-8">
           <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-medium margin-7" style={{ marginTop: 0, marginInline: 0 }}>
-            Join Medium.
+            {signUpHeading}
           </h3>
           <div>
             <div className="w-full">
@@ -107,7 +107,7 @@ function SignupComp() {
                 <label htmlFor="email">Email</label>
               </div>
 
-              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full height-2 border border-black border-radius-1 padding-7" type="email" placeholder="Enter your email" />
+              <input onChange={(e) => handleEmailChange(e)} id="email" className="w-full height-2 border border-black border-radius-1 padding-7" type="email" placeholder="Enter your email address" />
               {validationErr.email && <p className="color-9 p-0 m-0">Please enter valid email address</p>}
             </div>
             <div>
@@ -165,8 +165,8 @@ function SignupComp() {
                   </button>
                 </p>
               </div>
-              <div className="margin-8 tflex items-center w-full justify-center" style={{ marginInline: 0, marginBottom: 0 }}>
-                <button onClick={handleSubmitBtnClick} className="padding-6 px-0 w-full bg-blue-800 font-normal color-5 font-9 rounded-full opacity-75 cursor-pointer transition-all ease-in-out duration-200 hover:opacity-100">
+              <div className="margin-8 flex items-center w-full justify-center" style={{ marginInline: 0, marginBottom: 0 }}>
+                <button onClick={handleSubmitBtnClick} className="padding-6 px-0 w-full custom-bg-7 font-normal color-5 font-9 rounded-full opacity-75 cursor-pointer transition-all ease-in-out duration-200 hover:opacity-100">
                   Submit
                 </button>
               </div>

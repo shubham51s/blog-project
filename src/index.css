@@ -33,6 +33,7 @@ button {
   --bg-color-4: rgba(255, 255, 255, 0.9);
   --bg-color-5: rgba(255, 255, 255, 0.2);
   --bg-color-6: rgba(18, 18, 18, 0.6);
+  --bg-color-7: rgba(30, 64, 175, 1);
 
   /* for text colors */
   --txt-color-1: rgba(0, 0, 0, 0.8);
@@ -99,6 +100,10 @@ button {
 
 .custom-bg-6 {
   background-color: var(--bg-color-6);
+}
+
+.custom-bg-7 {
+  background-color: var(--bg-color-7);
 }
 
 /* for text colors */
@@ -367,7 +372,7 @@ button {
   }
 
   .padding-10 {
-    padding-block: 40px;
+    padding-block: 35px;
   }
 
   .margin-3 {

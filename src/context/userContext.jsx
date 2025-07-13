@@ -7,8 +7,9 @@ const UserProvider = ({ children }) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [isShowSignupPopup, setIsShowSignupPopup] = useState(false);
   const [isShowLoginPopup, setIsShowLoginPopup] = useState(true);
+  const [signUpHeading, setSignUpHeading] = useState("");
 
-  return <UserContext.Provider value={{ userData, setUserData, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isShowSignupPopup, setIsShowSignupPopup }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ userData, setUserData, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isShowSignupPopup, setIsShowSignupPopup, signUpHeading, setSignUpHeading }}>{children}</UserContext.Provider>;
 };
 
 export { UserContext };
