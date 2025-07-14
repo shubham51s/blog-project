@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import logo from "../../assets/images/mediumLogo.png";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import SignupComp from "../../components/Authentication/signup";
+import LoginComp from "../../components/Authentication/login";
 
 function AboutPage() {
   const footerOptions = [
@@ -39,6 +40,9 @@ function AboutPage() {
   ];
 
   const { isUserLoggedIn, isShowSignupPopup, isShowLoginPopup, setIsShowSignupPopup, setIsShowLoginPopup, setSignUpHeading } = useContext(UserContext);
+  const loginRef = useRef();
+  const signupRef = useRef();
+  const navigate = useNavigate();
 
   const handleNavigationBtnClick = (type) => {
     if (type === "login") {
@@ -51,10 +55,33 @@ function AboutPage() {
     }
   };
 
+  const handleClickOutside = (e) => {
+    const loginContainer = document.getElementById("loginPopupContainer");
+    const signupContainer = document.getElementById("signupContainer");
+
+    if (loginContainer && !loginContainer.contains(e.target) && loginRef.current && !loginRef.current.contains(e.target)) {
+      setIsShowLoginPopup(false);
+    }
+
+    if (signupContainer && !signupContainer.contains(e.target) && signupRef.current && !signupRef.current.contains(e.target)) {
+      setIsShowSignupPopup(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isUserLoggedIn) navigate("/");
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
-      {/* {!isUserLoggedIn && isShowSignupPopup && !isShowLoginPopup && <SignupComp />}
-      {!isUserLoggedIn && isShowLoginPopup && !isShowSignupPopup && <SignupComp />} */}
+      {!isShowLoginPopup && !isUserLoggedIn && isShowSignupPopup && <SignupComp />}
+      {!isUserLoggedIn && !isShowSignupPopup && isShowLoginPopup && <LoginComp />}
 
       <div className="flex justify-center font-normal">
         <div className="m-0 w-full min-w-0 max-w-full">
@@ -66,13 +93,13 @@ function AboutPage() {
             <div className="flex">
               <div className="margin-3">
                 <span>
-                  <button id="aboutLogin" onClick={() => handleNavigationBtnClick("login")} className="cursor-pointer padding-5 custom-line-h-1 custom-fs-1 custom-bdr-6 color-5 text-center no-underline inline-block bdr-1 custom-bdr-4 rounded-full">
+                  <button ref={loginRef} onClick={() => handleNavigationBtnClick("login")} className="cursor-pointer padding-5 custom-line-h-1 custom-fs-1 custom-bdr-6 color-5 text-center no-underline inline-block bdr-1 custom-bdr-4 rounded-full">
                     Sign in
                   </button>
                 </span>
               </div>
               <span>
-                <button id="aboutSignup" onClick={() => handleNavigationBtnClick("singup")} className="cursor-pointer color-6 padding-5 custom-line-h-1 custom-fs-1 custom-bdr-7 custom-bg-4 text-center inline-block bdr-1 rounded-full m-0 overflow-visible">
+                <button ref={signupRef} onClick={() => handleNavigationBtnClick("signup")} className="cursor-pointer color-6 padding-5 custom-line-h-1 custom-fs-1 custom-bdr-7 custom-bg-4 text-center inline-block bdr-1 rounded-full m-0 overflow-visible">
                   Sign up
                 </button>
               </span>

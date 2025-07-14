@@ -6,8 +6,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 function SignupComp() {
-  const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn, signUpHeading } = useContext(UserContext);
-  const signupRef = useRef();
+  const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn, signUpHeading, isShowSignupPopup } = useContext(UserContext);
+
   const [isShowPass, setIsShowPass] = useState(false);
   const [isShowConfirmPass, setIsShowConfirmPass] = useState(false);
 
@@ -61,6 +61,16 @@ function SignupComp() {
     setValidationErr({ ...validationErr, name: false });
   };
 
+  const togglePasswordVisibility = (e, val) => {
+    e.stopPropagation();
+    setIsShowPass(val);
+  };
+
+  const toggleConfirmPasswordVisibility = (e, val) => {
+    e.stopPropagation();
+    setIsShowConfirmPass(val);
+  };
+
   const handleSubmitBtnClick = () => {
     const nameRegex = /^[A-Za-z\s]{2,}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -84,28 +94,9 @@ function SignupComp() {
     }
   };
 
-  const handleClickOutside = (e) => {
-    const writeBtn = document.getElementById("Write");
-    const signUpBtn = document.getElementById("SignupBtn");
-
-    if (writeBtn && !writeBtn.contains(e.target) && signUpBtn && !signUpBtn.contains(e.target) && signupRef.current && !signupRef.current.contains(e.target)) {
-      setIsShowSignupPopup(false);
-    }
-  };
-
-  const resetInputValues = () => {};
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
   return (
     <div className="absolute z-[999] w-full custom-bg-6 h-screen flex items-center justify-center">
-      <div ref={signupRef} className="relative bg-gray-500 width-5 custom-bg-2 rounded">
+      <div id="signupContainer" className="relative bg-gray-500 width-5 custom-bg-2 rounded">
         <div className="absolute right-0 top-0 width-4 aspect-square flex items-center justify-center">
           <CloseIcon onClick={handleCloseBtnClick} className="cursor-pointer w-[50%] opacity-75" />
         </div>
@@ -138,8 +129,8 @@ function SignupComp() {
                 <input onChange={(e) => handlePassChange(e)} id="password" className="border w-full h-full border-black border-radius-1 padding-7" type={isShowPass ? "text" : "password"} placeholder="Enter password" />
 
                 <div className="absolute right-0 top-0 bottom-0 aspect-square flex items-center justify-center">
-                  {!isShowPass && <VisibilityIcon onClick={() => setIsShowPass(true)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
-                  {isShowPass && <VisibilityOffIcon onClick={() => setIsShowPass(false)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
+                  {!isShowPass && <VisibilityIcon onClick={(e) => togglePasswordVisibility(e, true)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
+                  {isShowPass && <VisibilityOffIcon onClick={(e) => togglePasswordVisibility(e, false)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
                 </div>
               </div>
               {validationErr.pass && <p className="color-9 p-0 m-0">Please enter valid password</p>}
@@ -152,8 +143,8 @@ function SignupComp() {
                 <input onChange={(e) => handleConfirmPassChange(e)} id="confirmPassowrd" className="w-full h-full border border-black border-radius-1 padding-7" type={isShowConfirmPass ? "text" : "password"} placeholder="Confirm password" />
 
                 <div className="absolute right-0 top-0 bottom-0 aspect-square flex items-center justify-center">
-                  {!isShowConfirmPass && <VisibilityIcon onClick={() => setIsShowConfirmPass(true)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
-                  {isShowConfirmPass && <VisibilityOffIcon onClick={() => setIsShowConfirmPass(false)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
+                  {!isShowConfirmPass && <VisibilityIcon onClick={(e) => toggleConfirmPasswordVisibility(e, true)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
+                  {isShowConfirmPass && <VisibilityOffIcon onClick={(e) => toggleConfirmPasswordVisibility(e, false)} style={{ maxWidth: "50%", maxHeight: "50%", cursor: "pointer" }} />}
                 </div>
               </div>
               {!validationErr.pass && validationErr.confirmPass && <p className="color-9 p-0 m-0">Password did not match</p>}

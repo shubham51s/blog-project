@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import logo from "../../../assets/images/mediumLogo.png";
 import brandImage from "../../../assets/images/brandLogo.jpg";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,22 +15,44 @@ function UnauthenticatedHome() {
   ];
 
   const navigate = useNavigate();
+  const loginRef = useRef();
+  const signupRef = useRef();
+  const writePostRef = useRef();
 
   const handleShowSignupBtnClick = () => {
     setSignUpHeading("Join Medium.");
     setIsShowSignupPopup(true);
   };
 
-  const handleHeaderNavigationTabBtnClick = (path) => {
-    if (path === "/login") {
+  const handleLoginBtnClick = (path) => {
+    if (path === "login") {
       setIsShowLoginPopup(true);
-    } else if (path === "/create") {
+    } else if (path === "create") {
       setSignUpHeading("Create an account to start writing.");
       setIsShowSignupPopup(true);
-    } else {
-      navigate(path);
     }
   };
+
+  const handleClickOutside = (e) => {
+    const loginContainer = document.getElementById("loginPopupContainer");
+    const signupContainer = document.getElementById("signupContainer");
+
+    if (loginContainer && !loginContainer.contains(e.target) && loginRef.current && !loginRef.current.contains(e.target)) {
+      setIsShowLoginPopup(false);
+    }
+
+    if (signupContainer && !signupContainer.contains(e.target) && signupRef.current && !signupRef.current.contains(e.target) && writePostRef.current && !writePostRef.current.contains(e.target)) {
+      setIsShowSignupPopup(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="w-screen h-screen flex flex-col font-normal custom-bg-2">
@@ -46,20 +68,47 @@ function UnauthenticatedHome() {
                 </div>
                 <div className="grow flex-shrink-0 basis-auto"></div>
                 <div className="flex items-center font-medium">
-                  {navOptions.map((item) => (
-                    <div className="inline-block" key={item.id}>
-                      <div className="custom-m-r">
-                        <p className="color-3 custom-fs-1 font-sans">
-                          <a id={item.name} to={item.path} onClick={() => handleHeaderNavigationTabBtnClick(item.path)} className="cursor-pointer m-0 p-0 ">
-                            {item.name}
-                          </a>
-                        </p>
-                      </div>
+                  <div className="inline-block">
+                    <div className="custom-m-r">
+                      <p className="color-3 custom-fs-1 font-sans">
+                        <a onClick={() => navigate("/about")} className="cursor-pointer m-0 p-0 ">
+                          Our Story
+                        </a>
+                      </p>
                     </div>
-                  ))}
+                  </div>
+
+                  <div className="inline-block">
+                    <div className="custom-m-r">
+                      <p className="color-3 custom-fs-1 font-sans">
+                        <a className="cursor-pointer m-0 p-0 ">Membership</a>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="inline-block">
+                    <div className="custom-m-r">
+                      <p className="color-3 custom-fs-1 font-sans">
+                        <a onClick={() => handleLoginBtnClick("create")} ref={writePostRef} className="cursor-pointer m-0 p-0 ">
+                          Write
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="inline-block">
+                    <div className="custom-m-r">
+                      <p className="color-3 custom-fs-1 font-sans">
+                        <a onClick={() => handleLoginBtnClick("login")} ref={loginRef} className="cursor-pointer m-0 p-0 ">
+                          Sign
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+
                   <div>
                     <span>
-                      <a className="cursor-pointer m-0 p-0" onClick={handleShowSignupBtnClick}>
+                      <a className="cursor-pointer m-0 p-0" onClick={handleShowSignupBtnClick} ref={signupRef}>
                         <button id="SignupBtn" className="cursor-pointer transition-colors color-2 duration-300 ease-linear text-center no-underline inline-block bdr-1 rounded-full custom-bdr-1 custom-bg-1 fill-white custom-px-2 custom-py-2 custom-line-h-1 custom-fs-1">
                           Get started
                         </button>
