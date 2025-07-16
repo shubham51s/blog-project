@@ -3,8 +3,10 @@ import HeaderComp from "../../../components/Home/Home components/Header";
 
 function HomePageProtected() {
   return (
-    <div>
+    <div className="custom-bg-8">
       <HeaderComp />
+      {/* home content */}
+      <div className="flex"></div>
     </div>
   );
 }

@@ -25,6 +25,7 @@ button {
   --border-5: rgb(242, 242, 242);
   --border-6: rgba(255, 255, 255, 0.8);
   --border-7: rgba(255, 255, 255, 0.9);
+  --border-8: black;
 
   /* for background color */
   --bg-color-1: rgb(25, 25, 25);
@@ -34,6 +35,9 @@ button {
   --bg-color-5: rgba(255, 255, 255, 0.2);
   --bg-color-6: rgba(18, 18, 18, 0.6);
   --bg-color-7: rgba(30, 64, 175, 1);
+  --bg-color-8: rgba(255, 255, 255, 1);
+  --bg-color-9: black;
+  --bg-color-10: rgb(249 249 249);
 
   /* for text colors */
   --txt-color-1: rgba(0, 0, 0, 0.8);
@@ -76,6 +80,10 @@ button {
   border-color: var(--border-7);
 }
 
+.custom-bdr-8 {
+  border-color: var(--border-8);
+}
+
 /* for background colors */
 
 .custom-bg-1 {
@@ -104,6 +112,18 @@ button {
 
 .custom-bg-7 {
   background-color: var(--bg-color-7);
+}
+
+.custom-bg-8 {
+  background-color: var(--bg-color-8);
+}
+
+.bg-9 {
+  background-color: var(--bg-color-9);
+}
+
+.bg-10 {
+  background-color: var(--bg-color-10);
 }
 
 /* for text colors */
@@ -146,6 +166,46 @@ button {
 
 .left-unset {
   left: unset;
+}
+
+.letter-spacing-1 {
+  letter-spacing: -0.055em;
+}
+
+.letter-spacing-2 {
+  letter-spacing: -0.003em;
+}
+
+.letter-spacing-3 {
+  letter-spacing: -0.009em;
+}
+
+.letter-spacing-4 {
+  letter-spacing: -0.03em;
+}
+
+.line-h-2 {
+  line-height: 100px;
+}
+
+.line-h-3 {
+  line-height: 28px;
+}
+
+.line-h-4 {
+  line-height: 88px;
+}
+
+.line-h-5 {
+  line-height: 32px;
+}
+
+.line-h-6 {
+  line-height: 40px;
+}
+
+.line-h-7 {
+  line-height: 16px;
 }
 
 @media only screen and (min-width: 1500px) {
@@ -201,6 +261,18 @@ button {
     height: 40px;
   }
 
+  .height-3 {
+    height: 57px;
+  }
+
+  .height-4 {
+    height: 15px;
+  }
+
+  .height-5 {
+    height: 22px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -223,46 +295,6 @@ button {
     aspect-ratio: auto 460 / 600;
     overflow-clip-margin: content-box;
     overflow: clip;
-  }
-
-  .letter-spacing-1 {
-    letter-spacing: -0.055em;
-  }
-
-  .letter-spacing-2 {
-    letter-spacing: -0.003em;
-  }
-
-  .letter-spacing-3 {
-    letter-spacing: -0.009em;
-  }
-
-  .letter-spacing-4 {
-    letter-spacing: -0.03em;
-  }
-
-  .line-h-2 {
-    line-height: 100px;
-  }
-
-  .line-h-3 {
-    line-height: 28px;
-  }
-
-  .line-h-4 {
-    line-height: 88px;
-  }
-
-  .line-h-5 {
-    line-height: 32px;
-  }
-
-  .line-h-6 {
-    line-height: 40px;
-  }
-
-  .line-h-7 {
-    line-height: 16px;
   }
 
   .font-size-1 {
@@ -319,6 +351,18 @@ button {
     border-radius: 6px;
   }
 
+  .border-radius-2 {
+    border-radius: 20px;
+  }
+
+  .bdr-3 {
+    border: 1px solid;
+  }
+
+  .bdr-4 {
+    border-right: 1px solid;
+  }
+
   .max-width-2 {
     max-width: 680px;
   }
@@ -333,6 +377,30 @@ button {
 
   .width-5 {
     width: 650px;
+  }
+
+  .width-6 {
+    width: 8px;
+  }
+
+  .width-7 {
+    width: 35px;
+  }
+
+  .width-8 {
+    width: 22px;
+  }
+
+  .width-9 {
+    width: 240px;
+  }
+
+  .width-10 {
+    width: 22px;
+  }
+
+  .width-11 {
+    width: 32px;
   }
 
   .margin-2 {
@@ -375,6 +443,14 @@ button {
     padding-block: 35px;
   }
 
+  .padding-11 {
+    padding: 0px 24px 0px 16px;
+  }
+
+  .padding-12 {
+    padding: 10px 20px 10px 0;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -409,6 +485,18 @@ button {
 
   .margin-11 {
     margin-block: 20px;
+  }
+
+  .margin-12 {
+    margin-inline: 24px;
+  }
+
+  .margin-13 {
+    margin-inline: 12px;
+  }
+
+  .margin-14 {
+    margin: 32px;
   }
 
   .custom-bg-position {
