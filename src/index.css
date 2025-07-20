@@ -17,6 +17,8 @@ button {
 }
 
 :root {
+  /* box shadow */
+  --box-shadow-1: rgba(0, 0, 0, 0.15)
   /* for border colors */
   --border-1: rgb(25, 25, 25);
   --border-2: rgba(25, 25, 25, 1);
@@ -38,6 +40,7 @@ button {
   --bg-color-8: rgba(255, 255, 255, 1);
   --bg-color-9: black;
   --bg-color-10: rgb(249 249 249);
+  --bg-color-11:  rgb(242 242 242);
 
   /* for text colors */
   --txt-color-1: rgba(0, 0, 0, 0.8);
@@ -126,6 +129,10 @@ button {
   background-color: var(--bg-color-10);
 }
 
+.bg-11 {
+  background-color: var(--bg-color-11);
+}
+
 /* for text colors */
 
 .custom-color-1 {
@@ -184,6 +191,10 @@ button {
   letter-spacing: -0.03em;
 }
 
+.letter-spacing-5 {
+  letter-spacing: 0.077em;
+}
+
 .line-h-2 {
   line-height: 100px;
 }
@@ -208,13 +219,18 @@ button {
   line-height: 16px;
 }
 
+.custom-line-h-1 {
+  line-height: 20px;
+}
+
+.box-shadow-1 {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 10px 0px;
+}
+
+
 @media only screen and (min-width: 1500px) {
   .custom-margin-1 {
     margin: 20px 64px 0;
-  }
-
-  .custom-line-h-1 {
-    line-height: 20px;
   }
 
   .custom-fs-1 {
@@ -265,12 +281,20 @@ button {
     height: 57px;
   }
 
+  .top-1 {
+    top: 50px;
+  }
+
   .height-4 {
     height: 15px;
   }
 
   .height-5 {
     height: 22px;
+  }
+
+  .height-6 {
+    max-height: 20px;
   }
 
   .custom-max-w-1 {
@@ -355,12 +379,24 @@ button {
     border-radius: 20px;
   }
 
+  .border-radius-3 {
+    border-radius: 4px;
+  }
+
+  .border-radius-4 {
+    border-radius: 3px;
+  }
+
   .bdr-3 {
     border: 1px solid;
   }
 
   .bdr-4 {
     border-right: 1px solid;
+  }
+
+  .bdr-5 {
+    border-top: 1px solid var(--border-5);
   }
 
   .max-width-2 {
@@ -401,6 +437,18 @@ button {
 
   .width-11 {
     width: 32px;
+  }
+
+  .width-12 {
+    width: 316px;
+  }
+
+  .width-13 {
+    width: 24px;
+  }
+
+  .width-14 {
+    width: 252px;
   }
 
   .margin-2 {
@@ -451,6 +499,18 @@ button {
     padding: 10px 20px 10px 0;
   }
 
+  .padding-13 {
+    padding: 30px;
+  }
+
+  .padding-14 {
+    padding: 20px;
+  }
+
+  .padding-15 {
+    padding-right: 12px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -497,6 +557,22 @@ button {
 
   .margin-14 {
     margin: 32px;
+  }
+
+  .margin-15 {
+    margin-bottom: 15px;
+  }
+
+  .margin-16 {
+    margin: 8px;
+  }
+
+  .margin-17 {
+    margin-block: 24px;
+  }
+
+  .margin-18 {
+    margin-inline: 20px;
   }
 
   .custom-bg-position {

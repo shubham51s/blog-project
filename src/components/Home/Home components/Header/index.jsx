@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SearchHomeComp from "./Search";
 import { FiEdit } from "react-icons/fi";
-import { IoIosNotificationsOutline } from "react-icons/io";
 import ProfileHeaderComp from "./User Profile";
+import { IoNotificationsOutline } from "react-icons/io5";
 
 function HeaderComp() {
   const [isMenuActive, setIsMenuActive] = useState(false);
@@ -48,7 +48,7 @@ function HeaderComp() {
           <div className="margin-14 flex" style={{ marginLeft: 0, marginBlock: 0 }}>
             <Link className="border-0 cursor-pointer p-0 m-0 opacity-75 transition-all duration-300 ease-in-out hover:opacity-100">
               <div className="relative custom-fs-1 color-6 custom-line-h-1 flex items-center font-normal">
-                <IoIosNotificationsOutline className="width-10 height-5 align-middle color-6" />
+                <IoNotificationsOutline className="width-10 height-5 align-middle color-6" />
               </div>
             </Link>
           </div>
