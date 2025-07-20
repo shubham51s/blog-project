@@ -237,6 +237,10 @@ button {
     gap: 16px;
   }
 
+  .custom-gap-3 {
+    gap: 8px;
+  }
+
   .custom-margin-1 {
     margin: 20px 64px 0;
   }
@@ -620,6 +624,10 @@ button {
 
   .margin-18 {
     margin-inline: 20px;
+  }
+
+  .margin-19 {
+    margin: 4px;
   }
 
   .custom-bg-position {
