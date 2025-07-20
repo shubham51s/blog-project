@@ -99,7 +99,7 @@ function SearchHomeComp() {
                         <p className="uppercase line-h-7 letter-spacing-5 font-4 color-4 font-normal m-0 p-0">People</p>
                       </div>
                       <li className="py-0 block">
-                        <div className="bdr-5"></div>
+                        <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
                       </li>
                     </div>
                     <div className="margin-7 margin-15 flex flex-col justify-between" style={{ marginInline: 0 }}>
@@ -133,7 +133,7 @@ function SearchHomeComp() {
                         <p className="uppercase line-h-7 letter-spacing-5 font-4 color-4 font-normal m-0 p-0">Publications</p>
                       </div>
                       <li className="py-0 block">
-                        <div className="bdr-5"></div>
+                        <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
                       </li>
                     </div>
                     <div className="margin-7 margin-15 flex flex-col justify-between" style={{ marginInline: 0 }}>
@@ -167,7 +167,7 @@ function SearchHomeComp() {
                         <p className="uppercase line-h-7 letter-spacing-5 font-4 color-4 font-normal m-0 p-0">Topics</p>
                       </div>
                       <li className="py-0 block">
-                        <div className="bdr-5"></div>
+                        <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
                       </li>
                     </div>
                     <div className="margin-7 margin-15 flex flex-col justify-between" style={{ marginInline: 0 }}>

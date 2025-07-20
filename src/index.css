@@ -229,6 +229,14 @@ button {
 
 
 @media only screen and (min-width: 1500px) {
+  .custom-gap-1 {
+    gap: 4px;
+  }
+
+  .custom-gap-2 {
+    gap: 16px;
+  }
+
   .custom-margin-1 {
     margin: 20px 64px 0;
   }
@@ -295,6 +303,21 @@ button {
 
   .height-6 {
     max-height: 20px;
+  }
+
+  .height-7 {
+    max-height: 797.9px;
+  }
+  .height-8 {
+    height: 12px
+  }
+
+  .height-9 {
+    max-height: 16px;
+  }
+
+  .height-10 {
+    height: 24px;
   }
 
   .custom-max-w-1 {
@@ -396,7 +419,7 @@ button {
   }
 
   .bdr-5 {
-    border-top: 1px solid var(--border-5);
+    border: 1px solid var(--border-5);
   }
 
   .max-width-2 {
@@ -449,6 +472,10 @@ button {
 
   .width-14 {
     width: 252px;
+  }
+
+  .width-15 {
+    width: 48px;
   }
 
   .margin-2 {
@@ -509,6 +536,26 @@ button {
 
   .padding-15 {
     padding-right: 12px;
+  }
+
+  .padding-16 {
+    padding-bottom: 16px
+  }
+
+  .padding-17 {
+    padding: 18px;
+  }
+
+  .padding-18 {
+    padding-block: 16px;
+  }
+
+  .padding-19 {
+    padding-inline: 24px;
+  }
+
+  .padding-20 {
+    padding-block: 6px;
   }
 
   .margin-3 {
