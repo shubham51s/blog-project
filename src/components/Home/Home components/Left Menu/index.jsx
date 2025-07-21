@@ -7,6 +7,8 @@ import { BsBookmarks } from "react-icons/bs";
 import { BsBookmarksFill } from "react-icons/bs";
 import { FaRegFile } from "react-icons/fa";
 import { FaRegFileAlt } from "react-icons/fa";
+import { RiAddLargeFill } from "react-icons/ri";
+import { GoPerson } from "react-icons/go";
 
 function HomeLeftMenuComp() {
   const menuOptions = [
@@ -51,7 +53,6 @@ function HomeLeftMenuComp() {
       <div className="sticky translate-x-0 top-2 height-11 bdr-5 width-16 custom-bg-8 flex flex-col z-[500]" style={{ borderLeft: 0, borderBlock: 0 }}>
         <div className="flex-grow flex-shrink basis-auto flex">
           <div className="flex flex-col custom-gap-4 overflow-auto padding-14" style={{ paddingTop: 0, paddingInline: 0 }}>
-            {/* top section */}
             <div className="flex flex-col custom-gap-4">
               <div className="height-12"></div>
 
@@ -66,11 +67,35 @@ function HomeLeftMenuComp() {
               ))}
             </div>
 
-            {/* middle section */}
             <div className="margin-20 bdr-5" style={{ borderTop: 0, borderInline: 0 }}></div>
 
-            {/* bottom section */}
-            <div className="flex flex-col custom-gap-5"></div>
+            <div className="flex flex-col custom-gap-5">
+              <div className="padding-22 flex items-center justify-between" style={{ paddingBlock: 0 }}>
+                <p className="custom-fs-1 color-6 opacity-75 custom-line-h-1 font-normal m-0 p-0">Recent</p>
+                <div className="inline-block">
+                  <div className="padding-6 cursor-pointer m-0 p-0 color-6 opacity-75 no-underline transition-all duration-300 ease-in-out hover:opacity-100">
+                    <div className="height-8 aspect-square">
+                      <RiAddLargeFill className="w-full h-full align-middle" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="margin-21 flex custom-gap-2 padding-3" style={{ marginBottom: 0, marginInline: 0, paddingBlock: 0 }}>
+                <div className="padding-23 flex-none color-6 opacity-75" style={{ paddingBlock: 0 }}>
+                  <div className="width-19 aspect-square align-middle">
+                    <GoPerson className="w-full h-full align-middle" />
+                  </div>
+                </div>
+                <div className="flex flex-col custom-gap-3 items-start">
+                  <p className="custom-fs-1 color-6 opacity-75 custom-line-h-1 font-normal m-0 p-0">Discover more writers and publications to follow.</p>
+                  <div className="custom-fs-1 color-6 custom-line-h-1 font-normal opacity-75 transition-all duration-300 ease-in-out hover:opacity-100">
+                    <a href="#" className="cursor-pointer m-0 p-0 underline">
+                      See suggestions
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
