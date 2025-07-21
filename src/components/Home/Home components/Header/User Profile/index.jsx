@@ -48,7 +48,7 @@ function ProfileHeaderComp() {
   const [isShowProfileMenu, setIsShowProfileMenu] = useState(false);
 
   const handleUserProfileBtnClick = () => {
-    setIsShowProfileMenu(true);
+    setIsShowProfileMenu(!isShowProfileMenu);
   };
 
   const handleClickOutside = (e) => {

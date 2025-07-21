@@ -14,7 +14,7 @@ function HeaderComp() {
 
   return (
     <div className="sticky top-0 z-[500] custom-bg-8" style={{ transform: "translateY(0px)" }}>
-      <div className="padding-1 height-3 bdr-3 custom-bdr-5 flex items-center">
+      <div className="padding-1 height-3 bdr-5 flex items-center" style={{ borderTop: 0, borderInline: 0 }}>
         {/* left section */}
         <div className="flex items-center flex-[1_0_auto]">
           <div className="inline-block">
