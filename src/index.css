@@ -448,6 +448,10 @@ button {
     border-radius: 3px;
   }
 
+  .border-radius-5 {
+    border-radius: 2px;
+  }
+
   .bdr-3 {
     border: 1px solid;
   }
