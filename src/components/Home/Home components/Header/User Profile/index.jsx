@@ -132,9 +132,9 @@ function ProfileHeaderComp() {
                     <div className="padding-17 bdr-5" style={{ paddingInline: 0, borderTop: 0, borderInline: 0 }}>
                       <a href="#" className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
                         <div className="padding-20 padding-19 custom-fs-1 color-6 custom-line-h-1 font-medium">
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between text-center custom-fs-1">
                             Become a Medium member
-                            <PiStarFourDuotone className="aspect-square width-16 align-middle text-yellow-400" />
+                            <PiStarFourDuotone className="aspect-square width-19 align-middle text-yellow-900" />
                           </div>
                         </div>
                       </a>
