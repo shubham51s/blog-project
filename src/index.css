@@ -359,6 +359,10 @@ button {
     min-height: calc(-57px + 100vh);
   }
 
+  .height-15 {
+    max-height: 40px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -457,6 +461,14 @@ button {
     border-radius: 2px;
   }
 
+  .border-radius-6 {
+    border-radius: 100px;
+  }
+
+  .border-radius-7 {
+    border-radius: 24px;
+  }
+
   .bdr-3 {
     border: 1px solid;
   }
@@ -471,6 +483,10 @@ button {
 
   .bdr-6 {
     border: 1px solid var(--border-1)
+  }
+
+  .bdr-7 {
+    border: 1px solid var(--border-3);
   }
 
   .max-width-2 {
@@ -556,6 +572,14 @@ button {
 
   .width-22 {
     min-width: 368px;
+  }
+
+  .width-23 {
+    min-width: 102px;
+  }
+
+  .width-24 {
+    width: 66px;
   }
 
   .margin-2 {
@@ -749,6 +773,14 @@ button {
 
   .margin-22 {
     margin: 40px;
+  }
+
+  .margin-23 {
+    margin: 2px;
+  }
+
+  .margin-24 {
+    margin: 6px;
   }
 
   .custom-bg-position {
