@@ -41,6 +41,7 @@ button {
   --bg-color-9: black;
   --bg-color-10: rgb(249 249 249);
   --bg-color-11:  rgb(242 242 242);
+  --bg-color-12: rgb(196, 226, 255);
 
   /* for text colors */
   --txt-color-1: rgba(0, 0, 0, 0.8);
@@ -131,6 +132,10 @@ button {
 
 .bg-11 {
   background-color: var(--bg-color-11);
+}
+
+.bg-12 {
+  background-color: var(--bg-color-12);
 }
 
 /* for text colors */
@@ -464,6 +469,10 @@ button {
     border: 1px solid var(--border-5);
   }
 
+  .bdr-6 {
+    border: 1px solid var(--border-1)
+  }
+
   .max-width-2 {
     max-width: 680px;
   }
@@ -644,6 +653,22 @@ button {
 
   .padding-24 {
     padding-left: 40px;
+  }
+
+  .padding-25 {
+    padding: 10px;
+  }
+
+  .padding-26 {
+    padding: 22px;
+  }
+
+  .padding-27 {
+    padding-block: 5px;
+  }
+
+  .padding-28 {
+    padding-inline: 12px
   }
 
   .margin-3 {

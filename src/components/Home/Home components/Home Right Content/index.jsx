@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { IoClose } from "react-icons/io5";
 
 function HomeRightSectionComp() {
   const staffPickedPosts = [
@@ -33,6 +35,8 @@ function HomeRightSectionComp() {
   ];
 
   const index = 3;
+
+  const [isShowWritingSection, setIsShowWritingSection] = useState(true);
   return (
     <div className="width-22 width-21 height-13 bdr-5 padding-3 custom-bg-8 padding-24" style={{ borderRight: 0, borderBlock: 0, paddingBlock: 0 }}>
       <div className="relative inline-block h-full w-full">
@@ -82,11 +86,59 @@ function HomeRightSectionComp() {
                   ))}
                 </div>
 
-                <p className="custom-fs-1 color-4 custom-line-h-1 font-normal m-0 p-0"></p>
+                <p className="custom-fs-1 color-4 custom-line-h-1 m-0 p-0">
+                  <Link to="/" className="cursor-pointer m-0 p-0 no-underline font-medium custom-line-h-1 custom-fs-1">
+                    See the full list
+                  </Link>
+                </p>
               </div>
 
-              {/* middle content */}
-              <div className=""></div>
+              <div>
+                <div className="margin-22" style={{ marginBottom: 0, marginInline: 0, display: isShowWritingSection ? "block" : "none" }}>
+                  <div className="border-radius-3 bg-12">
+                    <div className="float-right padding-25">
+                      <div className="relative right-0 top-0">
+                        <button onClick={(e) => setIsShowWritingSection(false)} className="cursor-pointer m-0 p-0 flex bg-transparent height-12 aspect-square transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
+                          <IoClose className="color-46 align-middle w-full h-full" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="padding-26">
+                      <div className="">
+                        <h2 className="font-bold tracking-normal font-10 color-3 custom-line-h-1 m-0 p-0">Writing on Medium</h2>
+                      </div>
+                      <div className="margin-10" style={{ marginBottom: 0 }}>
+                        <div className="margin-17" style={{ marginBottom: 0 }}>
+                          <a href="#" className="cursor-pointer no-underline m-0 p-0">
+                            <h2 className="tracking-normal font-10 color-3 color-3 custom-line-h-1 font-medium m-0 p-0">Join our Medium Writing 101 Webinar</h2>
+                          </a>
+                        </div>
+                        <div className="margin-10" style={{ marginBottom: 0 }}>
+                          <a href="#" className="cursor-pointer no-underline m-0 p-0">
+                            <h2 className="tracking-normal font-10 color-3 color-3 custom-line-h-1 font-medium m-0 p-0">Read Medium tips & tricks</h2>
+                          </a>
+                        </div>
+                        <div className="margin-10" style={{ marginBottom: 0 }}>
+                          <a href="#" className="cursor-pointer no-underline m-0 p-0">
+                            <h2 className="tracking-normal font-10 color-3 color-3 custom-line-h-1 font-medium m-0 p-0">Read Medium tips & tricks</h2>
+                          </a>
+                        </div>
+                      </div>
+                      <div className="margin-17" style={{ marginBottom: 0 }}>
+                        <Link to="/create" className="text-center no-underline bdr-6 custom-bg-1 padding-28 padding-27 color-7 font-4 custom-line-h-1 font-normal inline-block box-border transition-all duration-300 ease-in-out opacity-[0.9] hover:opacity-100" style={{ borderRadius: "99em" }}>
+                          Start writing
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* section 2 working */}
+                <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}></div>
+                {/* section 3 */}
+                <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}></div>
+                {/* section 4 */}
+                <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}></div>
+              </div>
             </div>
             {/* footer */}
             <div className="flex padding-3 flex-wrap" style={{ paddingInline: 0 }}></div>
