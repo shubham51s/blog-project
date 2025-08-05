@@ -19,6 +19,7 @@ button {
 :root {
   /* box shadow */
   --box-shadow-1: rgba(0, 0, 0, 0.15)
+  --box-shadow-2: rgb(242, 242, 242)
   /* for border colors */
   --border-1: rgb(25, 25, 25);
   --border-2: rgba(25, 25, 25, 1);
@@ -236,6 +237,22 @@ button {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 10px 0px;
 }
 
+.box-shadow-2 {
+  box-shadow: var(--box-shadow-2) 0px -1px 0px inset;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.bg-gradient-1 {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.75) 25%, rgba(255, 255, 255, 0.9) 50%, rgb(255, 255, 255) 75%);
+}
+
+.bg-gradient-2 {
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.75) 25%, rgba(255, 255, 255, 0.9) 50%, rgb(255, 255, 255) 75%);
+}
+
 
 @media only screen and (min-width: 1500px) {
   .custom-gap-1 {
@@ -294,6 +311,10 @@ button {
 
   .top-2 {
     top: 57px;
+  }
+
+  .bottom-1 {
+    bottom: 12px;
   }
 
   .custom-h-1 {
@@ -361,6 +382,10 @@ button {
 
   .height-15 {
     max-height: 40px;
+  }
+
+  .height-16 {
+    height: 50px;
   }
 
   .custom-max-w-1 {
@@ -693,6 +718,10 @@ button {
 
   .padding-28 {
     padding-inline: 12px
+  }
+
+  .padding-29 {
+    padding: 44px
   }
 
   .margin-3 {
