@@ -388,6 +388,10 @@ button {
     height: 50px;
   }
 
+  .height-17 {
+    height: 19px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -607,6 +611,14 @@ button {
     width: 66px;
   }
 
+  .width-25 {
+    width: 19px;
+  }
+  
+  .width-26 {
+    width: 26px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -722,6 +734,14 @@ button {
 
   .padding-29 {
     padding: 44px
+  }
+
+  .padding-30 {
+    padding: 2px
+  }
+
+  .padding-31 {
+    padding: 8px
   }
 
   .margin-3 {
