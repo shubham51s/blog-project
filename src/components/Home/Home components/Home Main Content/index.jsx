@@ -4,6 +4,7 @@ import { IoMdAdd } from "react-icons/io";
 import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
 import NoContentComp from "./No Content";
+import BlogComp from "./Blog Comp";
 
 function HomeMainContentComp() {
   const [recommendedTopics, setRecommendedTopics] = useState([
@@ -75,7 +76,8 @@ function HomeMainContentComp() {
 
         {/* section-4 */}
         <div>
-          <NoContentComp item={recommendedTopics[1].noData} />
+          {false && <NoContentComp item={recommendedTopics[1].noData} />}
+          <BlogComp />
         </div>
       </div>
     </main>

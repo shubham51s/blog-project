@@ -392,6 +392,10 @@ button {
     height: 19px;
   }
 
+  .height-18 {
+    max-height: 450px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
