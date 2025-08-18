@@ -19,9 +19,9 @@ button {
 :root {
   /* box shadow */
   --box-shadow-1: rgba(0, 0, 0, 0.15)
-  --box-shadow-2: rgb(242, 242, 242)
+  --box-shadow-2: rgb(242, 242, 242);
   /* for border colors */
-  --border-1: rgb(25, 25, 25);
+  --border-1: rgba(25, 25, 25, 1);
   --border-2: rgba(25, 25, 25, 1);
   --border-3: rgb(36, 36, 36);
   --border-4: rgba(255, 255, 255, 0.65);
@@ -619,6 +619,10 @@ button {
     width: 26px;
   }
 
+  .width-27 {
+    max-width: 520px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -742,6 +746,10 @@ button {
 
   .padding-31 {
     padding: 8px
+  }
+
+  .padding-32 {
+    padding-block: 80px;
   }
 
   .margin-3 {
