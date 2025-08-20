@@ -76,7 +76,7 @@ function HomeMainContentComp() {
 
         {/* section-4 */}
         <div>
-          {false && <NoContentComp item={recommendedTopics[1].noData} />}
+          {false && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
           <BlogComp />
         </div>
       </div>
