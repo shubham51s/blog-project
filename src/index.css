@@ -201,6 +201,10 @@ button {
   letter-spacing: 0.077em;
 }
 
+.letter-spacing-6 {
+  letter-spacing: -0.016em;
+}
+
 .line-h-2 {
   line-height: 100px;
 }
@@ -231,6 +235,10 @@ button {
 
 .line-h-8 {
   line-height: 24px;
+}
+
+.line-h-9 {
+  line-height: 30px;
 }
 
 .box-shadow-1 {
@@ -396,6 +404,10 @@ button {
     max-height: 450px;
   }
 
+  .height-19 {
+    max-height: 90px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -458,6 +470,10 @@ button {
 
   .font-10 {
     font-size: 16px;
+  }
+
+  .font-11 {
+    font-size: 24px;
   }
 
   .padding-1 {
@@ -842,6 +858,10 @@ button {
 
   .margin-24 {
     margin: 6px;
+  }
+
+  .margin-25 {
+    margin: 56px;
   }
 
   .custom-bg-position {

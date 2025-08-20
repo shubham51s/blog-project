@@ -2,15 +2,19 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function BlogComp() {
-  const handleUserProfileClick = () => {
-    useNavigate("/");
-  };
-
   const blog = {
     profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg",
     userName: "Robin Sanah Kai",
     channelName: "Word Garden",
+    title: "How To Wake Up at 5 A.M. Every Day",
+    description: "An unconventional and compassionate guide to becoming an early bird",
   };
+
+  const handleUserProfileClick = () => {
+    useNavigate("/");
+  };
+
+  const handleBlogClick = () => {};
 
   return (
     <div className="height-18 overflow-hidden">
@@ -45,7 +49,23 @@ function BlogComp() {
                       </div>
 
                       {/* blog section */}
-                      <div className="flex"></div>
+                      <div className="flex">
+                        {/* left section */}
+                        <div className="flex-1" style={{ wordBreak: "break-word" }}>
+                          <div>
+                            <div onClick={() => handleBlogClick()} className="flex flex-col static cursor-pointer">
+                              <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold truncate color-3 m-0 p-0">{blog.title}</h2>
+                              <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
+                                <h3 className="height-15 truncate font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.description}</h3>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div></div>
+                        </div>
+                        {/* right section working */}
+                        <div className="margin-25" style={{ marginRight: 0, marginBlock: 0 }}></div>
+                      </div>
                     </div>
                   </div>
                   <div className="margin-11 h-0 bdr-5 w-full" style={{ marginBottom: 0, borderTop: 0, borderInline: 0 }}></div>
