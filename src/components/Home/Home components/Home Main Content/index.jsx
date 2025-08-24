@@ -32,6 +32,15 @@ function HomeMainContentComp() {
     },
   ]);
 
+  const [blogs, setBlogs] = useState([
+    { _id: 1, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Robin Sanah Kai", channelName: "Word Garden", title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past", description: "An unconventional and compassionate guide to becoming an early bird", createtAt: "5d ago", likes: 9, comments: 4 },
+    { _id: 2, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Robin Sanah Kai", channelName: "Word Garden", title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past", description: "An unconventional and compassionate guide to becoming an early bird", createtAt: "5d ago", likes: 9, comments: 4 },
+    { _id: 3, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Robin Sanah Kai", channelName: "Word Garden", title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past", description: "An unconventional and compassionate guide to becoming an early bird", createtAt: "5d ago", likes: 9, comments: 4 },
+    { _id: 4, isBookmarked: true, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Robin Sanah Kai", channelName: "Word Garden", title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past", description: "An unconventional and compassionate guide to becoming an early bird", createtAt: "5d ago", likes: 9, comments: 4 },
+    { _id: 5, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Robin Sanah Kai", channelName: "Word Garden", title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past", description: "An unconventional and compassionate guide to becoming an early bird", createtAt: "5d ago", likes: 9, comments: 4 },
+    { _id: 6, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Robin Sanah Kai", channelName: "Word Garden", title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past", description: "An unconventional and compassionate guide to becoming an early bird", createtAt: "5d ago", likes: 9, comments: 4 },
+  ]);
+
   const [activeTopicIndex, setActiveTopicIndex] = useState(0);
 
   const handleActiveTabChange = (index) => {
@@ -72,12 +81,14 @@ function HomeMainContentComp() {
         </div>
 
         {/* section-3 */}
-        <div className="height-16"></div>
+        {/* <div className="height-16"></div> */}
 
         {/* section-4 */}
         <div>
           {false && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-          <BlogComp />
+          {blogs.map((item) => (
+            <BlogComp item={item} key={item._id} />
+          ))}
         </div>
       </div>
     </main>

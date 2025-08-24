@@ -282,13 +282,13 @@ function HomeRightSectionComp() {
                   <div>
                     <h2 className="font-10 font-medium color-3 custom-line-h-1 m-0 p-0">Reading list</h2>
                     <div className="padding-18" style={{ paddingBottom: 0 }}>
-                      <p className="custom-fs-1 color-4 custom-line-h-1 m-0 p-0 font-normal">
+                      <div className="custom-fs-1 color-4 custom-line-h-1 m-0 p-0 font-normal">
                         Click the{" "}
                         <div className="inline-block custom-h-2 aspect-square margin-23 align-middle">
                           <CiBookmarkPlus className="w-full h-full" style={{ marginTop: 0, marginInline: 0 }} />
                         </div>{" "}
                         on any story to easily add it to your reading list or a custom list that you can share.
-                      </p>
+                      </div>
                     </div>
                   </div>
                 </div>

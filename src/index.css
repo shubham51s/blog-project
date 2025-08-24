@@ -416,6 +416,10 @@ button {
     height: 16px;
   }
 
+  .height-52 {
+    height: 107px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -655,6 +659,10 @@ button {
     max-width: 200px;
   }
 
+  .width-29 {
+    width: 160px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -782,6 +790,10 @@ button {
 
   .padding-32 {
     padding-block: 80px;
+  }
+
+  .padding-33 {
+    padding: 12px;
   }
 
   .margin-3 {

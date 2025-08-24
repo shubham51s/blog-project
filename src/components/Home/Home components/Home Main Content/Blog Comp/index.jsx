@@ -1,32 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PiStarFourLight } from "react-icons/pi";
 import { PiHandsClappingDuotone } from "react-icons/pi";
 import { FaRegComment } from "react-icons/fa";
+import { CiCircleMinus } from "react-icons/ci";
+import { RiMoreLine } from "react-icons/ri";
+import { CiBookmarkPlus } from "react-icons/ci";
+import { IoBookmark } from "react-icons/io5";
+import { toast } from "react-toastify";
 
-function BlogComp() {
-  const blog = {
-    profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg",
-    userName: "Robin Sanah Kai",
-    channelName: "Word Garden",
-    title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past",
-    description: "An unconventional and compassionate guide to becoming an early bird",
-    createtAt: "5d ago",
-    likes: 9,
-    comments: 4,
-  };
-
+function BlogComp({ item }) {
   const handleUserProfileClick = () => {
     useNavigate("/");
   };
 
+  const [blog, setBlog] = useState(item);
+
   const handleBlogClick = () => {};
+
+  const handleShowLessLikeThisBtnClick = () => {};
+
+  const handleBookmarkBlogBtnClick = () => {
+    if (blog.isBookmarked) {
+      setBlog({ ...blog, isBookmarked: false });
+    } else {
+      setBlog({ ...blog, isBookmarked: true });
+    }
+
+    toast.success(`Bookmark ${!blog.isBookmarked ? "added" : "removed"} successfully!`);
+  };
 
   return (
     <div className="height-18 overflow-hidden">
       <div className="flex justify-center">
         <div className="w-full max-width-2 margin-2 min-w-0">
-          <div className="w-full">
+          <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
             <article>
               <div className="box-content">
                 <div className="w-full h-full">
@@ -57,12 +65,12 @@ function BlogComp() {
                       {/* blog section */}
                       <div className="flex">
                         {/* left section */}
-                        <div className="flex-1" style={{ wordBreak: "break-word" }}>
+                        <div className="grow shrink basis-auto" style={{ wordBreak: "break-word" }}>
                           <div>
                             <div onClick={() => handleBlogClick()} className="flex flex-col static cursor-pointer">
-                              <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold truncate color-3 m-0 p-0">{blog.title}</h2>
+                              <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.title}</h2>
                               <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
-                                <h3 className="height-15 truncate font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.description}</h3>
+                                <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.description}</h3>
                               </div>
                             </div>
                           </div>
@@ -74,7 +82,7 @@ function BlogComp() {
                                   <div className="flex items-center custom-gap-2 align-middle text-center">
                                     <div className="box-content flex">
                                       <div className="inline-block">
-                                        <button className="z-[2] relative border-none cursor-pointer p-0 m-0 bg-transparent">
+                                        <button className="z-[2] relative border-none cursor-pointer p-0 m-0 bg-transparent" title="Member-only story">
                                           <div className="inline-block width-19 aspect-square">
                                             <PiStarFourLight className="w-full h-full align-middle text-yellow-600" />
                                           </div>
@@ -84,7 +92,7 @@ function BlogComp() {
                                     {blog.createtAt}
                                     <div className="width-28 height-51 relative flex items-center">
                                       <Link className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
-                                        <div className="flex">
+                                        <div className="flex" title={`${blog.likes} claps`}>
                                           <div className="custom-gap-1 flex items-center">
                                             <div className="inline-block width-19 aspect-square">
                                               <PiHandsClappingDuotone className="w-full h-full" />
@@ -92,7 +100,7 @@ function BlogComp() {
                                             <span>{blog.likes}</span>
                                           </div>
                                         </div>
-                                        <div className="flex">
+                                        <div className="flex" title={`${blog.comments} responses`}>
                                           <div className="custom-gap-1 flex items-center">
                                             <div className="inline-block width-19 aspect-square">
                                               <FaRegComment className="w-full h-full" />
@@ -104,19 +112,45 @@ function BlogComp() {
                                     </div>
                                   </div>
 
-                                  {/* icons right section working */}
-                                  <div className="flex justify-end items-center grow-0 shrink-0 basis-0">
-                                    <div></div>
-                                    <div></div>
-                                    <div className="margin-26"></div>
+                                  <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
+                                    <div>
+                                      <div className="inline-block">
+                                        <button onClick={() => handleShowLessLikeThisBtnClick()} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Show less like this">
+                                          <div className="width-13 aspect-square">
+                                            <CiCircleMinus className="w-full h-full align-middle" />
+                                          </div>
+                                        </button>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div className="inline-block">
+                                        <button onClick={() => handleBookmarkBlogBtnClick()} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
+                                          <div className="width-13 aspect-square">
+                                            {!blog?.isBookmarked && <CiBookmarkPlus className="w-full h-full align-middle" />}
+                                            {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />}
+                                          </div>
+                                        </button>
+                                      </div>
+                                    </div>
+                                    <div className="margin-26">
+                                      <div className="inline-block">
+                                        <button className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="More">
+                                          <div className="width-13 aspect-square">
+                                            <RiMoreLine className="w-full h-full align-middle" />
+                                          </div>
+                                        </button>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </span>
                             </div>
                           </div>
                         </div>
-                        {/* right section */}
-                        <div className="margin-25" style={{ marginRight: 0, marginBlock: 0 }}></div>
+                        {/* right section working */}
+                        <div className="margin-25" style={{ marginRight: 0, marginBlock: 0 }}>
+                          <img src={blog.images} className="bg-10 border-radius-5 align-middle width-29 height-52" />
+                        </div>
                       </div>
                     </div>
                   </div>
