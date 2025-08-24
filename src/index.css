@@ -408,6 +408,14 @@ button {
     max-height: 90px;
   }
 
+  .height-50 {
+    height: 48px;
+  }
+
+  .height-51 {
+    height: 16px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -643,6 +651,10 @@ button {
     max-width: 520px;
   }
 
+  .width-28 {
+    max-width: 200px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -862,6 +874,10 @@ button {
 
   .margin-25 {
     margin: 56px;
+  }
+
+  .margin-26 {
+    margin-right: -12px;
   }
 
   .custom-bg-position {

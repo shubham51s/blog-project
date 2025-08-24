@@ -1,13 +1,19 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { PiStarFourLight } from "react-icons/pi";
+import { PiHandsClappingDuotone } from "react-icons/pi";
+import { FaRegComment } from "react-icons/fa";
 
 function BlogComp() {
   const blog = {
     profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg",
     userName: "Robin Sanah Kai",
     channelName: "Word Garden",
-    title: "How To Wake Up at 5 A.M. Every Day",
+    title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past",
     description: "An unconventional and compassionate guide to becoming an early bird",
+    createtAt: "5d ago",
+    likes: 9,
+    comments: 4,
   };
 
   const handleUserProfileClick = () => {
@@ -61,9 +67,55 @@ function BlogComp() {
                             </div>
                           </div>
 
-                          <div></div>
+                          <div>
+                            <div className="w-full padding-25" style={{ paddingBottom: 0, paddingInline: 0 }}>
+                              <span className="font-4 color-4 custom-line-h-1 font-normal">
+                                <div className="height-50 flex justify-between items-center">
+                                  <div className="flex items-center custom-gap-2 align-middle text-center">
+                                    <div className="box-content flex">
+                                      <div className="inline-block">
+                                        <button className="z-[2] relative border-none cursor-pointer p-0 m-0 bg-transparent">
+                                          <div className="inline-block width-19 aspect-square">
+                                            <PiStarFourLight className="w-full h-full align-middle text-yellow-600" />
+                                          </div>
+                                        </button>
+                                      </div>
+                                    </div>
+                                    {blog.createtAt}
+                                    <div className="width-28 height-51 relative flex items-center">
+                                      <Link className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
+                                        <div className="flex">
+                                          <div className="custom-gap-1 flex items-center">
+                                            <div className="inline-block width-19 aspect-square">
+                                              <PiHandsClappingDuotone className="w-full h-full" />
+                                            </div>
+                                            <span>{blog.likes}</span>
+                                          </div>
+                                        </div>
+                                        <div className="flex">
+                                          <div className="custom-gap-1 flex items-center">
+                                            <div className="inline-block width-19 aspect-square">
+                                              <FaRegComment className="w-full h-full" />
+                                            </div>
+                                            <span>{blog.comments}</span>
+                                          </div>
+                                        </div>
+                                      </Link>
+                                    </div>
+                                  </div>
+
+                                  {/* icons right section working */}
+                                  <div className="flex justify-end items-center grow-0 shrink-0 basis-0">
+                                    <div></div>
+                                    <div></div>
+                                    <div className="margin-26"></div>
+                                  </div>
+                                </div>
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                        {/* right section working */}
+                        {/* right section */}
                         <div className="margin-25" style={{ marginRight: 0, marginBlock: 0 }}></div>
                       </div>
                     </div>
