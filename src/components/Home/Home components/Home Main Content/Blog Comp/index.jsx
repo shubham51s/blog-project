@@ -16,8 +16,6 @@ function BlogComp({ item }) {
 
   const [blog, setBlog] = useState(item);
 
-  const handleBlogClick = () => {};
-
   const handleShowLessLikeThisBtnClick = () => {};
 
   const handleBookmarkBlogBtnClick = () => {
@@ -30,12 +28,14 @@ function BlogComp({ item }) {
     toast.success(`Bookmark ${!blog.isBookmarked ? "added" : "removed"} successfully!`);
   };
 
+  const handleBlogMainClick = () => {};
+
   return (
     <div className="height-18 overflow-hidden">
       <div className="flex justify-center">
         <div className="w-full max-width-2 margin-2 min-w-0">
           <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
-            <article>
+            <article onClick={() => handleBlogMainClick()}>
               <div className="box-content">
                 <div className="w-full h-full">
                   <div className="flex relative">
@@ -67,7 +67,7 @@ function BlogComp({ item }) {
                         {/* left section */}
                         <div className="grow shrink basis-auto" style={{ wordBreak: "break-word" }}>
                           <div>
-                            <div onClick={() => handleBlogClick()} className="flex flex-col static cursor-pointer">
+                            <div className="flex flex-col static cursor-pointer">
                               <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.title}</h2>
                               <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
                                 <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.description}</h3>
@@ -148,7 +148,7 @@ function BlogComp({ item }) {
                           </div>
                         </div>
                         {/* right section working */}
-                        <div className="margin-25" style={{ marginRight: 0, marginBlock: 0 }}>
+                        <div className="margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
                           <img src={blog.images} className="bg-10 border-radius-5 align-middle width-29 height-52" />
                         </div>
                       </div>

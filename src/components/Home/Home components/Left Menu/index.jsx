@@ -9,6 +9,8 @@ import { FaRegFile } from "react-icons/fa";
 import { FaRegFileAlt } from "react-icons/fa";
 import { RiAddLargeFill } from "react-icons/ri";
 import { GoPerson } from "react-icons/go";
+import { Link } from "react-router-dom";
+import { FaChevronRight } from "react-icons/fa6";
 
 function HomeLeftMenuComp() {
   const menuOptions = [
@@ -71,14 +73,12 @@ function HomeLeftMenuComp() {
 
             <div className="flex flex-col custom-gap-5">
               <div className="padding-22 flex items-center justify-between" style={{ paddingBlock: 0 }}>
-                <p className="custom-fs-1 color-6 opacity-75 custom-line-h-1 font-normal m-0 p-0">Recent</p>
-                <div className="inline-block">
-                  <div className="padding-6 cursor-pointer m-0 p-0 color-6 opacity-75 no-underline transition-all duration-300 ease-in-out hover:opacity-100">
-                    <div className="height-8 aspect-square">
-                      <RiAddLargeFill className="w-full h-full align-middle" />
-                    </div>
+                <Link to="/" className="flex items-center m-0 p-0 no-underline custom-gap-3">
+                  <h2 className="tracking-normal color-3 font-10 font-medium custom-line-h-1 m-0 p-0">Following</h2>
+                  <div className="width-19 aspect-square">
+                    <FaChevronRight className="align-middle w-full h-full color-4" />
                   </div>
-                </div>
+                </Link>
               </div>
               <div className="margin-21 flex custom-gap-2 padding-3" style={{ marginBottom: 0, marginInline: 0, paddingBlock: 0 }}>
                 <div className="padding-23 flex-none color-6 opacity-75" style={{ paddingBlock: 0 }}>
