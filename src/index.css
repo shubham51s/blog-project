@@ -14,6 +14,7 @@ p {
 
 button {
   margin: 0;
+  cursor: pointer;
 }
 
 :root {
@@ -291,6 +292,10 @@ button {
     gap: 12px;
   }
 
+  .custom-gap-6 {
+    gap: 18px;
+  }
+
   .custom-margin-1 {
     margin: 20px 64px 0;
   }
@@ -441,6 +446,26 @@ button {
     height: 3px;
   }
 
+  .height-56 {
+    min-height: 15px;
+  }
+
+  .height-57 {
+    min-height: 100px;
+  }
+
+  .height-58 {
+    max-height: 100px;
+  }
+
+  .height-59 {
+    min-height: 24px;
+  }
+
+  .height-60 {
+    max-height: 24px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -553,6 +578,14 @@ button {
 
   .border-radius-7 {
     border-radius: 24px;
+  }
+
+  .border-radius-8 {
+    border-radius: 19px;
+  }
+
+  .border-radius-9 {
+    border-radius: 99em;
   }
 
   .bdr-3 {
@@ -716,6 +749,18 @@ button {
     max-width: 7952px;
   }
 
+  .width-36 {
+    max-width: 155px;
+  }
+
+  .width-37 {
+    max-width: 500px;
+  }
+
+  .width-38 {
+    width: 21px
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -861,6 +906,26 @@ button {
     padding-inline: 2px
   }
 
+  .padding-37 {
+    padding-block: 9px;
+  }
+
+  .padding-38 {
+    padding-inline: 16px;
+  }
+
+  .padding-39 {
+    padding: 16px;
+  }
+
+  .padding-40 {
+    padding: 14px
+  }
+
+  .padding-41 {
+    padding: 6px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -979,6 +1044,14 @@ button {
 
   .margin-32 {
     margin: 2.14em;
+  }
+  
+  .margin-33 {
+    margin-bottom: 16px
+  }
+
+  .margin-34 {
+    margin: 10px;
   }
 
   .custom-bg-position {
