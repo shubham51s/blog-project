@@ -9,6 +9,7 @@ import { GoShare } from "react-icons/go";
 import { IoIosMore } from "react-icons/io";
 import { Link } from "react-router-dom";
 import CommentsComp from "../../components/PostDetailsPageComponents/Comments comp";
+import BlogRecommendComp from "../../components/PostDetailsPageComponents/Blog Recommendation";
 
 function PostDetailsPage() {
   const [blogDetails, setBlogDetails] = useState({
@@ -45,7 +46,7 @@ function PostDetailsPage() {
       <div className="flex">
         <HomeLeftMenuComp />
         {/* width need to check later given different width than original */}
-        <div className="width-17 grow-1 shrink-1 basis-auto">
+        <div className="width-17 flex-grow shrink basis-auto">
           <div>
             <div className="bdr-5 w-full">
               <div className="height-55 w-full"></div>
@@ -124,7 +125,7 @@ function PostDetailsPage() {
                             </div>
                             <div className="flex items-center flex-wrap">
                               <span className="custom-fs-1 custom-line-h-1 color-3 font-normal color-4">
-                                <div className="flex grow-1 shrink-0 basis-auto">
+                                <div className="flex flex-grow shrink-0 basis-auto">
                                   <span>{blogDetails.readTime}</span>
                                   <div className="padding-6 flex items-center text-center" style={{ paddingBlock: 0 }}>
                                     .
@@ -219,7 +220,7 @@ function PostDetailsPage() {
             <div className=""></div>
 
             <footer className="margin-28 static height-54 height-53 border-t-0 box-content flex items-center custom-bg-8" style={{ marginTop: 0, marginInline: 0 }}>
-              <div className="grow-1 shrink-0 basis-auto">
+              <div className="flex-grow shrink-0 basis-auto">
                 <div className="flex justify-center">
                   <div className="min-w-0 w-full max-width-2 margin-2 flex justify-between">
                     <div className="flex items-center">
@@ -253,21 +254,21 @@ function PostDetailsPage() {
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <div className="margin-18 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
+                      <div className="margin-18 flex-grow: 0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
                         <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
                           <div className="width-13 aspect-square">
                             <MdOutlineBookmarkAdd className="w-full h-full" />
                           </div>
                         </button>
                       </div>
-                      <div className="margin-18 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
+                      <div className="margin-18 flex-grow: 0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
                         <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
                           <div className="width-13 aspect-square">
                             <GoShare className="w-full h-full" />
                           </div>
                         </button>
                       </div>
-                      <div className="grow-0 shrink-0 basis-auto">
+                      <div className="flex-grow: 0 shrink-0 basis-auto">
                         <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
                           <div className="width-13 aspect-square">
                             <IoIosMore className="w-full h-full" />
@@ -295,7 +296,7 @@ function PostDetailsPage() {
                           </Link>
                         </div>
                       </div>
-                      <div className="flex flex-col grow-0 shrink-0 basis-auto">
+                      <div className="flex flex-col flex-grow: 0 shrink-0 basis-auto">
                         <div className="width-37">
                           <a href="#" className="m-0 p-0 cursor-pointer flex items-center no-underline">
                             <h2 className="tracking-normal line-h-8 font-3 font-semibold color-3 m-0 p-0">
@@ -305,7 +306,7 @@ function PostDetailsPage() {
                             </h2>
                           </a>
                           <div className="flex items-baseline margin-16" style={{ marginBottom: 0, marginInline: 0 }}>
-                            <div className="grow-0 shrink-0 basis-auto">
+                            <div className="flex-grow: 0 shrink-0 basis-auto">
                               <span className="custom-fs-1 custom-fs-1 color-4 custom-line-h-1">
                                 <a href="#" className="cursor-pointer m-0 p-0 no-underline">{`${blogDetails.community.followers} followers`}</a>
                               </span>
@@ -345,7 +346,7 @@ function PostDetailsPage() {
                         </Link>
                       </div>
                     </div>
-                    <div className="flex flex-col grow-0 shrink-0 basis-auto">
+                    <div className="flex flex-col flex-grow: 0 shrink-0 basis-auto">
                       <div className="width-37">
                         <a href="#" className="m-0 p-0 cursor-pointer flex items-center no-underline">
                           <h2 className="tracking-normal line-h-8 font-3 font-semibold color-3 m-0 p-0">
@@ -355,7 +356,7 @@ function PostDetailsPage() {
                           </h2>
                         </a>
                         <div className="flex items-baseline margin-16" style={{ marginBottom: 0, marginInline: 0 }}>
-                          <div className="grow-0 shrink-0 basis-auto">
+                          <div className="flex-grow: 0 shrink-0 basis-auto">
                             <span className="custom-fs-1 custom-fs-1 color-4 custom-line-h-1">
                               <a href="#" className="cursor-pointer m-0 p-0 no-underline">{`${blogDetails.author.followers} followers`}</a>
                             </span>
@@ -391,7 +392,7 @@ function PostDetailsPage() {
             {/* comments section */}
             {/* working */}
             <CommentsComp />
-            <div className="padding-34 bg-10" style={{ paddingBottom: 0, paddingInline: 0 }}></div>
+            <BlogRecommendComp />
           </div>
         </div>
       </div>

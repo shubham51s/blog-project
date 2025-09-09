@@ -3,6 +3,7 @@ import { FaBold } from "react-icons/fa";
 import { FaItalic } from "react-icons/fa";
 
 import { AiTwotoneSafetyCertificate } from "react-icons/ai";
+import { IoIosMore } from "react-icons/io";
 
 function CommentsComp() {
   const [commentInp, setCommentInp] = useState("");
@@ -14,7 +15,43 @@ function CommentsComp() {
     userName: "shubhams1234",
   });
 
-  const [userComments, setUserComments] = useState([{}]);
+  const [userComments, setUserComments] = useState([
+    {
+      _id: 0,
+      name: "Yana Bostongirl",
+      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*w3tvZB5IHnwLb244e12-1w.jpeg",
+      comment: "Thank you for reading!",
+      date: "Aug 20",
+    },
+    {
+      _id: 1,
+      name: "Madison Clarke",
+      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*TjQ8gFFDcmp0C6PHJIKI1A.jpeg",
+      comment: "Toxic people can drain so much energy—setting boundaries really is self-protection.",
+      date: "Aug 20",
+    },
+    {
+      _id: 2,
+      name: "Shaant",
+      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*_0nIFKGQWE56R5MDpoYXkQ.jpeg",
+      comment: "They crave attention for good deeds. C’mon, if you are a good person, great, but you don’t need a drumroll every time you smile at a stranger or help an elderly person cross the road.",
+      date: "Aug 20",
+    },
+    {
+      _id: 3,
+      name: "Madison Clarke",
+      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*TjQ8gFFDcmp0C6PHJIKI1A.jpeg",
+      comment: "Toxic people can drain so much energy—setting boundaries really is self-protection.",
+      date: "Aug 20",
+    },
+    {
+      _id: 4,
+      name: "Madison Clarke",
+      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*TjQ8gFFDcmp0C6PHJIKI1A.jpeg",
+      comment: "Toxic people can drain so much energy—setting boundaries really is self-protection.",
+      date: "Aug 20",
+    },
+  ]);
   const [isAddComment, setIsAddComment] = useState(false);
 
   const handleCommentInputChange = (e) => {
@@ -104,7 +141,56 @@ function CommentsComp() {
 
           {/* user comments dynamic */}
           {/* working */}
-          <div className="bdr-5" style={{ borderTop: 0, borderInline: 0 }}></div>
+          {userComments.slice(0, 3).map((item) => (
+            <div className="bdr-5" style={{ borderTop: 0, borderInline: 0 }} key={item._id}>
+              <div className="h-full w-full">
+                <div className="custom-p-y-1 padding-42" style={{ paddingInline: 0 }}>
+                  <div className="flex justify-between">
+                    <div className="flex items-center">
+                      <div className="inline-block cursor-pointer relative">
+                        <div className="relative">
+                          <img src={item.profileImg} alt={item.name} className="width-11 aspect-square box-border rounded-full align-middle" />
+                        </div>
+                      </div>
+                      <div className="padding-33" style={{ paddingRight: 0, paddingBlock: 0 }}>
+                        <div className="flex items-center">
+                          <div className="cursor-pointer transition-all duration-400 ease-in-out hover:underline">
+                            <p className="break-all text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0">{item.name}</p>
+                          </div>
+                          {item._id === 0 && (
+                            <div className="bg-[rgb(26,137,23)] text-white margin-19 border-radius-3 padding-6 line-h-7 font-8 font-normal" style={{ marginBlock: 0, marginRight: 0, paddingBlock: 0 }}>
+                              Author
+                            </div>
+                          )}
+                        </div>
+                        <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">
+                          <span>{item.date}</span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="inline-block">
+                      <button className="custom-px-2 padding-36 cursor-pointer m-0">
+                        <div className="width-13 aspect-square">
+                          <IoIosMore className="w-full h-full" />
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="margin-35 break-words" style={{ marginBottom: 0, marginInline: 0 }}>
+                    <div className="padding-27">
+                      <div className="color-3 custom-fs-1 line-h-8 font-normal">{item.comment}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {userComments.length > 3 && (
+            <div className="margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
+              <button className="bdr-7 cursor-pointer border-radius-9 text-center padding-5 box-border color-3 custom-fs-1 inline-block custom-line-h-1 font-medium">See all responses</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
