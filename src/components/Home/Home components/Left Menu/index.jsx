@@ -53,7 +53,7 @@ function HomeLeftMenuComp() {
   return (
     <div className="width-16 flex-none">
       <div className="sticky translate-x-0 top-2 height-11 bdr-5 width-16 custom-bg-8 flex flex-col z-[500]" style={{ borderLeft: 0, borderBlock: 0 }}>
-        <div className="flex-grow flex-shrink basis-auto flex">
+        <div className="grow flex-shrink basis-auto flex">
           <div className="flex flex-col custom-gap-4 overflow-auto padding-14" style={{ paddingTop: 0, paddingInline: 0 }}>
             <div className="flex flex-col custom-gap-4">
               <div className="height-12"></div>

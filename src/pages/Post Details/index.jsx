@@ -46,7 +46,7 @@ function PostDetailsPage() {
       <div className="flex">
         <HomeLeftMenuComp />
         {/* width need to check later given different width than original */}
-        <div className="width-17 flex-grow shrink basis-auto">
+        <div className="width-17 grow shrink basis-auto">
           <div>
             <div className="bdr-5 w-full">
               <div className="height-55 w-full"></div>
@@ -125,7 +125,7 @@ function PostDetailsPage() {
                             </div>
                             <div className="flex items-center flex-wrap">
                               <span className="custom-fs-1 custom-line-h-1 color-3 font-normal color-4">
-                                <div className="flex flex-grow shrink-0 basis-auto">
+                                <div className="flex grow shrink-0 basis-auto">
                                   <span>{blogDetails.readTime}</span>
                                   <div className="padding-6 flex items-center text-center" style={{ paddingBlock: 0 }}>
                                     .
@@ -220,7 +220,7 @@ function PostDetailsPage() {
             <div className=""></div>
 
             <footer className="margin-28 static height-54 height-53 border-t-0 box-content flex items-center custom-bg-8" style={{ marginTop: 0, marginInline: 0 }}>
-              <div className="flex-grow shrink-0 basis-auto">
+              <div className="grow shrink-0 basis-auto">
                 <div className="flex justify-center">
                   <div className="min-w-0 w-full max-width-2 margin-2 flex justify-between">
                     <div className="flex items-center">

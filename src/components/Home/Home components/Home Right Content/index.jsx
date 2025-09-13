@@ -116,7 +116,7 @@ function HomeRightSectionComp() {
         {/* position sticky & scroll need to check */}
         <div className="sticky top-2 mt-0">
           <div className="height-14 flex flex-col">
-            <div className="flex-grow flex-shrink-0 basis-auto">
+            <div className="grow shrink-0 basis-auto">
               <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                 <div className="margin-17" style={{ marginTop: 0 }}>
                   <a href="#" className="cursor-pointer m-0 p-0 no-underline">

@@ -49,7 +49,7 @@ function HomeMainContentComp() {
   };
 
   return (
-    <main className="width-20 flex-grow flex-shrink basis-auto block">
+    <main className="width-20 grow flex-shrink basis-auto block">
       <div className="block">
         {/* section-1 */}
         <div className="height-10"></div>

@@ -29,7 +29,7 @@ button {
   --border-6: rgba(255, 255, 255, 0.8);
   --border-7: rgba(255, 255, 255, 0.9);
   --border-8: black;
-  --border-9: rgba(229, 229, 229, 1)
+  --border-9: rgb(229, 229, 229);
 
   /* for background color */
   --bg-color-1: rgb(25, 25, 25);
@@ -485,6 +485,10 @@ button {
     max-height: 24px;
   }
 
+  .height-61 {
+    max-height: 48px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -628,7 +632,7 @@ button {
   }
 
   .bdr-8 {
-  border: 1px solid var(--border-9)
+  border: 1px solid var(--border-9);
 }
 
   .translateY-1 {
@@ -961,6 +965,14 @@ button {
     padding: 56px;
   }
 
+  .padding-44 {
+    padding-top: 88px;
+  }
+
+  .padding-45 {
+    padding-bottom: 40px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -1103,6 +1115,10 @@ button {
 
   .margin-38 { 
     margin-inline: -16px;
+  }
+
+  .margin-39 {
+    margin-block: 72px;
   }
 
   .custom-bg-position {

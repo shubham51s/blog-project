@@ -112,7 +112,7 @@ function BlogComp({ item }) {
                                     </div>
                                   </div>
 
-                                  <div className="flex justify-end items-center flex-grow-0 shrink-0 basis-0 color-6">
+                                  <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
                                     <div>
                                       <div className="inline-block">
                                         <button onClick={() => handleShowLessLikeThisBtnClick()} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Show less like this">

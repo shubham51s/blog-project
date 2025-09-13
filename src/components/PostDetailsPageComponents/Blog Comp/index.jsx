@@ -1,25 +1,15 @@
-import { Description } from "@mui/icons-material";
 import React, { useState } from "react";
+import { Description } from "@mui/icons-material";
+import { PiHandsClapping } from "react-icons/pi";
+import { FiMessageCircle } from "react-icons/fi";
+import { IoIosMore } from "react-icons/io";
+import { CiBookmarkPlus } from "react-icons/ci";
 
-function BlogComp() {
-  const [blogDetails, setBlogDetails] = useState({
-    title: "How to Tell If Someone Is Actually Smart",
-    description: "And 5 things that automatically don’t mean you’re smart",
-    date: "Jul 31",
-    img: "https://miro.medium.com/v2/resize:fit:849/format:webp/1*kcMrO6kCcd5Zr9WMf5FVyA.jpeg",
-    community: {
-      name: "ILLUMINATION",
-      profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*AZxiin1Cvws3J0TwNUP2sQ.png",
-    },
-    writer: {
-      name: "Yana Bostongirl",
-    },
-  });
-
+function BlogComp({ blogDetails }) {
   return (
     <div className="padding-39 grow-0" style={{ maxWidth: "50%", flexBasis: "50%", paddingBlock: 0 }}>
       <div className="padding-43 h-full" style={{ paddingTop: 0, paddingInline: 0 }}>
-        <article className="h-full">
+        <article className="h-full cursor-pointer">
           <div className="h-full box-border">
             <div className="h-full w-full">
               <div className="grid relative h-full custom-gap-8 grid-rows-[auto_1fr] grid-cols-12 grid-area-1">
@@ -63,10 +53,40 @@ function BlogComp() {
                           <span className="">{blogDetails.date}</span>
                           <div className="width-28 height-51 relative flex items-center">
                             {/* pending from here claps and comments icon with value */}
-                            <a href="" className=""></a>
+                            <a href="#" className="relative flex items-center custom-gap-2 no-underline m-0 p-0 transition-all duration-300 ease-out">
+                              <div className="flex items-center custom-gap-1" title={`${blogDetails.clapsCount} claps`}>
+                                <div className="width-19 aspect-square">
+                                  <PiHandsClapping className="w-full h-full" />
+                                </div>
+                                <span className="">{blogDetails.clapsCount}</span>
+                              </div>
+                              <div className="flex items-center custom-gap-1" title={`${blogDetails.commentsCount} responses`}>
+                                <div className="width-19 aspect-square">
+                                  <FiMessageCircle className="w-full h-full" />
+                                </div>
+                                <span className="">{blogDetails.commentsCount}</span>
+                              </div>
+                            </a>
                           </div>
                         </div>
-                        <div className="grow-0 shrink-0 basis-0 flex items-center justify-end"></div>
+                        <div className="grow-0 shrink-0 basis-0 flex items-center justify-end">
+                          <div className="inline-block">
+                            <button className="relative padding-33 cursor-pointer m-0" title="Save">
+                              <div className="width-13 aspect-square">
+                                <CiBookmarkPlus className="w-full h-full" />
+                              </div>
+                            </button>
+                          </div>
+                          <div className="margin-26">
+                            <div className="inline-block">
+                              <button className="relative padding-33 cursor-pointer m-0" title="More">
+                                <div className="width-13 aspect-square">
+                                  <IoIosMore className="w-full h-full" />
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </span>
                   </div>

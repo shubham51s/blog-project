@@ -56,7 +56,7 @@ function UnauthenticatedHome() {
 
   return (
     <div className="w-screen h-screen flex flex-col font-normal custom-bg-2">
-      <div className="flex-grow flex-shrink-0 basis-auto overflow-hidden custom-min-h-1 flex flex-col">
+      <div className="grow shrink-0 basis-auto overflow-hidden custom-min-h-1 flex flex-col">
         <div className="transition-colors duration-300 ease-linear bdr-1 custom-bdr-3 w-full">
           <div className="flex justify-center">
             <div className="my-0 custom-m-x-1 w-full">
@@ -66,7 +66,7 @@ function UnauthenticatedHome() {
                     <img className="custom-h-2 w-auto" src={logo} />
                   </span>
                 </div>
-                <div className="grow flex-shrink-0 basis-auto"></div>
+                <div className="grow shrink-0 basis-auto"></div>
                 <div className="flex items-center font-medium">
                   <div className="inline-block">
                     <div className="custom-m-r">

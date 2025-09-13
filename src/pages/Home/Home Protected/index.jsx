@@ -11,7 +11,7 @@ function HomePageProtected() {
       {/* home content */}
       <div className="flex">
         <HomeLeftMenuComp />
-        <div className="width-17 flex-grow flex-shrink basis-auto">
+        <div className="width-17 grow flex-shrink basis-auto">
           <div className="width-18 m-auto flex justify-evenly">
             <HomeMainContentComp />
             <HomeRightSectionComp />
