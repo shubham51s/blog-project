@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { urlBasePath } from "../../constants/constant";
+import { toast } from "react-toastify";
 
 function LoginComp() {
-  const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn } = useContext(UserContext);
+  const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn, setUserInfo, userInfo } = useContext(UserContext);
+  const submitBtnTimeout = useRef(null);
 
   const [isShowPass, setIsShowPass] = useState(false);
 
@@ -44,19 +47,68 @@ function LoginComp() {
     setIsShowPass(val);
   };
 
+  const validateUserCredentials = async () => {
+    try {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      const isValidEmail = !emailRegex.test(userDetails.email);
+      const isValidPassword = userDetails.pass.length < 4;
+
+      setValidationErr({
+        email: isValidEmail,
+        pass: isValidPassword,
+      });
+
+      if (isValidEmail || isValidPassword) {
+        return;
+      }
+
+      const param = {
+        email: userDetails.email,
+        password: userDetails.pass,
+      };
+
+      const response = await fetch(`${urlBasePath}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(param),
+      });
+
+      const result = await response.json();
+
+      if (response.status === 200) {
+        const user = {
+          ...result.data.user,
+          token: result.token,
+        };
+        setUserInfo(user);
+        setIsUserLoggedIn(true);
+      } else {
+        const msg = result.message || "Something went wrong!";
+        toast.error(msg);
+      }
+      console.log("result: ", result);
+    } catch (err) {
+      console.log("catch block: ", err);
+      const msg = "Something went wrong!";
+      toast.error(msg);
+    }
+  };
+
   const handleSubmitBtnClick = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    const isValidEmail = !emailRegex.test(userDetails.email);
-    const isValidPassword = userDetails.pass.length < 4;
-
-    setValidationErr({
-      email: isValidEmail,
-      pass: isValidPassword,
-    });
-
-    if (!isValidEmail && !isValidPassword) {
-      setIsUserLoggedIn(true);
+    if (!submitBtnTimeout.current) {
+      validateUserCredentials();
+      submitBtnTimeout.current = setTimeout(() => {
+        submitBtnTimeout.current = null;
+      }, 500);
+    } else {
+      clearTimeout(submitBtnTimeout.current);
+      submitBtnTimeout.current = setTimeout(() => {
+        submitBtnTimeout.current = null;
+        validateUserCredentials();
+      }, 500);
     }
   };
 

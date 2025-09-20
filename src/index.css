@@ -12,6 +12,7 @@ p {
   margin: 0;
 }
 
+
 button {
   margin: 0;
   /* cursor: pointer; */
@@ -280,7 +281,6 @@ button {
   "image image image image image image image image image image image image"
   "content content content content content content content content content content content content";
 }
-
 
 @media only screen and (min-width: 1500px) {
   .custom-gap-1 {
@@ -639,6 +639,10 @@ button {
     transform: translateY(149.8px);
   }
 
+  .translateX-1 {
+    transform: translateX(-414px);
+  }
+
   .max-width-2 {
     max-width: 680px;
   }
@@ -790,6 +794,10 @@ button {
 
   .width-39 {
     width: calc(100% + 32px);
+  }
+
+  .width-40 {
+    width: 414px;
   }
 
   .margin-2 {
