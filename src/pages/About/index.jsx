@@ -39,7 +39,7 @@ function AboutPage() {
     },
   ];
 
-  const { isUserLoggedIn, isShowSignupPopup, isShowLoginPopup, setIsShowSignupPopup, setIsShowLoginPopup, setSignUpHeading } = useContext(UserContext);
+  const { isUserLoggedIn, isInitialLoading, isShowSignupPopup, isShowLoginPopup, setIsShowSignupPopup, setIsShowLoginPopup, setSignUpHeading } = useContext(UserContext);
   const loginRef = useRef();
   const signupRef = useRef();
   const navigate = useNavigate();
@@ -69,7 +69,7 @@ function AboutPage() {
   };
 
   useEffect(() => {
-    if (isUserLoggedIn) navigate("/");
+    if (!isInitialLoading && isUserLoggedIn) navigate("/");
 
     document.addEventListener("click", handleClickOutside);
 

@@ -6,10 +6,13 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { urlBasePath } from "../../constants/constant";
 import { toast } from "react-toastify";
+import { useApi } from "../../hooks/useApi";
 
 function LoginComp() {
   const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn, setUserInfo, userInfo } = useContext(UserContext);
   const submitBtnTimeout = useRef(null);
+
+  const { fetchRequest } = useApi();
 
   const [isShowPass, setIsShowPass] = useState(false);
 
@@ -68,20 +71,13 @@ function LoginComp() {
         password: userDetails.pass,
       };
 
-      const response = await fetch(`${urlBasePath}/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(param),
-      });
+      const response = await fetchRequest("/users/login", "POST", param);
 
       const result = await response.json();
 
       if (response.status === 200) {
         const user = {
           ...result.data.user,
-          token: result.token,
         };
         setUserInfo(user);
         setIsUserLoggedIn(true);
@@ -89,9 +85,7 @@ function LoginComp() {
         const msg = result.message || "Something went wrong!";
         toast.error(msg);
       }
-      console.log("result: ", result);
     } catch (err) {
-      console.log("catch block: ", err);
       const msg = "Something went wrong!";
       toast.error(msg);
     }

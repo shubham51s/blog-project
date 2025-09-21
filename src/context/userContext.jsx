@@ -1,15 +1,46 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { urlBasePath } from "../constants/constant";
 
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState({});
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isShowSignupPopup, setIsShowSignupPopup] = useState(false);
   const [isShowLoginPopup, setIsShowLoginPopup] = useState(false);
   const [signUpHeading, setSignUpHeading] = useState("");
 
-  return <UserContext.Provider value={{ userInfo, setUserInfo, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isShowSignupPopup, setIsShowSignupPopup, signUpHeading, setSignUpHeading }}>{children}</UserContext.Provider>;
+  const verifyAuthentication = async () => {
+    try {
+      const response = await fetch(`${urlBasePath}/users/me`, {
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        method: "GET",
+      });
+
+      setIsInitialLoading(false);
+
+      if (response.status === 200) {
+        const result = await response.json();
+        setUserInfo({ ...result.data.user });
+        setIsUserLoggedIn(true);
+      } else {
+        setUserInfo({});
+        setIsUserLoggedIn(false);
+      }
+    } catch (err) {
+      setUserInfo({});
+      setIsUserLoggedIn(false);
+      setIsInitialLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    verifyAuthentication();
+  }, []);
+
+  return <UserContext.Provider value={{ userInfo, setUserInfo, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isShowSignupPopup, setIsShowSignupPopup, signUpHeading, setSignUpHeading, isInitialLoading, setIsInitialLoading }}>{children}</UserContext.Provider>;
 };
 
 export { UserContext };

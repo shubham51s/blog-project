@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { urlBasePath } from "../../constants/constant";
+import { useApi } from "../../hooks/useApi";
 
 function SignupComp() {
-  const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn, signUpHeading, isShowSignupPopup } = useContext(UserContext);
+  const { setIsShowSignupPopup, setIsShowLoginPopup, setIsUserLoggedIn, signUpHeading, isShowSignupPopup, setUserInfo } = useContext(UserContext);
+  const { fetchRequest } = useApi();
 
   const [isShowPass, setIsShowPass] = useState(false);
   const [isShowConfirmPass, setIsShowConfirmPass] = useState(false);
@@ -71,6 +74,32 @@ function SignupComp() {
     setIsShowConfirmPass(val);
   };
 
+  const validateUserCredentials = async () => {
+    try {
+      const param = {
+        name: userDetails.name,
+        email: userDetails.email,
+        password: userDetails.pass,
+        confirmPassword: userDetails.confirmPass,
+        gender: userDetails.gender,
+      };
+
+      const res = await fetchRequest("/users/signup", "POST", param);
+
+      const result = await res.json();
+
+      if (res.status === 200) {
+        setIsUserLoggedIn(true);
+        setUserInfo({ ...result.data.user });
+      } else {
+        const msg = result.message || "Something went wrong!";
+        toast.err(msg);
+      }
+    } catch (err) {
+      console.err(err);
+    }
+  };
+
   const handleSubmitBtnClick = () => {
     const nameRegex = /^[A-Za-z\s]{2,}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -90,7 +119,7 @@ function SignupComp() {
     });
 
     if (!isValidName && !isValidEmail && !isValidPassword && !isValidConfirmPass && !isGenderSelected) {
-      setIsUserLoggedIn(true);
+      validateUserCredentials();
     }
   };
 
