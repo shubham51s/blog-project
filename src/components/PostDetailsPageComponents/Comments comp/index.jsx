@@ -227,6 +227,7 @@ function CommentsComp() {
           </div>
         </div>
       </div>
+      {/* Show all comments component */}
       {/* only when to show all comments (>3) */}
       {/* working */}
       <div className={`transition-transform duration-600 ease shadow-lg bdr-5" ${isShowAllComments ? "fixed flex flex-col box-border h-full justify-stretch visible translateX-1 left-full top-0 overflow-auto custom-bg-8 z-[520] width-40" : "hidden translate-x-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
