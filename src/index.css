@@ -345,6 +345,10 @@ button {
     padding-inline: 16px;
   }
 
+  .rightCustom-1 {
+    right: -7px;
+  }
+
   .top-1 {
     top: 50px;
   }
@@ -487,6 +491,10 @@ button {
 
   .height-61 {
     max-height: 48px;
+  }
+
+  .height-62 {
+    min-height: 14px
   }
 
   .custom-max-w-1 {

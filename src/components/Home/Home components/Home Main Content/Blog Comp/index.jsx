@@ -10,8 +10,9 @@ import { IoBookmark } from "react-icons/io5";
 import { toast } from "react-toastify";
 
 function BlogComp({ item }) {
+  const navigate = useNavigate();
   const handleUserProfileClick = () => {
-    useNavigate("/");
+    navigate("/");
   };
 
   const [blog, setBlog] = useState(item);
@@ -28,7 +29,9 @@ function BlogComp({ item }) {
     toast.success(`Bookmark ${!blog.isBookmarked ? "added" : "removed"} successfully!`);
   };
 
-  const handleBlogMainClick = () => {};
+  const handleBlogMainClick = () => {
+    navigate("/blog/12345");
+  };
 
   return (
     <div className="height-18 overflow-hidden">

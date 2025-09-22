@@ -1,14 +1,18 @@
 import React, { useRef, useState } from "react";
 import { FaBold } from "react-icons/fa";
 import { FaItalic } from "react-icons/fa";
-
 import { AiTwotoneSafetyCertificate } from "react-icons/ai";
 import { IoIosMore } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 
 function CommentsComp() {
   const [commentInp, setCommentInp] = useState("");
+  const [commentInp2, setCommentInp2] = useState("");
   const inputRef = useRef(null);
+  const inputRef2 = useRef(null);
   const [isShowAllComments, setIsShowAllComments] = useState(true);
+  const [isAddComment, setIsAddComment] = useState(false);
+  const [isAddComment2, setIsAddComment2] = useState(false);
 
   const [userDetails, setUserDetails] = useState({
     name: "",
@@ -53,12 +57,17 @@ function CommentsComp() {
       date: "Aug 20",
     },
   ]);
-  const [isAddComment, setIsAddComment] = useState(false);
 
   const handleCommentInputChange = (e) => {
     e.stopPropagation();
     const value = e.target.value.trim();
     setCommentInp(value);
+  };
+
+  const handleCommentInputChange2 = (e) => {
+    e.stopPropagation();
+    const value = e.target.value.trim();
+    setCommentInp2(value);
   };
 
   const handleEnableAddComment = () => {
@@ -68,9 +77,27 @@ function CommentsComp() {
     inputRef.current.focus();
   };
 
+  const handleEnableAddComment2 = () => {
+    if (isAddComment2) return;
+
+    setIsAddComment2(true);
+    inputRef2.current.focus();
+  };
+
   const handleDisableAddComment = () => {
     setCommentInp("");
     setIsAddComment(false);
+  };
+
+  const handleDisableAddComment2 = () => {
+    setCommentInp2("");
+    setIsAddComment2(false);
+  };
+
+  const handleShowMoreCommentsClick = () => {
+    setCommentInp2("");
+    setIsAddComment2(false);
+    setIsShowAllComments(!isShowAllComments);
   };
 
   return (
@@ -143,7 +170,6 @@ function CommentsComp() {
             </div>
 
             {/* user comments dynamic */}
-            {/* working */}
 
             {userComments.length > 0 &&
               userComments.slice(0, 3).map((item) => (
@@ -193,7 +219,9 @@ function CommentsComp() {
 
             {userComments.length > 3 && (
               <div className="margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
-                <button className="bdr-7 cursor-pointer border-radius-9 text-center padding-5 box-border color-3 custom-fs-1 inline-block custom-line-h-1 font-medium">See all responses</button>
+                <button onClick={handleShowMoreCommentsClick} className="bdr-7 cursor-pointer border-radius-9 text-center padding-5 box-border color-3 custom-fs-1 inline-block custom-line-h-1 font-medium">
+                  See all responses
+                </button>
               </div>
             )}
           </div>
@@ -201,7 +229,111 @@ function CommentsComp() {
       </div>
       {/* only when to show all comments (>3) */}
       {/* working */}
-      <div className={`transition-transform duration-600 ease-[cubic-bezier(0.23,1,0.32,1) shadow-lg" ${isShowAllComments ? "fixed flex flex-col box-border h-full justify-stretch visible translateX-1 left-full top-0 overflow-auto custom-bg-8 z-[520] width-40" : "invisible translate-x-0"}`}></div>
+      <div className={`transition-transform duration-600 ease shadow-lg bdr-5" ${isShowAllComments ? "fixed flex flex-col box-border h-full justify-stretch visible translateX-1 left-full top-0 overflow-auto custom-bg-8 z-[520] width-40" : "hidden translate-x-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
+        <div className="overflow-auto grow">
+          <div className="padding-3 flex items-center justify-between">
+            <div className="flex">
+              <h2 className="font-3 line-h-8 font-medium color-3 m-0 p-0">{`Responses (${userComments.length})`}</h2>
+            </div>
+            <div className="flex">
+              <div className="custom-h-2 aspect-square">
+                <AiTwotoneSafetyCertificate className="w-full h-full" />
+              </div>
+              <div className="relative rightCustom-1">
+                <div className="relative top-0 right-0">
+                  <button onClick={() => setIsShowAllComments(false)} className="cursor-pointer m-0 p-0 flex width-13 aspect-square">
+                    <IoMdClose className="w-full h-full" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bdr-5 padding-3 margin-2" style={{ borderBottom: 0, borderInline: 0, paddingInline: 0 }}>
+            <div className="flex flex-col relative bg-11 custom-fs-1">
+              <div onClick={handleEnableAddComment2} className={`transition-all duration-400 ease-in-out ${isAddComment2 ? "padding-39 height-57" : "custom-px-2 padding-28 height-56 cursor-text"}`}>
+                <div className="relative whitespace-pre-wrap wrap-break-word height-62">
+                  <textarea ref={inputRef2} value={commentInp2} onInput={(e) => handleCommentInputChange2(e)} placeholder="What are your thoughts?" className={`w-full border-0 outline-0 ${isAddComment2 ? "pointer-events-auto" : "height-60 pointer-events-none"}`}></textarea>
+                </div>
+              </div>
+
+              <div className={`color-4 margin-34 flex justify-between transition-all duration-400 ease-in-out ${isAddComment2 ? "height-58 opacity-100" : "max-h-0 opacity-0"}`} style={{ marginRight: 0, marginBlock: 0 }}>
+                <span className="custom-fs-1 color-4 custom-line-h-1 font-normal">
+                  <div className="flex">
+                    <div className="inline-flex padding-41 margin-19 border-radius-3 cursor-pointer justify-center" style={{ marginBlock: 0 }}>
+                      <div className="width-25 aspect-square">
+                        <FaBold className="h-full w-full" />
+                      </div>
+                    </div>
+                    <div className="inline-flex padding-41 margin-19 border-radius-3 cursor-pointer justify-center" style={{ marginBlock: 0 }}>
+                      <div className="width-25 aspect-square">
+                        <FaItalic className="h-full w-full" />
+                      </div>
+                    </div>
+                  </div>
+                </span>
+                {isAddComment2 && (
+                  <div className="height-58 padding-40 flex self-end" style={{ paddingBlock: 0 }}>
+                    <div>
+                      <button onClick={handleDisableAddComment2} className="border-0 padding-27 padding-28 border-radius-9 text-center box-border color-3 inline-block font-4 custom-line-h-1 m-0">
+                        Cancel
+                      </button>
+                    </div>
+                    <button className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 ${commentInp2.length > 0 ? "opacity-100" : "opacity-[0.1]"}`} style={{ cursor: commentInp2.length > 0 ? "pointer" : "not-allowed" }}>
+                      Respond
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="margin-2">
+            {userComments.map((item) => (
+              <div className="bdr-5" style={{ borderTop: 0, borderInline: 0 }} key={item._id}>
+                <div className="h-full w-full">
+                  <div className="custom-p-y-1 padding-42" style={{ paddingInline: 0 }}>
+                    <div className="flex justify-between">
+                      <div className="flex items-center">
+                        <div className="inline-block cursor-pointer relative">
+                          <div className="relative">
+                            <img src={item.profileImg} alt={item.name} className="width-11 aspect-square box-border rounded-full align-middle" />
+                          </div>
+                        </div>
+                        <div className="padding-33" style={{ paddingRight: 0, paddingBlock: 0 }}>
+                          <div className="flex items-center">
+                            <div className="cursor-pointer transition-all duration-400 ease-in-out hover:underline">
+                              <p className="break-all text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0">{item.name}</p>
+                            </div>
+                            {item._id === 0 && (
+                              <div className="bg-[rgb(26,137,23)] text-white margin-19 border-radius-3 padding-6 line-h-7 font-8 font-normal" style={{ marginBlock: 0, marginRight: 0, paddingBlock: 0 }}>
+                                Author
+                              </div>
+                            )}
+                          </div>
+                          <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">
+                            <span>{item.date}</span>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="inline-block">
+                        <button className="custom-px-2 padding-36 cursor-pointer m-0">
+                          <div className="width-13 aspect-square">
+                            <IoIosMore className="w-full h-full" />
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="margin-35 break-words" style={{ marginBottom: 0, marginInline: 0 }}>
+                      <div className="padding-27">
+                        <div className="color-3 custom-fs-1 line-h-8 font-normal">{item.comment}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </>
   );
 }
