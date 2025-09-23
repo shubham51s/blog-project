@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import UserProvider from "./context/userContext.jsx";
 import "../src/index.css";
@@ -12,9 +13,11 @@ import { ToastContainer, Bounce } from "react-toastify";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <UserProvider>
-      <App />
-      <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick={false} rtl={false} pauseOnFocusLoss pauseOnHover theme="light" transition={Bounce} />
-    </UserProvider>
+    <BrowserRouter>
+      <UserProvider>
+        <App />
+        <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick={false} rtl={false} pauseOnFocusLoss pauseOnHover theme="light" transition={Bounce} />
+      </UserProvider>
+    </BrowserRouter>
   </StrictMode>
 );

@@ -16,9 +16,10 @@ export function useApi() {
       });
 
       if (response.status === 401) {
-        setIsUserLoggedIn(false);
-        setUserInfo({});
-        useNavigate("/");
+        // setIsUserLoggedIn(false);
+        // setUserInfo({});
+        // useNavigate("/");
+        window.location.reload();
       }
 
       return response;

@@ -1,9 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 import { urlBasePath } from "../constants/constant";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [userInfo, setUserInfo] = useState({});
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -26,12 +29,10 @@ const UserProvider = ({ children }) => {
         setUserInfo({ ...result.data.user });
         setIsUserLoggedIn(true);
       } else {
-        setUserInfo({});
-        setIsUserLoggedIn(false);
+        // need to check later
+        if (location.pathname !== "/") navigate("/");
       }
     } catch (err) {
-      setUserInfo({});
-      setIsUserLoggedIn(false);
       setIsInitialLoading(false);
     }
   };
