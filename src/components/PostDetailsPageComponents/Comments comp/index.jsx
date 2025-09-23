@@ -219,11 +219,11 @@ function CommentsComp() {
                         <div className="inline-block">
                           <Popover.Root>
                             <Popover.Trigger>
-                              <button className="custom-px-2 padding-36 cursor-pointer m-0">
+                              <div className="custom-px-2 padding-36 cursor-pointer m-0">
                                 <div className="width-13 aspect-square">
                                   <IoIosMore className="w-full h-full" />
                                 </div>
-                              </button>
+                              </div>
                             </Popover.Trigger>
                             <Popover.Content side="bottom" align="middle" sideOffset={1}>
                               <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
@@ -348,11 +348,11 @@ function CommentsComp() {
                       <div className="inline-block">
                         <Popover.Root>
                           <Popover.Trigger>
-                            <button className="custom-px-2 padding-36 cursor-pointer m-0">
+                            <div className="custom-px-2 padding-36 cursor-pointer m-0">
                               <div className="width-13 aspect-square">
                                 <IoIosMore className="w-full h-full" />
                               </div>
-                            </button>
+                            </div>
                           </Popover.Trigger>
                           <Popover.Content side="bottom" sideOffset={1}>
                             <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
