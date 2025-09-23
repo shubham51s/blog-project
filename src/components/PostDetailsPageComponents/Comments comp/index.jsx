@@ -1,18 +1,21 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaBold } from "react-icons/fa";
 import { FaItalic } from "react-icons/fa";
 import { AiTwotoneSafetyCertificate } from "react-icons/ai";
 import { IoIosMore } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
+import * as Popover from "@radix-ui/react-popover";
 
 function CommentsComp() {
   const [commentInp, setCommentInp] = useState("");
   const [commentInp2, setCommentInp2] = useState("");
   const inputRef = useRef(null);
   const inputRef2 = useRef(null);
-  const [isShowAllComments, setIsShowAllComments] = useState(true);
+  const [isShowAllComments, setIsShowAllComments] = useState(false);
   const [isAddComment, setIsAddComment] = useState(false);
   const [isAddComment2, setIsAddComment2] = useState(false);
+  const allCommentsBtnRef = useRef(null);
+  const allCommentsContentRef = useRef(null);
 
   const [userDetails, setUserDetails] = useState({
     name: "",
@@ -99,6 +102,20 @@ function CommentsComp() {
     setIsAddComment2(false);
     setIsShowAllComments(!isShowAllComments);
   };
+
+  const handleClickOutside = (e) => {
+    if (allCommentsContentRef.current && !allCommentsContentRef.current.contains(e.target) && allCommentsBtnRef.current && !allCommentsBtnRef.current.contains(e.target)) {
+      setIsShowAllComments(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -200,11 +217,24 @@ function CommentsComp() {
                           </div>
                         </div>
                         <div className="inline-block">
-                          <button className="custom-px-2 padding-36 cursor-pointer m-0">
-                            <div className="width-13 aspect-square">
-                              <IoIosMore className="w-full h-full" />
-                            </div>
-                          </button>
+                          <Popover.Root>
+                            <Popover.Trigger>
+                              <button className="custom-px-2 padding-36 cursor-pointer m-0">
+                                <div className="width-13 aspect-square">
+                                  <IoIosMore className="w-full h-full" />
+                                </div>
+                              </button>
+                            </Popover.Trigger>
+                            <Popover.Content side="bottom" align="middle" sideOffset={1}>
+                              <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
+                                <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
+                                  <li className="padding-1 custom-fs-1 color-4 font-normal">
+                                    <button className="text-[#c94a4a] cursor-pointer m-0 p-0">{item._id === 0 ? "Delete response" : "Report response..."}</button>
+                                  </li>
+                                </ul>
+                              </div>
+                            </Popover.Content>
+                          </Popover.Root>
                         </div>
                       </div>
                       <div className="margin-35 break-words" style={{ marginBottom: 0, marginInline: 0 }}>
@@ -219,7 +249,7 @@ function CommentsComp() {
 
             {userComments.length > 3 && (
               <div className="margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
-                <button onClick={handleShowMoreCommentsClick} className="bdr-7 cursor-pointer border-radius-9 text-center padding-5 box-border color-3 custom-fs-1 inline-block custom-line-h-1 font-medium">
+                <button ref={allCommentsBtnRef} onClick={handleShowMoreCommentsClick} className="bdr-7 cursor-pointer border-radius-9 text-center padding-5 box-border color-3 custom-fs-1 inline-block custom-line-h-1 font-medium">
                   See all responses
                 </button>
               </div>
@@ -230,7 +260,7 @@ function CommentsComp() {
       {/* Show all comments component */}
       {/* only when to show all comments (>3) */}
       {/* working */}
-      <div className={`transition-transform duration-600 ease shadow-lg bdr-5" ${isShowAllComments ? "fixed flex flex-col box-border h-full justify-stretch visible translateX-1 left-full top-0 overflow-auto custom-bg-8 z-[520] width-40" : "hidden translate-x-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
+      <div ref={allCommentsContentRef} className={`transition-transform duration-600 ease box-shadow-3 bdr-5 pointer-events-none" ${isShowAllComments ? "fixed flex flex-col box-border h-full justify-stretch visible translateX-1 left-full top-0 overflow-auto custom-bg-8 z-[520] width-40" : "hidden translate-x-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
         <div className="overflow-auto grow">
           <div className="padding-3 flex items-center justify-between">
             <div className="flex">
@@ -242,7 +272,7 @@ function CommentsComp() {
               </div>
               <div className="relative rightCustom-1">
                 <div className="relative top-0 right-0">
-                  <button onClick={() => setIsShowAllComments(false)} className="cursor-pointer m-0 p-0 flex width-13 aspect-square">
+                  <button onClick={() => setIsShowAllComments(false)} className="cursor-pointer m-0 p-0 flex width-13 aspect-square opacity-75  transition-all duration-300 ease-in-out hover:opacity-100">
                     <IoMdClose className="w-full h-full" />
                   </button>
                 </div>
@@ -316,11 +346,24 @@ function CommentsComp() {
                         </div>
                       </div>
                       <div className="inline-block">
-                        <button className="custom-px-2 padding-36 cursor-pointer m-0">
-                          <div className="width-13 aspect-square">
-                            <IoIosMore className="w-full h-full" />
-                          </div>
-                        </button>
+                        <Popover.Root>
+                          <Popover.Trigger>
+                            <button className="custom-px-2 padding-36 cursor-pointer m-0">
+                              <div className="width-13 aspect-square">
+                                <IoIosMore className="w-full h-full" />
+                              </div>
+                            </button>
+                          </Popover.Trigger>
+                          <Popover.Content side="bottom" sideOffset={1}>
+                            <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
+                              <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
+                                <li className="padding-1 custom-fs-1 color-4 font-normal">
+                                  <button className="text-[#c94a4a] cursor-pointer m-0 p-0">{item._id === 0 ? "Delete response" : "Report response..."}</button>
+                                </li>
+                              </ul>
+                            </div>
+                          </Popover.Content>
+                        </Popover.Root>
                       </div>
                     </div>
                     <div className="margin-35 break-words" style={{ marginBottom: 0, marginInline: 0 }}>

@@ -263,6 +263,14 @@ button {
   box-shadow: var(--box-shadow-2) 0px -1px 0px inset;
 }
 
+.box-shadow-3 {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
+}
+
+.box-shadow-4 {
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 4px, rgba(0, 0, 0, 0.15) 0px 2px 8px;
+}
+
 .scrollbar-none::-webkit-scrollbar {
   display: none;
   /* Chrome, Safari */
