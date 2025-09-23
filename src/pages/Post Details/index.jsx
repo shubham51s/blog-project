@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HeaderComp from "../../components/Home/Home components/Header";
 import HomeLeftMenuComp from "../../components/Home/Home components/Left Menu";
 import { PiHandsClapping } from "react-icons/pi";
@@ -13,6 +13,8 @@ import BlogRecommendComp from "../../components/PostDetailsPageComponents/Blog R
 
 function PostDetailsPage() {
   const [isShowFullImg, SetIsShowFullImg] = useState("https://miro.medium.com/v2/resize:fit:1400/format:webp/1*3lCgOLAxH3lgdeodzV7L_g.jpeg");
+  const fullImgRef = useRef(null);
+
   const [blogDetails, setBlogDetails] = useState({
     id: 1,
     community: {
@@ -39,6 +41,16 @@ function PostDetailsPage() {
     images: ["https://miro.medium.com/v2/resize:fit:1400/format:webp/1*3lCgOLAxH3lgdeodzV7L_g.jpeg"],
     paragraphs: ["It usually happens to me on a random day. Nothing’s wrong. Life at home is good. Work’s okay. I’m still in touch with my close friends. But I feel existentially stuck. Not in pain. Not in crisis. Just this dull, dragging emptiness. It’s that weird state where everything’s “fine,” but nothing feels good That’s not even the worst part. The terrible part of this feeling is being stuck in your head, looking for answers.", "The problem isn’t the big things in life.", "But it doesn’t mean you’re not broken. Or ungrateful.", "Science has a term for it. It’s called the lack of interest, enjoyment or pleasure from life’s experiences .” In short, you don’t feel pleasure, even when nothing’s technically wrong.", "It’s like your brain forgets how to enjoy life. Or how to be curious and how to wonder. And when curiosity dies, so does joy. We don’t feel stuck because something happened. We feel stuck because nothing happens. Time collapses in our reality. And our brain stops reacting. But there’s a way out.", "The human brain is not a fan of repetition. It wants novelty. Change. Challenge, even when you don’t…"],
   });
+
+  const handleClickOutside = (e) => {};
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -401,7 +413,7 @@ function PostDetailsPage() {
       </div>
       {/* full screen image view */}
       {isShowFullImg && (
-        <div className="w-screen h-screen max-w-screen max-h-screen fixed inset-0 z-[999] flex items-center justify-center custom-bg-4 select-none">
+        <div onClick={() => SetIsShowFullImg(false)} className="w-screen h-screen max-w-screen max-h-screen fixed inset-0 z-[999] flex items-center justify-center custom-bg-4 select-none pointer-events-auto">
           <img onClick={() => SetIsShowFullImg(false)} src={isShowFullImg} className="h-full max-w-full max-h-full cursor-zoom-out" />
         </div>
       )}
