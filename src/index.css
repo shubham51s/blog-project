@@ -45,6 +45,7 @@ button {
   --bg-color-10: rgb(249 249 249);
   --bg-color-11: rgb(242 242 242);
   --bg-color-12: rgb(196, 226, 255);
+  --bg-color-13: rgba(255, 255, 255, 0.97);
 
   /* for text colors */
   --txt-color-1: rgba(0, 0, 0, 0.8);
@@ -56,6 +57,7 @@ button {
   --text-color-7: rgba(255, 255, 255, 1);
   --text-color-8: rgba(255, 255, 255, 0.6);
   --text-color-9: rgba(239, 68, 68, 1);
+  --text-color-10: rgba(0, 0, 0, 0.54);
 }
 
 /* for border colors */
@@ -141,6 +143,10 @@ button {
   background-color: var(--bg-color-12);
 }
 
+.bg13 {
+  background-color: var(--bg-color-13);
+}
+
 /* for text colors */
 
 .custom-color-1 {
@@ -177,6 +183,10 @@ button {
 
 .color-9 {
   color: var(--text-color-9);
+}
+
+.color10 {
+  color: var(--text-color-10);
 }
 
 .left-unset {
@@ -505,6 +515,14 @@ button {
     min-height: 14px
   }
 
+  .height-63 {
+    height: 65px
+  }
+
+  .height64 {
+    height: 26px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -814,6 +832,14 @@ button {
 
   .width-40 {
     width: 414px;
+  }
+
+  .width41 {
+    max-width: 1032px;
+  }
+
+  .width42 {
+    width: 120px;
   }
 
   .margin-2 {

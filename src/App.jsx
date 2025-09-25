@@ -28,7 +28,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<SignupPage />} />
-        <Route path="/create" element={<CreatePostPage />} />
+        <Route path="/new-story" element={<CreatePostPage />} />
         <Route path="/edit/:id" element={<EditPostPage />} />
         {/* temporary post details page changed */}
         {/* <Route path="/" element={<PostDetailsPage />} /> */}
