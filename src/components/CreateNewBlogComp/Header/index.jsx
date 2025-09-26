@@ -16,7 +16,18 @@ function WriteBlogHeader() {
           </div>
         </div>
 
-        <div className="relative z-[500] grow-0 shrink-0 basis-auto flex items-center"></div>
+        <div className="relative z-[500] grow-0 shrink-0 basis-auto flex items-center">
+          <div className="height-63 padding-6 flex items-center" style={{ paddingBlock: 0 }}>
+            <button className="color-2 bg14 font13 custom-h-2 padding-25 m-0 box-border cursor-pointer bdr9 rounded-full" style={{ paddingBlock: 0 }}>
+              <span>Publish</span>
+            </button>
+          </div>
+          <div>
+            {/* working */}
+            <button className=""></button>
+            <button className=""></button>
+          </div>
+        </div>
       </div>
     </div>
   );

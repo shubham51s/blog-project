@@ -147,6 +147,10 @@ button {
   background-color: var(--bg-color-13);
 }
 
+.bg14 {
+  background-color: rgba(26, 137, 23, 0.25);
+}
+
 /* for text colors */
 
 .custom-color-1 {
@@ -295,9 +299,9 @@ button {
 }
 
 .grid-area-1 {
-    grid-template-areas:
-  "image image image image image image image image image image image image"
-  "content content content content content content content content content content content content";
+  grid-template-areas:
+    "image image image image image image image image image image image image"
+    "content content content content content content content content content content content content";
 }
 
 @media only screen and (min-width: 1500px) {
@@ -595,6 +599,10 @@ button {
     font-size: 42px;
   }
 
+  .font13 {
+    font-size: 15px;
+  }
+
   .padding-1 {
     padding: 8px 20px;
   }
@@ -666,8 +674,9 @@ button {
   }
 
   .bdr-8 {
-  border: 1px solid var(--border-9);
-}
+    border: 1px solid var(--border-9);
+  }
+
 
   .translateY-1 {
     transform: translateY(149.8px);
@@ -1142,7 +1151,7 @@ button {
   .margin-32 {
     margin: 2.14em;
   }
-  
+
   .margin-33 {
     margin-bottom: 16px
   }
@@ -1163,7 +1172,7 @@ button {
     margin-top: 16px;
   }
 
-  .margin-38 { 
+  .margin-38 {
     margin-inline: -16px;
   }
 
