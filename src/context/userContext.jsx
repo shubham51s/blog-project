@@ -13,6 +13,7 @@ const UserProvider = ({ children }) => {
   const [isShowSignupPopup, setIsShowSignupPopup] = useState(false);
   const [isShowLoginPopup, setIsShowLoginPopup] = useState(false);
   const [signUpHeading, setSignUpHeading] = useState("");
+  const tempUserProfile = "https://cdn-images-1.medium.com/fit/c/40/40/0*AbhaXOwX9-XpKPtX";
 
   const verifyAuthentication = async () => {
     try {
@@ -26,7 +27,7 @@ const UserProvider = ({ children }) => {
 
       if (response.status === 200) {
         const result = await response.json();
-        setUserInfo({ ...result.data.user });
+        setUserInfo({ ...result.data.user, profileImg: tempUserProfile });
         setIsUserLoggedIn(true);
       } else {
         // need to check later
