@@ -147,7 +147,7 @@ function WriteBlogHeader() {
                       ))}
                       <li className="bdr9 margin-10 padding47" style={{ borderBottom: 0, borderInline: 0 }}></li>{" "}
                       <li className="text-left w-full whitespace-nowrap font-10 font-normal">
-                        <button onClick={handleUserLogout} className="inline-block padding48 padding49 text-left w-full whitespace-nowrap color-6 align-baseline transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
+                        <button onClick={handleUserLogout} className="inline-block padding48 padding49 text-left w-full whitespace-nowrap color-6 cursor-pointer align-baseline transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
                           Sign out
                         </button>
                       </li>

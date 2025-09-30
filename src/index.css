@@ -381,6 +381,14 @@ button {
     right: -7px;
   }
 
+  .right4 {
+    right: 1129.6px;
+  }
+
+  .left2 {
+    left: 430px;
+  }
+
   .top-1 {
     top: 50px;
   }
@@ -391,6 +399,14 @@ button {
 
   .top3 {
     top: 1px;
+  }
+
+  .top4 {
+    top: 23px;
+  }
+
+  .top5 {
+    top: 37px;
   }
 
   .bottom-1 {
@@ -539,6 +555,14 @@ button {
 
   .height64 {
     height: 26px;
+  }
+
+  .height65 {
+    min-height: calc(100vh - 65px);
+  }
+
+  .height66 {
+    height: 68.5px;
   }
 
   .custom-max-w-1 {
@@ -875,6 +899,10 @@ button {
 
   .width44 {
     max-width: 280px;
+  }
+
+  .width55 {
+    max-width: 740px;
   }
 
   .margin-2 {
@@ -1224,6 +1252,30 @@ button {
 
   .margin-39 {
     margin-block: 72px;
+  }
+
+  .margin40 {
+    margin-top: 3px;
+  }
+
+  .margin41 {
+    margin-bottom: 50px;
+  }
+
+  .margin42 {
+    margin: 30px;
+  }
+
+  .margin43 {
+    margin-left: -58px;
+  }
+
+  .margin44 {
+    margin-top: 4px;
+  }
+
+  .margin45 {
+    margin-block: 29px;
   }
 
   .custom-bg-position {
