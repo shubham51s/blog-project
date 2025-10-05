@@ -32,6 +32,7 @@ button {
   --border-8: black;
   --border-9: rgb(229, 229, 229);
   --border-10: rgba(0, 0, 0, .05);
+  --border-11: rgba(0, 0, 0, .15);
 
   /* for background color */
   --bg-color-1: rgb(25, 25, 25);
@@ -60,6 +61,26 @@ button {
   --text-color-9: rgba(239, 68, 68, 1);
   --text-color-10: rgba(0, 0, 0, 0.54);
   --text-color-11: rgba(0, 0, 0, .84);
+  --text-color-12: rgb(148, 194, 134);
+}
+
+.ProseMirror {
+  border: none !important;
+  outline: none !important;
+}
+
+.ProseMirror:focus {
+  outline: none !important;
+  border: none !important;
+}
+
+.ProseMirror p.is-editor-empty::before {
+  color: #9ca3af;
+  /* gray-400 */
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
 
 /* for border colors */
@@ -197,6 +218,10 @@ button {
 
 .color11 {
   color: var(--text-color-11)
+}
+
+.color12 {
+  color: var(--text-color-12)
 }
 
 .left-unset {
@@ -347,6 +372,10 @@ button {
     gap: 24px 0px;
   }
 
+  .gap9 {
+    gap: 2px;
+  }
+
   .custom-margin-1 {
     margin: 20px 64px 0;
   }
@@ -387,6 +416,10 @@ button {
 
   .left2 {
     left: 430px;
+  }
+
+  .left3 {
+    left: 14px;
   }
 
   .top-1 {
@@ -719,6 +752,9 @@ button {
     border: 1px solid var(--border-10)
   }
 
+  .bdr10 {
+    border: 1px solid var(--border-11);
+  }
 
   .translateY-1 {
     transform: translateY(149.8px);
@@ -903,6 +939,10 @@ button {
 
   .width55 {
     max-width: 740px;
+  }
+
+  .width56 {
+    width: 1px;
   }
 
   .margin-2 {
@@ -1104,6 +1144,18 @@ button {
 
   .padding49 {
     padding-inline: 25px
+  }
+
+  .padding50 {
+    padding-inline: 8px;
+  }
+
+  .padding51 {
+    padding-block: 2px;
+  }
+
+  .padding52 {
+    padding: 19px
   }
 
   .margin-3 {

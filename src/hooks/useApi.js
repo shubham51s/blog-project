@@ -24,6 +24,7 @@ export function useApi() {
 
       return response;
     } catch (err) {
+      window.location.reload();
       return null;
     }
   }

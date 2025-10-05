@@ -35,6 +35,8 @@ const UserProvider = ({ children }) => {
       }
     } catch (err) {
       setIsInitialLoading(false);
+      // need to check later
+      if (location.pathname !== "/") navigate("/");
     }
   };
 
