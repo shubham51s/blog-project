@@ -4,11 +4,9 @@ import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
+import CharacterCount from "@tiptap/extension-character-count";
 
-function WriteBlogComp() {
-  const [heading, setHeading] = useState("");
-  const [content, setContent] = useState("");
-
+function WriteBlogComp({ setHeading, heading, setContent, setDescription }) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -24,37 +22,29 @@ function WriteBlogComp() {
       Placeholder.configure({
         placeholder: "Tell your story...",
       }),
+      CharacterCount.configure({
+        limit: 30000,
+      }),
     ],
     content: "",
     shouldRerenderOnTransaction: true,
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML());
-      console.log("content: ", content);
+
+      const html = editor.getHTML();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const firstParagraph = doc.querySelector("p");
+      const description = firstParagraph ? firstParagraph.textContent : "";
+
+      setContent(html);
+      setDescription(description);
+
+      console.log("html: ", html, " description: ", description);
     },
   });
 
-  const addImage = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-    input.click();
-
-    input.onchange = () => {
-      const file = input.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        editor.chain().focus().setImage({ src: reader.result }).run();
-      };
-      reader.readAsDataURL(file);
-    };
-  };
-
   if (!editor) return null;
-
-  useEffect(() => {
-    if (editor) editor.commands.focus();
-  }, [editor]);
 
   return (
     <main className="block">
@@ -63,10 +53,6 @@ function WriteBlogComp() {
         <div className="margin40 margin41 break-all relative">
           <section className="block margin-11 relative clear-both padding-27" style={{ marginBottom: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
             <div className="w-full width55 padding-14 my-0 mx-auto box-border relative editor-wrapper" style={{ paddingBlock: 0 }}>
-              {/* <h3 className="padding-18 m-0 font-normal font-12 color11" style={{ paddingBottom: 0 }}>
-                Heading
-              </h3> */}
-
               <textarea
                 value={heading}
                 onChange={(e) => {
@@ -74,6 +60,7 @@ function WriteBlogComp() {
                   e.target.style.height = "auto"; // reset previous height
                   e.target.style.height = `${e.target.scrollHeight}px`; // set new height based on content
                 }}
+                maxLength={500}
                 className="padding-18 m-0 font-normal font-12 color11 outline-none resize-none overflow-hidden w-full"
                 placeholder="Title"
                 style={{
@@ -105,28 +92,6 @@ function WriteBlogComp() {
                       i
                     </button>
                   </div>
-                </BubbleMenu>
-              )}
-
-              {editor && (
-                <BubbleMenu
-                  editor={editor}
-                  className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300 absolute left-[-40px]"
-                  shouldShow={({ state }) => {
-                    const { empty, from } = state.selection;
-                    const node = state.doc.nodeAt(from);
-                    return empty && node?.type.name === "paragraph" && (node.content.size === 0 || (node.content.size === 1 && node.content.firstChild.text === ""));
-                  }}
-                >
-                  <button
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      addImage();
-                    }}
-                    className="w-8 h-8 flex items-center justify-center font-bold"
-                  >
-                    +
-                  </button>
                 </BubbleMenu>
               )}
 

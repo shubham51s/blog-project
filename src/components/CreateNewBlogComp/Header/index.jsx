@@ -7,7 +7,7 @@ import { BorderBottom } from "@mui/icons-material";
 import { UserContext } from "../../../context/userContext";
 import { useApi } from "../../../hooks/useApi";
 
-function WriteBlogHeader() {
+function WriteBlogHeader({ heading, description, createNewBlog }) {
   const { userInfo, isUserLoggedIn } = useContext(UserContext);
   const { fetchRequest } = useApi();
 
@@ -69,6 +69,10 @@ function WriteBlogHeader() {
     }
   };
 
+  const handlePublishBtnClick = () => {
+    createNewBlog();
+  };
+
   return (
     <div className="fixed z-[500] w-full font-10 color10 font-normal top-0 box-border bg13">
       <div className="relative width41 height-63 padding-14 mx-auto flex justify-between items-center" style={{ paddingBlock: 0 }}>
@@ -84,7 +88,7 @@ function WriteBlogHeader() {
 
         <div className="relative z-[500] grow-0 shrink-0 basis-auto flex items-center">
           <div className="height-63 padding-6 flex items-center" style={{ paddingBlock: 0 }}>
-            <button className="color-2 bg14 font13 custom-h-2 padding-25 m-0 box-border cursor-pointer bdr9 rounded-full" style={{ paddingBlock: 0 }}>
+            <button onClick={handlePublishBtnClick} className={`color-2 bg14 font13 custom-h-2 padding-25 m-0 box-border cursor-pointer bdr9 rounded-full ${heading.trim().length >= 2 && description.trim().length >= 4 ? "opacity-100 pointer-events-auto" : "opacity-50 pointer-events-none"}`} style={{ paddingBlock: 0 }}>
               <span>Publish</span>
             </button>
           </div>
