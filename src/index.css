@@ -83,6 +83,13 @@ button {
   pointer-events: none;
 }
 
+.ProseMirror img {
+  display: block;
+  margin-block: 30px;
+  max-width: 100%;
+  border-radius: 4px;
+}
+
 /* for border colors */
 .custom-bdr-1 {
   border-color: var(--border-1);
@@ -340,6 +347,11 @@ button {
 }
 
 @media only screen and (min-width: 1500px) {
+  .ProseMirror img {
+    margin-block: 25px;
+    border-radius: 4px;
+  }
+
   .custom-gap-1 {
     gap: 4px;
   }
@@ -754,6 +766,10 @@ button {
 
   .bdr10 {
     border: 1px solid var(--border-11);
+  }
+
+  .bdr11 {
+    border: 1px solid var(--border-8);
   }
 
   .translateY-1 {

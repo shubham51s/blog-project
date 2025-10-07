@@ -7,7 +7,7 @@ import { BorderBottom } from "@mui/icons-material";
 import { UserContext } from "../../../context/userContext";
 import { useApi } from "../../../hooks/useApi";
 
-function WriteBlogHeader({ heading, description, createNewBlog }) {
+function WriteBlogHeader({ heading, description, createNewBlog, isLoading }) {
   const { userInfo, isUserLoggedIn } = useContext(UserContext);
   const { fetchRequest } = useApi();
 
@@ -70,6 +70,7 @@ function WriteBlogHeader({ heading, description, createNewBlog }) {
   };
 
   const handlePublishBtnClick = () => {
+    if (isLoading) return;
     createNewBlog();
   };
 
