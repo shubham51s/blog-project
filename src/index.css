@@ -62,6 +62,7 @@ button {
   --text-color-10: rgba(0, 0, 0, 0.54);
   --text-color-11: rgba(0, 0, 0, .84);
   --text-color-12: rgb(148, 194, 134);
+  --text-color-13: rgba(0, 0, 0, .68);
 }
 
 .ProseMirror {
@@ -229,6 +230,10 @@ button {
 
 .color12 {
   color: var(--text-color-12)
+}
+
+.color13 {
+  color: var(--text-color-13)
 }
 
 .left-unset {
@@ -961,6 +966,14 @@ button {
     width: 1px;
   }
 
+  .width57 {
+    max-width: 1040px
+  }
+
+  .width58 {
+    width: 29px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -1172,6 +1185,18 @@ button {
 
   .padding52 {
     padding: 19px
+  }
+
+  .padding53 {
+    padding-block: 100px;
+  }
+
+  .padding54 {
+    padding-inline: 5px;
+  }
+
+  .padding55 {
+    padding: 40px;
   }
 
   .margin-3 {
