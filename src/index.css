@@ -48,6 +48,8 @@ button {
   --bg-color-11: rgb(242 242 242);
   --bg-color-12: rgb(196, 226, 255);
   --bg-color-13: rgba(255, 255, 255, 0.97);
+  --bg-color-14: rgb(250 250 250);
+  --bg-color-15: rgba(0, 0, 0, .68);
 
   /* for text colors */
   --txt-color-1: rgba(0, 0, 0, 0.8);
@@ -182,6 +184,14 @@ button {
   background-color: rgb(26 137 23);
 }
 
+.bg15 {
+  background-color: var(--bg-color-14);
+}
+
+.bg16 {
+  background-color: var(--bg-color-15);
+}
+
 /* for text colors */
 
 .custom-color-1 {
@@ -310,6 +320,10 @@ button {
 
 .line-h-10 {
   line-height: 52px;
+}
+
+.line-h11 {
+  line-height: 37px;
 }
 
 .box-shadow-1 {
@@ -615,6 +629,14 @@ button {
     height: 68.5px;
   }
 
+  .height67 {
+    height: 200px
+  }
+
+  .height68 {
+    height: 37px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -689,6 +711,10 @@ button {
 
   .font13 {
     font-size: 15px;
+  }
+
+  .font14 {
+    font-size: 19px;
   }
 
   .padding-1 {
@@ -777,12 +803,22 @@ button {
     border: 1px solid var(--border-8);
   }
 
+  .bdr12 {
+    border: 1px solid var(--border-4);
+  }
+
   .translateY-1 {
     transform: translateY(149.8px);
   }
 
   .translateX-1 {
     transform: translateX(-414px);
+  }
+
+  .positionCenter {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .max-width-2 {
@@ -1369,6 +1405,14 @@ button {
 
   .margin45 {
     margin-block: 29px;
+  }
+
+  .margin46 {
+    margin: 15px;
+  }
+
+  .margin47 {
+    margin-top: 10px;
   }
 
   .custom-bg-position {
