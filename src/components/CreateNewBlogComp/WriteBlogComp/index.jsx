@@ -8,8 +8,7 @@ import CharacterCount from "@tiptap/extension-character-count";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import PreviewBlogComp from "./preview-blog-comp";
 
-function WriteBlogComp({ setHeading, heading, setContent, setDescription }) {
-  const [isPreview, setIsPreview] = useState(true);
+function WriteBlogComp({ blog, setBlog }) {
   const [showAddBtn, setShowAddBtn] = useState(false);
   const [btnPos, setBtnPos] = useState({ top: 0, left: 0 });
   const [pendingImages, setPendingImages] = useState([]);
@@ -61,8 +60,6 @@ function WriteBlogComp({ setHeading, heading, setContent, setDescription }) {
     content: "",
     shouldRerenderOnTransaction: true,
     onUpdate: ({ editor }) => {
-      setContent(editor.getHTML());
-
       const html = editor.getHTML();
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, "text/html");
@@ -70,8 +67,7 @@ function WriteBlogComp({ setHeading, heading, setContent, setDescription }) {
       const description = firstParagraph ? firstParagraph.textContent : "";
       const existingIds = Array.from(html.matchAll(/data-id="([^"]+)"/g), (m) => m[1]);
 
-      setContent(html);
-      setDescription(description);
+      setBlog((prev) => ({ ...prev, description, content: html, previewSubtitle: description.slice(0, 140) }));
 
       setPendingImages((prev) => prev.filter((img) => existingIds.includes(img.id)));
 
@@ -132,6 +128,13 @@ function WriteBlogComp({ setHeading, heading, setContent, setDescription }) {
     }
   };
 
+  const handleHeightChange = (e) => {
+    const heading = e.target.value;
+    setBlog((prev) => ({ ...prev, heading, previewTitle: heading.slice(0, 100) }));
+    e.target.style.height = "auto"; // reset previous height
+    e.target.style.height = `${e.target.scrollHeight}px`; // set new height based on content
+  };
+
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
 
@@ -148,12 +151,8 @@ function WriteBlogComp({ setHeading, heading, setContent, setDescription }) {
             <section className="block margin-11 relative clear-both padding-27" style={{ marginBottom: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
               <div ref={editorWrapperRef} className="w-full width55 padding-14 my-0 mx-auto box-border relative editor-wrapper" style={{ paddingBlock: 0 }}>
                 <textarea
-                  value={heading}
-                  onChange={(e) => {
-                    setHeading(e.target.value);
-                    e.target.style.height = "auto"; // reset previous height
-                    e.target.style.height = `${e.target.scrollHeight}px`; // set new height based on content
-                  }}
+                  value={blog.heading}
+                  onChange={(e) => handleHeightChange(e)}
                   maxLength={500}
                   className="padding-18 m-0 font-normal font-12 color11 outline-none resize-none overflow-hidden w-full"
                   placeholder="Title"
@@ -211,7 +210,7 @@ function WriteBlogComp({ setHeading, heading, setContent, setDescription }) {
             </section>
           </div>
 
-          {heading.length > 0 && (
+          {blog.heading.length > 0 && (
             <div className="absolute top4 right4 height66 text-right font-10 color10 margin42" style={{ marginLeft: 0, marginBlock: 0 }}>
               <div className="h-full absolute width56 left3 top-0 overflow-hidden custom-bg-3 opacity-50">
                 <div className="bdr10 absolute h-full top-[-100%]" style={{ borderLeft: 0, borderBlock: 0 }}></div>
@@ -227,7 +226,7 @@ function WriteBlogComp({ setHeading, heading, setContent, setDescription }) {
           <footer className="padding-25"></footer>
         </article>
       </main>
-      {isPreview && <PreviewBlogComp />}
+      {blog.isShowPreview && <PreviewBlogComp blog={blog} setBlog={setBlog} />}
     </>
   );
 }

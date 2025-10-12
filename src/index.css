@@ -3,7 +3,7 @@
 body {
   padding: 0;
   margin: 0;
-  color: var(--txt-color-1);
+  color: rgba(0, 0, 0, 0.8);
   box-sizing: border-box;
   font-weight: 400;
 }
@@ -11,7 +11,6 @@ body {
 p {
   margin: 0;
 }
-
 
 button {
   margin: 0;
@@ -52,7 +51,7 @@ button {
   --bg-color-15: rgba(0, 0, 0, .68);
 
   /* for text colors */
-  --txt-color-1: rgba(0, 0, 0, 0.8);
+  --txt-color-1: rgba(0, 0, 0, .9);
   --txt-color-2: rgb(255 255 255);
   --txt-color-3: rgb(36, 36, 36);
   --txt-color-4: rgb(107 107 107);
@@ -61,10 +60,11 @@ button {
   --text-color-7: rgba(255, 255, 255, 1);
   --text-color-8: rgba(255, 255, 255, 0.6);
   --text-color-9: rgba(239, 68, 68, 1);
-  --text-color-10: rgba(0, 0, 0, 0.54);
+  --text-color-10: rgba(0, 0, 0, .54);
   --text-color-11: rgba(0, 0, 0, .84);
   --text-color-12: rgb(148, 194, 134);
   --text-color-13: rgba(0, 0, 0, .68);
+  --text-color-14: rgba(0, 0, 0, .76);
 }
 
 .ProseMirror {
@@ -198,6 +198,10 @@ button {
   color: var(rgb(36, 36, 36));
 }
 
+.color1 {
+  color: var(--txt-color-1);
+}
+
 .color-2 {
   color: var(--txt-color-2);
 }
@@ -244,6 +248,10 @@ button {
 
 .color13 {
   color: var(--text-color-13)
+}
+
+.color14 {
+  color: var(--text-color-14)
 }
 
 .left-unset {
@@ -639,6 +647,10 @@ button {
 
   .height69 {
     height: 300px;
+  }
+
+  .height70 {
+    min-height: 37px;
   }
 
   .custom-max-w-1 {
@@ -1257,6 +1269,10 @@ button {
 
   .padding57 {
     padding-right: 10px;
+  }
+
+  .padding58 {
+    padding-bottom: 3px;
   }
 
   .margin-3 {
