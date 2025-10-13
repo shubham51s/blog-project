@@ -2,11 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { UserContext } from "../../../../context/userContext";
 import Select from "react-select";
+import { toast } from "react-toastify";
 
 function PreviewBlogComp({ blog, setBlog }) {
   const { userInfo, isUserLoggedIn } = useContext(UserContext);
   const [isChangePreviewImg, setIsChangePreviewImg] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
+  const [selectedTopic, setSelectedTopic] = useState([]);
+
   const colourOptions = [
     { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
     { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
@@ -72,6 +75,11 @@ function PreviewBlogComp({ blog, setBlog }) {
     setBlog((prev) => ({ ...prev, previewSubtitle }));
     e.target.style.height = "auto";
     e.target.style.height = `${e.target.scrollHeight}px`;
+  };
+
+  const handleChange = (selected) => {
+    if (selected.length <= 5) setSelectedTopic(selected);
+    else toast.info("Select upto 5 topics!");
   };
 
   useEffect(() => {
@@ -147,19 +155,30 @@ function PreviewBlogComp({ blog, setBlog }) {
                 <p className="font-normal font-10 custom-line-h-1 color10 margin-10" style={{ marginTop: 0, marginInline: 0 }}>
                   <span className="color1 font-normal font-10 custom-line-h-1">Add or change topics (up to 5) so readers know what your story is about</span>
                 </p>
-                <div className="bdr10 bg15 padding-20 padding-19" style={{ paddingBottom: 0, paddingRight: 0 }}>
+                <div className="bg15">
                   <div className="height70">
                     <div className="font13 font-normal">
-                      {/* working */}
-                      <Select isMulti name="colors" options={colourOptions} className="basic-multi-select" classNamePrefix="select" />
+                      <Select value={selectedTopic} onChange={handleChange} isMulti name="colors" options={colourOptions} className="basic-multi-select custom-select box-border" classNamePrefix="select" placeholder="Add a topic..." />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="margin-17" style={{ marginBottom: 0 }}></div>
+              <div className="margin-17" style={{ marginBottom: 0 }}>
+                <a href="#" className="underline">
+                  Learn more
+                </a>{" "}
+                about what happens to your story when you publish.
+              </div>
 
-              <div className="margin-14 flex items-center" style={{ marginBottom: 0, marginInline: 0 }}></div>
+              <div className="margin-14 flex items-center" style={{ marginBottom: 0, marginInline: 0 }}>
+                <div className="shrink-0 grow-0 basis-auto">
+                  <button className="bg14 transition-all duration-300 ease-in-out opacity-[0.9] color-7 height68 line-h11 custom-py-2 border-radius-9 inline-block font-10 text-center cursor-pointer align-bottom whitespace-nowrap select-none box-border font-normal m-0 hover:opacity-100">
+                    <span>Publish and send now</span>
+                  </button>
+                </div>
+                <div className=""></div>
+              </div>
             </div>
           </div>
         </div>

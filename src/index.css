@@ -19,7 +19,8 @@ button {
 
 :root {
   /* box shadow */
-  --box-shadow-1: rgba(0, 0, 0, 0.15) --box-shadow-2: rgb(242, 242, 242);
+  --box-shadow-1: rgba(0, 0, 0, 0.15);
+  --box-shadow-2: rgb(242, 242, 242);
   /* for border colors */
   --border-1: rgba(25, 25, 25, 1);
   --border-2: rgba(25, 25, 25, 1);
@@ -31,7 +32,7 @@ button {
   --border-8: black;
   --border-9: rgb(229, 229, 229);
   --border-10: rgba(0, 0, 0, .05);
-  --border-11: rgba(0, 0, 0, .15);
+  --border-11: rgba(0, 0, 0, .25);
 
   /* for background color */
   --bg-color-1: rgb(25, 25, 25);
@@ -92,6 +93,24 @@ button {
   max-width: 100%;
   border-radius: 4px;
 }
+
+.custom-select .select__control {
+  border: 1px solid var(--border-11) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+
+.custom-select .select__control--is-focused {
+  border: 1px solid var(--border-11) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.custom-select .select__control:hover {
+  border: 1px solid var(--border-11) !important;
+}
+
 
 /* for border colors */
 .custom-bdr-1 {
@@ -181,7 +200,7 @@ button {
 }
 
 .bg14 {
-  background-color: rgb(26 137 23);
+  background-color: rgb(30, 126, 26);
 }
 
 .bg15 {
@@ -1457,6 +1476,10 @@ button {
 
   .margin48 {
     margin: 7px;
+  }
+
+  .margin49 {
+    margin: 3px;
   }
 
   .custom-bg-position {
