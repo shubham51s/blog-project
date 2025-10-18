@@ -14,7 +14,7 @@ function CreatePostPage() {
     previewImg: "",
     content: "",
     description: "",
-    isShowPreview: true,
+    isShowPreview: false,
   });
 
   return (

@@ -3,25 +3,15 @@ import { IoCloseOutline } from "react-icons/io5";
 import { UserContext } from "../../../../context/userContext";
 import Select from "react-select";
 import { toast } from "react-toastify";
+import { useApi } from "../../../../hooks/useApi";
 
-function PreviewBlogComp({ blog, setBlog }) {
+function PreviewBlogComp({ blog, setBlog, pendingImages }) {
+  const { fetchRequest } = useApi();
   const { userInfo, isUserLoggedIn } = useContext(UserContext);
   const [isChangePreviewImg, setIsChangePreviewImg] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
   const [selectedTopic, setSelectedTopic] = useState([]);
-
-  const colourOptions = [
-    { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
-    { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
-    { value: "purple", label: "Purple", color: "#5243AA" },
-    { value: "red", label: "Red", color: "#FF5630", isFixed: true },
-    { value: "orange", label: "Orange", color: "#FF8B00" },
-    { value: "yellow", label: "Yellow", color: "#FFC400" },
-    { value: "green", label: "Green", color: "#36B37E" },
-    { value: "forest", label: "Forest", color: "#00875A" },
-    { value: "slate", label: "Slate", color: "#253858" },
-    { value: "silver", label: "Silver", color: "#666666" },
-  ];
+  const [topics, setTopics] = useState([]);
 
   const images = [
     {
@@ -60,7 +50,7 @@ function PreviewBlogComp({ blog, setBlog }) {
 
   const handlePreviewImgChange = (index) => {
     setImgIndex(index);
-    setBlog((prev) => ({ ...prev, previewImg: images[index].url }));
+    setBlog((prev) => ({ ...prev, previewImg: pendingImages[index].blobUrl }));
   };
 
   const handlePreviewTitleChange = (e) => {
@@ -82,8 +72,22 @@ function PreviewBlogComp({ blog, setBlog }) {
     else toast.info("Select upto 5 topics!");
   };
 
+  const getAllTopics = async () => {
+    try {
+      const response = await fetchRequest("/topic", "GET");
+      if (!response?.status === 200) return;
+
+      const result = await response.json();
+      const sortedResult = result?.data?.topics.map((item) => ({ label: item.name.charAt(0).toUpperCase() + item.name.slice(1), value: item._id }));
+      setTopics(sortedResult || []);
+    } catch (err) {
+      console.log("err: ", err);
+    }
+  };
+
   useEffect(() => {
-    setBlog((prev) => ({ ...prev, previewImg: images[imgIndex].url }));
+    getAllTopics();
+    if (pendingImages.length > 0) setBlog((prev) => ({ ...prev, previewImg: pendingImages[imgIndex]?.blobUrl }));
   }, []);
 
   return (
@@ -108,9 +112,7 @@ function PreviewBlogComp({ blog, setBlog }) {
                     <button onClick={() => setIsChangePreviewImg(true)} className="inline-block height68 absolute positionCenter line-h11 padding-38 bdr12 border-radius-9 whitespace-nowrap font-10 text-center align-bottom cursor-pointer select-none box-border font-normal bg16 color-2">
                       Change preview image
                     </button>
-                    <div>
-                      <img src={images[imgIndex].url} className="w-full height67" />
-                    </div>
+                    <div>{pendingImages.length > 0 && <img src={pendingImages[imgIndex].blobUrl} className="w-full height67" />}</div>
                   </div>
                 )}
 
@@ -120,9 +122,9 @@ function PreviewBlogComp({ blog, setBlog }) {
                       Done
                     </button>
                     <div className="height69 padding-27 padding56 padding57 overflow-scroll">
-                      {images.map((item, index) => (
+                      {pendingImages.map((item, index) => (
                         <div className="w-[30%] padding57 padding-27 inline-block" key={index} style={{ paddingTop: 0, paddingLeft: 0 }}>
-                          <img onClick={() => handlePreviewImgChange(index)} src={item.url} className={`w-full transition-all duration-200 ease-in-out ${imgIndex === index ? "bdr13" : "bdr14"}`} />
+                          <img onClick={() => handlePreviewImgChange(index)} src={item.blobUrl} className={`w-full transition-all duration-200 ease-in-out ${imgIndex === index ? "bdr13" : "bdr14"}`} />
                         </div>
                       ))}
                     </div>
@@ -158,7 +160,7 @@ function PreviewBlogComp({ blog, setBlog }) {
                 <div className="bg15">
                   <div className="height70">
                     <div className="font13 font-normal">
-                      <Select value={selectedTopic} onChange={handleChange} isMulti name="colors" options={colourOptions} className="basic-multi-select custom-select box-border" classNamePrefix="select" placeholder="Add a topic..." />
+                      <Select value={selectedTopic} onChange={handleChange} isMulti name="colors" options={topics} className="basic-multi-select custom-select box-border" classNamePrefix="select" placeholder="Add a topic..." />
                     </div>
                   </div>
                 </div>

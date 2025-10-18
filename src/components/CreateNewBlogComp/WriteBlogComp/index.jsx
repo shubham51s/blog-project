@@ -71,8 +71,6 @@ function WriteBlogComp({ blog, setBlog }) {
 
       setPendingImages((prev) => prev.filter((img) => existingIds.includes(img.id)));
 
-      console.log("html: ", html, " description: ", description);
-
       // Get current selection (cursor)
       const { from } = editor.state.selection;
 
@@ -119,7 +117,6 @@ function WriteBlogComp({ blog, setBlog }) {
       setPendingImages((prev) => [...prev, { file, id, blobUrl: localUrl }]);
     };
     input.click();
-    console.log("pending images: ", pendingImages);
   };
 
   const handleClickOutside = (e) => {
@@ -226,7 +223,7 @@ function WriteBlogComp({ blog, setBlog }) {
           <footer className="padding-25"></footer>
         </article>
       </main>
-      {blog.isShowPreview && <PreviewBlogComp blog={blog} setBlog={setBlog} />}
+      {blog.isShowPreview && <PreviewBlogComp blog={blog} setBlog={setBlog} pendingImages={pendingImages} />}
     </>
   );
 }
