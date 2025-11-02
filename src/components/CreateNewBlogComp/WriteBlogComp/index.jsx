@@ -18,8 +18,6 @@ function WriteBlogComp({ blog, setBlog }) {
 
   const handlePlusButtonVisibility = (editor) => {
     const { from } = editor.state.selection;
-    const pos = editor.state.selection.$from.pos;
-    const node = editor.state.doc.nodeAt(pos);
 
     const isEmpty = editor.state.doc.textContent.trim() === "" || editor.state.selection.$from.parent.textContent.trim() === "";
 
@@ -65,32 +63,17 @@ function WriteBlogComp({ blog, setBlog }) {
       const doc = parser.parseFromString(html, "text/html");
       const firstParagraph = doc.querySelector("p");
       const description = firstParagraph ? firstParagraph.textContent : "";
-      const existingIds = Array.from(html.matchAll(/data-id="([^"]+)"/g), (m) => m[1]);
+      // Extract all <img src="..."> URLs
+      const existingSrcs = Array.from(html.matchAll(/<img[^>]+src="([^"]+)"/g), (m) => m[1]);
+      setPendingImages((prev) => prev.filter((img) => existingSrcs.includes(img.blobUrl)));
 
-      setBlog((prev) => ({ ...prev, description, content: html, previewSubtitle: description.slice(0, 140) }));
-
-      setPendingImages((prev) => prev.filter((img) => existingIds.includes(img.id)));
-
-      // Get current selection (cursor)
-      const { from } = editor.state.selection;
-
-      // Get current node (the paragraph user is editing)
-      const node = editor.view.domAtPos(from)?.node;
-
-      // Find paragraph parent node
-      const para = node?.closest("p");
-
-      // Check if paragraph exists and is empty
-      const isEmpty = para && para.textContent.trim().length === 0;
+      setBlog((prev) => ({ ...prev, description, content: html }));
 
       handlePlusButtonVisibility(editor);
     },
     onFocus: ({ editor }) => {
       handlePlusButtonVisibility(editor);
     },
-    // onBlur: () => {
-    //   setShowAddBtn(false); // optional: hide on blur
-    // },
     onSelectionUpdate: ({ editor }) => {
       handlePlusButtonVisibility(editor);
     },
@@ -120,16 +103,22 @@ function WriteBlogComp({ blog, setBlog }) {
   };
 
   const handleClickOutside = (e) => {
-    if (addImgBtnRef && !addImgBtnRef.current.contains(e.target) && editorRef && !editorRef.current.contains(e.target)) {
+    if (addImgBtnRef.current && !addImgBtnRef.current.contains(e.target) && editorRef.current && !editorRef.current.contains(e.target)) {
       setShowAddBtn(false);
     }
   };
 
   const handleHeightChange = (e) => {
     const heading = e.target.value;
-    setBlog((prev) => ({ ...prev, heading, previewTitle: heading.slice(0, 100) }));
+    setBlog((prev) => ({ ...prev, heading }));
     e.target.style.height = "auto"; // reset previous height
     e.target.style.height = `${e.target.scrollHeight}px`; // set new height based on content
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      editor?.commands.focus();
+    }
   };
 
   useEffect(() => {
@@ -157,6 +146,7 @@ function WriteBlogComp({ blog, setBlog }) {
                     paddingBottom: 0,
                   }}
                   rows={1}
+                  onKeyDown={(e) => handleKeyDown(e)}
                 />
 
                 {editor && (

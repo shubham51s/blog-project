@@ -59,7 +59,7 @@ function AboutPage() {
     const loginContainer = document.getElementById("loginPopupContainer");
     const signupContainer = document.getElementById("signupContainer");
 
-    if (loginContainer && !loginContainer.contains(e.target) && loginRef.current && !loginRef.current.contains(e.target)) {
+    if (loginContainer.current && !loginContainer.current.contains(e.target) && loginRef.current && !loginRef.current.contains(e.target)) {
       setIsShowLoginPopup(false);
     }
 

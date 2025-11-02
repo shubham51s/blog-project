@@ -1482,6 +1482,10 @@ button {
     margin: 3px;
   }
 
+  .margin50 {
+    margin-inline: 70px;
+  }
+
   .custom-bg-position {
     background-position-y: 50px;
   }
