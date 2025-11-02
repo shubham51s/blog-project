@@ -9,11 +9,11 @@ function CreatePostPage() {
 
   const [blog, setBlog] = useState({
     heading: "",
+    description: "",
     previewTitle: "",
     previewSubtitle: "",
     previewImg: "",
     content: "",
-    description: "",
     isShowPreview: false,
   });
 
