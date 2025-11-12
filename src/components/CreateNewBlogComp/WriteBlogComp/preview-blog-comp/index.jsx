@@ -4,6 +4,7 @@ import { UserContext } from "../../../../context/userContext";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { useApi } from "../../../../hooks/useApi";
+import { urlBasePath } from "../../../../constants/constant";
 
 function PreviewBlogComp({ blog, setBlog, pendingImages }) {
   const { fetchRequest } = useApi();
@@ -12,6 +13,9 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
   const [imgIndex, setImgIndex] = useState(0);
   const [selectedTopic, setSelectedTopic] = useState([]);
   const [topics, setTopics] = useState([]);
+  const [blobUrl, setBlobUrl] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePreviewImgChange = (index) => {
     setImgIndex(index);
@@ -50,9 +54,81 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
     }
   };
 
+  const publishBlog = async () => {
+    setIsLoading(true);
+    try {
+      const blobUrls = pendingImages.map((item) => {
+        return item.blobUrl;
+      });
+
+      const images = pendingImages.map((item) => {
+        return item.file;
+      });
+
+      const formData = new FormData();
+
+      images.map((img) => {
+        formData.append("images", img);
+      });
+
+      blobUrls.map((url) => {
+        formData.append("blobUrls[]", url);
+      });
+
+      selectedTopic.map((item) => {
+        formData.append("categories", item.value);
+      });
+
+      for (const key in blog) {
+        formData.append(key, blog[key]);
+      }
+
+      const response = await fetch(`${urlBasePath}/blogs`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
+
+      setIsLoading(false);
+
+      const result = await response.json();
+
+      console.log("result: ", result);
+
+      if (response.status === 201) {
+        console.log("blog created succesfully");
+      } else {
+        const msg = result.message || "Something went wrong!";
+        toast.error(msg);
+      }
+      console.log("result: ", result);
+    } catch (err) {
+      setIsLoading(false);
+      console.log("publishBlog catch block: ", err);
+    }
+  };
+
   const handlePublishBtnClick = async () => {
-    console.log("handlePublishBtnClick blog: ", blog);
-    console.log("pendingImages: ", pendingImages);
+    if (isLoading) return;
+
+    if (blog.previewTitle.length <= 0 || blog.previewSubtitle.length <= 0) {
+      let msg = "";
+      if (blog.previewTitle.length <= 0) {
+        msg = "Please provide a preview title";
+      } else {
+        msg = "Please provide a preview subtitle";
+      }
+      toast.warn(msg);
+      return;
+    }
+
+    if (selectedTopic.length <= 0) {
+      let msg = "Please select at least 1 topic";
+      toast.warn(msg);
+      return;
+    }
+
+    publishBlog();
   };
 
   const handleClosePreviewBlogBtnClick = () => {
@@ -120,10 +196,10 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
 
               {!isChangePreviewImg && (
                 <div className="w-full margin46" style={{ marginBottom: 0, marginInline: 0 }}>
-                  <div className="padding-27 padding58 margin-10 bdr10 w-full" style={{ paddingInline: 0, marginTop: 0, borderTop: 0, borderInline: 0 }}>
+                  <div className={`padding-27 padding58 margin-10 bdr10 w-full ${blog.previewTitle.length <= 0 ? "bdr15" : "bdr10"}`} style={{ paddingInline: 0, marginTop: 0, borderTop: 0, borderInline: 0 }}>
                     <textarea value={blog.previewTitle} onChange={(e) => handlePreviewTitleChange(e)} maxLength={100} placeholder="Write a preview title" rows={1} className="w-full m-0 p-0 border-0 outline-0 font-bold font-6 line-h-8 color11 outline-none resize-none overflow-hidden" />
                   </div>
-                  <div className="padding-27 padding58 margin-10 bdr10 w-full" style={{ paddingInline: 0, marginTop: 0, borderTop: 0, borderInline: 0 }}>
+                  <div className={`padding-27 padding58 margin-10 w-full ${blog.previewSubtitle.length <= 0 ? "bdr15" : "bdr10"}`} style={{ paddingInline: 0, marginTop: 0, borderTop: 0, borderInline: 0 }}>
                     <textarea value={blog.previewSubtitle} onChange={(e) => handleSubtitleChange(e)} maxLength={140} placeholder="Write a preview subtitle..." rows={1} className="w-full m-0 p-0 border-0 outline-0 font-light font-10 line-h-8 color11 outline-none resize-none overflow-hidden" />
                   </div>
                 </div>
@@ -161,8 +237,14 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
 
               <div className="margin-14 flex items-center" style={{ marginBottom: 0, marginInline: 0 }}>
                 <div className="shrink-0 grow-0 basis-auto">
-                  <button onClick={handlePublishBtnClick} className="bg14 transition-all duration-300 ease-in-out opacity-[0.9] color-7 height68 line-h11 custom-py-2 border-radius-9 inline-block font-10 text-center cursor-pointer align-bottom whitespace-nowrap select-none box-border font-normal m-0 hover:opacity-100">
-                    <span>Publish and send now</span>
+                  <button onClick={handlePublishBtnClick} className={`flex items-center justify-center bg14 transition-all duration-300 ease-in-out color-7 height68 line-h11 custom-py-2 border-radius-9  font-10 text-center cursor-pointer align-bottom whitespace-nowrap select-none box-border font-normal m-0 hover:opacity-100 ${isLoading ? "opacity-[0.8] pointer-events-none" : " opacity-[0.9] pointer-events-auto"}`}>
+                    {isLoading && (
+                      <div className="h-full aspect-square flex items-center justify-start">
+                        <div className="animate-spin h-[50%] aspect-square border-r-2 border-white rounded-full bg-transparent opacity-100"></div>
+                      </div>
+                    )}
+                    {!isLoading && <span>Publish and send now</span>}
+                    {isLoading && <span>Please wait...</span>}
                   </button>
                 </div>
                 <div className=""></div>

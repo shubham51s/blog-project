@@ -33,6 +33,7 @@ button {
   --border-9: rgb(229, 229, 229);
   --border-10: rgba(0, 0, 0, .05);
   --border-11: rgba(0, 0, 0, .25);
+  --border-12: rgba(255, 0, 0, 0.6);
 
   /* for background color */
   --bg-color-1: rgb(25, 25, 25);
@@ -852,6 +853,10 @@ button {
 
   .bdr14:hover {
     border-color: rgb(125, 197, 122);
+  }
+
+  .bdr15 {
+    border: 1px solid var(--border-12);
   }
 
   .translateY-1 {
