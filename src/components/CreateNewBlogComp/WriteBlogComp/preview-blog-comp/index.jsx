@@ -5,6 +5,7 @@ import Select from "react-select";
 import { toast } from "react-toastify";
 import { useApi } from "../../../../hooks/useApi";
 import { urlBasePath } from "../../../../constants/constant";
+import { useNavigate } from "react-router-dom";
 
 function PreviewBlogComp({ blog, setBlog, pendingImages }) {
   const { fetchRequest } = useApi();
@@ -16,6 +17,7 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
   const [blobUrl, setBlobUrl] = useState([]);
   const [files, setFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handlePreviewImgChange = (index) => {
     setImgIndex(index);
@@ -93,31 +95,24 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
 
       const result = await response.json();
 
-      console.log("result: ", result);
-
       if (response.status === 201) {
-        console.log("blog created succesfully");
+        navigate("/");
       } else {
         const msg = result.message || "Something went wrong!";
         toast.error(msg);
       }
-      console.log("result: ", result);
     } catch (err) {
-      setIsLoading(false);
       console.log("publishBlog catch block: ", err);
+      setIsLoading(false);
     }
   };
 
   const handlePublishBtnClick = async () => {
     if (isLoading) return;
 
-    if (blog.previewTitle.length <= 0 || blog.previewSubtitle.length <= 0) {
-      let msg = "";
-      if (blog.previewTitle.length <= 0) {
-        msg = "Please provide a preview title";
-      } else {
-        msg = "Please provide a preview subtitle";
-      }
+    if (blog.previewTitle.length <= 0) {
+      const msg = "Please provide a preview title";
+
       toast.warn(msg);
       return;
     }
@@ -199,7 +194,7 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
                   <div className={`padding-27 padding58 margin-10 bdr10 w-full ${blog.previewTitle.length <= 0 ? "bdr15" : "bdr10"}`} style={{ paddingInline: 0, marginTop: 0, borderTop: 0, borderInline: 0 }}>
                     <textarea value={blog.previewTitle} onChange={(e) => handlePreviewTitleChange(e)} maxLength={100} placeholder="Write a preview title" rows={1} className="w-full m-0 p-0 border-0 outline-0 font-bold font-6 line-h-8 color11 outline-none resize-none overflow-hidden" />
                   </div>
-                  <div className={`padding-27 padding58 margin-10 w-full ${blog.previewSubtitle.length <= 0 ? "bdr15" : "bdr10"}`} style={{ paddingInline: 0, marginTop: 0, borderTop: 0, borderInline: 0 }}>
+                  <div className="padding-27 padding58 margin-10 w-full bdr10" style={{ paddingInline: 0, marginTop: 0, borderTop: 0, borderInline: 0 }}>
                     <textarea value={blog.previewSubtitle} onChange={(e) => handleSubtitleChange(e)} maxLength={140} placeholder="Write a preview subtitle..." rows={1} className="w-full m-0 p-0 border-0 outline-0 font-light font-10 line-h-8 color11 outline-none resize-none overflow-hidden" />
                   </div>
                 </div>

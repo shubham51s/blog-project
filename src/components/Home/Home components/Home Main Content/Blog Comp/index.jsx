@@ -9,7 +9,7 @@ import { CiBookmarkPlus } from "react-icons/ci";
 import { IoBookmark } from "react-icons/io5";
 import { toast } from "react-toastify";
 
-function BlogComp({ item }) {
+function BlogComp({ item, userInfo }) {
   const navigate = useNavigate();
   const handleUserProfileClick = () => {
     navigate("/");
@@ -49,17 +49,17 @@ function BlogComp({ item }) {
                           <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
                             <div onClick={() => handleUserProfileClick()} className="relative z-[2] no-underline cursor-pointer">
                               <div className="relative">
-                                <img className="height-12 aspect-square box-border rounded-full align-middle" src={blog.profileUrl} alt={blog.name} />
+                                <img className="height-12 aspect-square box-border rounded-full align-middle" src={userInfo.profileImg} alt={userInfo.name} />
                                 <div className="height-12 aspect-square absolute top-0 rounded-full"></div>
                               </div>
                             </div>
                           </div>
                           <div onClick={() => handleUserProfileClick()} className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
                             <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
-                              {blog.channelName && <span className="font-light">In </span>}
-                              <span className="font-normal no-underline hover:underline">{blog.userName}</span>
-                              {blog.channelName && <span className="font-light"> by </span>}
-                              {blog.channelName && <span className="font-normal no-underline hover:underline">{blog.channelName}</span>}
+                              {blog.community && <span className="font-light">In </span>}
+                              <span className="font-normal no-underline hover:underline">{userInfo.username}</span>
+                              {blog.community && <span className="font-light"> by </span>}
+                              {blog.community && <span className="font-normal no-underline hover:underline">{blog.community}</span>}
                             </div>
                           </div>
                         </div>
@@ -71,9 +71,9 @@ function BlogComp({ item }) {
                         <div className="grow shrink basis-auto" style={{ wordBreak: "break-word" }}>
                           <div>
                             <div className="flex flex-col static cursor-pointer">
-                              <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.title}</h2>
+                              <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.previewTitle}</h2>
                               <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
-                                <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.description}</h3>
+                                <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.previewSubtitle}</h3>
                               </div>
                             </div>
                           </div>
@@ -92,23 +92,23 @@ function BlogComp({ item }) {
                                         </button>
                                       </div>
                                     </div>
-                                    {blog.createtAt}
+                                    {blog.updatedAt}
                                     <div className="width-28 height-51 relative flex items-center">
                                       <Link className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
-                                        <div className="flex" title={`${blog.likes} claps`}>
+                                        <div className="flex" title={`${blog.likeCount} claps`}>
                                           <div className="custom-gap-1 flex items-center">
                                             <div className="inline-block width-19 aspect-square">
                                               <PiHandsClappingDuotone className="w-full h-full" />
                                             </div>
-                                            <span>{blog.likes}</span>
+                                            <span>{blog.likeCount}</span>
                                           </div>
                                         </div>
-                                        <div className="flex" title={`${blog.comments} responses`}>
+                                        <div className="flex" title={`${blog.commentCount} responses`}>
                                           <div className="custom-gap-1 flex items-center">
                                             <div className="inline-block width-19 aspect-square">
                                               <FaRegComment className="w-full h-full" />
                                             </div>
-                                            <span>{blog.comments}</span>
+                                            <span>{blog.commentCount}</span>
                                           </div>
                                         </div>
                                       </Link>
@@ -152,7 +152,7 @@ function BlogComp({ item }) {
                         </div>
                         {/* right section working */}
                         <div className="margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
-                          <img src={blog.images} className="bg-10 border-radius-5 align-middle width-29 height-52" />
+                          <img src={blog.previewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />
                         </div>
                       </div>
                     </div>

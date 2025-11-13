@@ -1,12 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
 import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
 import NoContentComp from "./No Content";
 import BlogComp from "./Blog Comp";
+import { UserContext } from "../../../../context/userContext";
+import { useApi } from "../../../../hooks/useApi";
 
 function HomeMainContentComp() {
+  const { userInfo } = useContext(UserContext);
+  const { fetchRequest } = useApi();
   const [recommendedTopics, setRecommendedTopics] = useState([
     {
       id: 0,
@@ -32,14 +36,16 @@ function HomeMainContentComp() {
     },
   ]);
 
-  const [blogs, setBlogs] = useState([
-    { _id: 1, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Robin Sanah Kai", channelName: "Word Garden", title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past", description: "An unconventional and compassionate guide to becoming an early bird", createtAt: "5d ago", likes: "9", comments: 4 },
-    { _id: 2, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/da:true/resize:fill:100:66/g:fp:0.45:0.42/1*UeYfTm8_eiAJptIUZabGOQ.gif", userName: "Devon Price", channelName: "Human Parts", title: "Laziness Does Not Exist", description: "Psychological research is clear: when people procrastinate, there's usually a good reason", createtAt: "Mar 24, 2018", likes: "254k", comments: 2585 },
-    { _id: 3, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:320:214/1*4zC5ohNcmVDb1NXmzCvmNA.jpeg", userName: "Julie Zhuo", channelName: "The Year of the Looking Glass", title: "How to Think About Your Career", description: "If you had asked 22-year-old me what my “career aspirations” were, I would have looked at you blankly and then casually changed the subject…", createtAt: "July 26, 2016", likes: "29K", comments: 490 },
-    { _id: 4, isBookmarked: true, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Scripting Soul", title: "React Component Design: 9 Architecture Patterns That Make Your UI Bulletproof", description: "React gives you incredible freedom. But with freedom comes inconsistency, spaghetti code, and team confusion — unless you use design…", createtAt: "Jun 21", likes: "181", comments: 4 },
-    { _id: 5, profileUrl: "	https://miro.medium.com/v2/resize:fill:40:40/1*3qgCwMpj-q4oKW3ngVkyUg.jpeg", images: "https://miro.medium.com/v2/da:true/resize:fill:320:214/0*luPh_V4RH2SnJNqB", userName: "The CS Engineer", title: "Stop Using JSS in React — CSS Modules Are Way Faster", description: "Your CSS choices can kill your performance.", createtAt: "6d ago", likes: "64", comments: 2 },
-    { _id: 6, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*e7o4kbk8ofT6eKaLrO0jaw.png", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Saurav Mandal", title: "How to *really* know you’re in love", description: "Because most of “the signs” they tell you are garbage", createtAt: "Aug 3, 2017", likes: "161k", comments: 1485 },
-  ]);
+  const [blogs, setBlogs] = useState([]);
+
+  // const [blogs, setBlogs] = useState([
+  //   { _id: 1, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Robin Sanah Kai", channelName: "Word Garden", title: "10 “Fresh” Design Trends We Shamelessly Stole From the Past", description: "An unconventional and compassionate guide to becoming an early bird", createtAt: "5d ago", likes: "9", comments: 4 },
+  //   { _id: 2, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/da:true/resize:fill:100:66/g:fp:0.45:0.42/1*UeYfTm8_eiAJptIUZabGOQ.gif", userName: "Devon Price", channelName: "Human Parts", title: "Laziness Does Not Exist", description: "Psychological research is clear: when people procrastinate, there's usually a good reason", createtAt: "Mar 24, 2018", likes: "254k", comments: 2585 },
+  //   { _id: 3, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:320:214/1*4zC5ohNcmVDb1NXmzCvmNA.jpeg", userName: "Julie Zhuo", channelName: "The Year of the Looking Glass", title: "How to Think About Your Career", description: "If you had asked 22-year-old me what my “career aspirations” were, I would have looked at you blankly and then casually changed the subject…", createtAt: "July 26, 2016", likes: "29K", comments: 490 },
+  //   { _id: 4, isBookmarked: true, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*x03RC4xTP5f1EZ6sew_n0w.jpeg", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Scripting Soul", title: "React Component Design: 9 Architecture Patterns That Make Your UI Bulletproof", description: "React gives you incredible freedom. But with freedom comes inconsistency, spaghetti code, and team confusion — unless you use design…", createtAt: "Jun 21", likes: "181", comments: 4 },
+  //   { _id: 5, profileUrl: "	https://miro.medium.com/v2/resize:fill:40:40/1*3qgCwMpj-q4oKW3ngVkyUg.jpeg", images: "https://miro.medium.com/v2/da:true/resize:fill:320:214/0*luPh_V4RH2SnJNqB", userName: "The CS Engineer", title: "Stop Using JSS in React — CSS Modules Are Way Faster", description: "Your CSS choices can kill your performance.", createtAt: "6d ago", likes: "64", comments: 2 },
+  //   { _id: 6, profileUrl: "https://miro.medium.com/v2/resize:fill:40:40/1*e7o4kbk8ofT6eKaLrO0jaw.png", images: "https://miro.medium.com/v2/resize:fill:200:134/1*Rjb2s95x1IljX_vfahIVdg.avif", userName: "Saurav Mandal", title: "How to *really* know you’re in love", description: "Because most of “the signs” they tell you are garbage", createtAt: "Aug 3, 2017", likes: "161k", comments: 1485 },
+  // ]);
 
   const [activeTopicIndex, setActiveTopicIndex] = useState(0);
 
@@ -47,6 +53,25 @@ function HomeMainContentComp() {
     if (index === activeTopicIndex) return;
     setActiveTopicIndex(index);
   };
+
+  const fetchBlogs = async () => {
+    try {
+      const response = await fetchRequest("/blogs", "GET");
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("result: ", result.data.blogs);
+        setBlogs(result.data.blogs);
+      }
+    } catch (err) {
+      console.log("fetchBlogs catch block: ", err);
+    }
+  };
+
+  useEffect(() => {
+    console.log("userInfo: ", userInfo);
+    fetchBlogs();
+  }, []);
 
   return (
     <main className="width-20 grow flex-shrink basis-auto block">
@@ -88,7 +113,7 @@ function HomeMainContentComp() {
         {/* section-4 */}
         <div>
           {blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-          {blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
+          {blogs.length > 0 && blogs.map((item) => <BlogComp item={item} userInfo={userInfo} key={item._id} />)}
         </div>
       </div>
     </main>

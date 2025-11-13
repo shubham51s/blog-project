@@ -117,6 +117,7 @@ function WriteBlogComp({ blog, setBlog }) {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       editor?.commands.focus();
     }
   };
@@ -138,6 +139,7 @@ function WriteBlogComp({ blog, setBlog }) {
               <div ref={editorWrapperRef} className="w-full width55 padding-14 my-0 mx-auto box-border relative editor-wrapper" style={{ paddingBlock: 0 }}>
                 <textarea
                   value={blog.heading}
+                  onKeyDown={(e) => handleKeyDown(e)}
                   onChange={(e) => handleHeightChange(e)}
                   maxLength={500}
                   className="padding-18 m-0 font-normal font-12 color11 outline-none resize-none overflow-hidden w-full"
@@ -146,7 +148,6 @@ function WriteBlogComp({ blog, setBlog }) {
                     paddingBottom: 0,
                   }}
                   rows={1}
-                  onKeyDown={(e) => handleKeyDown(e)}
                 />
 
                 {editor && (

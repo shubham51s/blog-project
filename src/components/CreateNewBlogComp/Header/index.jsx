@@ -78,7 +78,7 @@ function WriteBlogHeader({ blog, setBlog }) {
       <div className="relative width41 height-63 padding-14 mx-auto flex justify-between items-center" style={{ paddingBlock: 0 }}>
         <div className="relative z-[500] grow shink basis-auto flex justify-start items-center">
           <div>
-            <Link className="border-0 no-underline p-0 m-0 flex items-center">
+            <Link to="/" className="border-0 no-underline p-0 m-0 flex items-center">
               <div className="flex">
                 <img src={mediumLogo} alt="brand logo" className="width42 height64" />
               </div>

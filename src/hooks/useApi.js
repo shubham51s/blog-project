@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export function useApi() {
   const { setUserInfo, setIsUserLoggedIn } = useContext(UserContext);
 
-  async function fetchRequest(url, method, param) {
+  async function fetchRequest(url, method, param = null) {
     try {
       const response = await fetch(`${urlBasePath}${url}`, {
         headers: { "Content-Type": "application/json" },
