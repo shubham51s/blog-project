@@ -1,25 +1,26 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PiStarFourLight } from "react-icons/pi";
 import { PiHandsClappingDuotone } from "react-icons/pi";
 import { FaRegComment } from "react-icons/fa";
-import { CiCircleMinus } from "react-icons/ci";
-import { RiMoreLine } from "react-icons/ri";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { IoBookmark } from "react-icons/io5";
 import { toast } from "react-toastify";
+import MoreComp from "./MoreComponent";
+import ShowLessComp from "./ShowLessComp";
 
 function BlogComp({ item, userInfo }) {
   const navigate = useNavigate();
+  const [isHideBlog, setIsHideBlog] = useState(false);
+
   const handleUserProfileClick = () => {
     navigate("/");
   };
 
   const [blog, setBlog] = useState(item);
 
-  const handleShowLessLikeThisBtnClick = () => {};
-
-  const handleBookmarkBlogBtnClick = () => {
+  const handleBookmarkBlogBtnClick = (e) => {
+    e.stopPropagation();
     if (blog.isBookmarked) {
       setBlog({ ...blog, isBookmarked: false });
     } else {
@@ -33,8 +34,47 @@ function BlogComp({ item, userInfo }) {
     navigate("/blog/12345");
   };
 
+  function formatDateForBlog(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+
+    const diffMs = now.getTime() - date.getTime();
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    if (diffSec < 60) {
+      return diffSec <= 0 ? "just now" : `${diffSec}s ago`;
+    }
+
+    if (diffMin < 60) {
+      return `${diffMin}m ago`;
+    }
+
+    if (diffHour < 24) {
+      return `${diffHour}h ago`;
+    }
+
+    if (diffDay < 10) {
+      return `${diffDay}d ago`;
+    }
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear().toString().slice(-2);
+
+    if (date.getFullYear() === now.getFullYear()) {
+      return `${month} ${day}`;
+    }
+
+    return `${day} ${month} ${year}`;
+  }
+
   return (
-    <div className="height-18 overflow-hidden">
+    <div className={`overflow-hidden transition-all duration-500 ease-out ${isHideBlog ? "height71" : "height-18"}`}>
       <div className="flex justify-center">
         <div className="w-full max-width-2 margin-2 min-w-0">
           <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
@@ -56,10 +96,10 @@ function BlogComp({ item, userInfo }) {
                           </div>
                           <div onClick={() => handleUserProfileClick()} className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
                             <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
-                              {blog.community && <span className="font-light">In </span>}
+                              {blog.communityName && <span className="font-light">In </span>}
                               <span className="font-normal no-underline hover:underline">{userInfo.username}</span>
-                              {blog.community && <span className="font-light"> by </span>}
-                              {blog.community && <span className="font-normal no-underline hover:underline">{blog.community}</span>}
+                              {blog.communityName && <span className="font-light"> by </span>}
+                              {blog.communityName && <span className="font-normal no-underline hover:underline">{blog.communityName}</span>}
                             </div>
                           </div>
                         </div>
@@ -73,13 +113,13 @@ function BlogComp({ item, userInfo }) {
                             <div className="flex flex-col static cursor-pointer">
                               <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.previewTitle}</h2>
                               <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
-                                <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.previewSubtitle}</h3>
+                                {blog.previewSubtitle && <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.previewSubtitle}</h3>}
                               </div>
                             </div>
                           </div>
 
                           <div>
-                            <div className="w-full padding-25" style={{ paddingBottom: 0, paddingInline: 0 }}>
+                            <div className="w-full padding-25 cursor-pointer" style={{ paddingBottom: 0, paddingInline: 0 }}>
                               <span className="font-4 color-4 custom-line-h-1 font-normal">
                                 <div className="height-50 flex justify-between items-center">
                                   <div className="flex items-center custom-gap-2 align-middle text-center">
@@ -92,7 +132,7 @@ function BlogComp({ item, userInfo }) {
                                         </button>
                                       </div>
                                     </div>
-                                    {blog.updatedAt}
+                                    {formatDateForBlog(blog.updatedAt)}
                                     <div className="width-28 height-51 relative flex items-center">
                                       <Link className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
                                         <div className="flex" title={`${blog.likeCount} claps`}>
@@ -116,18 +156,10 @@ function BlogComp({ item, userInfo }) {
                                   </div>
 
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
+                                    <ShowLessComp setIsHideBlog={setIsHideBlog} />
                                     <div>
                                       <div className="inline-block">
-                                        <button onClick={() => handleShowLessLikeThisBtnClick()} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Show less like this">
-                                          <div className="width-13 aspect-square">
-                                            <CiCircleMinus className="w-full h-full align-middle" />
-                                          </div>
-                                        </button>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div className="inline-block">
-                                        <button onClick={() => handleBookmarkBlogBtnClick()} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
+                                        <button onClick={(e) => handleBookmarkBlogBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
                                           <div className="width-13 aspect-square">
                                             {!blog?.isBookmarked && <CiBookmarkPlus className="w-full h-full align-middle" />}
                                             {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />}
@@ -135,15 +167,7 @@ function BlogComp({ item, userInfo }) {
                                         </button>
                                       </div>
                                     </div>
-                                    <div className="margin-26">
-                                      <div className="inline-block">
-                                        <button className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="More">
-                                          <div className="width-13 aspect-square">
-                                            <RiMoreLine className="w-full h-full align-middle" />
-                                          </div>
-                                        </button>
-                                      </div>
-                                    </div>
+                                    <MoreComp blog={blog} />
                                   </div>
                                 </div>
                               </span>
@@ -151,7 +175,7 @@ function BlogComp({ item, userInfo }) {
                           </div>
                         </div>
                         {/* right section working */}
-                        <div className="margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
+                        <div className="margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
                           <img src={blog.previewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />
                         </div>
                       </div>
