@@ -1099,6 +1099,10 @@ button {
     max-width: 320px;
   }
 
+  .width62 {
+    width: 185px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }

@@ -11,13 +11,13 @@ import ShowLessComp from "./ShowLessComp";
 
 function BlogComp({ item, userInfo }) {
   const navigate = useNavigate();
+  const isMyBlog = userInfo._id === item.author._id;
+  const [blog, setBlog] = useState({ ...item, isMyBlog });
   const [isHideBlog, setIsHideBlog] = useState(false);
 
   const handleUserProfileClick = () => {
     navigate("/");
   };
-
-  const [blog, setBlog] = useState(item);
 
   const handleBookmarkBlogBtnClick = (e) => {
     e.stopPropagation();
@@ -89,7 +89,7 @@ function BlogComp({ item, userInfo }) {
                           <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
                             <div onClick={() => handleUserProfileClick()} className="relative z-[2] no-underline cursor-pointer">
                               <div className="relative">
-                                <img className="height-12 aspect-square box-border rounded-full align-middle" src={userInfo.profileImg} alt={userInfo.name} />
+                                <img className="height-12 aspect-square box-border rounded-full align-middle" src={blog.author.profileImg} alt={blog.author.name} />
                                 <div className="height-12 aspect-square absolute top-0 rounded-full"></div>
                               </div>
                             </div>
@@ -97,9 +97,9 @@ function BlogComp({ item, userInfo }) {
                           <div onClick={() => handleUserProfileClick()} className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
                             <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
                               {blog.communityName && <span className="font-light">In </span>}
-                              <span className="font-normal no-underline hover:underline">{userInfo.username}</span>
-                              {blog.communityName && <span className="font-light"> by </span>}
                               {blog.communityName && <span className="font-normal no-underline hover:underline">{blog.communityName}</span>}
+                              {blog.communityName && <span className="font-light"> by </span>}
+                              <span className="font-normal no-underline hover:underline">{blog.isMyBlog ? "You" : blog.author.username}</span>
                             </div>
                           </div>
                         </div>
@@ -156,7 +156,7 @@ function BlogComp({ item, userInfo }) {
                                   </div>
 
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
-                                    <ShowLessComp setIsHideBlog={setIsHideBlog} />
+                                    {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
                                     <div>
                                       <div className="inline-block">
                                         <button onClick={(e) => handleBookmarkBlogBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">

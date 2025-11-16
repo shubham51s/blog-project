@@ -69,7 +69,6 @@ function HomeMainContentComp() {
   };
 
   useEffect(() => {
-    console.log("userInfo: ", userInfo);
     fetchBlogs();
   }, []);
 
