@@ -7,11 +7,16 @@ import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import { GoShare } from "react-icons/go";
 import { IoIosMore } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import CommentsComp from "../../components/PostDetailsPageComponents/Comments comp";
 import BlogRecommendComp from "../../components/PostDetailsPageComponents/Blog Recommendation";
+import { useApi } from "../../hooks/useApi";
+import { toast } from "react-toastify";
 
 function PostDetailsPage() {
+  const { title, id } = useParams();
+  const { fetchRequest } = useApi();
+  const navigate = useNavigate();
   const [isShowFullImg, SetIsShowFullImg] = useState(false);
   const fullImgRef = useRef(null);
 
@@ -44,7 +49,28 @@ function PostDetailsPage() {
 
   const handleClickOutside = (e) => {};
 
+  const fetchBlogDetails = async () => {
+    try {
+      const response = await fetchRequest(`/blogs/${id}`, "GET");
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        toast.error(result.message || "Something went wrong!");
+        navigate("/");
+        return;
+      }
+
+      console.log("result: ", result);
+    } catch (err) {
+      console.log("fetchBlogDetails catch block: ", err);
+      toast.error("Something went wrong!");
+      navigate("/");
+    }
+  };
+
   useEffect(() => {
+    fetchBlogDetails();
     document.addEventListener("click", handleClickOutside);
 
     return () => {
@@ -404,7 +430,6 @@ function PostDetailsPage() {
               </div>
 
               {/* comments section */}
-              {/* working */}
               <CommentsComp />
               <BlogRecommendComp />
             </div>

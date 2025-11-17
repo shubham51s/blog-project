@@ -30,8 +30,9 @@ function BlogComp({ item, userInfo }) {
     toast.success(`Bookmark ${!blog.isBookmarked ? "added" : "removed"} successfully!`);
   };
 
-  const handleBlogMainClick = () => {
-    navigate("/blog/12345");
+  const handleShowDetailedBlog = () => {
+    const title = blog.previewTitle.split(" ").join("-");
+    navigate(`/${title}/${blog._id}`);
   };
 
   function formatDateForBlog(dateString) {
@@ -78,7 +79,7 @@ function BlogComp({ item, userInfo }) {
       <div className="flex justify-center">
         <div className="w-full max-width-2 margin-2 min-w-0">
           <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
-            <article onClick={() => handleBlogMainClick()}>
+            <article onClick={() => handleShowDetailedBlog()}>
               <div className="box-content">
                 <div className="w-full h-full">
                   <div className="flex relative">

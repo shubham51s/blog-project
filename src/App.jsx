@@ -24,14 +24,12 @@ function App() {
         {/* <Route path="/post/:id" element={<Homepage />} /> */}
 
         <Route path="/" element={<Homepage />} />
-        <Route path="/blog/:id" element={<PostDetailsPage />} />
+        <Route path="/:title/:id" element={<PostDetailsPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<SignupPage />} />
         <Route path="/new-story" element={<CreatePostPage />} />
         <Route path="/edit/:id" element={<EditPostPage />} />
-        {/* temporary post details page changed */}
-        {/* <Route path="/" element={<PostDetailsPage />} /> */}
         <Route path="/my-blogs/:id" element={<MyBlogsPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/*" element={<NotFoundPage />} />

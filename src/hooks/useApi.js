@@ -15,7 +15,7 @@ export function useApi() {
         body: param ? JSON.stringify(param) : null,
       });
 
-      if (response.status === 401) {
+      if (response?.status === 401) {
         // setIsUserLoggedIn(false);
         // setUserInfo({});
         // useNavigate("/");
