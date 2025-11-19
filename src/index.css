@@ -279,6 +279,13 @@ button {
   color: var(--text-color-14)
 }
 
+.markupContainer img {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  cursor: zoom-in;
+}
+
 .left-unset {
   left: unset;
 }
@@ -896,6 +903,24 @@ button {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+
+  .markupContainer img {
+    margin-block: 56px;
+    max-width: 7952px !important;
+  }
+
+  .markupContainer p {
+    letter-spacing: -0.003em;
+    line-height: 32px;
+    margin-top: 2.14em;
+    font-size: 20px;
+    word-break: break-all;
+    color: var(--txt-color-3);
+    font-weight: 400;
+    padding: 0;
+    margin-bottom: 0;
+    margin-inline: 0;
   }
 
   .max-width-2 {

@@ -17,36 +17,9 @@ function PostDetailsPage() {
   const { title, id } = useParams();
   const { fetchRequest } = useApi();
   const navigate = useNavigate();
-  const [isShowFullImg, SetIsShowFullImg] = useState(false);
+  const [isShowFullImg, setIsShowFullImg] = useState(false);
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState();
-
-  const [blogDetails, setBlogDetails] = useState({
-    id: 1,
-    community: {
-      name: "Philosophy Today",
-      image: "https://miro.medium.com/v2/resize:fill:48:48/1*PUDx_xvsheMfWyuDj5_Kxg.png",
-      description: "Philosophy Today is dedicated to current philosophy, logic, and thought.",
-      followers: "515K",
-      lastPublishedTime: "8 hours ago",
-      about: "Practical wisdom for life drawn from philosophy, psychology, spirituality and personal experiences.",
-    },
-    author: {
-      name: "Gen. A Ishimwe",
-      followers: "61K",
-      following: "400",
-      about: "The wisdom of great minds. My essays cross between psychology, philosophy and self-improvement.",
-      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*Rfb_-NdeQ6kzcR3JmVdH9A.jpeg",
-    },
-    heading: "Why the Middle Class Suffers the Most: The Paradox of Choice",
-    description: "How Trying to Optimize Your Life is Part of the Problem",
-    readTime: "4 min read",
-    date: "May 7, 2025",
-    clapsCount: "3.6K",
-    commentCount: "150",
-    images: ["https://miro.medium.com/v2/resize:fit:1400/format:webp/1*3lCgOLAxH3lgdeodzV7L_g.jpeg"],
-    paragraphs: ["It usually happens to me on a random day. Nothing’s wrong. Life at home is good. Work’s okay. I’m still in touch with my close friends. But I feel existentially stuck. Not in pain. Not in crisis. Just this dull, dragging emptiness. It’s that weird state where everything’s “fine,” but nothing feels good That’s not even the worst part. The terrible part of this feeling is being stuck in your head, looking for answers.", "The problem isn’t the big things in life.", "But it doesn’t mean you’re not broken. Or ungrateful.", "Science has a term for it. It’s called the lack of interest, enjoyment or pleasure from life’s experiences .” In short, you don’t feel pleasure, even when nothing’s technically wrong.", "It’s like your brain forgets how to enjoy life. Or how to be curious and how to wonder. And when curiosity dies, so does joy. We don’t feel stuck because something happened. We feel stuck because nothing happens. Time collapses in our reality. And our brain stops reacting. But there’s a way out.", "The human brain is not a fan of repetition. It wants novelty. Change. Challenge, even when you don’t…"],
-  });
 
   const handleClickOutside = (e) => {};
 
@@ -71,12 +44,31 @@ function PostDetailsPage() {
     }
   };
 
+  const handlMarkupParentClick = (e) => {
+    const imageEl = e.target.closest("img");
+    if (imageEl && imageEl.src) {
+      setIsShowFullImg(imageEl.src);
+      window.addEventListener("scroll", handleOnScroll);
+    }
+  };
+
+  // add on scroll event only when full size image is open (to close this full size image on scroll) and remove listener when full size image is closed
+  const handleOnScroll = () => {
+    handleCloseFullImg();
+  };
+
+  const handleCloseFullImg = () => {
+    setIsShowFullImg(false);
+    window.removeEventListener("scroll", handleOnScroll);
+  };
+
   useEffect(() => {
     fetchBlogDetails();
     document.addEventListener("click", handleClickOutside);
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
+      window.removeEventListener("scroll", handleOnScroll);
     };
   }, []);
 
@@ -121,12 +113,12 @@ function PostDetailsPage() {
                         <div className="width-30 flex items-start flex-col">
                           <a href="#" className="no-underline p-0 m-0">
                             <div className="relative">
-                              <img src={blogDetails.community.profileImg} alt={blogDetails.community.name} className="width-31 aspect-square border-radius-5 block align-middle" />
+                              <img src={blog.community.profileImg} alt={blog.community.name} className="width-31 aspect-square border-radius-5 block align-middle" />
                             </div>
                           </a>
                           <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}></div>
                           <p className="custom-fs-1 color-4 custom-line-h-1 font-normal m-0 p-0">
-                            <span>{blogDetails.community.about}</span>
+                            <span>{blog.community.about}</span>
                           </p>
                           <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}></div>
                           <p className="color-3 custom-fs-1 custom-line-h-1 font-medium m-0 p-0">
@@ -243,21 +235,23 @@ function PostDetailsPage() {
                             </div>
                           </div>
 
-                          <figure className="margin-25 clear-both" style={{ marginBottom: 0, marginInline: 0 }}>
-                            {/* need to add zoom in out logic here (maybe) */}
+                          <div onClick={handlMarkupParentClick} className="markupContainer" dangerouslySetInnerHTML={{ __html: blog.content }} />
+
+                          {/* need to add zoom in out logic here (maybe) */}
+                          {/* <figure className="margin-25 clear-both" style={{ marginBottom: 0, marginInline: 0 }}>
                             <div className="z-auto cursor-zoom-in relative w-full transition ease-in-out duration-300">
                               <div className="width-35 mr-auto ml-auto">
-                                <picture>{blogDetails.images.length > 0 && <img onClick={() => SetIsShowFullImg(blogDetails.images[0])} src={blogDetails.images[0]} alt={blogDetails.heading} className="h-auto w-full max-w-full align-middle" />}</picture>
+                                <picture>{blogDetails.images.length > 0 && <img onClick={() => setIsShowFullImg(blogDetails.images[0])} src={blogDetails.images[0]} alt={blogDetails.heading} className="h-auto w-full max-w-full align-middle" />}</picture>
                               </div>
                             </div>
-                          </figure>
+                          </figure> */}
 
                           {/* paragraphs are dynamic */}
-                          {blogDetails.paragraphs.map((item, index) => (
+                          {/* {blogDetails.paragraphs.map((item, index) => (
                             <p key={index} className="letter-spacing-2 line-h-5 margin-32 font-3 break-words color-3 font-normal p-0" style={{ marginBottom: 0, marginInline: 0 }}>
                               {item}
                             </p>
-                          ))}
+                          ))} */}
                         </div>
                       </div>
                     </div>
@@ -276,27 +270,29 @@ function PostDetailsPage() {
                           <div className="width-36">
                             <span className="inline-block">
                               <div className="flex items-center">
-                                <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                  <div className="width-13 aspect-square opacity-[0.80] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
-                                    <PiHandsClapping className="w-full h-full" />
+                                <div className="select-none color-6 margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
+                                  <div className="width-13 aspect-square opacity-[0.7] transition-all duration-200 ease-out cursor-pointer hover:opacity-[0.9]">
+                                    <PiHandsClapping className="w-full h-full" title="Clap" />
                                   </div>
                                 </div>
                                 <div>
-                                  <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0 text-center">{blog.likeCount}</p>
+                                  <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer opacity-[0.7] transition-all duration-200 ease-out hover:opacity-[0.9]" title="View Claps">
+                                    {blog.likeCount}
+                                  </p>
                                 </div>
                               </div>
                             </span>
                           </div>
                           <div className="margin-12" style={{ marginRight: 0 }}>
                             <span className="inline-block">
-                              <div className="flex items-center">
+                              <div className="flex items-center color-6 opacity-[0.7] transition-all duration-200 ease-out cursor-pointer hover:opacity-[0.9]" title="Respond">
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                  <div className="width-13 aspect-square opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
-                                    <FiMessageCircle className="w-full h-full" />
+                                  <div className="width-13 aspect-square">
+                                    <FiMessageCircle className="w-full h-full opacity-[0.9]" />
                                   </div>
                                 </div>
                                 <div>
-                                  <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0 text-center">{blog.commentCount}</p>
+                                  <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center">{blog.commentCount}</p>
                                 </div>
                               </div>
                             </span>
@@ -306,21 +302,21 @@ function PostDetailsPage() {
                           <div className="margin-18 flex-grow: 0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
                             <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
                               <div className="width-13 aspect-square">
-                                <MdOutlineBookmarkAdd className="w-full h-full" />
+                                <MdOutlineBookmarkAdd className="w-full h-full" title="Save" />
                               </div>
                             </button>
                           </div>
                           <div className="margin-18 flex-grow: 0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
                             <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
                               <div className="width-13 aspect-square">
-                                <GoShare className="w-full h-full" />
+                                <GoShare className="w-full h-full" title="Share" />
                               </div>
                             </button>
                           </div>
                           <div className="flex-grow: 0 shrink-0 basis-auto">
                             <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
                               <div className="width-13 aspect-square">
-                                <IoIosMore className="w-full h-full" />
+                                <IoIosMore className="w-full h-full" title="More" />
                               </div>
                             </button>
                           </div>
@@ -337,7 +333,7 @@ function PostDetailsPage() {
                       {/* community details */}
                       {blog.community && (
                         <div className="custom-margin-b-1">
-                          <div className="flex">
+                          <div className="flex items-start">
                             <div className="margin-18 flex justify-between" style={{ marginLeft: 0 }}>
                               <div className="">
                                 <Link className="no-underline">
@@ -347,7 +343,7 @@ function PostDetailsPage() {
                                 </Link>
                               </div>
                             </div>
-                            <div className="flex flex-col flex-grow: 0 shrink-0 basis-auto">
+                            <div className="flex flex-col grow shrink-0 basis-auto">
                               <div className="width-37">
                                 <a href="#" className="m-0 p-0 cursor-pointer flex items-center no-underline">
                                   <h2 className="tracking-normal line-h-8 font-3 font-semibold color-3 m-0 p-0">
@@ -357,16 +353,16 @@ function PostDetailsPage() {
                                   </h2>
                                 </a>
                                 <div className="flex items-baseline margin-16" style={{ marginBottom: 0, marginInline: 0 }}>
-                                  <div className="flex-grow: 0 shrink-0 basis-auto">
+                                  <div className="grow-0 shrink-0 basis-auto">
                                     <span className="custom-fs-1 custom-fs-1 color-4 custom-line-h-1">
-                                      <a href="#" className="cursor-pointer m-0 p-0 no-underline">{`${blog.community.followersCount} followers`}</a>
+                                      <a href="#" className="cursor-pointer m-0 p-0 no-underline hover:underline">{`${blog.community.followersCount} followers`}</a>
                                     </span>
                                   </div>
                                   <div className="whitespace-pre-wrap custom-fs-1 color-4 custom-line-h-1 flex font-normal">
                                     <span className="margin-16" style={{ marginBlock: 0 }}>
                                       <span className="custom-fs-1 color-4 custom-line-h-1 font-normal">·</span>
                                     </span>
-                                    <a href="#" className="cursor-pointer m-0 p-0 no-underline">
+                                    <a href="#" className="cursor-pointer m-0 p-0 no-underline hover:underline">
                                       {`Last published ${blog.community.lastPublishedTime}`}
                                     </a>
                                   </div>
@@ -388,50 +384,55 @@ function PostDetailsPage() {
                           </div>
                         </div>
                       )}
-                      <div className="flex">
+                      <div className="flex items-start">
                         <div className="margin-18 flex justify-between" style={{ marginLeft: 0 }}>
                           <div className="">
                             <Link className="no-underline">
                               <div className="relative">
-                                <img src={blog.author.profileImg} alt={blog.author.name} className="width-15 aspect-square border-radius-5" />
+                                <img src={blog.author.profileImg} alt={blog.author.name} className="width-15 aspect-square rounded-full" />
                               </div>
                             </Link>
                           </div>
                         </div>
-                        <div className="flex flex-col flex-grow: 0 shrink-0 basis-auto">
+                        <div className="flex flex-col grow shrink-0 basis-auto">
                           <div className="width-37">
                             <a href="#" className="m-0 p-0 cursor-pointer flex items-center no-underline">
                               <h2 className="tracking-normal line-h-8 font-3 font-semibold color-3 m-0 p-0">
                                 <span className="break-words padding-23" style={{ paddingLeft: 0, paddingBlock: 0 }}>
-                                  {`Written by ${blog.author.name}`}
+                                  {`Written by ${blog.author.name
+                                    .split(" ")
+                                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                    .join(" ")}`}
                                 </span>
                               </h2>
                             </a>
                             <div className="flex items-baseline margin-16" style={{ marginBottom: 0, marginInline: 0 }}>
-                              <div className="flex-grow: 0 shrink-0 basis-auto">
+                              <div className="grow-0 shrink-0 basis-auto">
                                 <span className="custom-fs-1 custom-fs-1 color-4 custom-line-h-1">
-                                  <a href="#" className="cursor-pointer m-0 p-0 no-underline">{`${blog.author.followerCount} followers`}</a>
+                                  <a href="#" className="cursor-pointer m-0 p-0 no-underline font-medium hover:underline">{`${blog.author.followerCount} followers`}</a>
                                 </span>
                               </div>
                               <div className="whitespace-pre-wrap custom-fs-1 color-4 custom-line-h-1 flex font-normal">
                                 <span className="margin-16" style={{ marginBlock: 0 }}>
                                   <span className="custom-fs-1 color-4 custom-line-h-1 font-normal">·</span>
                                 </span>
-                                <a href="#" className="cursor-pointer m-0 p-0 no-underline">
+                                <a href="#" className="cursor-pointer m-0 p-0 no-underline font-medium hover:underline">
                                   {`${blog.author.followingCount} following`}
                                 </a>
                               </div>
                             </div>
-                            <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}>
-                              <p className="color-3 custom-fs-1 custom-line-h-1 font-medium m-0 p-0">
-                                <span className="break-words">{blogDetails.author.about}</span>
-                              </p>
-                            </div>
+                            {blog.author.about && (
+                              <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}>
+                                <p className="color-3 custom-fs-1 custom-line-h-1 font-medium m-0 p-0">
+                                  <span className="break-words">{blog.author.about}</span>
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div className="">
                           <div className="flex">
-                            <button className="bdr-7 padding-37 padding-38 border-radius-8 width-34 flex items-center justify-center m-0">
+                            <button className="bdr-7 padding-37 padding-38 border-radius-8 width-34 flex items-center justify-center m-0 cursor-pointer">
                               <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Follow</span>
                             </button>
                           </div>
@@ -452,8 +453,8 @@ function PostDetailsPage() {
 
       {/* full screen image view */}
       {isShowFullImg && (
-        <div onClick={() => SetIsShowFullImg(false)} className="w-screen h-screen max-w-screen max-h-screen fixed inset-0 z-[999] flex items-center justify-center custom-bg-4 select-none pointer-events-auto">
-          <img onClick={() => SetIsShowFullImg(false)} src={isShowFullImg} className="h-full max-w-full max-h-full cursor-zoom-out" />
+        <div onClick={() => handleCloseFullImg()} className="w-screen h-screen max-w-screen max-h-screen fixed inset-0 z-[999] flex items-center justify-center custom-bg-4 select-none pointer-events-auto">
+          <img onClick={() => handleCloseFullImg()} src={isShowFullImg} className="h-full max-w-full max-h-full cursor-zoom-out" />
         </div>
       )}
     </>
