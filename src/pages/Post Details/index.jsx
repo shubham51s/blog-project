@@ -20,29 +20,9 @@ function PostDetailsPage() {
   const [isShowFullImg, setIsShowFullImg] = useState(false);
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState();
+  const [readingTime, setReadingTime] = useState();
 
   const handleClickOutside = (e) => {};
-
-  const fetchBlogDetails = async () => {
-    try {
-      const response = await fetchRequest(`/blogs/${id}`, "GET");
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        toast.error(result.message || "Something went wrong!");
-        navigate("/");
-        return;
-      }
-
-      if (response.status === 200) setBlog(result.data.blog);
-      console.log("result: ", result.data.blog);
-    } catch (err) {
-      console.log("fetchBlogDetails catch block: ", err);
-      toast.error("Something went wrong!");
-      navigate("/");
-    }
-  };
 
   const handlMarkupParentClick = (e) => {
     const imageEl = e.target.closest("img");
@@ -60,6 +40,74 @@ function PostDetailsPage() {
   const handleCloseFullImg = () => {
     setIsShowFullImg(false);
     window.removeEventListener("scroll", handleOnScroll);
+  };
+
+  const formatDate = (dateString) => {
+    const inputDate = new Date(dateString);
+    const now = new Date();
+
+    const diffMs = now - inputDate;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHrs = Math.floor(diffMin / 60);
+    const diffDays = Math.floor(diffHrs / 24);
+
+    if (diffDays === 0) {
+      if (diffHrs > 0) return `${diffHrs} hour${diffHrs > 1 ? "s" : ""} ago`;
+      if (diffMin > 0) return `${diffMin} minute${diffMin > 1 ? "s" : ""} ago`;
+      return `${diffSec} second${diffSec > 1 ? "s" : ""} ago`;
+    }
+
+    if (diffDays === 1) {
+      return `1 day ago`;
+    }
+
+    const options = { month: "short", day: "numeric", year: "numeric" };
+    return inputDate.toLocaleDateString("en-US", options);
+  };
+
+  const calculateReadingTime = (htmlContent) => {
+    console.log("htmlContent: ", htmlContent);
+    const div = document.createElement("div");
+    div.innerHTML = htmlContent;
+
+    const text = div.textContent || "";
+    const words = text.trim().split(/\s+/).length;
+
+    const wordsPerMinute = 265;
+    const readMinFromWords = words / wordsPerMinute;
+
+    const imageCount = div.querySelectorAll("img").length;
+    const imageTime = imageCount * (12 / 60); // 12 sec = 0.2 min
+
+    const totalTime = Math.ceil(readMinFromWords + imageTime);
+
+    const time = `${totalTime} min read`;
+    setReadingTime(time);
+  };
+
+  const fetchBlogDetails = async () => {
+    try {
+      const response = await fetchRequest(`/blogs/${id}`, "GET");
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        toast.error(result.message || "Something went wrong!");
+        navigate("/");
+        return;
+      }
+
+      if (response.status === 200) {
+        setBlog(result.data.blog);
+        calculateReadingTime(result.data.blog.content);
+      }
+      console.log("result: ", result.data.blog);
+    } catch (err) {
+      console.log("fetchBlogDetails catch block: ", err);
+      toast.error("Something went wrong!");
+      navigate("/");
+    }
   };
 
   useEffect(() => {
@@ -140,7 +188,7 @@ function PostDetailsPage() {
                       <div className="flex justify-center">
                         <div className="w-full min-w-0 max-width-2 margin-12">
                           <div>
-                            <h1 className="letter-spacing-7 line-h-10 font-12 margin-30 mt-0 font-bold color-3">{blog.heading}</h1>
+                            <h1 className="letter-spacing-7 line-h-10 font-12 margin-30 mt-0 font-bold color-3">{blog.heading.charAt(0).toUpperCase() + blog.heading.slice(1)}</h1>
                           </div>
                           <div>
                             <h2 className="line-h-3 margin-31 font-2 margin-17 color-4 font-normal">{blog.previewSubtitle}</h2>
@@ -148,16 +196,21 @@ function PostDetailsPage() {
                               <div className="flex items-center custom-gap-5">
                                 <div className="flex items-center custom-gap-5 ">
                                   <div className="flex items-baseline">
-                                    <img src={blog.author.profileImg} alt={blog.author.name} className="width-11 aspect-square" />
+                                    <img src={blog.author.profileImg} alt={blog.author.name} className="width-11 aspect-square rounded-full" />
                                   </div>
                                   <span className="custom-fs-1 custom-line-h-1 color-3 font-normal">
                                     <div className="flex items-center margin-23" style={{ marginTop: 0, marginInline: 0 }}>
                                       <div className="flex items-center flex-nowrap">
-                                        <div className="flex items-center custom-fs-1 custom-line-h-1 color-3">{blog.author.name}</div>
+                                        <div className="flex items-center custom-fs-1 custom-line-h-1 color-3">
+                                          {blog.author.name
+                                            .split(" ")
+                                            .map((name) => name.charAt(0).toUpperCase() + name.slice(1))
+                                            .join(" ")}
+                                        </div>
                                         <div className="inline-block width-33"></div>
                                         <div className="inline-block">
                                           <button className="bdr-7 padding-28 padding-20 width-24 border-radius-7 cursor-pointer flex justify-between items-center m-0">
-                                            <span className="custom-fs-1 custom-line-h-1 color-3 w-full font-normal">Follow</span>
+                                            <span className="custom-fs-1 custom-line-h-1 color-3 w-full font-normal whitespace-nowrap">Follow</span>
                                           </button>
                                         </div>
                                       </div>
@@ -165,13 +218,13 @@ function PostDetailsPage() {
                                   </span>
                                 </div>
                                 <div className="flex items-center flex-wrap">
-                                  <span className="custom-fs-1 custom-line-h-1 color-3 font-normal color-4">
+                                  <span className="custom-fs-1 custom-line-h-1 color-3 font-medium color-4">
                                     <div className="flex grow shrink-0 basis-auto">
-                                      <span>{blog.readTime || "no time"}</span>
+                                      <span>{readingTime}</span>
                                       <div className="padding-6 flex items-center text-center" style={{ paddingBlock: 0 }}>
                                         .
                                       </div>
-                                      <span>{blog.updatedAt}</span>
+                                      <span>{formatDate(blog.updatedAt)}</span>
                                     </div>
                                   </span>
                                 </div>
