@@ -67,7 +67,6 @@ function PostDetailsPage() {
   };
 
   const calculateReadingTime = (htmlContent) => {
-    console.log("htmlContent: ", htmlContent);
     const div = document.createElement("div");
     div.innerHTML = htmlContent;
 
@@ -496,7 +495,7 @@ function PostDetailsPage() {
                 </div>
 
                 {/* comments section */}
-                <CommentsComp />
+                <CommentsComp blog={blog} />
                 <BlogRecommendComp />
               </div>
             </div>
