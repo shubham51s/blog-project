@@ -6,13 +6,15 @@ import { IoIosMore } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 import * as Popover from "@radix-ui/react-popover";
 import { UserContext } from "../../../context/userContext";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
+import CharacterCount from "@tiptap/extension-character-count";
 
 function CommentsComp({ blog }) {
   const { userInfo } = useContext(UserContext);
   const [commentInp, setCommentInp] = useState("");
   const [commentInp2, setCommentInp2] = useState("");
-  const inputRef = useRef(null);
-  const inputRef2 = useRef(null);
   const [isShowAllComments, setIsShowAllComments] = useState(false);
   const [isAddComment, setIsAddComment] = useState(false);
   const [isAddComment2, setIsAddComment2] = useState(false);
@@ -57,45 +59,90 @@ function CommentsComp({ blog }) {
     },
   ]);
 
-  const handleCommentInputChange = (e) => {
-    e.stopPropagation();
-    const value = e.target.value.trim();
-    setCommentInp(value);
-  };
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        heading: false,
+        blockquote: true,
+        codeBlock: true,
+        horizontalRule: true,
+        listItem: true,
+        orderedList: true,
+        bulletList: true,
+      }),
+      Placeholder.configure({
+        placeholder: "What are your thoughts?",
+      }),
+      CharacterCount.configure({
+        limit: 3000,
+      }),
+    ],
+    content: "",
+    shouldRerenderOnTransaction: true,
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      setCommentInp(html);
+    },
+  });
 
-  const handleCommentInputChange2 = (e) => {
-    e.stopPropagation();
-    const value = e.target.value.trim();
-    setCommentInp2(value);
-  };
+  if (!editor) return null;
+
+  const editor2 = useEditor({
+    extensions: [
+      StarterKit.configure({
+        heading: false,
+        blockquote: true,
+        codeBlock: true,
+        horizontalRule: true,
+        listItem: true,
+        orderedList: true,
+        bulletList: true,
+      }),
+      Placeholder.configure({
+        placeholder: "What are your thoughts?",
+      }),
+      CharacterCount.configure({
+        limit: 3000,
+      }),
+    ],
+    content: "",
+    shouldRerenderOnTransaction: true,
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      setCommentInp2(html);
+    },
+  });
+
+  if (!editor2) return null;
 
   const handleEnableAddComment = () => {
     if (isAddComment) return;
 
     setIsAddComment(true);
-    inputRef.current.focus();
+    editor?.commands.focus();
   };
 
   const handleEnableAddComment2 = () => {
     if (isAddComment2) return;
 
     setIsAddComment2(true);
-    inputRef2.current.focus();
+    editor2?.commands.focus();
   };
 
   const handleDisableAddComment = () => {
     setCommentInp("");
     setIsAddComment(false);
+    editor?.commands.clearContent();
   };
 
   const handleDisableAddComment2 = () => {
     setCommentInp2("");
     setIsAddComment2(false);
+    editor2?.commands.clearContent();
   };
 
   const handleShowMoreCommentsClick = () => {
-    setCommentInp2("");
-    setIsAddComment2(false);
+    handleDisableAddComment2();
     setIsShowAllComments(!isShowAllComments);
   };
 
@@ -105,9 +152,14 @@ function CommentsComp({ blog }) {
     }
   };
 
+  const handleCommentTextStyleChange = (e, type) => {
+    e.preventDefault(); // prevent editor losing focus
+    if (type === "b") editor.chain().focus().toggleBold().run();
+    if (type === "i") editor.chain().focus().toggleItalic().run();
+  };
+
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
-    console.log("userInfo: ", userInfo);
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
@@ -145,21 +197,22 @@ function CommentsComp({ blog }) {
                     <div className="flex flex-col relative">
                       <div onClick={handleEnableAddComment} className={`transition-all duration-400 ease-in-out ${isAddComment ? "padding-39 height-57" : "custom-px-2 padding-28 height-56 cursor-text"}`}>
                         <div className="relative whitespace-pre-wrap wrap-break-word height-59">
-                          <textarea ref={inputRef} value={commentInp} onInput={(e) => handleCommentInputChange(e)} placeholder="What are your thoughts?" className={`w-full border-0 outline-0 ${isAddComment ? "pointer-events-auto" : "height-60 pointer-events-none"}`}></textarea>
+                          {/* <textarea ref={inputRef} value={commentInp} onInput={(e) => handleCommentInputChange(e)} placeholder="What are your thoughts?" className={`w-full border-0 outline-0 ${isAddComment ? "pointer-events-auto" : "height-60 pointer-events-none"}`}></textarea> */}
+                          <EditorContent editor={editor} className={`w-full border-0 outline-0 ${isAddComment ? "pointer-events-auto" : "height-60 pointer-events-none"}`} />
                         </div>
                       </div>
 
                       <div className={`color-4 margin-34 flex justify-between transition-all duration-400 ease-in-out ${isAddComment ? "height-58 opacity-100" : "max-h-0 opacity-0"}`} style={{ marginRight: 0, marginBlock: 0 }}>
                         <span className="custom-fs-1 color-4 custom-line-h-1 font-normal">
                           <div className="flex">
-                            <div className="inline-flex padding-41 margin-19 border-radius-3 cursor-pointer justify-center" style={{ marginBlock: 0 }}>
+                            <div className={`inline-flex padding-41 margin-19 border-radius-3 cursor-pointer justify-center  transition-all duration-200 ease-out hover:bg-[#ede6e6] ${editor.isActive("bold") ? "bg18 bdr-8" : "bdr16"}`} style={{ marginBlock: 0 }}>
                               <div className="width-38 aspect-square">
-                                <FaBold className="h-full w-full" title="Bold" />
+                                <FaBold className="h-full w-full" onClick={(e) => handleCommentTextStyleChange(e, "b")} title="Bold" />
                               </div>
                             </div>
-                            <div className="inline-flex padding-41 margin-19 border-radius-3 cursor-pointer justify-center" style={{ marginBlock: 0 }}>
+                            <div className={`inline-flex padding-41 margin-19 border-radius-3 cursor-pointer justify-center  transition-all duration-200 ease-out hover:bg-[#ede6e6] ${editor.isActive("italic") ? "bg18 bdr-8" : "bdr16"}`} style={{ marginBlock: 0 }}>
                               <div className="width-38 aspect-square">
-                                <FaItalic className="h-full w-full" title="Italic" />
+                                <FaItalic className="h-full w-full" onClick={(e) => handleCommentTextStyleChange(e, "i")} title="Italic" />
                               </div>
                             </div>
                           </div>
@@ -171,9 +224,7 @@ function CommentsComp({ blog }) {
                                 Cancel
                               </button>
                             </div>
-                            <button className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 transition-all duration-200 ease-out hover:opacity-100 ${commentInp.length > 0 ? "opacity-[0.95] hover:opacity-100" : "opacity-[0.1]"}`} style={{ cursor: commentInp.length > 0 ? "pointer" : "not-allowed" }}>
-                              Respond
-                            </button>
+                            <button className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 transition-all duration-200 ease-out hover:opacity-100 ${editor?.getText().length > 0 ? "opacity-[0.95] hover:opacity-100" : "opacity-[0.1] pointer-events-none"}`}>Respond</button>
                           </div>
                         )}
                       </div>
@@ -280,7 +331,8 @@ function CommentsComp({ blog }) {
             <div className="flex flex-col relative bg-11 custom-fs-1">
               <div onClick={handleEnableAddComment2} className={`transition-all duration-400 ease-in-out ${isAddComment2 ? "padding-39 height-57" : "custom-px-2 padding-28 height-56 cursor-text"}`}>
                 <div className="relative whitespace-pre-wrap wrap-break-word height-62">
-                  <textarea ref={inputRef2} value={commentInp2} onInput={(e) => handleCommentInputChange2(e)} placeholder="What are your thoughts?" className={`w-full border-0 outline-0 ${isAddComment2 ? "pointer-events-auto" : "height-60 pointer-events-none"}`}></textarea>
+                  {/* <textarea ref={inputRef2} value={commentInp2} onInput={(e) => handleCommentInputChange2(e)} placeholder="What are your thoughts?" className={`w-full border-0 outline-0 ${isAddComment2 ? "pointer-events-auto" : "height-60 pointer-events-none"}`}></textarea> */}
+                  <EditorContent editor={editor2} className={`w-full border-0 outline-0 ${isAddComment2 ? "pointer-events-auto" : "height-60 pointer-events-none"}`} />
                 </div>
               </div>
 
@@ -306,9 +358,7 @@ function CommentsComp({ blog }) {
                         Cancel
                       </button>
                     </div>
-                    <button className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 ${commentInp2.length > 0 ? "opacity-100" : "opacity-[0.1]"}`} style={{ cursor: commentInp2.length > 0 ? "pointer" : "not-allowed" }}>
-                      Respond
-                    </button>
+                    <button className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 ${editor2?.getText().length > 0 ? "opacity-100" : "opacity-[0.1]"}`}>Respond</button>
                   </div>
                 )}
               </div>
