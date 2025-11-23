@@ -6,12 +6,15 @@ import { IoIosMore } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 import * as Popover from "@radix-ui/react-popover";
 import { UserContext } from "../../../context/userContext";
-import { EditorContent, useEditor } from "@tiptap/react";
+import { EditorContent, h, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
+import { useApi } from "../../../hooks/useApi";
+import { toast } from "react-toastify";
 
 function CommentsComp({ blog }) {
+  const { fetchRequest } = useApi();
   const { userInfo } = useContext(UserContext);
   const [commentInp, setCommentInp] = useState("");
   const [commentInp2, setCommentInp2] = useState("");
@@ -20,6 +23,8 @@ function CommentsComp({ blog }) {
   const [isAddComment2, setIsAddComment2] = useState(false);
   const allCommentsBtnRef = useRef(null);
   const allCommentsContentRef = useRef(null);
+  const [commentsCount, setCommentsCount] = useState(blog.commentCount);
+  const [comments, setComments] = useState([]);
 
   const [userComments, setUserComments] = useState([
     {
@@ -158,8 +163,71 @@ function CommentsComp({ blog }) {
     if (type === "i") editor.chain().focus().toggleItalic().run();
   };
 
+  const handleAddCommentBtnClick = async (type) => {
+    try {
+      const params = {
+        blog: blog._id,
+        content: type === 1 ? commentInp : commentInp2,
+      };
+
+      const response = await fetchRequest("/comment", "POST", params);
+      const result = await response.json();
+
+      if (response.status === 201) {
+        if (type === 1) {
+          handleDisableAddComment();
+        } else {
+          handleDisableAddComment2();
+        }
+
+        setCommentsCount((prev) => prev + 1);
+        fetchComments();
+      } else {
+        toast.error(response.message || "Something went wrong");
+      }
+    } catch (err) {
+      console.log("handleAddCommentBtnClick catch block: ", err);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const handleDeleteCommentBtnClick = async (commentId) => {
+    try {
+      const response = await fetchRequest(`/comment/${commentId}`, "DELETE");
+
+      if (response.status === 200) {
+        setCommentsCount((prev) => (prev > 0 ? prev - 1 : 0));
+        fetchComments();
+        toast.success("Comment deleted successfully");
+      } else {
+        const result = await response.json();
+        toast.error(result.message || "Something went wrong");
+      }
+    } catch (err) {
+      toast.error("Something went wrong");
+      console.log("handleDeleteCommentBtnClick catch block: ", err);
+    }
+  };
+
+  const fetchComments = async () => {
+    try {
+      const response = await fetchRequest(`/comment/${blog._id}`, "GET");
+      const result = await response.json();
+
+      if (response.status === 200) {
+        setComments(result?.data?.comments);
+      } else {
+        toast.error(response.message || "Something went wrong");
+      }
+    } catch (err) {
+      console.log("fetchComments catch blog: ", err);
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
+
+    fetchComments();
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
@@ -173,8 +241,8 @@ function CommentsComp({ blog }) {
         <div className="flex justify-center">
           <div className="max-width-2 margin-2 min-w-0 w-full">
             <div className="flex items-center justify-between">
-              {blog.commentCount > 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">{`Responses (${blog.commentCount})`}</h2>}
-              {blog.commentCount <= 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">No responses yet</h2>}
+              {commentsCount > 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">{`Responses (${commentsCount})`}</h2>}
+              {commentsCount <= 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">No responses yet</h2>}
               <div className="flex height-4 aspect-square">
                 <AiTwotoneSafetyCertificate className="w-full h-full cursor-pointer opacity-[0.9] transition-all duration-100 ease-out hover:opacity-100" title="View community guidelines" />
               </div>
@@ -224,7 +292,9 @@ function CommentsComp({ blog }) {
                                 Cancel
                               </button>
                             </div>
-                            <button className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 transition-all duration-200 ease-out hover:opacity-100 ${editor?.getText().length > 0 ? "opacity-[0.95] hover:opacity-100" : "opacity-[0.1] pointer-events-none"}`}>Respond</button>
+                            <button onClick={() => handleAddCommentBtnClick(1)} className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 transition-all duration-200 ease-out hover:opacity-100 ${editor?.getText().length > 0 ? "opacity-[0.95] hover:opacity-100" : "opacity-[0.1] pointer-events-none"}`}>
+                              Respond
+                            </button>
                           </div>
                         )}
                       </div>
@@ -234,10 +304,10 @@ function CommentsComp({ blog }) {
               </div>
             </div>
 
-            {/* user comments dynamic */}
+            {/* user comments */}
 
-            {userComments.length > 0 &&
-              userComments.slice(0, 3).map((item) => (
+            {comments.length > 0 &&
+              comments.slice(0, 3).map((item) => (
                 <div className="bdr-5" style={{ borderTop: 0, borderInline: 0 }} key={item._id}>
                   <div className="h-full w-full">
                     <div className="custom-p-y-1 padding-42" style={{ paddingInline: 0 }}>
@@ -245,22 +315,22 @@ function CommentsComp({ blog }) {
                         <div className="flex items-center">
                           <div className="inline-block cursor-pointer relative">
                             <div className="relative">
-                              <img src={item.profileImg} alt={item.name} className="width-11 aspect-square box-border rounded-full align-middle" />
+                              <img src={item.user.profileImg} alt={item.user.name} className="width-11 aspect-square box-border rounded-full align-middle" />
                             </div>
                           </div>
                           <div className="padding-33" style={{ paddingRight: 0, paddingBlock: 0 }}>
                             <div className="flex items-center">
                               <div className="cursor-pointer transition-all duration-400 ease-in-out hover:underline">
-                                <p className="break-all text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0">{item.name}</p>
+                                <p className="break-all text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0">{item.user.name}</p>
                               </div>
-                              {item._id === 0 && (
+                              {item.user._id === userInfo._id && (
                                 <div className="bg-[rgb(26,137,23)] text-white margin-19 border-radius-3 padding-6 line-h-7 font-8 font-normal" style={{ marginBlock: 0, marginRight: 0, paddingBlock: 0 }}>
                                   Author
                                 </div>
                               )}
                             </div>
                             <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">
-                              <span>{item.date}</span>
+                              <span>{item.updatedAt}</span>
                             </p>
                           </div>
                         </div>
@@ -276,9 +346,19 @@ function CommentsComp({ blog }) {
                             <Popover.Content side="bottom" align="middle" sideOffset={1}>
                               <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
                                 <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
-                                  <li className="padding-1 custom-fs-1 color-4 font-normal">
-                                    <button className="text-[#c94a4a] cursor-pointer m-0 p-0">{item._id === 0 ? "Delete response" : "Report response..."}</button>
-                                  </li>
+                                  {item.user._id === userInfo._id && (
+                                    <li className="padding-1 custom-fs-1 color-4 font-normal">
+                                      <button onClick={() => handleDeleteCommentBtnClick(item._id)} className="text-[#c94a4a] cursor-pointer m-0 p-0">
+                                        Delete response
+                                      </button>
+                                    </li>
+                                  )}
+
+                                  {item.user._id !== userInfo._id && (
+                                    <li className="padding-1 custom-fs-1 color-4 font-normal">
+                                      <button className="text-[#c94a4a] cursor-pointer m-0 p-0">Report response...</button>
+                                    </li>
+                                  )}
                                 </ul>
                               </div>
                             </Popover.Content>
@@ -287,7 +367,7 @@ function CommentsComp({ blog }) {
                       </div>
                       <div className="margin-35 break-words" style={{ marginBottom: 0, marginInline: 0 }}>
                         <div className="padding-27">
-                          <div className="color-3 custom-fs-1 line-h-8 font-normal">{item.comment}</div>
+                          <div className="color-3 custom-fs-1 line-h-8 font-normal" dangerouslySetInnerHTML={{ __html: item.content }} />
                         </div>
                       </div>
                     </div>
@@ -295,7 +375,7 @@ function CommentsComp({ blog }) {
                 </div>
               ))}
 
-            {blog.commentCount.length > 3 && (
+            {comments.length > 3 && (
               <div className="margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
                 <button ref={allCommentsBtnRef} onClick={handleShowMoreCommentsClick} className="bdr-7 cursor-pointer border-radius-9 text-center padding-5 box-border color-3 custom-fs-1 inline-block custom-line-h-1 font-medium">
                   See all responses
@@ -307,12 +387,11 @@ function CommentsComp({ blog }) {
       </div>
       {/* Show all comments component */}
       {/* only when to show all comments (>3) */}
-      {/* working */}
       <div ref={allCommentsContentRef} className={`transition-transform duration-600 ease box-shadow-3 bdr-5 pointer-events-none" ${isShowAllComments ? "fixed flex flex-col box-border h-full justify-stretch visible translateX-1 left-full top-0 overflow-auto custom-bg-8 z-[520] width-40" : "hidden translate-x-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
         <div className="overflow-auto grow">
           <div className="padding-3 flex items-center justify-between">
             <div className="flex">
-              <h2 className="font-3 line-h-8 font-medium color-3 m-0 p-0">{`Responses (${userComments.length})`}</h2>
+              <h2 className="font-3 line-h-8 font-medium color-3 m-0 p-0">{`Responses (${commentsCount})`}</h2>
             </div>
             <div className="flex">
               <div className="custom-h-2 aspect-square">
@@ -365,7 +444,7 @@ function CommentsComp({ blog }) {
             </div>
           </div>
           <div className="margin-2">
-            {userComments.map((item) => (
+            {comments.map((item) => (
               <div className="bdr-5" style={{ borderTop: 0, borderInline: 0 }} key={item._id}>
                 <div className="h-full w-full">
                   <div className="custom-p-y-1 padding-42" style={{ paddingInline: 0 }}>
@@ -381,7 +460,7 @@ function CommentsComp({ blog }) {
                             <div className="cursor-pointer transition-all duration-400 ease-in-out hover:underline">
                               <p className="break-all text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0">{item.name}</p>
                             </div>
-                            {item._id === 0 && (
+                            {item.user._id === userInfo._id && (
                               <div className="bg-[rgb(26,137,23)] text-white margin-19 border-radius-3 padding-6 line-h-7 font-8 font-normal" style={{ marginBlock: 0, marginRight: 0, paddingBlock: 0 }}>
                                 Author
                               </div>
@@ -404,9 +483,19 @@ function CommentsComp({ blog }) {
                           <Popover.Content side="bottom" sideOffset={1}>
                             <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
                               <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
-                                <li className="padding-1 custom-fs-1 color-4 font-normal">
-                                  <button className="text-[#c94a4a] cursor-pointer m-0 p-0">{item._id === 0 ? "Delete response" : "Report response..."}</button>
-                                </li>
+                                {item._id === userInfo._id && (
+                                  <li className="padding-1 custom-fs-1 color-4 font-normal">
+                                    <button onClick={() => handleDeleteCommentBtnClick(item_id)} className="text-[#c94a4a] cursor-pointer m-0 p-0">
+                                      Delete response
+                                    </button>
+                                  </li>
+                                )}
+
+                                {item._id !== userInfo._id && (
+                                  <li className="padding-1 custom-fs-1 color-4 font-normal">
+                                    <button className="text-[#c94a4a] cursor-pointer m-0 p-0">Report response...</button>
+                                  </li>
+                                )}
                               </ul>
                             </div>
                           </Popover.Content>
