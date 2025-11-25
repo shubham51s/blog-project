@@ -13,7 +13,7 @@ import CharacterCount from "@tiptap/extension-character-count";
 import { useApi } from "../../../hooks/useApi";
 import { toast } from "react-toastify";
 
-function CommentsComp({ blog }) {
+function CommentsComp({ blog, setBlog }) {
   const { fetchRequest } = useApi();
   const { userInfo } = useContext(UserContext);
   const [commentInp, setCommentInp] = useState("");
@@ -23,7 +23,6 @@ function CommentsComp({ blog }) {
   const [isAddComment2, setIsAddComment2] = useState(false);
   const allCommentsBtnRef = useRef(null);
   const allCommentsContentRef = useRef(null);
-  const [commentsCount, setCommentsCount] = useState(blog.commentCount);
   const [comments, setComments] = useState([]);
 
   const [userComments, setUserComments] = useState([
@@ -180,13 +179,18 @@ function CommentsComp({ blog }) {
           handleDisableAddComment2();
         }
 
-        setCommentsCount((prev) => prev + 1);
-        fetchComments();
+        const newComment = result.data.comment;
+        setComments((prev) => [newComment, ...prev]);
+
+        const commentCount = blog.commentCount + 1;
+        setBlog((prev) => ({ ...prev, commentCount }));
+
+        // fetchComments();
       } else {
         toast.error(response.message || "Something went wrong");
       }
     } catch (err) {
-      console.log("handleAddCommentBtnClick catch block: ", err);
+      console.error("handleAddCommentBtnClick catch block: ", err);
       toast.error("Something went wrong");
     }
   };
@@ -196,8 +200,10 @@ function CommentsComp({ blog }) {
       const response = await fetchRequest(`/comment/${commentId}`, "DELETE");
 
       if (response.status === 200) {
-        setCommentsCount((prev) => (prev > 0 ? prev - 1 : 0));
-        fetchComments();
+        setComments((prev) => prev.filter((item) => item._id !== commentId));
+        const commentCount = blog.commentCount > 0 ? blog.commentCount - 1 : 0;
+        setBlog((prev) => ({ ...prev, commentCount }));
+        // fetchComments();
         toast.success("Comment deleted successfully");
       } else {
         const result = await response.json();
@@ -205,7 +211,7 @@ function CommentsComp({ blog }) {
       }
     } catch (err) {
       toast.error("Something went wrong");
-      console.log("handleDeleteCommentBtnClick catch block: ", err);
+      console.error("handleDeleteCommentBtnClick catch block: ", err);
     }
   };
 
@@ -220,7 +226,7 @@ function CommentsComp({ blog }) {
         toast.error(response.message || "Something went wrong");
       }
     } catch (err) {
-      console.log("fetchComments catch blog: ", err);
+      console.error("fetchComments catch blog: ", err);
     }
   };
 
@@ -241,8 +247,8 @@ function CommentsComp({ blog }) {
         <div className="flex justify-center">
           <div className="max-width-2 margin-2 min-w-0 w-full">
             <div className="flex items-center justify-between">
-              {commentsCount > 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">{`Responses (${commentsCount})`}</h2>}
-              {commentsCount <= 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">No responses yet</h2>}
+              {blog.commentCount > 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">{`Responses (${blog.commentCount})`}</h2>}
+              {blog.commentCount <= 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">No responses yet</h2>}
               <div className="flex height-4 aspect-square">
                 <AiTwotoneSafetyCertificate className="w-full h-full cursor-pointer opacity-[0.9] transition-all duration-100 ease-out hover:opacity-100" title="View community guidelines" />
               </div>
@@ -292,7 +298,7 @@ function CommentsComp({ blog }) {
                                 Cancel
                               </button>
                             </div>
-                            <button onClick={() => handleAddCommentBtnClick(1)} className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 transition-all duration-200 ease-out hover:opacity-100 ${editor?.getText().length > 0 ? "opacity-[0.95] hover:opacity-100" : "opacity-[0.1] pointer-events-none"}`}>
+                            <button onClick={() => handleAddCommentBtnClick(1)} className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 transition-all cursor-pointer duration-200 ease-out hover:opacity-100 ${editor?.getText().length > 0 ? "opacity-[0.95] hover:opacity-100" : "opacity-[0.1] pointer-events-none"}`}>
                               Respond
                             </button>
                           </div>
@@ -391,7 +397,7 @@ function CommentsComp({ blog }) {
         <div className="overflow-auto grow">
           <div className="padding-3 flex items-center justify-between">
             <div className="flex">
-              <h2 className="font-3 line-h-8 font-medium color-3 m-0 p-0">{`Responses (${commentsCount})`}</h2>
+              <h2 className="font-3 line-h-8 font-medium color-3 m-0 p-0">{`Responses (${blog.commentCount})`}</h2>
             </div>
             <div className="flex">
               <div className="custom-h-2 aspect-square">
@@ -437,7 +443,7 @@ function CommentsComp({ blog }) {
                         Cancel
                       </button>
                     </div>
-                    <button className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 ${editor2?.getText().length > 0 ? "opacity-100" : "opacity-[0.1]"}`}>Respond</button>
+                    <button className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal cursor-pointer m-0 ${editor2?.getText().length > 0 ? "opacity-100" : "opacity-[0.1]"}`}>Respond</button>
                   </div>
                 )}
               </div>

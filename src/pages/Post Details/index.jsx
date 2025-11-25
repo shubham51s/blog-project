@@ -21,6 +21,7 @@ function PostDetailsPage() {
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState();
   const [readingTime, setReadingTime] = useState();
+  const [recommendedBlogs, setRecommendedBlogs] = useState([]);
 
   const handleClickOutside = (e) => {};
 
@@ -85,6 +86,20 @@ function PostDetailsPage() {
     setReadingTime(time);
   };
 
+  const getRecommendedBlogs = async () => {
+    try {
+      const response = await fetchRequest(`/blogs/user/${id}`, "GET");
+
+      if (response.status === 200) {
+        const result = await response.json();
+
+        if (result.data.blogs.length > 0) setRecommendedBlogs(result.data.blogs);
+      }
+    } catch (err) {
+      console.log("getRecommendedBlogs catch block: ", err);
+    }
+  };
+
   const fetchBlogDetails = async () => {
     try {
       const response = await fetchRequest(`/blogs/${id}`, "GET");
@@ -100,6 +115,8 @@ function PostDetailsPage() {
       if (response.status === 200) {
         setBlog(result.data.blog);
         calculateReadingTime(result.data.blog.content);
+
+        getRecommendedBlogs(); // fetch recommended blogs from author
       }
       console.log("result: ", result.data.blog);
     } catch (err) {
@@ -160,7 +177,7 @@ function PostDetailsPage() {
                         <div className="width-30 flex items-start flex-col">
                           <a href="#" className="no-underline p-0 m-0">
                             <div className="relative">
-                              <img src={blog.community.profileImg} alt={blog.community.name} className="width-31 aspect-square border-radius-5 block align-middle" />
+                              <img src={blog.community.profileImg} className="width-31 aspect-square border-radius-5 block align-middle" />
                             </div>
                           </a>
                           <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}></div>
@@ -195,7 +212,7 @@ function PostDetailsPage() {
                               <div className="flex items-center custom-gap-5">
                                 <div className="flex items-center custom-gap-5 ">
                                   <div className="flex items-baseline">
-                                    <img src={blog.author.profileImg} alt={blog.author.name} className="width-11 aspect-square rounded-full" />
+                                    <img src={blog.author.profileImg} className="width-11 aspect-square rounded-full" />
                                   </div>
                                   <span className="custom-fs-1 custom-line-h-1 color-3 font-normal">
                                     <div className="flex items-center margin-23" style={{ marginTop: 0, marginInline: 0 }}>
@@ -390,7 +407,7 @@ function PostDetailsPage() {
                               <div className="">
                                 <Link className="no-underline">
                                   <div className="relative">
-                                    <img src={blog.community.profileImg} alt={blog.community.name} className="width-15 aspect-square border-radius-5" />
+                                    <img src={blog.community.profileImg} className="width-15 aspect-square border-radius-5" />
                                   </div>
                                 </Link>
                               </div>
@@ -441,7 +458,7 @@ function PostDetailsPage() {
                           <div className="">
                             <Link className="no-underline">
                               <div className="relative">
-                                <img src={blog.author.profileImg} alt={blog.author.name} className="width-15 aspect-square rounded-full" />
+                                <img src={blog.author.profileImg} className="width-15 aspect-square rounded-full" />
                               </div>
                             </Link>
                           </div>
@@ -495,7 +512,7 @@ function PostDetailsPage() {
                 </div>
 
                 {/* comments section */}
-                <CommentsComp blog={blog} />
+                <CommentsComp blog={blog} setBlog={setBlog} />
                 <BlogRecommendComp />
               </div>
             </div>
