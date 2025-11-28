@@ -12,6 +12,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import { useApi } from "../../../hooks/useApi";
 import { toast } from "react-toastify";
+import { formatMonthAndDayLong } from "../../../utils/monthDateLongFormatter";
 
 function CommentsComp({ blog, setBlog }) {
   const { fetchRequest } = useApi();
@@ -336,7 +337,7 @@ function CommentsComp({ blog, setBlog }) {
                               )}
                             </div>
                             <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">
-                              <span>{item.updatedAt}</span>
+                              <span>{formatMonthAndDayLong(item.updatedAt)}</span>
                             </p>
                           </div>
                         </div>

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BlogComp from "../Blog Comp";
 import { Link } from "react-router-dom";
 
-function BlogRecommendComp() {
+function BlogRecommendComp({ moreBlogsFromAuthorAndCommunity }) {
   const footerOptions = [
     {
       id: 0,
@@ -130,7 +130,8 @@ function BlogRecommendComp() {
     },
   ]);
 
-  const [recommendedBlogs, setRecommendedBlogs] = useState([
+  const [recommendedBlogs, setRecommendedBlogs] = useState([]);
+  const [recommendedBlog1s, setRecommendedBlogs1] = useState([
     {
       _id: 0,
       title: "How to Tell If Someone Is Actually Smart",
@@ -256,7 +257,7 @@ function BlogRecommendComp() {
           </div>
 
           <div className="margin-38 width-39 flex flex-wrap items-stretch">
-            {moreBlogs.slice(0, 4).map((blogDetails) => (
+            {moreBlogsFromAuthorAndCommunity.slice(0, 4).map((blogDetails) => (
               <BlogComp blogDetails={blogDetails} key={blogDetails._id} />
             ))}
           </div>

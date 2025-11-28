@@ -21,7 +21,7 @@ function PostDetailsPage() {
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState();
   const [readingTime, setReadingTime] = useState();
-  const [recommendedBlogs, setRecommendedBlogs] = useState([]);
+  const [moreBlogsFromAuthorAndCommunity, setMoreBlogsFromAuthorAndCommunity] = useState([]);
 
   const handleClickOutside = (e) => {};
 
@@ -86,17 +86,19 @@ function PostDetailsPage() {
     setReadingTime(time);
   };
 
-  const getRecommendedBlogs = async () => {
+  const getRecommendedBlogsByAuthor = async (author) => {
     try {
-      const response = await fetchRequest(`/blogs/user/${id}`, "GET");
+      const response = await fetchRequest(`/blogs/user/${author}`, "GET");
 
       if (response.status === 200) {
         const result = await response.json();
 
-        if (result.data.blogs.length > 0) setRecommendedBlogs(result.data.blogs);
+        if (result.data.blogs.length > 0) {
+          setMoreBlogsFromAuthorAndCommunity(result.data.blogs);
+        }
       }
     } catch (err) {
-      console.log("getRecommendedBlogs catch block: ", err);
+      console.log("getRecommendedBlogsByAuthor catch block: ", err);
     }
   };
 
@@ -114,11 +116,10 @@ function PostDetailsPage() {
 
       if (response.status === 200) {
         setBlog(result.data.blog);
-        calculateReadingTime(result.data.blog.content);
 
-        getRecommendedBlogs(); // fetch recommended blogs from author
+        if (result.data.blog?.author?._id) getRecommendedBlogsByAuthor(result.data.blog.author._id); // fetch recommended blogs from author
+        calculateReadingTime(result.data.blog.content);
       }
-      console.log("result: ", result.data.blog);
     } catch (err) {
       console.log("fetchBlogDetails catch block: ", err);
       toast.error("Something went wrong!");
@@ -513,7 +514,7 @@ function PostDetailsPage() {
 
                 {/* comments section */}
                 <CommentsComp blog={blog} setBlog={setBlog} />
-                <BlogRecommendComp />
+                <BlogRecommendComp moreBlogsFromAuthorAndCommunity={moreBlogsFromAuthorAndCommunity} />
               </div>
             </div>
           </div>

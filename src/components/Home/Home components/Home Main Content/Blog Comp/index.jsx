@@ -8,6 +8,7 @@ import { IoBookmark } from "react-icons/io5";
 import { toast } from "react-toastify";
 import MoreComp from "./MoreComponent";
 import ShowLessComp from "./ShowLessComp";
+import { formatMonthAndDayShort } from "../../../../../utils/monthDateFormatter";
 
 function BlogComp({ item, userInfo }) {
   const navigate = useNavigate();
@@ -34,45 +35,6 @@ function BlogComp({ item, userInfo }) {
     const title = blog.previewTitle.split(" ").join("-");
     navigate(`/${title}/${blog._id}`);
   };
-
-  function formatDateForBlog(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
-
-    const diffMs = now.getTime() - date.getTime();
-    const diffSec = Math.floor(diffMs / 1000);
-    const diffMin = Math.floor(diffSec / 60);
-    const diffHour = Math.floor(diffMin / 60);
-    const diffDay = Math.floor(diffHour / 24);
-
-    if (diffSec < 60) {
-      return diffSec <= 0 ? "just now" : `${diffSec}s ago`;
-    }
-
-    if (diffMin < 60) {
-      return `${diffMin}m ago`;
-    }
-
-    if (diffHour < 24) {
-      return `${diffHour}h ago`;
-    }
-
-    if (diffDay < 10) {
-      return `${diffDay}d ago`;
-    }
-
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear().toString().slice(-2);
-
-    if (date.getFullYear() === now.getFullYear()) {
-      return `${month} ${day}`;
-    }
-
-    return `${day} ${month} ${year}`;
-  }
 
   return (
     <div className={`overflow-hidden transition-all duration-500 ease-out ${isHideBlog ? "height71" : "height-18"}`}>
@@ -133,7 +95,7 @@ function BlogComp({ item, userInfo }) {
                                         </button>
                                       </div>
                                     </div>
-                                    {formatDateForBlog(blog.updatedAt)}
+                                    {formatMonthAndDayShort(blog.updatedAt)}
                                     <div className="width-28 height-51 relative flex items-center">
                                       <Link className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
                                         <div className="flex" title={`${blog.likeCount} claps`}>
