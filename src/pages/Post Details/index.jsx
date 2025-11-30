@@ -21,7 +21,6 @@ function PostDetailsPage() {
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState();
   const [readingTime, setReadingTime] = useState();
-  const [moreBlogsFromAuthorAndCommunity, setMoreBlogsFromAuthorAndCommunity] = useState([]);
 
   const handleClickOutside = (e) => {};
 
@@ -86,22 +85,6 @@ function PostDetailsPage() {
     setReadingTime(time);
   };
 
-  const getRecommendedBlogsByAuthor = async (author) => {
-    try {
-      const response = await fetchRequest(`/blogs/user/${author}`, "GET");
-
-      if (response.status === 200) {
-        const result = await response.json();
-
-        if (result.data.blogs.length > 0) {
-          setMoreBlogsFromAuthorAndCommunity(result.data.blogs);
-        }
-      }
-    } catch (err) {
-      console.log("getRecommendedBlogsByAuthor catch block: ", err);
-    }
-  };
-
   const fetchBlogDetails = async () => {
     try {
       const response = await fetchRequest(`/blogs/${id}`, "GET");
@@ -115,9 +98,8 @@ function PostDetailsPage() {
       }
 
       if (response.status === 200) {
+        console.log("result.data.blog: ", result.data.blog);
         setBlog(result.data.blog);
-
-        if (result.data.blog?.author?._id) getRecommendedBlogsByAuthor(result.data.blog.author._id); // fetch recommended blogs from author
         calculateReadingTime(result.data.blog.content);
       }
     } catch (err) {
@@ -306,22 +288,6 @@ function PostDetailsPage() {
                           </div>
 
                           <div onClick={handlMarkupParentClick} className="markupContainer" dangerouslySetInnerHTML={{ __html: blog.content }} />
-
-                          {/* need to add zoom in out logic here (maybe) */}
-                          {/* <figure className="margin-25 clear-both" style={{ marginBottom: 0, marginInline: 0 }}>
-                            <div className="z-auto cursor-zoom-in relative w-full transition ease-in-out duration-300">
-                              <div className="width-35 mr-auto ml-auto">
-                                <picture>{blogDetails.images.length > 0 && <img onClick={() => setIsShowFullImg(blogDetails.images[0])} src={blogDetails.images[0]} alt={blogDetails.heading} className="h-auto w-full max-w-full align-middle" />}</picture>
-                              </div>
-                            </div>
-                          </figure> */}
-
-                          {/* paragraphs are dynamic */}
-                          {/* {blogDetails.paragraphs.map((item, index) => (
-                            <p key={index} className="letter-spacing-2 line-h-5 margin-32 font-3 break-words color-3 font-normal p-0" style={{ marginBottom: 0, marginInline: 0 }}>
-                              {item}
-                            </p>
-                          ))} */}
                         </div>
                       </div>
                     </div>
@@ -514,7 +480,7 @@ function PostDetailsPage() {
 
                 {/* comments section */}
                 <CommentsComp blog={blog} setBlog={setBlog} />
-                <BlogRecommendComp moreBlogsFromAuthorAndCommunity={moreBlogsFromAuthorAndCommunity} />
+                {blog && <BlogRecommendComp blog={blog} />}
               </div>
             </div>
           </div>

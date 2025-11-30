@@ -5,14 +5,22 @@ import { FiMessageCircle } from "react-icons/fi";
 import { IoIosMore } from "react-icons/io";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { formatMonthAndDayShort } from "../../../utils/monthDateFormatter";
+import { useNavigate } from "react-router-dom";
 
 function BlogComp({ blogDetails }) {
   const [isCommunity, setIsCommunity] = useState(blogDetails.hasOwnProperty("community"));
+  const navigate = useNavigate();
+
+  const handleViewFullBlog = () => {
+    const title = blogDetails.previewTitle.split(" ").join("-");
+    navigate(`/${title}/${blogDetails._id}`);
+    window.location.reload();
+  };
 
   return (
     <div className="padding-39 grow-0" style={{ maxWidth: "50%", flexBasis: "50%", paddingBlock: 0 }}>
       <div className="padding-43 h-full" style={{ paddingTop: 0, paddingInline: 0 }}>
-        <article className="h-full cursor-pointer">
+        <article onClick={() => handleViewFullBlog()} className="h-full cursor-pointer">
           <div className="h-full box-border">
             <div className="h-full w-full">
               <div className="grid relative h-full custom-gap-8 grid-rows-[auto_1fr] grid-cols-12 grid-area-1">
