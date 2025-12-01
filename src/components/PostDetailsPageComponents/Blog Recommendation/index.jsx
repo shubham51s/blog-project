@@ -138,124 +138,10 @@ function BlogRecommendComp({ blog }) {
   ]);
 
   const [recommendedBlogs, setRecommendedBlogs] = useState([]);
-  const [recommendedBlog1s, setRecommendedBlogs1] = useState([
-    {
-      _id: 0,
-      title: "How to Tell If Someone Is Actually Smart",
-      description: "And 5 things that automatically don’t mean you’re smart",
-      date: "Jul 31",
-      img: "https://miro.medium.com/v2/resize:fit:849/format:webp/1*kcMrO6kCcd5Zr9WMf5FVyA.jpeg",
-      clapsCount: "1.1K",
-      commentsCount: "19",
-      community: {
-        name: "ILLUMINATION",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*AZxiin1Cvws3J0TwNUP2sQ.png",
-      },
-      writer: {
-        name: "Yana Bostongirl",
-      },
-    },
-    {
-      _id: 1,
-      title: "Have We Been Tricked by Gödel?",
-      description: "According to Kreisel, yes.",
-      date: "Jul 31",
-      img: "	https://miro.medium.com/v2/resize:fit:849/format:webp/1*qdw8AKBattm1F_BBoLeRdg.jpeg",
-      clapsCount: "520",
-      commentsCount: "192",
-      community: {
-        name: "Philosophy Today",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*PUDx_xvsheMfWyuDj5_Kxg.png",
-      },
-      writer: {
-        name: "Pedro Barbalho",
-      },
-    },
-    {
-      _id: 2,
-      title: "Have We Been Tricked by Gödel?",
-      description: "According to Kreisel, yes.",
-      date: "Jul 31",
-      img: "	https://miro.medium.com/v2/resize:fit:849/format:webp/1*qdw8AKBattm1F_BBoLeRdg.jpeg",
-      clapsCount: "520",
-      commentsCount: "192",
-      community: {
-        name: "Philosophy Today",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*PUDx_xvsheMfWyuDj5_Kxg.png",
-      },
-      writer: {
-        name: "Pedro Barbalho",
-      },
-    },
-    {
-      _id: 3,
-      title: "How to Tell If Someone Is Actually Smart",
-      description: "And 5 things that automatically don’t mean you’re smart",
-      date: "Jul 31",
-      img: "https://miro.medium.com/v2/resize:fit:849/format:webp/1*kcMrO6kCcd5Zr9WMf5FVyA.jpeg",
-      clapsCount: "1.1K",
-      commentsCount: "19",
-      community: {
-        name: "ILLUMINATION",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*AZxiin1Cvws3J0TwNUP2sQ.png",
-      },
-      writer: {
-        name: "Yana Bostongirl",
-      },
-    },
-    {
-      _id: 4,
-      title: "How to Tell If Someone Is Actually Smart",
-      description: "And 5 things that automatically don’t mean you’re smart",
-      date: "Jul 31",
-      img: "https://miro.medium.com/v2/resize:fit:849/format:webp/1*kcMrO6kCcd5Zr9WMf5FVyA.jpeg",
-      clapsCount: "1.1K",
-      commentsCount: "19",
-      community: {
-        name: "ILLUMINATION",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*AZxiin1Cvws3J0TwNUP2sQ.png",
-      },
-      writer: {
-        name: "Yana Bostongirl",
-      },
-    },
-    {
-      _id: 5,
-      title: "How to Tell If Someone Is Actually Smart",
-      description: "And 5 things that automatically don’t mean you’re smart",
-      date: "Jul 31",
-      img: "https://miro.medium.com/v2/resize:fit:849/format:webp/1*kcMrO6kCcd5Zr9WMf5FVyA.jpeg",
-      clapsCount: "1.1K",
-      commentsCount: "19",
-      community: {
-        name: "ILLUMINATION",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*AZxiin1Cvws3J0TwNUP2sQ.png",
-      },
-      writer: {
-        name: "Yana Bostongirl",
-      },
-    },
-    {
-      _id: 6,
-      title: "How to Tell If Someone Is Actually Smart",
-      description: "And 5 things that automatically don’t mean you’re smart",
-      date: "Jul 31",
-      img: "https://miro.medium.com/v2/resize:fit:849/format:webp/1*kcMrO6kCcd5Zr9WMf5FVyA.jpeg",
-      clapsCount: "1.1K",
-      commentsCount: "19",
-      community: {
-        name: "ILLUMINATION",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*AZxiin1Cvws3J0TwNUP2sQ.png",
-      },
-      writer: {
-        name: "Yana Bostongirl",
-      },
-    },
-  ]);
 
   const getRecommendedBlogsByAuthor = async (author) => {
     try {
-      const response = await fetchRequest(`/blogs/user/${author}`, "GET");
+      const response = await fetchRequest(`/blogs/user/${author}?skip=0&limit=6`, "GET");
 
       if (response.status === 200) {
         const result = await response.json();
@@ -277,7 +163,7 @@ function BlogRecommendComp({ blog }) {
         categories,
       };
 
-      const response = await fetchRequest(`/blogs/categories`, "POST", params);
+      const response = await fetchRequest(`/blogs/categories?skip=0&limit=6`, "POST", params);
 
       if (response.status === 200) {
         const result = await response.json();
@@ -341,9 +227,11 @@ function BlogRecommendComp({ blog }) {
 
               <div className="margin-17 bdr-8 w-full" style={{ marginTop: 0, borderTop: 0, borderInline: 0 }}></div>
 
-              <div className="flex">
-                <Link className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-normal opacity-[0.85] transition-all duration-300 ease-out hover:opacity-100">See more recommendations</Link>
-              </div>
+              {recommendedBlogs.length > 0 && (
+                <div className="flex">
+                  <Link className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-normal opacity-[0.85] transition-all duration-300 ease-out hover:opacity-100">See more recommendations</Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

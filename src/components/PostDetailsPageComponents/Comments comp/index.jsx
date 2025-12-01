@@ -142,7 +142,7 @@ function CommentsComp({ blog, setBlog }) {
 
   const handleDisableAddComment2 = () => {
     setCommentInp2("");
-    setIsAddComment2(false);
+    // setIsAddComment2(false);
     editor2?.commands.clearContent();
   };
 
@@ -223,8 +223,9 @@ function CommentsComp({ blog, setBlog }) {
 
       if (response.status === 200) {
         setComments(result?.data?.comments);
+        console.log("result?.data?.comments: ", result?.data?.comments);
       } else {
-        toast.error(response.message || "Something went wrong");
+        // toast.error(response.message || "Something went wrong");
       }
     } catch (err) {
       console.error("fetchComments catch blog: ", err);
@@ -394,7 +395,7 @@ function CommentsComp({ blog, setBlog }) {
       </div>
       {/* Show all comments component */}
       {/* only when to show all comments (>3) */}
-      <div ref={allCommentsContentRef} className={`transition-transform duration-600 ease box-shadow-3 bdr-5 pointer-events-none" ${isShowAllComments ? "fixed flex flex-col box-border h-full justify-stretch visible translateX-1 left-full top-0 overflow-auto custom-bg-8 z-[520] width-40" : "hidden translate-x-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
+      <div ref={allCommentsContentRef} className={`width-40 transition-transform duration-600 ease box-shadow-3 bdr-5 fixed flex flex-col box-border h-full justify-stretch right-0 top-2 overflow-auto custom-bg-8 z-[520]" ${isShowAllComments ? "visible pointer-events-auto translate-x-0" : "translate-x-full pointer-events-none invisible"}`} style={{ borderRight: 0, borderBlock: 0 }}>
         <div className="overflow-auto grow">
           <div className="padding-3 flex items-center justify-between">
             <div className="flex">
@@ -440,7 +441,7 @@ function CommentsComp({ blog, setBlog }) {
                 {isAddComment2 && (
                   <div className="height-58 padding-40 flex self-end" style={{ paddingBlock: 0 }}>
                     <div>
-                      <button onClick={handleDisableAddComment2} className="border-0 padding-27 padding-28 border-radius-9 text-center box-border color-3 inline-block font-4 custom-line-h-1 m-0">
+                      <button onClick={() => handleDisableAddComment2()} className="border-0 padding-27 padding-28 border-radius-9 text-center box-border color-3 inline-block font-4 custom-line-h-1 m-0">
                         Cancel
                       </button>
                     </div>
@@ -459,13 +460,13 @@ function CommentsComp({ blog, setBlog }) {
                       <div className="flex items-center">
                         <div className="inline-block cursor-pointer relative">
                           <div className="relative">
-                            <img src={item.profileImg} alt={item.name} className="width-11 aspect-square box-border rounded-full align-middle" />
+                            <img src={item.profileImg} className="width-11 aspect-square box-border rounded-full align-middle" />
                           </div>
                         </div>
                         <div className="padding-33" style={{ paddingRight: 0, paddingBlock: 0 }}>
                           <div className="flex items-center">
                             <div className="cursor-pointer transition-all duration-400 ease-in-out hover:underline">
-                              <p className="break-all text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0">{item.name}</p>
+                              <div className="break-all text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0" dangerouslySetInnerHTML={{ __html: item.content }} />
                             </div>
                             {item.user._id === userInfo._id && (
                               <div className="bg-[rgb(26,137,23)] text-white margin-19 border-radius-3 padding-6 line-h-7 font-8 font-normal" style={{ marginBlock: 0, marginRight: 0, paddingBlock: 0 }}>
@@ -474,7 +475,7 @@ function CommentsComp({ blog, setBlog }) {
                             )}
                           </div>
                           <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">
-                            <span>{item.date}</span>
+                            <span>{formatMonthAndDayLong(item.updatedAt)}</span>
                           </p>
                         </div>
                       </div>
@@ -490,7 +491,7 @@ function CommentsComp({ blog, setBlog }) {
                           <Popover.Content side="bottom" sideOffset={1}>
                             <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
                               <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
-                                {item._id === userInfo._id && (
+                                {item.user._id === userInfo._id && (
                                   <li className="padding-1 custom-fs-1 color-4 font-normal">
                                     <button onClick={() => handleDeleteCommentBtnClick(item_id)} className="text-[#c94a4a] cursor-pointer m-0 p-0">
                                       Delete response
@@ -498,7 +499,7 @@ function CommentsComp({ blog, setBlog }) {
                                   </li>
                                 )}
 
-                                {item._id !== userInfo._id && (
+                                {item.user._id !== userInfo._id && (
                                   <li className="padding-1 custom-fs-1 color-4 font-normal">
                                     <button className="text-[#c94a4a] cursor-pointer m-0 p-0">Report response...</button>
                                   </li>
@@ -509,11 +510,11 @@ function CommentsComp({ blog, setBlog }) {
                         </Popover.Root>
                       </div>
                     </div>
-                    <div className="margin-35 break-words" style={{ marginBottom: 0, marginInline: 0 }}>
+                    {/* <div className="margin-35 break-words" style={{ marginBottom: 0, marginInline: 0 }}>
                       <div className="padding-27">
                         <div className="color-3 custom-fs-1 line-h-8 font-normal">{item.comment}</div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
