@@ -185,7 +185,12 @@ function BlogRecommendComp({ blog }) {
         <div className="flex justify-center">
           <div className="min-w-0 w-full max-width-2 margin-2">
             <div className="custom-margin-b-1 margin-37">
-              <h2 className="letter-spacing-8 line-h-9 font-11 font-medium color-3 m-0 p-0">{`More from ${blog.author.name.charAt(0).toUpperCase() + blog.author.name.slice(1)} ${communityBlogs.length > 0 ? "and " + blog.community.name.toUpperCase() + blog.community.name.slice(1) : ""}`}</h2>
+              <h2 className="letter-spacing-8 line-h-9 font-11 font-medium color-3 m-0 p-0">
+                <span>More from </span>
+                <span className="capitalize">{blog.author.name}</span>
+                {communityBlogs.length > 0 && <span> and </span>}
+                {communityBlogs.length > 0 && <span className="capitalize">blog.community.name</span>}
+              </h2>
             </div>
 
             <div className="margin-38 width-39 flex flex-wrap items-stretch">
@@ -197,11 +202,11 @@ function BlogRecommendComp({ blog }) {
             <div className="margin-17 bdr-8 w-full" style={{ marginTop: 0, borderTop: 0, borderInline: 0 }}></div>
 
             <div className="flex">
-              {authorBlogs.length > 0 && <Link className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-medium opacity-[0.9] transition-all duration-300 ease-out hover:opacity-100">{`See all from ${blog.author.name.charAt(0).toUpperCase() + blog.author.name.slice(1)}`}</Link>}
+              {authorBlogs.length > 0 && <Link className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-medium opacity-[0.9] transition-all duration-300 ease-out hover:opacity-100 capitalize">{`See all from ${blog.author.name}`}</Link>}
 
               {communityBlogs.length > 0 && (
                 <div className="margin-21" style={{ marginRight: 0, marginBlock: 0 }}>
-                  <Link className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-medium opacity-[0.9] transition-all duration-300 ease-out hover:opacity-100">{`See all from ${blog.community.name.toUpperCase() + blog.community.name.slice(1)}`}</Link>
+                  <Link className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-medium opacity-[0.9] transition-all duration-300 ease-out hover:opacity-100 capitalize">{`See all from ${blog.community.name}`}</Link>
                 </div>
               )}
             </div>

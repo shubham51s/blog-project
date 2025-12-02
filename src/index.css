@@ -15,8 +15,12 @@ p {
 }
 
 button {
-  margin: 0;
   /* cursor: pointer; */
+  user-select: none !important;
+}
+
+img {
+  user-select: none !important;
 }
 
 :root {

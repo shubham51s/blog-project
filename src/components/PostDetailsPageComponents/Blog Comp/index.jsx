@@ -34,7 +34,7 @@ function BlogComp({ blogDetails }) {
                     <div className="margin-21 flex items-center" style={{ marginTop: 0, marginInline: 0 }}>
                       <div className="margin-16" style={{ marginLeft: 0, marginBlock: 0 }}>
                         {isCommunity && <img src={blogDetails.community.profileImg} className="height-12 aspect-square border-radius-5" />}
-                        {!isCommunity && <img src={blogDetails.author.profileImg} className="height-12 aspect-square border-radius-5" />}
+                        {!isCommunity && <img src={blogDetails.author.profileImg} className="height-12 aspect-square rounded-full" />}
                       </div>
                       {isCommunity && (
                         <div className="padding-23 whitespace-nowrap" style={{ paddingLeft: 0, paddingBlock: 0 }}>
@@ -43,7 +43,9 @@ function BlogComp({ blogDetails }) {
                       )}
                       {isCommunity && (
                         <div className="">
-                          <p className="break-all text-ellipsis height-6 color-3 overflow-hidden font-4 custom-line-h-1 font-normal m-0 p-0">{blogDetails.community.name}</p>
+                          <p className="break-all text-ellipsis height-6 color-3 overflow-hidden capitalize font-4 custom-line-h-1 font-normal m-0 p-0" title={blogDetails.community.name}>
+                            {blogDetails.community.name}
+                          </p>
                         </div>
                       )}
                       {isCommunity && (
@@ -52,7 +54,9 @@ function BlogComp({ blogDetails }) {
                         </div>
                       )}
                       <div className="">
-                        <p className="break-all text-ellipsis height-6 color-3 overflow-hidden font-4 custom-line-h-1 font-normal m-0 p-0">{blogDetails.author.name}</p>
+                        <p className="break-all text-ellipsis height-6 color-3 overflow-hidden font-4 capitalize custom-line-h-1 font-normal m-0 p-0" title={blogDetails.author.name}>
+                          {blogDetails.author.name}
+                        </p>
                       </div>
                     </div>
 

@@ -18,7 +18,7 @@ export function formatMonthAndDayLong(dateString) {
     }
 
     if (diffHour < 24) {
-      return `${diffHour} ${hours > 1 ? "hours" : "hour"} ago`;
+      return `${diffHour} ${diffHour > 1 ? "hours" : "hour"} ago`;
     }
 
     if (diffDay < 10) {
@@ -37,7 +37,7 @@ export function formatMonthAndDayLong(dateString) {
 
     return `${day} ${month} ${year}`;
   } catch (err) {
-    console.log("format month and date");
+    console.log("format month and date: ", err);
     return "-";
   }
 }
