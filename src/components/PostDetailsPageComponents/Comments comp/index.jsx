@@ -20,6 +20,7 @@ function CommentsComp({ blog, setBlog }) {
   const allCommentsBtnRef = useRef(null);
   const allCommentsContentRef = useRef(null);
   const [comments, setComments] = useState([]);
+  const [isCommentLoader, setIsCommentLoader] = useState(false);
   const [commentsDrawer, setCommentsDrawer] = useState({
     isShow: false,
     input: "",
@@ -31,44 +32,6 @@ function CommentsComp({ blog, setBlog }) {
     isAddComment: false,
   });
   const [skip, setSkip] = useState(0);
-
-  const [userComments, setUserComments] = useState([
-    {
-      _id: 0,
-      name: "Yana Bostongirl",
-      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*w3tvZB5IHnwLb244e12-1w.jpeg",
-      comment: "Thank you for reading!",
-      date: "Aug 20",
-    },
-    {
-      _id: 1,
-      name: "Madison Clarke",
-      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*TjQ8gFFDcmp0C6PHJIKI1A.jpeg",
-      comment: "Toxic people can drain so much energy—setting boundaries really is self-protection.",
-      date: "Aug 20",
-    },
-    {
-      _id: 2,
-      name: "Shaant",
-      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*_0nIFKGQWE56R5MDpoYXkQ.jpeg",
-      comment: "They crave attention for good deeds. C’mon, if you are a good person, great, but you don’t need a drumroll every time you smile at a stranger or help an elderly person cross the road.",
-      date: "Aug 20",
-    },
-    {
-      _id: 3,
-      name: "Madison Clarke",
-      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*TjQ8gFFDcmp0C6PHJIKI1A.jpeg",
-      comment: "Toxic people can drain so much energy—setting boundaries really is self-protection.",
-      date: "Aug 20",
-    },
-    {
-      _id: 4,
-      name: "Madison Clarke",
-      profileImg: "https://miro.medium.com/v2/resize:fill:40:40/1*TjQ8gFFDcmp0C6PHJIKI1A.jpeg",
-      comment: "Toxic people can drain so much energy—setting boundaries really is self-protection.",
-      date: "Aug 20",
-    },
-  ]);
 
   const editor = useEditor({
     extensions: [
@@ -175,6 +138,7 @@ function CommentsComp({ blog, setBlog }) {
   };
 
   const handleAddCommentBtnClick = async (type) => {
+    setIsCommentLoader(true);
     try {
       const params = {
         blog: blog._id,
@@ -183,6 +147,7 @@ function CommentsComp({ blog, setBlog }) {
 
       const response = await fetchRequest("/comment", "POST", params);
       const result = await response.json();
+      setIsCommentLoader(false);
 
       if (response.status === 201) {
         if (type === 1) {
@@ -195,6 +160,7 @@ function CommentsComp({ blog, setBlog }) {
         setComments((prev) => [newComment, ...prev]);
 
         const commentCount = blog.commentCount + 1;
+        if (skip >= 0) setSkip((prev) => prev + 1);
         setBlog((prev) => ({ ...prev, commentCount }));
 
         // fetchComments();
@@ -202,8 +168,9 @@ function CommentsComp({ blog, setBlog }) {
         toast.error(response.message || "Something went wrong");
       }
     } catch (err) {
-      console.error("handleAddCommentBtnClick catch block: ", err);
+      setIsCommentLoader(false);
       toast.error("Something went wrong");
+      console.error(err);
     }
   };
 
@@ -215,8 +182,9 @@ function CommentsComp({ blog, setBlog }) {
         setComments((prev) => prev.filter((item) => item._id !== commentId));
         const commentCount = blog.commentCount > 0 ? blog.commentCount - 1 : 0;
         setBlog((prev) => ({ ...prev, commentCount }));
+        if (skip >= 0) setSkip((prev) => (prev > 0 ? prev - 1 : prev));
         // fetchComments();
-        toast.success("Comment deleted successfully");
+        toast.info("Comment deleted successfully");
       } else {
         const result = await response.json();
         toast.error(result.message || "Something went wrong");
@@ -228,18 +196,20 @@ function CommentsComp({ blog, setBlog }) {
   };
 
   const fetchComments = async () => {
+    if (skip < 0) return;
     try {
-      const response = await fetchRequest(`/comment/${blog._id}`, "GET");
+      const response = await fetchRequest(`/comment/${blog._id}?skip=${skip}`, "GET");
       const result = await response.json();
 
       if (response.status === 200) {
         setComments(result?.data?.comments);
-        console.log("result?.data?.comments: ", result?.data?.comments);
+        setSkip(result?.data?.comments?.length || -1);
       } else {
-        // toast.error(response.message || "Something went wrong");
+        setSkip(-1);
       }
     } catch (err) {
-      console.error("fetchComments catch blog: ", err);
+      setSkip(-1);
+      console.error(err);
     }
   };
 
@@ -310,7 +280,7 @@ function CommentsComp({ blog, setBlog }) {
                                 Cancel
                               </button>
                             </div>
-                            <button onClick={() => handleAddCommentBtnClick(1)} className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 transition-all cursor-pointer duration-200 ease-out hover:opacity-100 ${editor?.getText().length > 0 ? "opacity-[0.95] hover:opacity-100" : "opacity-[0.1] pointer-events-none"}`}>
+                            <button onClick={() => handleAddCommentBtnClick(1)} className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal m-0 transition-all cursor-pointer duration-200 ease-out hover:opacity-100 ${editor?.getText().length > 0 && !isCommentLoader ? "opacity-[0.95] hover:opacity-100" : "opacity-[0.2]"}`} disabled={editor?.getText().length === 0 || isCommentLoader}>
                               Respond
                             </button>
                           </div>
@@ -460,7 +430,7 @@ function CommentsComp({ blog, setBlog }) {
                         Cancel
                       </button>
                     </div>
-                    <button onClick={() => handleAddCommentBtnClick(2)} className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal cursor-pointer m-0 ${editor2?.getText().length > 0 ? "opacity-100" : "opacity-[0.1]"}`}>
+                    <button onClick={() => handleAddCommentBtnClick(2)} className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal cursor-pointer m-0 ${editor2?.getText().length > 0 && !isCommentLoader ? "opacity-100" : "opacity-[0.2]"}`} disabled={editor2?.getText().length === 0 || isCommentLoader}>
                       Respond
                     </button>
                   </div>

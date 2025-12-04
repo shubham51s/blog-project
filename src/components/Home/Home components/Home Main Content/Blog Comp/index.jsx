@@ -98,12 +98,12 @@ function BlogComp({ item, userInfo }) {
                                     {formatMonthAndDayShort(blog.updatedAt)}
                                     <div className="width-28 height-51 relative flex items-center">
                                       <Link className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
-                                        <div className="flex" title={`${blog.likeCount} claps`}>
+                                        <div className="flex" title={`${blog.clapsCount} claps`}>
                                           <div className="custom-gap-1 flex items-center">
                                             <div className="inline-block width-19 aspect-square">
                                               <PiHandsClappingDuotone className="w-full h-full" />
                                             </div>
-                                            <span>{blog.likeCount}</span>
+                                            <span>{blog.clapsCount}</span>
                                           </div>
                                         </div>
                                         <div className="flex" title={`${blog.commentCount} responses`}>

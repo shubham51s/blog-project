@@ -76,11 +76,11 @@ function BlogComp({ blogDetails }) {
                           <div className="width-28 height-51 relative flex items-center">
                             {/* pending from here claps and comments icon with value */}
                             <a href="#" className="relative flex items-center custom-gap-2 no-underline m-0 p-0 transition-all duration-300 ease-out">
-                              <div className="flex items-center custom-gap-1" title={`${blogDetails.likeCount} claps`}>
+                              <div className="flex items-center custom-gap-1" title={`${blogDetails.clapsCount} claps`}>
                                 <div className="width-19 aspect-square">
                                   <PiHandsClapping className="w-full h-full" />
                                 </div>
-                                <span className="">{blogDetails.likeCount}</span>
+                                <span className="">{blogDetails.clapsCount}</span>
                               </div>
                               <div className="flex items-center custom-gap-1" title={`${blogDetails.commentCount} responses`}>
                                 <div className="width-19 aspect-square">

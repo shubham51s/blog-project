@@ -12,6 +12,7 @@ import CommentsComp from "../../components/PostDetailsPageComponents/Comments co
 import BlogRecommendComp from "../../components/PostDetailsPageComponents/Blog Recommendation";
 import { useApi } from "../../hooks/useApi";
 import { toast } from "react-toastify";
+import { FaHandsClapping } from "react-icons/fa6";
 
 function PostDetailsPage() {
   const { title, id } = useParams();
@@ -21,6 +22,7 @@ function PostDetailsPage() {
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState();
   const [readingTime, setReadingTime] = useState();
+  const [myClapsCount, setMyClapsCount] = useState(1);
 
   const handleClickOutside = (e) => {};
 
@@ -233,11 +235,12 @@ function PostDetailsPage() {
                                   <div className="width-34 flex items-center">
                                     <div className="select-none margin-19 relative flex items-center" style={{ marginLeft: 0, marginBlock: 0 }}>
                                       <button className="select-none cursor-pointer p-0 m-0 width-13 aspect-square opacity-[0.8] transition-all duration-300 ease-out hover:opacity-100">
-                                        <PiHandsClapping className="w-full h-full" />
+                                        {myClapsCount <= 0 && <PiHandsClapping className="w-full h-full" />}
+                                        {myClapsCount > 0 && <FaHandsClapping className="w-full h-full" />}
                                       </button>
                                     </div>
                                     <div className="flex items-center text-center opacity-[0.65] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
-                                      <p className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0">{blog.likeCount}</p>
+                                      <p className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0">{blog.clapsCount}</p>
                                     </div>
                                   </div>
                                   <div className="inline-block">
@@ -308,12 +311,13 @@ function PostDetailsPage() {
                               <div className="flex items-center">
                                 <div className="select-none color-6 margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
                                   <div className="width-13 aspect-square opacity-[0.7] transition-all duration-200 ease-out cursor-pointer hover:opacity-[0.9]">
-                                    <PiHandsClapping className="w-full h-full" title="Clap" />
+                                    {myClapsCount <= 0 && <PiHandsClapping className="w-full h-full" title="Clap" />}
+                                    {myClapsCount > 0 && <FaHandsClapping className="w-full h-full" title="Clap" />}
                                   </div>
                                 </div>
                                 <div>
                                   <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer opacity-[0.7] transition-all duration-200 ease-out hover:opacity-[0.9]" title="View Claps">
-                                    {blog.likeCount}
+                                    {blog.clapsCount}
                                   </p>
                                 </div>
                               </div>
