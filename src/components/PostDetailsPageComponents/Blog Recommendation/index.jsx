@@ -59,83 +59,9 @@ function BlogRecommendComp({ blog }) {
 
   const { fetchRequest } = useApi();
 
-  const [currentBlog, setCurrentBlog] = useState({
-    name: "Yana Bostongirl",
-    community: {
-      name: "ILLUMINATION",
-    },
-  });
-
   const [moreBlogsFromAuthorAndCommunity, setMoreBlogsFromAuthorAndCommunity] = useState([]);
   const [authorBlogs, setAuthorBlogs] = useState([]);
   const [communityBlogs, setCommunityBlogs] = useState([]);
-
-  const [moreBlogs, setMoreBlogs] = useState([
-    {
-      _id: 0,
-      title: "How to Tell If Someone Is Actually Smart",
-      description: "And 5 things that automatically don’t mean you’re smart",
-      date: "Jul 31",
-      img: "https://miro.medium.com/v2/resize:fit:849/format:webp/1*kcMrO6kCcd5Zr9WMf5FVyA.jpeg",
-      clapsCount: "1.1K",
-      commentsCount: "19",
-      community: {
-        name: "ILLUMINATION",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*AZxiin1Cvws3J0TwNUP2sQ.png",
-      },
-      writer: {
-        name: "Yana Bostongirl",
-      },
-    },
-    {
-      _id: 1,
-      title: "Have We Been Tricked by Gödel?",
-      description: "According to Kreisel, yes.",
-      date: "Jul 31",
-      img: "	https://miro.medium.com/v2/resize:fit:849/format:webp/1*qdw8AKBattm1F_BBoLeRdg.jpeg",
-      clapsCount: "520",
-      commentsCount: "192",
-      community: {
-        name: "Philosophy Today",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*PUDx_xvsheMfWyuDj5_Kxg.png",
-      },
-      writer: {
-        name: "Pedro Barbalho",
-      },
-    },
-    {
-      _id: 2,
-      title: "Have We Been Tricked by Gödel?",
-      description: "According to Kreisel, yes.",
-      date: "Jul 31",
-      img: "	https://miro.medium.com/v2/resize:fit:849/format:webp/1*qdw8AKBattm1F_BBoLeRdg.jpeg",
-      clapsCount: "520",
-      commentsCount: "192",
-      community: {
-        name: "Philosophy Today",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*PUDx_xvsheMfWyuDj5_Kxg.png",
-      },
-      writer: {
-        name: "Pedro Barbalho",
-      },
-    },
-    {
-      _id: 3,
-      title: "How to Tell If Someone Is Actually Smart",
-      description: "And 5 things that automatically don’t mean you’re smart",
-      date: "Jul 31",
-      img: "https://miro.medium.com/v2/resize:fit:849/format:webp/1*kcMrO6kCcd5Zr9WMf5FVyA.jpeg",
-      clapsCount: "1.1K",
-      commentsCount: "19",
-      community: {
-        name: "ILLUMINATION",
-        profileImg: "https://miro.medium.com/v2/resize:fill:25:25/1*AZxiin1Cvws3J0TwNUP2sQ.png",
-      },
-      writer: {
-        name: "Yana Bostongirl",
-      },
-    },
-  ]);
 
   const [recommendedBlogs, setRecommendedBlogs] = useState([]);
 

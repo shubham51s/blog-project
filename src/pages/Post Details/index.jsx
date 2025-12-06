@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import HeaderComp from "../../components/Home/Home components/Header";
 import HomeLeftMenuComp from "../../components/Home/Home components/Left Menu";
 import { PiHandsClapping } from "react-icons/pi";
@@ -22,7 +22,15 @@ function PostDetailsPage() {
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState();
   const [readingTime, setReadingTime] = useState();
-  const [myClapsCount, setMyClapsCount] = useState(1);
+  const [myPrevClapsCount, setMyPrevClapsCount] = useState(0);
+  const [clapDetails, setClapDetails] = useState({
+    totalClaps: 0,
+    myClaps: 0,
+    isLoading: false,
+  });
+
+  let clapsTimeout = useRef(null);
+  const clapsClickedCount = useRef(0);
 
   const handleClickOutside = (e) => {};
 
@@ -87,6 +95,67 @@ function PostDetailsPage() {
     setReadingTime(time);
   };
 
+  const getMyClapsCount = async (blogId) => {
+    try {
+      const response = await fetchRequest(`/claps/${blogId}`, "GET");
+
+      if (response.status === 200) {
+        const result = await response.json();
+        setMyPrevClapsCount(result.data.count);
+        setClapDetails((prev) => ({ ...prev, myClaps: result.data.count }));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const addClaps = async () => {
+    const remaining = 50 - clapDetails.myClaps;
+    const clapsToAdd = Math.min(remaining, clapsClickedCount.current);
+    clapsClickedCount.current = 0;
+
+    setClapDetails((prev) => ({ ...prev, isLoading: true }));
+    try {
+      const params = {
+        clapsCount: clapsToAdd,
+        blog: blog._id,
+      };
+
+      const response = await fetchRequest(`/claps`, "POST", params);
+
+      setClapDetails((prev) => ({ ...prev, isLoading: false }));
+
+      if (response?.status === 200) {
+        const result = await response.json();
+        const updatedClaps = result.clapsCount;
+        setClapDetails((prev) => ({ ...prev, myClaps: updatedClaps, totalClaps: blog.clapsCount - myPrevClapsCount + updatedClaps }));
+      }
+    } catch (err) {
+      setClapDetails((prev) => ({ ...prev, isLoading: false }));
+      console.error(err);
+    }
+  };
+
+  const handleAddClapsBtnClick = () => {
+    if (clapDetails.myClaps >= 50) return;
+
+    clapsClickedCount.current++;
+
+    setClapDetails((prev) => {
+      const newTotal = blog.clapsCount - myPrevClapsCount + Math.min(prev.myClaps + clapsClickedCount.current, 50);
+      return {
+        ...prev,
+        totalClaps: newTotal,
+      };
+    });
+
+    if (clapsTimeout.current) clearTimeout(clapsTimeout.current);
+
+    clapsTimeout.current = setTimeout(() => {
+      addClaps();
+    }, 2000);
+  };
+
   const fetchBlogDetails = async () => {
     try {
       const response = await fetchRequest(`/blogs/${id}`, "GET");
@@ -100,12 +169,15 @@ function PostDetailsPage() {
       }
 
       if (response.status === 200) {
-        console.log("result.data.blog: ", result.data.blog);
-        setBlog(result.data.blog);
-        calculateReadingTime(result.data.blog.content);
+        const blog = result.data.blog;
+        console.log("result.data.blog: ", blog);
+        setClapDetails((prev) => ({ ...prev, totalClaps: blog.clapsCount }));
+        getMyClapsCount(blog._id);
+        setBlog(blog);
+        calculateReadingTime(blog.content);
       }
     } catch (err) {
-      console.log("fetchBlogDetails catch block: ", err);
+      console.error(err);
       toast.error("Something went wrong!");
       navigate("/");
     }
@@ -234,13 +306,13 @@ function PostDetailsPage() {
                                 <div className="flex items-center">
                                   <div className="width-34 flex items-center">
                                     <div className="select-none margin-19 relative flex items-center" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                      <button className="select-none cursor-pointer p-0 m-0 width-13 aspect-square opacity-[0.8] transition-all duration-300 ease-out hover:opacity-100">
-                                        {myClapsCount <= 0 && <PiHandsClapping className="w-full h-full" />}
-                                        {myClapsCount > 0 && <FaHandsClapping className="w-full h-full" />}
+                                      <button onClick={handleAddClapsBtnClick} className="select-none cursor-pointer p-0 m-0 width-13 aspect-square opacity-[0.8] transition-all duration-300 ease-out hover:opacity-100">
+                                        {clapDetails.myClaps <= 0 && <PiHandsClapping className="w-full h-full" />}
+                                        {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
                                       </button>
                                     </div>
                                     <div className="flex items-center text-center opacity-[0.65] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
-                                      <p className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0">{blog.clapsCount}</p>
+                                      <p className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0">{clapDetails.totalClaps}</p>
                                     </div>
                                   </div>
                                   <div className="inline-block">
@@ -310,14 +382,14 @@ function PostDetailsPage() {
                             <span className="inline-block">
                               <div className="flex items-center">
                                 <div className="select-none color-6 margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                  <div className="width-13 aspect-square opacity-[0.7] transition-all duration-200 ease-out cursor-pointer hover:opacity-[0.9]">
-                                    {myClapsCount <= 0 && <PiHandsClapping className="w-full h-full" title="Clap" />}
-                                    {myClapsCount > 0 && <FaHandsClapping className="w-full h-full" title="Clap" />}
+                                  <div onClick={handleAddClapsBtnClick} className="width-13 aspect-square opacity-[0.7] transition-all duration-200 ease-out cursor-pointer hover:opacity-[0.9]">
+                                    {clapDetails.myClaps <= 0 && <PiHandsClapping className="w-full h-full" title="Clap" />}
+                                    {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" title="Clap" />}
                                   </div>
                                 </div>
                                 <div>
                                   <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer opacity-[0.7] transition-all duration-200 ease-out hover:opacity-[0.9]" title="View Claps">
-                                    {blog.clapsCount}
+                                    {clapDetails.totalClaps}
                                   </p>
                                 </div>
                               </div>
