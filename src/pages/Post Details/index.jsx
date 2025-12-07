@@ -6,16 +6,18 @@ import { FiMessageCircle } from "react-icons/fi";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import { GoShare } from "react-icons/go";
-import { IoIosMore } from "react-icons/io";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CommentsComp from "../../components/PostDetailsPageComponents/Comments comp";
 import BlogRecommendComp from "../../components/PostDetailsPageComponents/Blog Recommendation";
 import { useApi } from "../../hooks/useApi";
 import { toast } from "react-toastify";
 import { FaHandsClapping } from "react-icons/fa6";
+import MoreOptionsComp from "../../components/PostDetailsPageComponents/MoreOptionsComp";
+import { UserContext } from "../../context/userContext";
 
 function PostDetailsPage() {
   const { title, id } = useParams();
+  const { userInfo } = useContext(UserContext);
   const { fetchRequest } = useApi();
   const navigate = useNavigate();
   const [isShowFullImg, setIsShowFullImg] = useState(false);
@@ -103,6 +105,21 @@ function PostDetailsPage() {
         const result = await response.json();
         setMyPrevClapsCount(result.data.count);
         setClapDetails((prev) => ({ ...prev, myClaps: result.data.count }));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const undoMyClaps = async () => {
+    try {
+      const response = await fetchRequest(`/claps/${blog._id}`, "DELETE");
+      // const result = await response.json();
+
+      if (response.status === 200) {
+        setClapDetails((prev) => ({ ...prev, myClaps: 0, totalClaps: blog.clapsCount - myPrevClapsCount >= 0 ? blog.clapsCount - myPrevClapsCount : 0 }));
+        setBlog((prev) => ({ ...prev, clapsCount: prev.clapsCount - myPrevClapsCount >= 0 ? prev.clapsCount - myPrevClapsCount : 0 }));
+        setMyPrevClapsCount(0);
       }
     } catch (err) {
       console.error(err);
@@ -228,7 +245,7 @@ function PostDetailsPage() {
 
                 {/* left section (about community) */}
                 {blog.community && (
-                  <div className="absolute translateY-1 top-0 width-17 transition-all duration-300 ease-out opacity-100 pointer-none">
+                  <div className="absolute translateY-1 top-0 width-17 transition-all duration-300 linear opacity-100 pointer-none">
                     <div className="flex justify-center">
                       <div className="margin-27 min-w-0 w-full custom-max-w-1" style={{ marginBlock: 0 }}>
                         <div className="width-30 flex items-start flex-col">
@@ -282,9 +299,11 @@ function PostDetailsPage() {
                                         </div>
                                         <div className="inline-block width-33"></div>
                                         <div className="inline-block">
-                                          <button className="bdr-7 padding-28 padding-20 width-24 border-radius-7 cursor-pointer flex justify-between items-center m-0">
-                                            <span className="custom-fs-1 custom-line-h-1 color-3 w-full font-normal whitespace-nowrap">Follow</span>
-                                          </button>
+                                          {userInfo?._id !== blog.author._id && (
+                                            <button className="bdr-7 padding-28 padding-20 width-24 border-radius-7 cursor-pointer flex justify-between items-center m-0">
+                                              <span className="custom-fs-1 custom-line-h-1 color-3 w-full font-normal whitespace-nowrap">Follow</span>
+                                            </button>
+                                          )}
                                         </div>
                                       </div>
                                     </div>
@@ -306,17 +325,17 @@ function PostDetailsPage() {
                                 <div className="flex items-center">
                                   <div className="width-34 flex items-center">
                                     <div className="select-none margin-19 relative flex items-center" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                      <button onClick={handleAddClapsBtnClick} className="select-none cursor-pointer p-0 m-0 width-13 aspect-square opacity-[0.8] transition-all duration-300 ease-out hover:opacity-100">
+                                      <button onClick={handleAddClapsBtnClick} className={`select-none p-0 m-0 width-13 aspect-square opacity-[0.8] transition-all duration-300 linear ${userInfo?._id === blog.author._id ? "cursor-not-allowed" : "cursor-pointer hover:opacity-100"}`} title={`${userInfo?._id === blog.author._id ? "You cannot applaud your own story" : "Clap"}`} disabled={userInfo?._id === blog.author._id}>
                                         {clapDetails.myClaps <= 0 && <PiHandsClapping className="w-full h-full" />}
                                         {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
                                       </button>
                                     </div>
-                                    <div className="flex items-center text-center opacity-[0.65] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
+                                    <div className="flex items-center text-center opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100">
                                       <p className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0">{clapDetails.totalClaps}</p>
                                     </div>
                                   </div>
                                   <div className="inline-block">
-                                    <button className="flex items-center color-6 padding-23 opacity-[0.65] transition-all duration-300 ease-out cursor-pointer m-0 hover:opacity-100" style={{ paddingInline: 0 }}>
+                                    <button className="flex items-center color-6 padding-23 opacity-[0.65] transition-all duration-300 linear cursor-pointer m-0 hover:opacity-100" style={{ paddingInline: 0 }}>
                                       <div className="width-13 aspect-square">
                                         <FiMessageCircle className="w-full h-full" />
                                       </div>
@@ -330,33 +349,27 @@ function PostDetailsPage() {
                                 </div>
                                 <div className="flex items-center">
                                   <div className="margin-12 shrink-0 inline-block" style={{ marginLeft: 0 }}>
-                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
+                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100">
                                       <div className="width-13 aspect-square">
                                         <MdOutlineBookmarkAdd className="w-full h-full" />
                                       </div>
                                     </button>
                                   </div>
                                   <div className="margin-12 shrink-0 inline-flex items-start" style={{ marginLeft: 0 }}>
-                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
+                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100">
                                       <div className="width-13 aspect-square">
                                         <IoPlayCircleOutline className="w-full h-full" />
                                       </div>
                                     </button>
                                   </div>
                                   <div className="margin-12 shrink-0 inline-block" style={{ marginLeft: 0 }}>
-                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
+                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100">
                                       <div className="width-13 aspect-square">
                                         <GoShare className="w-full h-full" />
                                       </div>
                                     </button>
                                   </div>
-                                  <div className="shrink-0 inline-block">
-                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
-                                      <div className="width-13 aspect-square">
-                                        <IoIosMore className="w-full h-full" />
-                                      </div>
-                                    </button>
-                                  </div>
+                                  <MoreOptionsComp blog={blog} clapDetails={clapDetails} undoMyClaps={undoMyClaps} />
                                 </div>
                               </div>
                             </div>
@@ -382,13 +395,13 @@ function PostDetailsPage() {
                             <span className="inline-block">
                               <div className="flex items-center">
                                 <div className="select-none color-6 margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                  <div onClick={handleAddClapsBtnClick} className="width-13 aspect-square opacity-[0.7] transition-all duration-200 ease-out cursor-pointer hover:opacity-[0.9]">
-                                    {clapDetails.myClaps <= 0 && <PiHandsClapping className="w-full h-full" title="Clap" />}
-                                    {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" title="Clap" />}
-                                  </div>
+                                  <button onClick={handleAddClapsBtnClick} className={`width-13 aspect-square opacity-[0.7] transition-all duration-200 linear ${userInfo?._id === blog.author._id ? "cursor-not-allowed" : "cursor-pointer hover:opacity-[0.9]"}`} title={`${userInfo?._id === blog.author._id ? "You cannot applaud your own story" : "Clap"}`} disabled={userInfo?._id === blog.author._id}>
+                                    {clapDetails.myClaps <= 0 && <PiHandsClapping className="w-full h-full" />}
+                                    {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
+                                  </button>
                                 </div>
                                 <div>
-                                  <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer opacity-[0.7] transition-all duration-200 ease-out hover:opacity-[0.9]" title="View Claps">
+                                  <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer opacity-[0.7] transition-all duration-200 linear hover:opacity-[0.9]" title="View Claps">
                                     {clapDetails.totalClaps}
                                   </p>
                                 </div>
@@ -397,7 +410,7 @@ function PostDetailsPage() {
                           </div>
                           <div className="margin-12" style={{ marginRight: 0 }}>
                             <span className="inline-block">
-                              <div className="flex items-center color-6 opacity-[0.7] transition-all duration-200 ease-out cursor-pointer hover:opacity-[0.9]" title="Respond">
+                              <div className="flex items-center color-6 opacity-[0.7] transition-all duration-200 linear cursor-pointer hover:opacity-[0.9]" title="Respond">
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
                                   <div className="width-13 aspect-square">
                                     <FiMessageCircle className="w-full h-full opacity-[0.9]" />
@@ -412,26 +425,20 @@ function PostDetailsPage() {
                         </div>
                         <div className="flex items-center">
                           <div className="margin-18 flex-grow: 0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
-                            <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
+                            <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 linear cursor-pointer hover:opacity-100">
                               <div className="width-13 aspect-square">
                                 <MdOutlineBookmarkAdd className="w-full h-full" title="Save" />
                               </div>
                             </button>
                           </div>
                           <div className="margin-18 flex-grow: 0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
-                            <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
+                            <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 linear cursor-pointer hover:opacity-100">
                               <div className="width-13 aspect-square">
                                 <GoShare className="w-full h-full" title="Share" />
                               </div>
                             </button>
                           </div>
-                          <div className="flex-grow: 0 shrink-0 basis-auto">
-                            <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 ease-out cursor-pointer hover:opacity-100">
-                              <div className="width-13 aspect-square">
-                                <IoIosMore className="w-full h-full" title="More" />
-                              </div>
-                            </button>
-                          </div>
+                          <MoreOptionsComp blog={blog} clapDetails={clapDetails} undoMyClaps={undoMyClaps} />
                         </div>
                       </div>
                     </div>
@@ -544,9 +551,16 @@ function PostDetailsPage() {
                         </div>
                         <div className="">
                           <div className="flex">
-                            <button className="bdr-7 padding-37 padding-38 border-radius-8 width-34 flex items-center justify-center m-0 cursor-pointer">
-                              <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Follow</span>
-                            </button>
+                            {userInfo?._id !== blog.author._id && (
+                              <button className="bdr-7 padding-37 padding-38 border-radius-8 width-34 flex items-center justify-center m-0 cursor-pointer">
+                                <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Follow</span>
+                              </button>
+                            )}
+                            {userInfo?._id === blog.author._id && (
+                              <Link className="text-center no-underline rounded-full bdr-6 custom-bg-1 custom-px-2 custom-py-2 color-2 box-border inline-block custom-fs-1 custom-line-h-1 font-normal opacity-[0.95] transition-all duration-200 linear hover:opacity-100">
+                                <div className="whitespace-nowrap">Edit profile</div>
+                              </Link>
+                            )}
                           </div>
                         </div>
                       </div>
