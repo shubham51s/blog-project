@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { FaHandsClapping } from "react-icons/fa6";
 import MoreOptionsComp from "../../components/PostDetailsPageComponents/MoreOptionsComp";
 import { UserContext } from "../../context/userContext";
+import ShowClapsComp from "../../components/PostDetailsPageComponents/ShowLikes";
 
 function PostDetailsPage() {
   const { title, id } = useParams();
@@ -29,12 +30,13 @@ function PostDetailsPage() {
     totalClaps: 0,
     myClaps: 0,
     isLoading: false,
+    isShowClapsComp: false,
+    clapsListArr: [],
+    skip: 0,
   });
 
   let clapsTimeout = useRef(null);
   const clapsClickedCount = useRef(0);
-
-  const handleClickOutside = (e) => {};
 
   const handlMarkupParentClick = (e) => {
     const imageEl = e.target.closest("img");
@@ -202,10 +204,8 @@ function PostDetailsPage() {
 
   useEffect(() => {
     fetchBlogDetails();
-    document.addEventListener("click", handleClickOutside);
 
     return () => {
-      document.removeEventListener("click", handleClickOutside);
       window.removeEventListener("scroll", handleOnScroll);
     };
   }, []);
@@ -330,8 +330,10 @@ function PostDetailsPage() {
                                         {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
                                       </button>
                                     </div>
-                                    <div className="flex items-center text-center opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100">
-                                      <p className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0">{clapDetails.totalClaps}</p>
+                                    <div className="flex items-center text-center margin-19 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" style={{ marginRight: 0, marginBlock: 0 }}>
+                                      <p onClick={() => setClapDetails((prev) => ({ ...prev, isShowClapsComp: true }))} className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0 select-none">
+                                        {clapDetails.totalClaps}
+                                      </p>
                                     </div>
                                   </div>
                                   <div className="inline-block">
@@ -400,8 +402,8 @@ function PostDetailsPage() {
                                     {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
                                   </button>
                                 </div>
-                                <div>
-                                  <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer opacity-[0.7] transition-all duration-200 linear hover:opacity-[0.9]" title="View Claps">
+                                <div className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
+                                  <p onClick={() => setClapDetails((prev) => ({ ...prev, isShowClapsComp: true }))} className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer select-none opacity-[0.7] transition-all duration-200 linear hover:opacity-[0.9]" title="View Claps">
                                     {clapDetails.totalClaps}
                                   </p>
                                 </div>
@@ -583,6 +585,8 @@ function PostDetailsPage() {
           <img onClick={() => handleCloseFullImg()} src={isShowFullImg} className="h-full max-w-full max-h-full cursor-zoom-out" />
         </div>
       )}
+
+      {clapDetails.isShowClapsComp && <ShowClapsComp clapDetails={clapDetails} setClapDetails={setClapDetails} />}
     </>
   );
 }
