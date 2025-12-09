@@ -31,8 +31,9 @@ function PostDetailsPage() {
     myClaps: 0,
     isLoading: false,
     isShowClapsComp: false,
-    clapsListArr: [],
+    clappedUsers: [],
     skip: 0,
+    clappedUsersCount: 0,
   });
 
   let clapsTimeout = useRef(null);
@@ -202,6 +203,12 @@ function PostDetailsPage() {
     }
   };
 
+  const handleShowClapsUi = () => {
+    if (clapDetails.totalClaps <= 0) return;
+
+    setClapDetails((prev) => ({ ...prev, isShowClapsComp: true }));
+  };
+
   useEffect(() => {
     fetchBlogDetails();
 
@@ -331,7 +338,7 @@ function PostDetailsPage() {
                                       </button>
                                     </div>
                                     <div className="flex items-center text-center margin-19 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" style={{ marginRight: 0, marginBlock: 0 }}>
-                                      <p onClick={() => setClapDetails((prev) => ({ ...prev, isShowClapsComp: true }))} className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0 select-none">
+                                      <p onClick={() => handleShowClapsUi()} className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0 select-none">
                                         {clapDetails.totalClaps}
                                       </p>
                                     </div>
@@ -403,7 +410,7 @@ function PostDetailsPage() {
                                   </button>
                                 </div>
                                 <div className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
-                                  <p onClick={() => setClapDetails((prev) => ({ ...prev, isShowClapsComp: true }))} className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer select-none opacity-[0.7] transition-all duration-200 linear hover:opacity-[0.9]" title="View Claps">
+                                  <p onClick={() => handleShowClapsUi()} className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer select-none opacity-[0.7] transition-all duration-200 linear hover:opacity-[0.9]" title="View Claps">
                                     {clapDetails.totalClaps}
                                   </p>
                                 </div>
@@ -586,7 +593,7 @@ function PostDetailsPage() {
         </div>
       )}
 
-      {clapDetails.isShowClapsComp && <ShowClapsComp clapDetails={clapDetails} setClapDetails={setClapDetails} />}
+      {clapDetails.isShowClapsComp && <ShowClapsComp clapDetails={clapDetails} setClapDetails={setClapDetails} blog={blog} />}
     </>
   );
 }
