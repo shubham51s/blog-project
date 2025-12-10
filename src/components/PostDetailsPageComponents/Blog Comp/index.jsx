@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Description } from "@mui/icons-material";
 import { PiHandsClapping } from "react-icons/pi";
 import { FiMessageCircle } from "react-icons/fi";
 import { IoIosMore } from "react-icons/io";

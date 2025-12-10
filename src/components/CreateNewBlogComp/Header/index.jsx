@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import mediumLogo from "./../../../assets/images/mediumIconFull.png";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import * as Popover from "@radix-ui/react-popover";
-import { BorderBottom } from "@mui/icons-material";
 import { UserContext } from "../../../context/userContext";
 import { useApi } from "../../../hooks/useApi";
 
