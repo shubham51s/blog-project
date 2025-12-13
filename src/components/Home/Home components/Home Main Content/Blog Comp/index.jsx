@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PiStarFourLight } from "react-icons/pi";
 import { PiHandsClappingDuotone } from "react-icons/pi";
@@ -9,26 +9,87 @@ import { toast } from "react-toastify";
 import MoreComp from "./MoreComponent";
 import ShowLessComp from "./ShowLessComp";
 import { formatMonthAndDayShort } from "../../../../../utils/monthDateFormatter";
+import { UserContext } from "../../../../../context/userContext";
+import { useApi } from "../../../../../hooks/useApi";
 
-function BlogComp({ item, userInfo }) {
+function BlogComp({ item }) {
+  const { fetchRequest } = useApi();
+  const { userInfo } = useContext(UserContext);
+
   const navigate = useNavigate();
   const isMyBlog = userInfo._id === item.author._id;
   const [blog, setBlog] = useState({ ...item, isMyBlog });
   const [isHideBlog, setIsHideBlog] = useState(false);
+  const [loaders, setLoaders] = useState({
+    isBookmarkLoader: false,
+  });
 
   const handleUserProfileClick = () => {
     navigate("/");
   };
 
+  const deleteBookmark = async () => {
+    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
+
+    try {
+      const params = {
+        blog: blog._id,
+      };
+
+      const response = await fetchRequest("/bookmarks/delete", "POST", params);
+
+      const result = await response.json();
+
+      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
+
+      if (response.status === 200 || response.status === 204) {
+        setBlog({ ...blog, isBookmarked: false });
+        toast.info("Blog unsaved");
+      } else {
+        toast.error(result?.message || "Some error occured");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Some error occured");
+      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
+    }
+  };
+
+  const addBookmark = async () => {
+    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
+
+    try {
+      const params = {
+        blog: blog._id,
+      };
+
+      const response = await fetchRequest("/bookmarks", "POST", params);
+
+      const result = await response.json();
+      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
+
+      if (response.status === 200 || response.status === 201) {
+        setBlog({ ...blog, isBookmarked: true });
+        toast.success("Blog saved");
+      } else {
+        toast.error(result?.message || "Some error occured");
+      }
+    } catch (err) {
+      toast.error("Some error occured");
+      console.error(err);
+      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
+    }
+  };
+
   const handleBookmarkBlogBtnClick = (e) => {
+    if (loaders.isBookmarkLoader) return;
+
     e.stopPropagation();
     if (blog.isBookmarked) {
-      setBlog({ ...blog, isBookmarked: false });
+      deleteBookmark();
     } else {
-      setBlog({ ...blog, isBookmarked: true });
+      addBookmark();
     }
-
-    toast.success(`Bookmark ${!blog.isBookmarked ? "added" : "removed"} successfully!`);
   };
 
   const handleShowDetailedBlog = () => {

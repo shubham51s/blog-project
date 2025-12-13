@@ -236,7 +236,7 @@ function PostDetailsPage() {
         <div className="flex">
           <HomeLeftMenuComp />
           {/* width need to check later given different width than original */}
-          {(!blog || isInitialLoading) && !isAnyErr && <BlogDetailsSkeletonComp />}
+          {isInitialLoading && <BlogDetailsSkeletonComp />}
           {blog && !isInitialLoading && !isAnyErr && (
             <div className="width-17 grow shrink basis-auto">
               <div>

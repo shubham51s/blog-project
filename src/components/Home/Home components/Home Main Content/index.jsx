@@ -102,7 +102,7 @@ function HomeMainContentComp() {
         {/* section-4 */}
         <div>
           {blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-          {blogs.length > 0 && blogs.map((item) => <BlogComp item={item} userInfo={userInfo} key={item._id} />)}
+          {blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
         </div>
       </div>
     </main>
