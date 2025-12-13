@@ -11,6 +11,7 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
   const [isClose, setIsClose] = useState(false);
   const closeTimeout = useRef(null);
   const [isInitialLoading, setIsInitialLoading] = useState(false);
+  const initialTimeout = useRef(null);
 
   const handleClose = () => {
     setIsClose(true);
@@ -28,8 +29,6 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
       const response = await fetchRequest(`/claps/users/${blog._id}?skip=${skip}`, "GET");
 
       const result = await response.json();
-      if (skip === 0) setIsInitialLoading(false);
-      console.log("set false");
 
       if (response.status === 200) {
         setClapDetails((prev) => ({ ...prev, clappedUsers: result?.data?.usersList || [], clappedUsersCount: result?.data?.totalCount || 0 }));
@@ -39,22 +38,34 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
     } catch (err) {
       console.error(err);
       updatedSkip = -1;
-      if (skip === 0) setIsInitialLoading(false);
     }
 
     setClapDetails((prev) => ({ ...prev, skip: updatedSkip }));
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     if (clapDetails.clappedUsers.length === 0) {
       setIsInitialLoading(true);
       getClappedUsersList(0);
+
+      if (initialTimeout.current) clearTimeout(initialTimeout.current);
+
+      // minimum loading time
+      initialTimeout.current = setTimeout(() => {
+        setIsInitialLoading(false);
+      }, 800);
     }
+
+    return () => {
+      if (initialTimeout.current) clearTimeout(initialTimeout.current);
+    };
   }, []);
 
   return (
     <div onClick={() => handleClose()} className={`fixed inset-0 overflow-x-hidden overflow-y-auto flex justify-center items-center bg13 scroll-smooth z-[800] transition-all duration-300 linear ${isClose ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"}`}>
-      {!isInitialLoading && (
+      {!isInitialLoading && clapDetails.clappedUsers.length > 0 && (
         <div className="mb-auto padding64">
           <div onClick={(e) => e.stopPropagation()} className="width63 padding-44">
             <div className="margin-17 text-center flex flex-col" style={{ marginTop: 0 }}>
@@ -101,7 +112,7 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
       )}
 
       {/* loader */}
-      {isInitialLoading && (
+      {(isInitialLoading || clapDetails.clappedUsers.length === 0) && (
         <div className="mb-auto padding64">
           <div onClick={(e) => e.stopPropagation()} className="width63 overflow-hidden padding-44">
             <Skeleton height={40} width={23434} className="mb-10" />

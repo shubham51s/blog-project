@@ -15,6 +15,8 @@ import { FaHandsClapping } from "react-icons/fa6";
 import MoreOptionsComp from "../../components/PostDetailsPageComponents/MoreOptionsComp";
 import { UserContext } from "../../context/userContext";
 import ShowClapsComp from "../../components/PostDetailsPageComponents/ShowLikes";
+import BlogDetailsSkeletonComp from "./skeleton";
+import BlogDetailsErrorComp from "./notFound";
 
 function PostDetailsPage() {
   const { title, id } = useParams();
@@ -26,6 +28,9 @@ function PostDetailsPage() {
   const [blog, setBlog] = useState();
   const [readingTime, setReadingTime] = useState();
   const [myPrevClapsCount, setMyPrevClapsCount] = useState(0);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isAnyErr, setIsAnyErr] = useState(false);
+  const loadingTimeout = useRef(null);
   const [clapDetails, setClapDetails] = useState({
     totalClaps: 0,
     myClaps: 0,
@@ -182,24 +187,20 @@ function PostDetailsPage() {
 
       const result = await response.json();
 
-      if (!response.ok) {
-        toast.error(result.message || "Something went wrong!");
-        navigate("/");
-        return;
-      }
-
-      if (response.status === 200) {
-        const blog = result.data.blog;
+      if (response?.status === 200) {
+        const blog = result?.data?.blog;
         console.log("result.data.blog: ", blog);
         setClapDetails((prev) => ({ ...prev, totalClaps: blog.clapsCount }));
         getMyClapsCount(blog._id);
         setBlog(blog);
         calculateReadingTime(blog.content);
+      } else {
+        setIsAnyErr(true);
       }
     } catch (err) {
+      setIsAnyErr(true);
       console.error(err);
       toast.error("Something went wrong!");
-      navigate("/");
     }
   };
 
@@ -210,23 +211,33 @@ function PostDetailsPage() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     fetchBlogDetails();
+
+    // minimun loading time
+    if (loadingTimeout.current) clearTimeout(loadingTimeout.current);
+
+    loadingTimeout.current = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 1200);
 
     return () => {
       window.removeEventListener("scroll", handleOnScroll);
+      if (loadingTimeout.current) clearTimeout(loadingTimeout.current);
     };
   }, []);
 
   return (
     <>
-      {/* skeleton loader pending */}
-      {blog && (
-        <div className="custom-bg-8">
-          <HeaderComp />
-          {/* home content */}
-          <div className="flex">
-            <HomeLeftMenuComp />
-            {/* width need to check later given different width than original */}
+      <div className="custom-bg-8">
+        <HeaderComp />
+        {/* home content */}
+        <div className="flex">
+          <HomeLeftMenuComp />
+          {/* width need to check later given different width than original */}
+          {(!blog || isInitialLoading) && !isAnyErr && <BlogDetailsSkeletonComp />}
+          {blog && !isInitialLoading && !isAnyErr && (
             <div className="width-17 grow shrink basis-auto">
               <div>
                 {blog.community && (
@@ -582,9 +593,10 @@ function PostDetailsPage() {
                 {blog && <BlogRecommendComp blog={blog} />}
               </div>
             </div>
-          </div>
+          )}
+          {!isInitialLoading && isAnyErr && <BlogDetailsErrorComp />}
         </div>
-      )}
+      </div>
 
       {/* full screen image view */}
       {isShowFullImg && (

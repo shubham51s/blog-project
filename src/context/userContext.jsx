@@ -10,10 +10,8 @@ const UserProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState({});
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
-  const [isShowSignupPopup, setIsShowSignupPopup] = useState(false);
   const [isShowLoginPopup, setIsShowLoginPopup] = useState(false);
-  const [signUpHeading, setSignUpHeading] = useState("");
-  const tempUserProfile = "https://cdn-images-1.medium.com/fit/c/40/40/0*AbhaXOwX9-XpKPtX";
+  const [isLoginTabActive, setIsLoginTabActive] = useState(true);
 
   const verifyAuthentication = async () => {
     try {
@@ -27,7 +25,7 @@ const UserProvider = ({ children }) => {
 
       if (response.status === 200) {
         const result = await response.json();
-        setUserInfo({ ...result.data.user, profileImg: tempUserProfile });
+        setUserInfo({ ...result.data.user });
         setIsUserLoggedIn(true);
       } else {
         // need to check later
@@ -44,7 +42,7 @@ const UserProvider = ({ children }) => {
     verifyAuthentication();
   }, []);
 
-  return <UserContext.Provider value={{ userInfo, setUserInfo, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isShowSignupPopup, setIsShowSignupPopup, signUpHeading, setSignUpHeading, isInitialLoading, setIsInitialLoading }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ userInfo, setUserInfo, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive }}>{children}</UserContext.Provider>;
 };
 
 export { UserContext };

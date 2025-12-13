@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/userContext";
 
 function UnauthenticatedHome() {
-  const { setIsShowSignupPopup, setIsShowLoginPopup, setSignUpHeading } = useContext(UserContext);
+  const { setIsLoginTabActive, setIsShowLoginPopup } = useContext(UserContext);
   const footerOptions = ["Help", "Status", "About", "Careers", "Press", "Blog", "Privacy", "Rules", "Terms", "Text to speech"];
   const navOptions = [
     { id: 1, name: "Our Story", path: "/about" },
@@ -20,39 +20,19 @@ function UnauthenticatedHome() {
   const writePostRef = useRef();
 
   const handleShowSignupBtnClick = () => {
-    setSignUpHeading("Join Medium.");
-    setIsShowSignupPopup(true);
+    setIsLoginTabActive(false);
+    setIsShowLoginPopup(true);
   };
 
   const handleLoginBtnClick = (path) => {
     if (path === "login") {
+      setIsLoginTabActive(true);
       setIsShowLoginPopup(true);
     } else if (path === "create") {
-      setSignUpHeading("Create an account to start writing.");
-      setIsShowSignupPopup(true);
+      setIsLoginTabActive(false);
+      setIsShowLoginPopup(true);
     }
   };
-
-  const handleClickOutside = (e) => {
-    const loginContainer = document.getElementById("loginPopupContainer");
-    const signupContainer = document.getElementById("signupContainer");
-
-    if (loginContainer.current && !loginContainer.current.contains(e.target) && loginRef.current && !loginRef.current.contains(e.target)) {
-      setIsShowLoginPopup(false);
-    }
-
-    if (signupContainer && !signupContainer.contains(e.target) && signupRef.current && !signupRef.current.contains(e.target) && writePostRef.current && !writePostRef.current.contains(e.target)) {
-      setIsShowSignupPopup(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   return (
     <div className="w-screen h-screen flex flex-col font-normal custom-bg-2">

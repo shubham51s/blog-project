@@ -1,19 +1,17 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import HomeDefaultComp from "../../components/Home/DefaultComp";
-import SignupComp from "../../components/Authentication/signup";
-import LoginComp from "../../components/Authentication/login";
 import HomePageProtected from "./Home Protected";
+import LoginSignupComp from "../../components/Authentication";
 
 function Homepage() {
-  const { isUserLoggedIn, isShowSignupPopup, isShowLoginPopup } = useContext(UserContext);
+  const { isUserLoggedIn, isShowLoginPopup } = useContext(UserContext);
 
   return (
     <>
       {!isUserLoggedIn && (
         <>
-          {isShowSignupPopup && !isShowLoginPopup && <SignupComp />}
-          {isShowLoginPopup && !isShowSignupPopup && <LoginComp />}
+          {isShowLoginPopup && <LoginSignupComp />}
           <HomeDefaultComp />
         </>
       )}

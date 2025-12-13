@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useRef } from "react";
 import logo from "../../assets/images/mediumLogo.png";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
-import SignupComp from "../../components/Authentication/signup";
-import LoginComp from "../../components/Authentication/login";
+import LoginSignupComp from "../../components/Authentication";
 
 function AboutPage() {
   const footerOptions = [
@@ -39,47 +38,22 @@ function AboutPage() {
     },
   ];
 
-  const { isUserLoggedIn, isShowSignupPopup, isShowLoginPopup, setIsShowSignupPopup, setIsShowLoginPopup, setSignUpHeading } = useContext(UserContext);
-  const loginRef = useRef();
-  const signupRef = useRef();
+  const { isUserLoggedIn, setIsLoginTabActive, isShowLoginPopup, setIsShowLoginPopup } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleNavigationBtnClick = (type) => {
     if (type === "login") {
-      setIsShowSignupPopup(false);
+      setIsLoginTabActive(true);
       setIsShowLoginPopup(true);
     } else if (type === "signup") {
-      setIsShowLoginPopup(false);
-      setIsShowSignupPopup(true);
-      setSignUpHeading("Join Medium.");
+      setIsLoginTabActive(false);
+      setIsShowLoginPopup(true);
     }
   };
-
-  const handleClickOutside = (e) => {
-    const loginContainer = document.getElementById("loginPopupContainer");
-    const signupContainer = document.getElementById("signupContainer");
-
-    if (loginContainer.current && !loginContainer.current.contains(e.target) && loginRef.current && !loginRef.current.contains(e.target)) {
-      setIsShowLoginPopup(false);
-    }
-
-    if (signupContainer && !signupContainer.contains(e.target) && signupRef.current && !signupRef.current.contains(e.target)) {
-      setIsShowSignupPopup(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   return (
     <>
-      {!isShowLoginPopup && !isUserLoggedIn && isShowSignupPopup && <SignupComp />}
-      {!isUserLoggedIn && !isShowSignupPopup && isShowLoginPopup && <LoginComp />}
+      {!isUserLoggedIn && isShowLoginPopup && <LoginSignupComp />}
 
       <div className="flex justify-center font-normal">
         <div className="m-0 w-full min-w-0 max-w-full">
@@ -91,13 +65,13 @@ function AboutPage() {
             <div className="flex">
               <div className="margin-3">
                 <span>
-                  <button ref={loginRef} onClick={() => handleNavigationBtnClick("login")} className="cursor-pointer padding-5 custom-line-h-1 custom-fs-1 custom-bdr-6 color-5 text-center no-underline inline-block bdr-1 custom-bdr-4 rounded-full">
+                  <button onClick={() => handleNavigationBtnClick("login")} className="cursor-pointer padding-5 custom-line-h-1 custom-fs-1 custom-bdr-6 color-5 text-center no-underline inline-block bdr-1 custom-bdr-4 rounded-full">
                     Sign in
                   </button>
                 </span>
               </div>
               <span>
-                <button ref={signupRef} onClick={() => handleNavigationBtnClick("signup")} className="cursor-pointer color-6 padding-5 custom-line-h-1 custom-fs-1 custom-bdr-7 custom-bg-4 text-center inline-block bdr-1 rounded-full m-0 overflow-visible">
+                <button onClick={() => handleNavigationBtnClick("signup")} className="cursor-pointer color-6 padding-5 custom-line-h-1 custom-fs-1 custom-bdr-7 custom-bg-4 text-center inline-block bdr-1 rounded-full m-0 overflow-visible">
                   Sign up
                 </button>
               </span>
