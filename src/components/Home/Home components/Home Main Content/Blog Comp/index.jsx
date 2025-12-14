@@ -42,7 +42,7 @@ function BlogComp({ item }) {
 
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
 
-      if (response.status === 200 || response.status === 204) {
+      if (response.status === 200) {
         setBlog({ ...blog, isBookmarked: false });
         toast.info("Blog unsaved");
       } else {
@@ -68,7 +68,7 @@ function BlogComp({ item }) {
       const result = await response.json();
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
 
-      if (response.status === 200 || response.status === 201) {
+      if (response.status === 201) {
         setBlog({ ...blog, isBookmarked: true });
         toast.success("Blog saved");
       } else {
@@ -113,7 +113,7 @@ function BlogComp({ item }) {
                           <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
                             <div onClick={() => handleUserProfileClick()} className="relative z-[2] no-underline cursor-pointer">
                               <div className="relative">
-                                <img className="height-12 aspect-square box-border rounded-full align-middle" src={blog.author.profileImg} alt={blog.author.name} />
+                                <img className="height-12 aspect-square box-border rounded-full align-middle capitalize" src={blog.author.profileImg} alt={blog.author.name} />
                                 <div className="height-12 aspect-square absolute top-0 rounded-full"></div>
                               </div>
                             </div>
@@ -123,7 +123,7 @@ function BlogComp({ item }) {
                               {blog.communityName && <span className="font-light">In </span>}
                               {blog.communityName && <span className="font-normal no-underline hover:underline">{blog.communityName}</span>}
                               {blog.communityName && <span className="font-light"> by </span>}
-                              <span className="font-normal no-underline hover:underline">{blog.isMyBlog ? "You" : blog.author.username}</span>
+                              <span className="font-normal no-underline hover:underline">{blog.isMyBlog ? "You" : blog.author.name}</span>
                             </div>
                           </div>
                         </div>
