@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 function MoreComp({ blog }) {
   const { fetchRequest } = useApi();
 
-  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(blog.author?.isFollowing || false);
 
   const [loaders, setLoaders] = useState({
     isFollowLoader: false,

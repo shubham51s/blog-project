@@ -4,6 +4,7 @@ import HomeLeftMenuComp from "../../components/Home/Home components/Left Menu";
 import { PiHandsClapping } from "react-icons/pi";
 import { FiMessageCircle } from "react-icons/fi";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { IoBookmarkSharp } from "react-icons/io5";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import { GoShare } from "react-icons/go";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -31,6 +32,10 @@ function PostDetailsPage() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isAnyErr, setIsAnyErr] = useState(false);
   const loadingTimeout = useRef(null);
+  const [loaders, setLoaders] = useState({
+    isBookmarkLoader: false,
+    isFollowLoader: false,
+  });
   const [clapDetails, setClapDetails] = useState({
     totalClaps: 0,
     myClaps: 0,
@@ -189,7 +194,6 @@ function PostDetailsPage() {
 
       if (response?.status === 200) {
         const blog = result?.data?.blog;
-        console.log("result.data.blog: ", blog);
         setClapDetails((prev) => ({ ...prev, totalClaps: blog.clapsCount }));
         getMyClapsCount(blog._id);
         setBlog(blog);
@@ -208,6 +212,135 @@ function PostDetailsPage() {
     if (clapDetails.totalClaps <= 0) return;
 
     setClapDetails((prev) => ({ ...prev, isShowClapsComp: true }));
+  };
+
+  const deleteBookmark = async () => {
+    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
+
+    try {
+      const params = {
+        blog: blog._id,
+      };
+
+      const response = await fetchRequest("/bookmarks/delete", "POST", params);
+
+      const result = await response.json();
+
+      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
+
+      if (response.status === 200) {
+        setBlog({ ...blog, isBookmarked: false });
+        toast.info("Blog unsaved");
+      } else {
+        if (response?.status === 500) {
+          toast.error("Some error occured");
+        } else {
+          toast.error(result?.message || "Some error occured");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Some error occured");
+      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
+    }
+  };
+
+  const addBookmark = async () => {
+    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
+
+    try {
+      const params = {
+        blog: blog._id,
+      };
+
+      const response = await fetchRequest("/bookmarks", "POST", params);
+
+      const result = await response.json();
+      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
+
+      if (response.status === 200) {
+        setBlog({ ...blog, isBookmarked: true });
+        toast.success("Blog saved");
+      } else {
+        if (response?.status === 500) {
+          toast.error("Some error occured");
+        } else {
+          toast.error(result?.message || "Some error occured");
+        }
+      }
+    } catch (err) {
+      toast.error("Some error occured");
+      console.error(err);
+      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
+    }
+  };
+
+  const handleToggleBookmark = () => {
+    if (loaders.isBookmarkLoader) return;
+
+    blog.isBookmarked ? deleteBookmark() : addBookmark();
+  };
+
+  const followAuthor = async () => {
+    setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
+    try {
+      const params = { userToFollow: blog.author._id };
+
+      const response = await fetchRequest("/follow/follow-user", "POST", params);
+
+      const result = await response.json();
+
+      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+
+      if (response?.status === 200) {
+        setBlog((prev) => ({ ...prev, author: { ...prev.author, isFollowing: true } }));
+        toast.success(`Success! You're now following ${blog.author.name}.`);
+      } else {
+        if (response?.status === 500) {
+          toast.error("Some error occured");
+        } else {
+          toast.error(result?.message || "Some error occured");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+      toast.error("Something went wrong");
+    }
+  };
+
+  const unFollowAuthor = async () => {
+    setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
+    try {
+      const params = { userToUnfollow: blog.author._id };
+
+      const response = await fetchRequest("/follow/unfollow-user", "POST", params);
+
+      const result = await response.json();
+
+      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+
+      if (response?.status === 200) {
+        setBlog((prev) => ({ ...prev, author: { ...prev.author, isFollowing: false } }));
+        toast.info(`You unfollowed ${blog.author.name}..`);
+      } else {
+        if (response?.status === 500) {
+          toast.error("Some error occured");
+        } else {
+          toast.error(result?.message || "Some error occured");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+      toast.error("Something went wrong");
+    }
+  };
+
+  const handleToggleAuthorFollow = () => {
+    if (loaders.isFollowLoader) return;
+
+    blog.author.isFollowing ? unFollowAuthor() : followAuthor();
   };
 
   useEffect(() => {
@@ -296,17 +429,17 @@ function PostDetailsPage() {
                       <div className="flex justify-center">
                         <div className="w-full min-w-0 max-width-2 margin-12">
                           <div>
-                            <h1 className="letter-spacing-7 line-h-10 font-12 margin-30 mt-0 font-bold color-3">{blog.heading.charAt(0).toUpperCase() + blog.heading.slice(1)}</h1>
+                            <h1 className="letter-spacing-7 line-h-10 font-12 margin54 mt-0 font-bold color-3">{blog.heading.charAt(0).toUpperCase() + blog.heading.slice(1)}</h1>
                           </div>
                           <div>
-                            <h2 className="line-h-3 margin-31 font-2 margin-17 color-4 font-normal">{blog.previewSubtitle}</h2>
+                            {/* <h2 className="line-h-3 margin-31 font-2 margin-17 color-4 font-normal">{blog.previewSubtitle}</h2> */}
                             <div className="w-full">
                               <div className="flex items-center custom-gap-5">
                                 <div className="flex items-center custom-gap-5 ">
                                   <div className="flex items-baseline">
                                     <img src={blog.author.profileImg} className="width-11 aspect-square rounded-full" />
                                   </div>
-                                  <span className="custom-fs-1 custom-line-h-1 color-3 font-normal">
+                                  <span className="custom-fs-1 custom-line-h-1 color-3 font-medium">
                                     <div className="flex items-center margin-23" style={{ marginTop: 0, marginInline: 0 }}>
                                       <div className="flex items-center flex-nowrap">
                                         <div className="flex items-center custom-fs-1 custom-line-h-1 color-3">
@@ -318,8 +451,9 @@ function PostDetailsPage() {
                                         <div className="inline-block width-33"></div>
                                         <div className="inline-block">
                                           {userInfo?._id !== blog.author._id && (
-                                            <button className="bdr-7 padding-28 padding-20 width-24 border-radius-7 cursor-pointer flex justify-between items-center m-0">
-                                              <span className="custom-fs-1 custom-line-h-1 color-3 w-full font-normal whitespace-nowrap">Follow</span>
+                                            <button onClick={handleToggleAuthorFollow} disabled={loaders.isFollowLoader} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
+                                              {blog.author.isFollowing && <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Unfollow</span>}
+                                              {!blog.author.isFollowing && <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Follow</span>}
                                             </button>
                                           )}
                                         </div>
@@ -355,7 +489,7 @@ function PostDetailsPage() {
                                     </div>
                                   </div>
                                   <div className="inline-block">
-                                    <button className="flex items-center color-6 padding-23 opacity-[0.65] transition-all duration-300 linear cursor-pointer m-0 hover:opacity-100" style={{ paddingInline: 0 }}>
+                                    <button className="flex items-center color-6 padding-23 opacity-[0.65] transition-all duration-300 linear cursor-pointer m-0 hover:opacity-100" style={{ paddingInline: 0 }} title="Respond">
                                       <div className="width-13 aspect-square">
                                         <FiMessageCircle className="w-full h-full" />
                                       </div>
@@ -369,21 +503,22 @@ function PostDetailsPage() {
                                 </div>
                                 <div className="flex items-center">
                                   <div className="margin-12 shrink-0 inline-block" style={{ marginLeft: 0 }}>
-                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100">
+                                    <button onClick={handleToggleBookmark} disabled={loaders.isBookmarkLoader} className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" title="Save">
                                       <div className="width-13 aspect-square">
-                                        <MdOutlineBookmarkAdd className="w-full h-full" />
+                                        {blog.isBookmarked && <IoBookmarkSharp className="w-full h-full" />}
+                                        {!blog.isBookmarked && <MdOutlineBookmarkAdd className="w-full h-full" />}
                                       </div>
                                     </button>
                                   </div>
                                   <div className="margin-12 shrink-0 inline-flex items-start" style={{ marginLeft: 0 }}>
-                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100">
+                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" title="Listen">
                                       <div className="width-13 aspect-square">
                                         <IoPlayCircleOutline className="w-full h-full" />
                                       </div>
                                     </button>
                                   </div>
                                   <div className="margin-12 shrink-0 inline-block" style={{ marginLeft: 0 }}>
-                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100">
+                                    <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" title="Share">
                                       <div className="width-13 aspect-square">
                                         <GoShare className="w-full h-full" />
                                       </div>
@@ -445,9 +580,10 @@ function PostDetailsPage() {
                         </div>
                         <div className="flex items-center">
                           <div className="margin-18 flex-grow: 0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
-                            <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 linear cursor-pointer hover:opacity-100">
+                            <button onClick={handleToggleBookmark} disabled={loaders.isBookmarkLoader} className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 linear cursor-pointer hover:opacity-100">
                               <div className="width-13 aspect-square">
-                                <MdOutlineBookmarkAdd className="w-full h-full" title="Save" />
+                                {blog.isBookmarked && <IoBookmarkSharp className="w-full h-full" title="Save" />}
+                                {!blog.isBookmarked && <MdOutlineBookmarkAdd className="w-full h-full" title="Save" />}
                               </div>
                             </button>
                           </div>
@@ -548,7 +684,7 @@ function PostDetailsPage() {
                             <div className="flex items-baseline margin-16" style={{ marginBottom: 0, marginInline: 0 }}>
                               <div className="grow-0 shrink-0 basis-auto">
                                 <span className="custom-fs-1 custom-fs-1 color-4 custom-line-h-1">
-                                  <a href="#" className="cursor-pointer m-0 p-0 no-underline font-medium hover:underline">{`${blog.author.followerCount} followers`}</a>
+                                  <a href="#" className="cursor-pointer m-0 p-0 no-underline font-medium hover:underline">{`${blog.author.followersCount} followers`}</a>
                                 </span>
                               </div>
                               <div className="whitespace-pre-wrap custom-fs-1 color-4 custom-line-h-1 flex font-normal">
@@ -572,8 +708,9 @@ function PostDetailsPage() {
                         <div className="">
                           <div className="flex">
                             {userInfo?._id !== blog.author._id && (
-                              <button className="bdr-7 padding-37 padding-38 border-radius-8 width-34 flex items-center justify-center m-0 cursor-pointer">
-                                <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Follow</span>
+                              <button onClick={handleToggleAuthorFollow} disabled={loaders.isFollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer">
+                                {blog.author.isFollowing && <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Unfollow</span>}
+                                {!blog.author.isFollowing && <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Follow</span>}
                               </button>
                             )}
                             {userInfo?._id === blog.author._id && (
