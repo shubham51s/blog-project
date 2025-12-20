@@ -12,6 +12,8 @@ import AboutPage from "./pages/About";
 import GlobalLoaderComp from "./components/Common/globalLoader";
 import { useContext } from "react";
 import { UserContext } from "./context/userContext";
+import MainComp from "./pages/Common";
+import HomePageProtected from "./pages/Home/Home Protected";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -20,11 +22,12 @@ function App() {
       {isInitialLoading && <GlobalLoaderComp />}
       {/* <BrowserRouter> */}
       <Routes>
-        {/* temporary home page changed */}
-        {/* <Route path="/post/:id" element={<Homepage />} /> */}
-
-        <Route path="/" element={<Homepage />} />
-        <Route path="/:title/:id" element={<PostDetailsPage />} />
+        <Route path="/" element={<MainComp />}>
+          // nested routes
+          <Route index element={<HomePageProtected />} /> // home component
+          <Route path=":title/:id" element={<PostDetailsPage />} />
+        </Route>
+        {/* <Route path="/:title/:id" element={<PostDetailsPage />} /> */}
         <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<SignupPage />} />

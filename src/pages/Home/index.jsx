@@ -4,6 +4,8 @@ import HomeDefaultComp from "../../components/Home/DefaultComp";
 import HomePageProtected from "./Home Protected";
 import LoginSignupComp from "../../components/Authentication";
 
+// * Not in use component
+
 function Homepage() {
   const { isUserLoggedIn, isShowLoginPopup } = useContext(UserContext);
 

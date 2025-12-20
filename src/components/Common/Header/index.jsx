@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import SearchHomeComp from "./Search";
+import SearchHomeComp from "./SearchComp";
 import { FiEdit } from "react-icons/fi";
-import ProfileHeaderComp from "./User Profile";
+import ProfileHeaderComp from "./ProfileComp";
 import { IoNotificationsOutline } from "react-icons/io5";
 
 function HeaderComp() {

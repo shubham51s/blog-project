@@ -3,8 +3,8 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosStats } from "react-icons/io";
 import { LuCircleHelp } from "react-icons/lu";
 import { PiStarFourDuotone } from "react-icons/pi";
-import { UserContext } from "../../../../../context/userContext";
-import { useApi } from "../../../../../hooks/useApi";
+import { UserContext } from "../../../../context/userContext";
+import { useApi } from "../../../../hooks/useApi";
 
 function ProfileHeaderComp() {
   const { userInfo, isUserLoggedIn } = useContext(UserContext);
