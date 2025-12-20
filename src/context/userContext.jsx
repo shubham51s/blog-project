@@ -12,6 +12,7 @@ const UserProvider = ({ children }) => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isShowLoginPopup, setIsShowLoginPopup] = useState(false);
   const [isLoginTabActive, setIsLoginTabActive] = useState(true);
+  const [isShowMenu, setIsShowMenu] = useState(localStorage.hasOwnProperty("isShowMenu") ? JSON.parse(localStorage.getItem("isShowMenu")) : true); // to toggle left side menu bar
 
   const verifyAuthentication = async () => {
     try {
@@ -42,7 +43,7 @@ const UserProvider = ({ children }) => {
     verifyAuthentication();
   }, []);
 
-  return <UserContext.Provider value={{ userInfo, setUserInfo, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ userInfo, setUserInfo, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu }}>{children}</UserContext.Provider>;
 };
 
 export { UserContext };

@@ -63,13 +63,15 @@ function HomeMainContentComp() {
   }, []);
 
   return (
-    <main className="width-20 grow flex-shrink basis-auto block">
+    // <main className="width-20 h-full overflow-y-auto grow flex-shrink basis-auto block">
+    <main className="width-20 h-full overflow-y-auto invisible-scrollbar grow flex-shrink basis-auto block">
       <div className="block">
         {/* section-1 */}
         <div className="height-10"></div>
 
         {/* section-2 */}
-        <div className="sticky top-2 z-[499] custom-bg-8">
+        {/* <div className="sticky top-2 z-[499] custom-bg-8"> */}
+        <div className="custom-bg-8">
           <div className="flex justify-center">
             <div className="w-full max-width-2 my-0 margin-12 min-w-0">
               <div className="padding-18 pb-0">
@@ -78,7 +80,7 @@ function HomeMainContentComp() {
                     <div className="flex items-center scrollbar-none overflow-y-hidden overflow-x-auto bdr-5 w-full" style={{ borderTop: 0, borderInline: 0 }}>
                       {/* active topic border & all pending */}
                       {recommendedTopics.map((item) => (
-                        <div className={`margin-21 min-w-max padding-18 pt-0 bdr-6`} key={item.id} title={item.title} style={{ marginBlock: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: activeTopicIndex == item.id ? "" : "transparent" }}>
+                        <div className={`margin-21 min-w-max padding-18 pt-0 bdr-6`} key={item.id} title={item.title} style={{ marginBlock: 0, marginLeft: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: activeTopicIndex == item.id ? "" : "transparent" }}>
                           <div className="inline-block outline-none">
                             <div className="p-0 m-0 cursor-pointer no-underline">
                               <div onClick={() => handleActiveTabChange(item.id)} className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-300 ease-in-out hover:opacity-100 ${activeTopicIndex == item.id ? "opacity-100" : "opacity-75"}`}>

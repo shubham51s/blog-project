@@ -8,7 +8,7 @@ function HomePageProtected() {
   }, []);
 
   return (
-    <div className="width-18 m-auto flex justify-evenly">
+    <div className="width-18 m-auto h-full overflow-hidden flex justify-evenly">
       <HomeMainContentComp />
       <HomeRightSectionComp />
     </div>

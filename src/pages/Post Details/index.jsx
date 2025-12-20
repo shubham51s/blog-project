@@ -364,7 +364,7 @@ function PostDetailsPage() {
       {/* home content */}
       {isInitialLoading && <BlogDetailsSkeletonComp />}
       {blog && !isInitialLoading && !isAnyErr && (
-        <div>
+        <div className="h-full overflow-y-auto">
           {blog.community && (
             <div className="bdr-5 w-full">
               <div className="height-55 w-full"></div>

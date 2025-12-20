@@ -111,7 +111,7 @@ function HomeRightSectionComp() {
   ]);
 
   return (
-    <div className="width-22 width-21 height-13 bdr-5 padding-3 custom-bg-8 padding-24" style={{ borderRight: 0, borderBlock: 0, paddingBlock: 0 }}>
+    <div className="width-22 width-21 h-full overflow-y-auto bdr-5 padding-3 custom-bg-8 padding-24 invisible-scrollbar" style={{ borderRight: 0, borderBlock: 0, paddingBlock: 0 }}>
       <div className="relative inline-block h-full w-full">
         {/* position sticky & scroll need to check */}
         <div className="sticky top-2 mt-0">
@@ -256,7 +256,7 @@ function HomeRightSectionComp() {
                               </div>
                               <div className="width-23">
                                 <div className="inline-block">
-                                  <button className="flex items-center justify-center bdr-7 padding-20 padding-28 width-24 border-radius-7 bg-transparent cursor-pointer m-0">
+                                  <button className="flex items-center justify-center bdr-7 padding-20 padding-28 border-radius-7 bg-transparent cursor-pointer m-0">
                                     <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-normal">
                                       <span className="break-all inline-block">Follow</span>
                                     </span>

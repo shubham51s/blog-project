@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoHomeSharp } from "react-icons/io5";
 import { BsPeople } from "react-icons/bs";
@@ -11,8 +11,10 @@ import { RiAddLargeFill } from "react-icons/ri";
 import { GoPerson } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { FaChevronRight } from "react-icons/fa6";
+import { UserContext } from "../../../context/userContext";
 
-function HomeLeftMenuComp() {
+function MenuComp() {
+  const { isShowMenu } = useContext(UserContext);
   const menuOptions = [
     {
       id: 0,
@@ -51,9 +53,9 @@ function HomeLeftMenuComp() {
   };
 
   return (
-    <div className="width-16 flex-none">
-      <div className="sticky translate-x-0 top-2 height-11 bdr-5 width-16 custom-bg-8 flex flex-col z-[500]" style={{ borderLeft: 0, borderBlock: 0 }}>
-        <div className="grow flex-shrink basis-auto flex">
+    <div className={`flex-none transition-all h-full overflow-y-auto duration-300 ease-in-out overflow-x-hidden invisible-scrollbar ${isShowMenu ? "width-16 visible" : "w-0 invisible"}`}>
+      <div className="bdr-5 w-full custom-bg-8" style={{ borderLeft: 0, borderBlock: 0 }}>
+        <div className="h-full w-full max-h-full flex-shrink basis-auto flex">
           <div className="flex flex-col custom-gap-4 overflow-auto padding-14" style={{ paddingTop: 0, paddingInline: 0 }}>
             <div className="flex flex-col custom-gap-4">
               <div className="height-12"></div>
@@ -103,4 +105,4 @@ function HomeLeftMenuComp() {
   );
 }
 
-export default HomeLeftMenuComp;
+export default MenuComp;

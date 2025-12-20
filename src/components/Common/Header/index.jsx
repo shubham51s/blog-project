@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchHomeComp from "./SearchComp";
 import { FiEdit } from "react-icons/fi";
 import ProfileHeaderComp from "./ProfileComp";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { UserContext } from "../../../context/userContext";
+import { MdOutlineMenu } from "react-icons/md";
+import { FiMenu } from "react-icons/fi";
 
 function HeaderComp() {
   const [isMenuActive, setIsMenuActive] = useState(false);
+  const { setIsShowMenu, isShowMenu } = useContext(UserContext);
 
   const toggleLeftMenu = () => {
-    setIsMenuActive(!isMenuActive);
+    setIsShowMenu((prev) => !prev);
+
+    localStorage.setItem("isShowMenu", JSON.stringify(!isShowMenu));
   };
 
   return (
@@ -19,9 +25,8 @@ function HeaderComp() {
         <div className="flex items-center flex-[1_0_auto]">
           <div className="inline-block">
             <button className="relative m-0 width-7 aspect-square bg-transparent flex items-center padding-6" style={{ paddingBlock: 0, paddingRight: 0 }}>
-              <div onClick={toggleLeftMenu} className="bdr-3 custom-bdr-8 height-4 width-8 rounded flex cursor-pointer opacity-75 transition-all duration-300 ease-in-out hover:opacity-100">
-                <div className={`h-full w-[30%] bdr-4 custom-bdr-8 border-l-0 border-y-0 ${isMenuActive ? "bg-9" : "bg-transparent"}`}></div>
-                <div className="h-full grow"></div>
+              <div onClick={toggleLeftMenu} className="width-8 aspect-square flex cursor-pointer opacity-75 transition-all duration-300 ease-in-out hover:opacity-100">
+                <FiMenu className="h-full w-full" />
               </div>
             </button>
           </div>

@@ -461,6 +461,16 @@ img {
   height: 10px;
 }
 
+.invisible-scrollbar {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.invisible-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @media only screen and (min-width: 1500px) {
   .ProseMirror img {
     margin-block: 25px;
@@ -647,7 +657,7 @@ img {
   }
 
   .height-11 {
-    height: calc(-57px + 100vh);
+    height: calc(100vh - 57px);
   }
 
   .height-12 {
@@ -1073,11 +1083,11 @@ img {
   }
 
   .width-16 {
-    width: 288px;
+    width: 240px;
   }
 
   .width-17 {
-    width: calc(100% - 288px);
+    width: calc(100% - 240px);
   }
 
   /* need to check */
