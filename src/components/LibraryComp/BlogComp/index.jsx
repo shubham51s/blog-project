@@ -6,20 +6,18 @@ import { FaRegComment } from "react-icons/fa";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { IoBookmark } from "react-icons/io5";
 import { toast } from "react-toastify";
-import MoreComp from "./MoreComponent";
-import ShowLessComp from "./ShowLessComp";
-import { formatMonthAndDayShort } from "../../../../../utils/monthDateFormatter";
-import { UserContext } from "../../../../../context/userContext";
-import { useApi } from "../../../../../hooks/useApi";
+import MoreComp from "./MoreComp";
+import { formatMonthAndDayShort } from "../../../utils/monthDateFormatter";
+import { UserContext } from "../../../context/userContext";
+import { useApi } from "../../../hooks/useApi";
 
-function BlogComp({ item }) {
+function BlogComp({ item, handleRemoveBookmarkedBlog, bookmarkId }) {
   const { fetchRequest } = useApi();
   const { userInfo } = useContext(UserContext);
 
   const navigate = useNavigate();
   const isMyBlog = userInfo._id === item.author._id;
   const [blog, setBlog] = useState({ ...item, isMyBlog });
-  const [isHideBlog, setIsHideBlog] = useState(false);
   const [loaders, setLoaders] = useState({
     isBookmarkLoader: false,
   });
@@ -44,39 +42,13 @@ function BlogComp({ item }) {
 
       if (response.status === 200) {
         setBlog({ ...blog, isBookmarked: false });
-        toast.info("Blog unsaved");
+        handleRemoveBookmarkedBlog(bookmarkId);
       } else {
         toast.error(result?.message || "Some error occured");
       }
     } catch (err) {
       console.error(err);
       toast.error("Some error occured");
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-    }
-  };
-
-  const addBookmark = async () => {
-    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
-
-    try {
-      const params = {
-        blog: blog._id,
-      };
-
-      const response = await fetchRequest("/bookmarks", "POST", params);
-
-      const result = await response.json();
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-
-      if (response.status === 200) {
-        setBlog({ ...blog, isBookmarked: true });
-        toast.success("Blog saved");
-      } else {
-        toast.error(result?.message || "Some error occured");
-      }
-    } catch (err) {
-      toast.error("Some error occured");
-      console.error(err);
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
     }
   };
@@ -85,11 +57,7 @@ function BlogComp({ item }) {
     if (loaders.isBookmarkLoader) return;
 
     e.stopPropagation();
-    if (blog.isBookmarked) {
-      deleteBookmark();
-    } else {
-      addBookmark();
-    }
+    deleteBookmark();
   };
 
   const handleShowDetailedBlog = () => {
@@ -98,7 +66,7 @@ function BlogComp({ item }) {
   };
 
   return (
-    <div className={`overflow-hidden transition-all duration-500 ease-out ${isHideBlog ? "height71" : "height-18"}`}>
+    <div className={`overflow-hidden transition-all duration-500 ease-out height-18`}>
       <div className="flex justify-center">
         <div className="w-full max-width-2 margin-2 min-w-0">
           <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
@@ -184,13 +152,11 @@ function BlogComp({ item }) {
                                   </div>
 
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
-                                    {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
                                     <div>
                                       <div className="inline-block">
                                         <button onClick={(e) => handleBookmarkBlogBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
                                           <div className="width-13 aspect-square">
-                                            {!blog?.isBookmarked && <CiBookmarkPlus className="w-full h-full align-middle" />}
-                                            {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />}
+                                            <IoBookmark className="w-full h-full align-middle" />
                                           </div>
                                         </button>
                                       </div>

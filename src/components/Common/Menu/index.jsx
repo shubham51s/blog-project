@@ -9,7 +9,7 @@ import { FaRegFile } from "react-icons/fa";
 import { FaRegFileAlt } from "react-icons/fa";
 import { RiAddLargeFill } from "react-icons/ri";
 import { GoPerson } from "react-icons/go";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaChevronRight } from "react-icons/fa6";
 import { UserContext } from "../../../context/userContext";
 import { GoPersonFill } from "react-icons/go";
@@ -22,6 +22,8 @@ function MenuComp() {
   const { isShowMenu } = useContext(UserContext);
   const { fetchRequest } = useApi();
   const isMounted = useRef(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const limit = 10;
   const menuOptions = [
@@ -35,27 +37,26 @@ function MenuComp() {
     {
       id: 1,
       name: "Library",
-      path: "/",
+      path: "/saved",
       IconInactive: BsBookmarks,
       IconActive: BsBookmarksFill,
     },
     {
       id: 2,
       name: "Profile",
-      path: "/",
+      path: "/profile",
       IconInactive: GoPerson,
       IconActive: GoPersonFill,
     },
     {
       id: 3,
       name: "Stories",
-      path: "/",
+      path: "/stories",
       IconInactive: FaRegFile,
       IconActive: FaRegFileAlt,
     },
   ];
 
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [following, setFollowing] = useState([]);
   const [fetchDetails, setFetchDetails] = useState({
     isLoading: false,
@@ -63,7 +64,7 @@ function MenuComp() {
   });
 
   const handleMenuTabButtonClick = (item) => {
-    setActiveTabIndex(item.id);
+    navigate(item.path);
   };
 
   const fetchFollowingList = async () => {
@@ -106,9 +107,9 @@ function MenuComp() {
 
               {menuOptions.map((item) => (
                 <div key={item.id}>
-                  <div onClick={() => handleMenuTabButtonClick(item)} className={`text-left line-h-8 select-none padding-21 py-0 flex items-center custom-gap-2 font-10 relative cursor-pointer m-0 color-6 font-normal no-underline transition-all duration-300 ease-in-out hover:opacity-100 ${activeTabIndex == item.id ? "opacity-100" : "opacity-[0.7]"}`}>
-                    {activeTabIndex == item.id && <item.IconActive className="width-13 height-10 align-middle" />}
-                    {activeTabIndex != item.id && <item.IconInactive className="width-13 height-10 align-middle" />}
+                  <div onClick={() => handleMenuTabButtonClick(item)} className={`text-left line-h-8 select-none padding-21 py-0 flex items-center custom-gap-2 font-10 relative cursor-pointer m-0 color-6 font-normal no-underline transition-all duration-300 ease-in-out hover:opacity-100 ${location.pathname === item.path ? "opacity-100" : "opacity-[0.7]"}`}>
+                    {location.pathname === item.path && <item.IconActive className="width-13 height-10 align-middle" />}
+                    {location.pathname !== item.path && <item.IconInactive className="width-13 height-10 align-middle" />}
                     <span className="shrink grow text-ellipsis overflow-hidden whitespace-nowrap">{item.name}</span>
                   </div>
                 </div>

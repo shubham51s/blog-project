@@ -14,6 +14,7 @@ import { useContext } from "react";
 import { UserContext } from "./context/userContext";
 import MainComp from "./pages/Common";
 import HomePageProtected from "./pages/Home/Home Protected";
+import SavedBlogsPage from "./pages/Library";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -25,6 +26,7 @@ function App() {
         <Route path="/" element={<MainComp />}>
           // nested routes
           <Route index element={<HomePageProtected />} /> // home component
+          <Route path="saved" element={<SavedBlogsPage />} />
           <Route path=":title/:id" element={<PostDetailsPage />} />
         </Route>
         {/* <Route path="/:title/:id" element={<PostDetailsPage />} /> */}

@@ -22,7 +22,7 @@ function MainComp() {
           <HeaderComp />
           <div className="flex height-11">
             <MenuComp />
-            <div className="width-17 grow flex-shrink basis-auto h-full">
+            <div className="width-17 grow shrink basis-auto h-full">
               <Outlet />
             </div>
           </div>

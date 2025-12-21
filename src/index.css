@@ -816,6 +816,10 @@ img {
     overflow: clip;
   }
 
+  .custom-bg-position {
+    background-position-y: 50px;
+  }
+
   .font-size-1 {
     font-size: 120px;
   }
@@ -1251,6 +1255,10 @@ img {
     width: 1100px;
   }
 
+  .width68 {
+    width: 11px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -1520,6 +1528,18 @@ img {
     padding-inline: 44px;
   }
 
+  .padding67 {
+    padding: 70px;
+  }
+
+  .padding68 {
+    padding-top: 16px;
+  }
+
+  .padding69 {
+    padding-bottom: 70px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -1728,7 +1748,7 @@ img {
     margin-bottom: 32px;
   }
 
-  .custom-bg-position {
-    background-position-y: 50px;
+  .margin55 {
+    margin-top: 56px;
   }
 }

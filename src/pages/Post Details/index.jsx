@@ -434,12 +434,7 @@ function PostDetailsPage() {
                             <span className="custom-fs-1 custom-line-h-1 color-3 font-medium">
                               <div className="flex items-center margin-23" style={{ marginTop: 0, marginInline: 0 }}>
                                 <div className="flex items-center flex-nowrap">
-                                  <div className="flex items-center custom-fs-1 custom-line-h-1 color-3">
-                                    {blog.author.name
-                                      .split(" ")
-                                      .map((name) => name.charAt(0).toUpperCase() + name.slice(1))
-                                      .join(" ")}
-                                  </div>
+                                  <div className="flex items-center custom-fs-1 custom-line-h-1 color-3 capitalize">{blog.author.name}</div>
                                   <div className="inline-block width-33"></div>
                                   <div className="inline-block">
                                     {userInfo?._id !== blog.author._id && (
@@ -474,22 +469,26 @@ function PostDetailsPage() {
                                   {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
                                 </button>
                               </div>
-                              <div className="flex items-center text-center margin-19 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" style={{ marginRight: 0, marginBlock: 0 }}>
-                                <p onClick={() => handleShowClapsUi()} className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0 select-none">
-                                  {clapDetails.totalClaps}
-                                </p>
-                              </div>
+                              {clapDetails.totalClaps > 0 && (
+                                <div className="flex items-center text-center margin-19 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" style={{ marginRight: 0, marginBlock: 0 }}>
+                                  <p onClick={() => handleShowClapsUi()} className="font-4 color-6 custom-line-h-1 font-normal m-0 p-0 select-none">
+                                    {clapDetails.totalClaps}
+                                  </p>
+                                </div>
+                              )}
                             </div>
                             <div className="inline-block">
                               <button className="flex items-center color-6 padding-23 opacity-[0.65] transition-all duration-300 linear cursor-pointer m-0 hover:opacity-100" style={{ paddingInline: 0 }} title="Respond">
                                 <div className="width-13 aspect-square">
                                   <FiMessageCircle className="w-full h-full" />
                                 </div>
-                                <p className="font-4 custom-line-h-1 font-normal m-0 p-0 flex items-center text-center">
-                                  <span className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
-                                    {blog.commentCount}
-                                  </span>
-                                </p>
+                                {blog.commentCount > 0 && (
+                                  <p className="font-4 custom-line-h-1 font-normal m-0 p-0 flex items-center text-center">
+                                    <span className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
+                                      {blog.commentCount}
+                                    </span>
+                                  </p>
+                                )}
                               </button>
                             </div>
                           </div>
@@ -547,11 +546,13 @@ function PostDetailsPage() {
                               {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
                             </button>
                           </div>
-                          <div className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
-                            <p onClick={() => handleShowClapsUi()} className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer select-none opacity-[0.7] transition-all duration-200 linear hover:opacity-[0.9]" title="View Claps">
-                              {clapDetails.totalClaps}
-                            </p>
-                          </div>
+                          {clapDetails.totalClaps > 0 && (
+                            <div className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
+                              <p onClick={() => handleShowClapsUi()} className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer select-none opacity-[0.7] transition-all duration-200 linear hover:opacity-[0.9]" title="View Claps">
+                                {clapDetails.totalClaps}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </span>
                     </div>
@@ -563,9 +564,11 @@ function PostDetailsPage() {
                               <FiMessageCircle className="w-full h-full opacity-[0.9]" />
                             </div>
                           </div>
-                          <div>
-                            <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center">{blog.commentCount}</p>
-                          </div>
+                          {blog.commentCount > 0 && (
+                            <div>
+                              <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center">{blog.commentCount}</p>
+                            </div>
+                          )}
                         </div>
                       </span>
                     </div>
