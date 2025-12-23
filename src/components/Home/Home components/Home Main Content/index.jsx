@@ -7,10 +7,13 @@ import NoContentComp from "./No Content";
 import BlogComp from "./Blog Comp";
 import { UserContext } from "../../../../context/userContext";
 import { useApi } from "../../../../hooks/useApi";
+import BlogLoader from "./Blog Comp/skeleton";
 
 function HomeMainContentComp() {
   const { userInfo } = useContext(UserContext);
   const { fetchRequest } = useApi();
+  const [initialLoader, setInitialLoader] = useState(true);
+  const loaderTimeout = useRef(null);
   const [recommendedTopics, setRecommendedTopics] = useState([
     {
       id: 0,
@@ -37,8 +40,10 @@ function HomeMainContentComp() {
   ]);
 
   const [blogs, setBlogs] = useState([]);
-
   const [activeTopicIndex, setActiveTopicIndex] = useState(0);
+  const [loaders, setLoaders] = useState({
+    blogsLoader: true,
+  });
 
   const handleActiveTabChange = (index) => {
     if (index === activeTopicIndex) return;
@@ -50,16 +55,25 @@ function HomeMainContentComp() {
       const response = await fetchRequest("/blogs", "GET");
       const result = await response.json();
 
-      if (response.ok) {
+      if (loaders.blogsLoader) setLoaders((prev) => ({ ...prev, blogsLoader: false }));
+
+      if (response?.status === 200) {
         setBlogs(result.data.blogs);
       }
     } catch (err) {
       console.error(err);
+      if (loaders.blogsLoader) setLoaders((prev) => ({ ...prev, blogsLoader: false }));
     }
   };
 
   useEffect(() => {
     fetchBlogs();
+
+    if (loaderTimeout.current) clearTimeout(loaderTimeout.current);
+    // minimum loader time
+    loaderTimeout.current = setTimeout(() => {
+      setInitialLoader(false);
+    }, 800);
   }, []);
 
   return (
@@ -83,8 +97,10 @@ function HomeMainContentComp() {
                         <div className={`margin-21 min-w-max padding-18 pt-0 bdr-6`} key={item.id} title={item.title} style={{ marginBlock: 0, marginLeft: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: activeTopicIndex == item.id ? "" : "transparent" }}>
                           <div className="inline-block outline-none">
                             <div className="p-0 m-0 cursor-pointer no-underline">
-                              <div onClick={() => handleActiveTabChange(item.id)} className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-300 ease-in-out hover:opacity-100 ${activeTopicIndex == item.id ? "opacity-100" : "opacity-75"}`}>
-                                <button className="whitespace-nowrap border-0 p-0 m-0 bg-transparent cursor-pointer">{item.name}</button>
+                              <div className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-300 ease-in-out hover:opacity-100 ${activeTopicIndex == item.id ? "opacity-100" : "opacity-75"}`}>
+                                <button onClick={() => handleActiveTabChange(item.id)} disabled={loaders.blogsLoader || initialLoader} className="whitespace-nowrap border-0 p-0 m-0 bg-transparent cursor-pointer">
+                                  {item.name}
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -103,8 +119,9 @@ function HomeMainContentComp() {
 
         {/* section-4 */}
         <div>
-          {blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-          {blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
+          {(initialLoader || loaders.blogsLoader) && blogs.length > 0 && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
+          {!initialLoader && !loaders.blogsLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
+          {!initialLoader && !loaders.blogsLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
         </div>
       </div>
     </main>

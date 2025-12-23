@@ -41,7 +41,7 @@ function SavedBlogsPage() {
     }
   };
 
-  const getMyBookmarksCount = async (isInit = false) => {
+  const getMyBookmarksCount = async () => {
     try {
       const response = await fetchRequest("/bookmarks/count", "GET");
 
@@ -50,27 +50,27 @@ function SavedBlogsPage() {
       if (response?.status === 200) {
         if (result?.data?.count > 0) {
           setBookmarksCount(result.data.count);
-          if (isInit) getBookmarkedBlogsList(0);
+          getBookmarkedBlogsList(0);
         } else {
-          if (isInit) setLoaders((prev) => ({ ...prev, isLoading: false }));
+          setLoaders((prev) => ({ ...prev, isLoading: false }));
         }
       } else {
-        if (isInit) setLoaders((prev) => ({ ...prev, isLoading: false }));
+        setLoaders((prev) => ({ ...prev, isLoading: false }));
       }
     } catch (err) {
       console.error(err);
-      if (isInit) setLoaders((prev) => ({ ...prev, isLoading: false }));
+      setLoaders((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
   const handleRemoveBookmarkedBlog = (id) => {
-    getMyBookmarksCount();
     const updatedBlogs = blogs.filter((item) => item._id !== id);
     setBlogs(updatedBlogs);
+    setBookmarksCount((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
   useEffect(() => {
-    getMyBookmarksCount(true);
+    getMyBookmarksCount();
 
     if (initialLoaderTimeout.current) clearTimeout(initialLoaderTimeout.current);
 
