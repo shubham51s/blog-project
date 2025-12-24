@@ -37,7 +37,7 @@ function MenuComp() {
     {
       id: 1,
       name: "Library",
-      path: "/saved",
+      path: "/me/saved",
       IconInactive: BsBookmarks,
       IconActive: BsBookmarksFill,
     },
@@ -51,7 +51,7 @@ function MenuComp() {
     {
       id: 3,
       name: "Stories",
-      path: "/stories",
+      path: "/me/stories",
       IconInactive: FaRegFile,
       IconActive: FaRegFileAlt,
     },
