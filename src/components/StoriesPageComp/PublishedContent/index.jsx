@@ -1,13 +1,36 @@
 import React, { useEffect, useState } from "react";
 import BlogComp from "./BlogComp";
+import { useRequestHandler } from "../../../hooks/requestHandler";
 
 function PublishContainer({ publishedCount, setPublishedCount, isInitialLoading, getAllStoriesCount }) {
+  const { requestHandler } = useRequestHandler();
   const [blogs, setBlogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getPublishedBlogs = async (skip) => {
+    setIsLoading(true);
+    try {
+      const response = await requestHandler(`/blogs/published?skip=${blogs.length}&limit=${50}`);
+
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        if (skip === 0) {
+          setBlogs(result?.data?.blogs || []);
+        }
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (isInitialLoading) {
       getAllStoriesCount();
-    } else {
+    } else if (publishedCount > 0) {
+      getPublishedBlogs(0);
     }
   }, [isInitialLoading]);
 
@@ -26,8 +49,8 @@ function PublishContainer({ publishedCount, setPublishedCount, isInitialLoading,
         </thead>
 
         <tbody className="m-0 no-first-row-border">
-          {Array.from({ length: 7 }).map((_, i) => (
-            <BlogComp key={i} />
+          {blogs.map((item) => (
+            <BlogComp key={item._id} item={item} />
           ))}
         </tbody>
       </table>

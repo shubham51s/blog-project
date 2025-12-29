@@ -4,13 +4,9 @@ import { FaHandsClapping } from "react-icons/fa6";
 import { MdMoreHoriz } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import { IoIosLink } from "react-icons/io";
+import { formatMonthAndDayShort } from "../../../../utils/monthDateFormatter";
 
-function BlogComp() {
-  const item = {
-    name: "",
-    previewImg: "https://miro.medium.com/v2/resize:fit:0/ab32eb8461142e4884d537415df41ea7072e7447c63d9235e135dc2b6dfb3a94",
-    previewTitle: "Ukraine Update December 25",
-  };
+function BlogComp({ item }) {
   return (
     <tr className="bdr-5" style={{ borderInline: 0, borderBottom: 0 }}>
       <td className="table-cell padding70" style={{ paddingInline: 0 }}>
@@ -29,15 +25,15 @@ function BlogComp() {
                 <div className="w-full flex flex-col gap10">
                   <div className="flex items-center custom-gap-1">
                     <div className="flex items-center flex-wrap">
-                      <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">Published 12h ago</p>
+                      <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">Published {formatMonthAndDayShort(item.createdAt)}</p>
                       <div className="padding-23 custom-fs-1 color-4 custom-line-h-1 font-normal" style={{ paddingBlock: 0 }}>
                         .
                       </div>
-                      <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">1 min read</p>
+                      <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">{item.readingTime} min read</p>
                       <div className="padding-23 custom-fs-1 color-4 custom-line-h-1 font-normal" style={{ paddingBlock: 0 }}>
                         .
                       </div>
-                      <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">Updated 10h ago</p>
+                      <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">Updated {formatMonthAndDayShort(item.updatedAt)}</p>
                     </div>
                   </div>
                   <div className="flex items-start custom-gap-2">
@@ -45,13 +41,13 @@ function BlogComp() {
                       <div className="width-19 aspect-square">
                         <FaHandsClapping className="w-full h-full opacity-75" />
                       </div>
-                      <p className="font-4 custom-line-h-1 font-normal m-0 p-0">0</p>
+                      <p className="font-4 custom-line-h-1 font-normal m-0 p-0">{item.clapsCount}</p>
                     </div>
                     <div className="flex items-center custom-gap-1">
                       <div className="width-19 aspect-square">
                         <TbMessageCircleFilled className="w-full h-full opacity-75" />
                       </div>
-                      <p className="font-4 custom-line-h-1 font-normal m-0 p-0">0</p>
+                      <p className="font-4 custom-line-h-1 font-normal m-0 p-0">{item.commentCount}</p>
                     </div>
                   </div>
                   <div className="w-full flex justify-between items-end"></div>

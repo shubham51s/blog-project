@@ -83,7 +83,7 @@ function SavedBlogsPage() {
   return (
     <>
       {!loaders.isLoading && !loaders.isInitialLoader && (
-        <div className="flex flex-col min-h-screen custom-bg-8 font-normal">
+        <div className="flex flex-col min-h-screen custom-bg-8 font-normal overflow-x-hidden overflow-y-auto max-h-full">
           <div className="flex justify-center">
             {userInfo && (
               <div className="min-w-0 w-full max-width-2 margin-12 my-0">

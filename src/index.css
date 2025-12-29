@@ -483,6 +483,7 @@ img {
   border-top: 0 !important;
 }
 
+/* my laptop breakpoint is 1536 × 864 */
 @media only screen and (min-width: 1500px) {
   .ProseMirror img {
     margin-block: 25px;

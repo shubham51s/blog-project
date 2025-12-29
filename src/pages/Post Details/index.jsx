@@ -25,7 +25,6 @@ function PostDetailsPage() {
   const [isShowFullImg, setIsShowFullImg] = useState(false);
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState();
-  const [readingTime, setReadingTime] = useState();
   const [myPrevClapsCount, setMyPrevClapsCount] = useState(0);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isAnyErr, setIsAnyErr] = useState(false);
@@ -87,25 +86,6 @@ function PostDetailsPage() {
 
     const options = { month: "short", day: "numeric", year: "numeric" };
     return inputDate.toLocaleDateString("en-US", options);
-  };
-
-  const calculateReadingTime = (htmlContent) => {
-    const div = document.createElement("div");
-    div.innerHTML = htmlContent;
-
-    const text = div.textContent || "";
-    const words = text.trim().split(/\s+/).length;
-
-    const wordsPerMinute = 265;
-    const readMinFromWords = words / wordsPerMinute;
-
-    const imageCount = div.querySelectorAll("img").length;
-    const imageTime = imageCount * (12 / 60); // 12 sec = 0.2 min
-
-    const totalTime = Math.ceil(readMinFromWords + imageTime);
-
-    const time = `${totalTime} min read`;
-    setReadingTime(time);
   };
 
   const getMyClapsCount = async (blogId) => {
@@ -195,7 +175,6 @@ function PostDetailsPage() {
         setClapDetails((prev) => ({ ...prev, totalClaps: blog.clapsCount }));
         getMyClapsCount(blog._id);
         setBlog(blog);
-        calculateReadingTime(blog.content);
       } else {
         setIsAnyErr(true);
       }
@@ -451,7 +430,7 @@ function PostDetailsPage() {
                           <div className="flex items-center flex-wrap">
                             <span className="custom-fs-1 custom-line-h-1 color-3 font-medium color-4">
                               <div className="flex grow shrink-0 basis-auto">
-                                <span>{readingTime}</span>
+                                <span>{blog.readingTime} min read</span>
                                 <div className="padding-6 flex items-center text-center" style={{ paddingBlock: 0 }}>
                                   .
                                 </div>
