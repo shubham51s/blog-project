@@ -1573,6 +1573,10 @@ img {
     padding: 32px;
   }
 
+  .padding71 {
+    padding-block: 48px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
