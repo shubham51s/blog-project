@@ -338,6 +338,10 @@ img {
   letter-spacing: -0.016em;
 }
 
+.letter-spacing9 {
+  letter-spacing: 0.083em;
+}
+
 .line-h-2 {
   line-height: 100px;
 }
@@ -897,6 +901,10 @@ img {
     font-size: 32px;
   }
 
+  .font16 {
+    font-size: 12px;
+  }
+
   .padding-1 {
     padding: 8px 20px;
   }
@@ -1288,6 +1296,10 @@ img {
     width: 208px;
   }
 
+  .width72 {
+    width: 17px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -1575,6 +1587,18 @@ img {
 
   .padding71 {
     padding-block: 48px;
+  }
+
+  .padding72 {
+    padding-block: 10px;
+  }
+
+  .padding73 {
+    padding-bottom: 5px;
+  }
+
+  .padding74 {
+    padding-top: 3px;
   }
 
   .margin-3 {

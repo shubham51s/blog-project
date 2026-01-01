@@ -3,15 +3,15 @@ import BlogComp from "./BlogComp";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import SkeletonComp from "../skeleton";
 
-function PublishContainer({ publishedCount, setPublishedCount, isInitialLoading, getAllStoriesCount }) {
+function PublishContainer({ isInitialLoading, publishedCount, setPublishedCount }) {
   const { requestHandler } = useRequestHandler();
   const [blogs, setBlogs] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
   const minLoadingTimeout = useRef(null);
 
   const getPublishedBlogs = async (skip) => {
-    setIsLoading(true);
+    if (skip === 0) setIsLoading(true);
     try {
       const response = await requestHandler(`/blogs/published?skip=${blogs.length}&limit=${50}`);
 
@@ -22,25 +22,21 @@ function PublishContainer({ publishedCount, setPublishedCount, isInitialLoading,
           setBlogs(result?.data?.blogs || []);
         }
       }
-      setIsLoading(false);
+      if (skip === 0) setIsLoading(false);
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
+      if (skip === 0) setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (isInitialLoading) {
-      getAllStoriesCount();
-    } else if (publishedCount > 0) {
-      getPublishedBlogs(0);
-    }
+    if (!isInitialLoading && publishedCount > 0) getPublishedBlogs(0);
 
     if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
 
     minLoadingTimeout.current = setTimeout(() => {
       setDefaultLoader(false);
-    }, 800);
+    }, 600);
 
     return () => {
       if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
@@ -64,8 +60,10 @@ function PublishContainer({ publishedCount, setPublishedCount, isInitialLoading,
             </thead>
 
             <tbody className="m-0 no-first-row-border">
-              {blogs.length > 0 && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
-              {blogs.length === 0 && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
+              {/* blogs list */}
+              {!defaultLoader && !isLoading && !isInitialLoading && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
+              {/* loader */}
+              {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
             </tbody>
           </table>
         </div>

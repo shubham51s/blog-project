@@ -4,17 +4,17 @@ import BlogComp from "./BlogComp";
 import SkeletonComp from "../skeleton";
 import { Link } from "react-router-dom";
 
-function DraftContainer({ draftsCount, setDraftsCount }) {
+function DraftContainer({ isInitialLoading, draftsCount, setDraftsCount }) {
   const { requestHandler } = useRequestHandler();
   const [blogs, setBlogs] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
   const minLoadingTimeout = useRef(null);
 
-  const getPublishedBlogs = async (skip) => {
-    setIsLoading(true);
+  const getDraftBlogsList = async (skip) => {
+    if (skip === 0) setIsLoading(true);
     try {
-      const response = await requestHandler(`/blogs/published?skip=${blogs.length}&limit=${50}`);
+      const response = await requestHandler(`/blogs/drafts?skip=${blogs.length}&limit=${50}`);
 
       const result = await response.json();
 
@@ -23,30 +23,30 @@ function DraftContainer({ draftsCount, setDraftsCount }) {
           setBlogs(result?.data?.blogs || []);
         }
       }
-      setIsLoading(false);
+      if (skip === 0) setIsLoading(false);
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
+      if (skip === 0) setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getPublishedBlogs(0);
+    if (!isInitialLoading && draftsCount > 0) getDraftBlogsList(0);
 
     if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
 
     minLoadingTimeout.current = setTimeout(() => {
       setDefaultLoader(false);
-    }, 800);
+    }, 600);
 
     return () => {
       if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
     };
-  }, []);
+  }, [isInitialLoading]);
 
   return (
     <>
-      {(defaultLoader || isLoading || blogs.length > 0) && (
+      {(defaultLoader || isLoading || isInitialLoading || blogs.length > 0) && (
         <div>
           <table className="border-0 border-collapse table-fixed w-full h-fit">
             <thead className="table-header-group text-left relative">
@@ -61,13 +61,13 @@ function DraftContainer({ draftsCount, setDraftsCount }) {
             </thead>
 
             <tbody className="m-0 no-first-row-border">
-              {blogs.length > 0 && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
-              {blogs.length === 0 && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
+              {!defaultLoader && !isLoading && !isInitialLoading && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
+              {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
             </tbody>
           </table>
         </div>
       )}
-      {!defaultLoader && !isLoading && blogs.length === 0 && (
+      {!defaultLoader && !isLoading && !isInitialLoading && blogs.length === 0 && (
         <div className="flex flex-col justify-center items-center custom-gap-3 padding-19 padding71">
           <p className="line-h-8 font-10 color-3 font-medium m-0 p-0">No stories in draft.</p>
           <p className="line-h-8 font-10 color-3 font-medium m-0 p-0">
