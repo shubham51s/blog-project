@@ -76,6 +76,7 @@ img {
   --text-color-13: rgba(0, 0, 0, .68);
   --text-color-14: rgba(0, 0, 0, .76);
   --text-color-15: rgb(117, 117, 117);
+  --text-color-16: rgb(25, 25, 25);
 }
 
 .ProseMirror {
@@ -293,6 +294,10 @@ img {
 
 .color15 {
   color: var(--text-color-15)
+}
+
+.color16 {
+  color: var(--text-color-16)
 }
 
 .markupContainer img {
@@ -1300,6 +1305,10 @@ img {
     width: 17px;
   }
 
+  .width73 {
+    min-width: 368px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -1599,6 +1608,14 @@ img {
 
   .padding74 {
     padding-top: 3px;
+  }
+
+  .padding75 {
+    padding-right: 24px;
+  }
+
+  .padding76 {
+    padding-left: 40px;
   }
 
   .margin-3 {

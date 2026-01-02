@@ -29,6 +29,7 @@ function App() {
           <Route index element={<HomePageProtected />} /> // home component
           <Route path="me/saved" element={<SavedBlogsPage />} />
           <Route path="me/stories" element={<StoriesPage />} />
+          <Route path="profile/:username" element={<ProfilePage />}></Route>
           <Route path=":title/:id" element={<PostDetailsPage />} />
         </Route>
         {/* <Route path="/:title/:id" element={<PostDetailsPage />} /> */}
