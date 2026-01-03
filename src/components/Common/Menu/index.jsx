@@ -24,8 +24,10 @@ function MenuComp() {
   const isMounted = useRef(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { userInfo } = useContext(UserContext);
 
   const limit = 10;
+
   const menuOptions = [
     {
       id: 0,
@@ -44,7 +46,7 @@ function MenuComp() {
     {
       id: 2,
       name: "Profile",
-      path: "/profile",
+      path: `/profile/@${userInfo.username}`,
       IconInactive: GoPerson,
       IconActive: GoPersonFill,
     },
@@ -67,7 +69,7 @@ function MenuComp() {
     navigate(item.path);
   };
 
-  const fetchFollowingList = async () => {
+  const fetchFollowingUsersList = async () => {
     setFetchDetails((prev) => ({ ...prev, isLoading: true }));
     try {
       const response = await fetchRequest(`/follow/following?skip=${fetchDetails.skip}&limit=${limit}`, "GET");
@@ -90,11 +92,18 @@ function MenuComp() {
     }
   };
 
+  const isActiveTab = (id) => {
+    if (id === 0) return location.pathname === "/";
+    if (id === 1) return location.pathname === "/me/saved";
+    if (id === 2) return location.pathname.includes(`/profile/@${userInfo.username}`);
+    if (id === 3) return location.pathname === "/me/stories";
+  };
+
   useEffect(() => {
     if (isMounted.current) return;
     isMounted.current = true;
 
-    fetchFollowingList();
+    fetchFollowingUsersList();
   }, []);
 
   return (
@@ -107,9 +116,8 @@ function MenuComp() {
 
               {menuOptions.map((item) => (
                 <div key={item.id}>
-                  <div onClick={() => handleMenuTabButtonClick(item)} className={`text-left line-h-8 select-none padding-21 py-0 flex items-center custom-gap-2 font-10 relative cursor-pointer m-0 color-6 font-normal no-underline transition-all duration-300 ease-in-out hover:opacity-100 ${location.pathname === item.path ? "opacity-100" : "opacity-[0.7]"}`}>
-                    {location.pathname === item.path && <item.IconActive className="width-13 height-10 align-middle" />}
-                    {location.pathname !== item.path && <item.IconInactive className="width-13 height-10 align-middle" />}
+                  <div onClick={() => handleMenuTabButtonClick(item)} className={`text-left line-h-8 select-none padding-21 py-0 flex items-center custom-gap-2 font-10 relative cursor-pointer m-0 color-6 font-normal no-underline transition-all duration-300 ease-in-out hover:opacity-100 ${isActiveTab(item.id) ? "opacity-100" : "opacity-[0.7]"}`}>
+                    {isActiveTab(item.id) ? <item.IconActive className="width-13 height-10 align-middle" /> : <item.IconInactive className="width-13 height-10 align-middle" />}
                     <span className="shrink grow text-ellipsis overflow-hidden whitespace-nowrap">{item.name}</span>
                   </div>
                 </div>
@@ -140,7 +148,7 @@ function MenuComp() {
               ))}
 
               {fetchDetails.skip > 0 && (
-                <button onClick={fetchFollowingList} className="margin-21 flex items-center custom-gap-2 padding-3 cursor-pointer transition-all duration-200 linear opacity-75 hover:opacity-100" style={{ marginBottom: 0, marginInline: 0, paddingBlock: 0 }} disabled={fetchDetails.isLoading}>
+                <button onClick={fetchFollowingUsersList} className="margin-21 flex items-center custom-gap-2 padding-3 cursor-pointer transition-all duration-200 linear opacity-75 hover:opacity-100" style={{ marginBottom: 0, marginInline: 0, paddingBlock: 0 }} disabled={fetchDetails.isLoading}>
                   <div className="padding-23 flex-none color-6" style={{ paddingBlock: 0 }}>
                     <div className="width-19 aspect-square">
                       {!fetchDetails.isLoading && <RiArrowDownSLine className="w-full h-full" />}

@@ -16,6 +16,9 @@ import MainComp from "./pages/Common";
 import HomePageProtected from "./pages/Home/Home Protected";
 import SavedBlogsPage from "./pages/Library";
 import StoriesPage from "./pages/Stories";
+import HomeComp from "./components/ProfileComp/HomeSection";
+import AboutComp from "./components/ProfileComp/AboutSection";
+import ListComp from "./components/ProfileComp/ListsSection";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -29,7 +32,11 @@ function App() {
           <Route index element={<HomePageProtected />} /> // home component
           <Route path="me/saved" element={<SavedBlogsPage />} />
           <Route path="me/stories" element={<StoriesPage />} />
-          <Route path="profile/:username" element={<ProfilePage />}></Route>
+          <Route path="profile/:username" element={<ProfilePage />}>
+            <Route index element={<HomeComp />} />
+            <Route path="about" element={<AboutComp />} />
+            <Route path="lists" element={<ListComp />} />
+          </Route>
           <Route path=":title/:id" element={<PostDetailsPage />} />
         </Route>
         {/* <Route path="/:title/:id" element={<PostDetailsPage />} /> */}
