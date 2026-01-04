@@ -16,9 +16,12 @@ import MainComp from "./pages/Common";
 import HomePageProtected from "./pages/Home/Home Protected";
 import SavedBlogsPage from "./pages/Library";
 import StoriesPage from "./pages/Stories";
-import HomeComp from "./components/ProfileComp/HomeSection";
-import AboutComp from "./components/ProfileComp/AboutSection";
-import ListComp from "./components/ProfileComp/ListsSection";
+import ProfileCommonLayout from "./pages/Profile/CommonLayout";
+import Home from "./pages/Profile/Home";
+import About from "./pages/Profile/About";
+import List from "./pages/Profile/List";
+import Follower from "./pages/Profile/Follower";
+import Following from "./pages/Profile/Following";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -33,9 +36,13 @@ function App() {
           <Route path="me/saved" element={<SavedBlogsPage />} />
           <Route path="me/stories" element={<StoriesPage />} />
           <Route path="profile/:username" element={<ProfilePage />}>
-            <Route index element={<HomeComp />} />
-            <Route path="about" element={<AboutComp />} />
-            <Route path="lists" element={<ListComp />} />
+            <Route element={<ProfileCommonLayout />}>
+              <Route index element={<Home />} />
+              <Route path="about" element={<About />} />
+              <Route path="lists" element={<List />} />
+            </Route>
+            <Route path="followers" element={<Follower />} />
+            <Route path="following" element={<Following />} />
           </Route>
           <Route path=":title/:id" element={<PostDetailsPage />} />
         </Route>
