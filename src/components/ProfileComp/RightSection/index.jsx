@@ -1,5 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { MdOutlineMoreHoriz } from "react-icons/md";
+import * as Popover from "@radix-ui/react-popover";
+import FollowingComp from "./FollowingComp";
+import ListComp from "./ListComp";
+import { footerOptions } from "../../../constants/constant";
 
 function RightSectionComp({ user }) {
   return (
@@ -39,8 +44,12 @@ function RightSectionComp({ user }) {
                     </div>
                     <div className="relative">
                       <span className="font-10 font-medium color-3 custom-line-h-1">Following</span>
-                      {/* working */}
-                      <ul className="margin-21 p-0 list-none" style={{ marginInline: 0 }}></ul>
+                      <ul className="margin-21 p-0 list-none" style={{ marginInline: 0 }}>
+                        {/* map */}
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <FollowingComp key={i} />
+                        ))}
+                      </ul>
                       {/* {user.followingCount > 5 && ( */}
                       <p className="font-4 color-3 custom-line-h-1 font-normal m-0 opacity-[0.8] transition-all duration-75 ease-in-out hover:opacity-100">
                         <Link to="following" className="cursor-pointer m-0 p-0 no-underline">
@@ -51,10 +60,31 @@ function RightSectionComp({ user }) {
                     </div>
                   </div>
                   {/* reading list */}
-                  <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}></div>
+                  <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
+                    <span className="font-10 font-medium color-3 line20">Lists</span>
+                    <div className="margin-37"></div>
+                    {/* map */}
+                    {Array.from({ length: 2 }).map((_, i) => (
+                      <ListComp key={i} />
+                    ))}
+                    <p className="font-4 color-3 opacity-[0.85] line20 font-normal transition-all duration-75 ease-in-out hover:opacity-100">
+                      <Link to="lists" className="cursor-pointer m-0 p-0 no-underline">
+                        View All
+                      </Link>
+                    </p>
+                  </div>
                 </div>
                 {/* footer */}
-                <div className="flex flex-wrap padding-3" style={{ paddingInline: 0 }}></div>
+                <div className="flex flex-wrap padding-3" style={{ paddingInline: 0 }}>
+                  {/* map */}
+                  {footerOptions.map((item) => (
+                    <div className="margin-24" style={{ marginLeft: 0, marginBlock: 0 }} key={item.id}>
+                      <Link to={item.path} className="cursor-pointer m-0 p-0 no-underline">
+                        <p className="line-h-7 font-8 color-4 font-normal m-0">{item.name}</p>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
