@@ -3,9 +3,10 @@ import { MdOutlineMoreHoriz } from "react-icons/md";
 import { Link, Outlet, useLocation, useOutletContext, useParams } from "react-router-dom";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import RightSectionComp from "../../../components/ProfileComp/RightSection";
+import Skeleton from "react-loading-skeleton";
 
 function ProfileCommonLayout() {
-  const { user, isError, loaders } = useOutletContext();
+  const { user, isError } = useOutletContext();
   const { pathname } = useLocation();
 
   const navOptions = [
@@ -36,9 +37,8 @@ function ProfileCommonLayout() {
 
   return (
     <>
-      {loaders.fetchUserLoader && <div className="">Loading...</div>}
-      {!loaders.fetchUserLoader && isError && <div className="">Error</div>}
-      {!loaders.fetchUserLoader && !isError && (
+      {isError && <div className="">Error</div>}
+      {!isError && (
         <div className="width-18 m-auto flex justify-evenly">
           <main className="grow shrink basis-auto width-20 block">
             <div className="height-13 flex flex-col custom-bg-8">
@@ -52,19 +52,28 @@ function ProfileCommonLayout() {
                         <div className="w-full flex items-center">
                           <div className="grow shrink basis-auto flex items-center justify-start">
                             <div className="flex flex-nowrap">
-                              <span className="letter-spacing-7 height-53 line-h-10 font-12 color16 padding50 break-all line-clamp-1 text-ellipsis font-bold overflow-hidden" style={{ paddingLeft: 0 }}>
-                                {user.name}
-                              </span>
+                              {user && (
+                                <span className="letter-spacing-7 height-53 line-h-10 font-12 color16 padding50 break-all line-clamp-1 text-ellipsis font-bold overflow-hidden" style={{ paddingLeft: 0 }}>
+                                  {user.name}
+                                </span>
+                              )}
+                              {!user && (
+                                <span className="height-53 padding50 overflow-hidden" style={{ paddingLeft: 0 }}>
+                                  <Skeleton height={30} width={300} />
+                                </span>
+                              )}
                             </div>
                           </div>
                           <div className="margin-13 flex" style={{ marginRight: 0 }}>
-                            <button className="cursor-pointer m-0 p-0 color16 opacity-[0.75] transition-all duration-100 linear hover:opacity-100">
-                              <div className="padding-23">
-                                <div className="custom-h-2 aspect-square">
-                                  <MdOutlineMoreHoriz className="w-full h-full" />
+                            {user && (
+                              <button className="cursor-pointer m-0 p-0 color16 opacity-[0.75] transition-all duration-100 linear hover:opacity-100">
+                                <div className="padding-23">
+                                  <div className="custom-h-2 aspect-square">
+                                    <MdOutlineMoreHoriz className="w-full h-full" />
+                                  </div>
                                 </div>
-                              </div>
-                            </button>
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>

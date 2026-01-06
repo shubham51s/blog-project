@@ -5,9 +5,9 @@ import { RiMoreLine } from "react-icons/ri";
 import { MdModeEdit } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-toastify";
-import { useRequestHandler } from "../../../../../../hooks/requestHandler";
+import { useRequestHandler } from "../../../../../hooks/requestHandler";
 
-function MoreComp({ blog }) {
+function MoreButton({ blog }) {
   const { requestHandler } = useRequestHandler();
 
   const [isFollowing, setIsFollowing] = useState(blog.author?.isFollowing || false);
@@ -21,7 +21,7 @@ function MoreComp({ blog }) {
     try {
       const params = { userToFollow: blog.author._id };
 
-      const response = await requestHandler("/follow/follow-user", "POST", params);
+      const response = await requestHandler("/follow/useRequestHandlerollow-user", "POST", params);
 
       const result = await response.json();
 
@@ -45,7 +45,7 @@ function MoreComp({ blog }) {
     try {
       const params = { userToUnfollow: blog.author._id };
 
-      const response = await requestHandler("/follow/unfollow-user", "POST", params);
+      const response = await requestHandler("/follow/useRequestHandlernfollow-user", "POST", params);
 
       const result = await response.json();
 
@@ -156,4 +156,4 @@ function MoreComp({ blog }) {
   );
 }
 
-export default MoreComp;
+export default MoreButton;

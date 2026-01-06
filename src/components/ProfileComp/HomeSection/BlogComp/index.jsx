@@ -6,15 +6,14 @@ import { FaRegComment } from "react-icons/fa";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { IoBookmark } from "react-icons/io5";
 import { toast } from "react-toastify";
-import MoreComp from "./MoreComponent";
-import ShowLessComp from "./ShowLessComp";
-import { formatMonthAndDayShort } from "../../../../../utils/monthDateFormatter";
-import { UserContext } from "../../../../../context/userContext";
-import { useApi } from "../../../../../hooks/useApi";
-import noPreviewImg from "../../../../../assets/images/noPreviewImage.png";
+import { useRequestHandler } from "../../../../hooks/requestHandler";
+import { formatMonthAndDayShort } from "../../../../utils/monthDateFormatter";
+import { UserContext } from "../../../../context/userContext";
+import MoreButton from "./MoreButtonComp";
+import noPreviewImg from "../../../../assets/images/noPreviewImage.png";
 
 function BlogComp({ item }) {
-  const { fetchRequest } = useApi();
+  const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
 
   const navigate = useNavigate();
@@ -25,10 +24,6 @@ function BlogComp({ item }) {
     isBookmarkLoader: false,
   });
 
-  const handleUserProfileClick = () => {
-    navigate("/");
-  };
-
   const deleteBookmark = async () => {
     setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
 
@@ -37,7 +32,7 @@ function BlogComp({ item }) {
         blog: blog._id,
       };
 
-      const response = await fetchRequest("/bookmarks/delete", "POST", params);
+      const response = await requestHandler("/bookmarks/delete", "POST", params);
 
       const result = await response.json();
 
@@ -64,7 +59,7 @@ function BlogComp({ item }) {
         blog: blog._id,
       };
 
-      const response = await fetchRequest("/bookmarks", "POST", params);
+      const response = await requestHandler("/bookmarks", "POST", params);
 
       const result = await response.json();
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
@@ -109,27 +104,20 @@ function BlogComp({ item }) {
                   <div className="flex relative">
                     <div className="w-full">
                       {/* writer section */}
-                      <div className="flex w-full">
-                        <div className="margin-21 flex items-center w-full" style={{ marginTop: 0, marginInline: 0 }}>
-                          <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
-                            <div onClick={() => handleUserProfileClick()} className="relative z-[2] no-underline cursor-pointer">
-                              <div className="relative">
-                                <img className="height-12 aspect-square box-border rounded-full align-middle capitalize" src={blog.author.profileImg} alt={blog.author.name} />
-                                <div className="height-12 aspect-square absolute top-0 rounded-full"></div>
+                      {blog.communityName && (
+                        <div className="flex w-full">
+                          <div className="margin-21 flex items-center w-full" style={{ marginTop: 0, marginInline: 0 }}>
+                            <div className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
+                              <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
+                                {blog.communityName && <span className="font-light">In </span>}
+                                {blog.communityName && <span className="font-normal no-underline hover:underline">{blog.communityName}</span>}
+                                {/* {blog.communityName && <span className="font-light"> by </span>} */}
+                                {/* <span className="font-normal no-underline hover:underline">{blog.isMyBlog ? "You" : blog.author.name}</span> */}
                               </div>
                             </div>
                           </div>
-                          <div onClick={() => handleUserProfileClick()} className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
-                            <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
-                              {blog.communityName && <span className="font-light">In </span>}
-                              {blog.communityName && <span className="font-normal no-underline hover:underline">{blog.communityName}</span>}
-                              {blog.communityName && <span className="font-light"> by </span>}
-                              <span className="font-normal no-underline hover:underline">{blog.isMyBlog ? "You" : blog.author.name}</span>
-                            </div>
-                          </div>
                         </div>
-                      </div>
-
+                      )}
                       {/* blog section */}
                       <div className="flex">
                         {/* left section */}
@@ -185,7 +173,6 @@ function BlogComp({ item }) {
                                   </div>
 
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
-                                    {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
                                     <div>
                                       <div className="inline-block">
                                         <button onClick={(e) => handleBookmarkBlogBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
@@ -196,14 +183,13 @@ function BlogComp({ item }) {
                                         </button>
                                       </div>
                                     </div>
-                                    <MoreComp blog={blog} />
+                                    <MoreButton blog={blog} />
                                   </div>
                                 </div>
                               </span>
                             </div>
                           </div>
                         </div>
-
                         <div className="margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
                           {blog.previewImg && <img src={blog.previewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
                           {!blog.previewImg && <img src={noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}

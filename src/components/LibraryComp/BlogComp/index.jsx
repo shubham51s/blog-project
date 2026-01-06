@@ -10,6 +10,7 @@ import MoreComp from "./MoreComp";
 import { formatMonthAndDayShort } from "../../../utils/monthDateFormatter";
 import { UserContext } from "../../../context/userContext";
 import { useApi } from "../../../hooks/useApi";
+import noPreviewImg from "../../../assets/images/noPreviewImage.png";
 
 function BlogComp({ item, handleRemoveBookmarkedBlog, bookmarkId }) {
   const { fetchRequest } = useApi();
@@ -170,7 +171,8 @@ function BlogComp({ item, handleRemoveBookmarkedBlog, bookmarkId }) {
                         </div>
                         {/* right section working */}
                         <div className="margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
-                          <img src={blog.previewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />
+                          {blog.previewImg && <img src={blog.previewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
+                          {!blog.previewImg && <img src={noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
                         </div>
                       </div>
                     </div>
