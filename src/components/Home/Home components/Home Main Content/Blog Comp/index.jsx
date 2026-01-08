@@ -5,13 +5,13 @@ import { PiHandsClappingDuotone } from "react-icons/pi";
 import { FaRegComment } from "react-icons/fa";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { IoBookmark } from "react-icons/io5";
-import { toast } from "react-toastify";
 import MoreComp from "./MoreComponent";
 import ShowLessComp from "./ShowLessComp";
 import { formatMonthAndDayShort } from "../../../../../utils/monthDateFormatter";
 import { UserContext } from "../../../../../context/userContext";
 import { useApi } from "../../../../../hooks/useApi";
 import noPreviewImg from "../../../../../assets/images/noPreviewImage.png";
+import { showToast } from "../../../../../utils/toaster";
 
 function BlogComp({ item }) {
   const { fetchRequest } = useApi();
@@ -45,13 +45,13 @@ function BlogComp({ item }) {
 
       if (response.status === 200) {
         setBlog({ ...blog, isBookmarked: false });
-        toast.info("Blog unsaved");
+        showToast("Blog unsaved");
       } else {
-        toast.error(result?.message || "Some error occured");
+        showToast(result?.message || "Some error occured", "error");
       }
     } catch (err) {
       console.error(err);
-      toast.error("Some error occured");
+      showToast("Some error occured", "error");
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
     }
   };
@@ -71,12 +71,12 @@ function BlogComp({ item }) {
 
       if (response.status === 200) {
         setBlog({ ...blog, isBookmarked: true });
-        toast.success("Blog saved");
+        showToast("Blog saved", "success");
       } else {
-        toast.error(result?.message || "Some error occured");
+        showToast(result?.message || "Some error occured", "error");
       }
     } catch (err) {
-      toast.error("Some error occured");
+      showToast("Some error occured", "error");
       console.error(err);
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
     }

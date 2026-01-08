@@ -11,8 +11,8 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import { useApi } from "../../../hooks/useApi";
-import { toast } from "react-toastify";
 import { formatMonthAndDayLong } from "../../../utils/monthDateLongFormatter";
+import { showToast } from "../../../utils/toaster";
 
 function CommentsComp({ blog, setBlog }) {
   const { fetchRequest } = useApi();
@@ -165,11 +165,11 @@ function CommentsComp({ blog, setBlog }) {
 
         // fetchComments();
       } else {
-        toast.error(response.message || "Something went wrong");
+        showToast(response.message || "Something went wrong", "error");
       }
     } catch (err) {
       setIsCommentLoader(false);
-      toast.error("Something went wrong");
+      showToast("Something went wrong", "error");
       console.error(err);
     }
   };
@@ -184,13 +184,13 @@ function CommentsComp({ blog, setBlog }) {
         setBlog((prev) => ({ ...prev, commentCount }));
         if (skip >= 0) setSkip((prev) => (prev > 0 ? prev - 1 : prev));
         // fetchComments();
-        toast.info("Comment deleted successfully");
+        showToast("Comment deleted successfully");
       } else {
         const result = await response.json();
-        toast.error(result.message || "Something went wrong");
+        showToast(result.message || "Something went wrong", "error");
       }
     } catch (err) {
-      toast.error("Something went wrong");
+      showToast("Something went wrong", "error");
       console.error("handleDeleteCommentBtnClick catch block: ", err);
     }
   };

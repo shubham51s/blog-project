@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { UserContext } from "../../../../context/userContext";
 import Select from "react-select";
-import { toast } from "react-toastify";
 import { useApi } from "../../../../hooks/useApi";
 import { urlBasePath } from "../../../../constants/constant";
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../../../../utils/toaster";
 
 function PreviewBlogComp({ blog, setBlog, pendingImages }) {
   const { fetchRequest } = useApi();
@@ -40,7 +40,7 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
 
   const handleChange = (selected) => {
     if (selected.length <= 5) setSelectedTopic(selected);
-    else toast.info("Select upto 5 topics!");
+    else showToast("Select upto 5 topics!");
   };
 
   const getAllTopics = async () => {
@@ -99,7 +99,7 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
         navigate("/");
       } else {
         const msg = result.message || "Something went wrong!";
-        toast.error(msg);
+        showToast(msg);
       }
     } catch (err) {
       console.log("publishBlog catch block: ", err);
@@ -113,13 +113,13 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
     if (blog.previewTitle.length <= 0) {
       const msg = "Please provide a preview title";
 
-      toast.warn(msg);
+      showToast(msg);
       return;
     }
 
     if (selectedTopic.length <= 0) {
       let msg = "Please select at least 1 topic";
-      toast.warn(msg);
+      showToast(msg);
       return;
     }
 

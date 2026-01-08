@@ -14,12 +14,12 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import { useApi } from "../../hooks/useApi";
-import { toast } from "react-toastify";
 import { urlBasePath } from "../../constants/constant";
 import { IoMdClose } from "react-icons/io";
 import infinity from "../../assets/images/infinity.png";
 import Select from "react-select";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { showToast } from "../../utils/toaster";
 
 function LoginSignupComp() {
   const { setIsShowLoginPopup, isLoginTabActive, setIsLoginTabActive, setIsUserLoggedIn, setUserInfo } = useContext(UserContext);
@@ -181,11 +181,11 @@ function LoginSignupComp() {
       if (response?.status === 200) {
         setIsTopicsTabActive(true);
       } else {
-        toast.error(result?.message || "Something went wrong");
+        showToast(result?.message || "Something went wrong", "error");
       }
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong");
+      showToast("Something went wrong", "error");
       setIsLoading(false);
     }
   };
@@ -217,11 +217,11 @@ function LoginSignupComp() {
         setIsShowLoginPopup(false);
       } else {
         const msg = result?.message || "Something went wrong!";
-        toast.error(msg);
+        showToast(msg, "error");
       }
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong");
+      showToast("Something went wrong", "error");
       setIsLoading(false);
     }
   };
@@ -241,7 +241,7 @@ function LoginSignupComp() {
 
   const handleTopicSelectionChange = (selected) => {
     if (selected.length <= 50) setSelectedTopic(selected);
-    else toast.info("Select upto 50 topics!");
+    else showToast("Select upto 50 topics!");
   };
 
   const handleCloseTopicsTab = () => {
@@ -278,7 +278,7 @@ function LoginSignupComp() {
         setIsUserLoggedIn(true);
         setIsShowLoginPopup(false);
       } else {
-        toast.error(result?.message || "Something went wrong");
+        showToast(result?.message || "Something went wrong", "error");
       }
     } catch (err) {
       console.error(err);

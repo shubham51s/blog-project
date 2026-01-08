@@ -4,8 +4,8 @@ import * as Popover from "@radix-ui/react-popover";
 import { RiMoreLine } from "react-icons/ri";
 import { MdModeEdit } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
-import { toast } from "react-toastify";
 import { useRequestHandler } from "../../../../../../hooks/requestHandler";
+import { showToast } from "../../../../../../utils/toaster";
 
 function MoreComp({ blog }) {
   const { requestHandler } = useRequestHandler();
@@ -29,14 +29,14 @@ function MoreComp({ blog }) {
 
       if (response?.status === 200) {
         setIsFollowing(true);
-        toast.success(`Success! You're now following ${blog.author.name}.`);
+        showToast(`Success! You're now following ${blog.author.name}.`, "success");
       } else {
-        toast.error(result?.message || "Some error occured");
+        showToast(result?.message || "Some error occured", "error");
       }
     } catch (err) {
       console.error(err);
       setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-      toast.error("Something went wrong");
+      showToast("Something went wrong", "error");
     }
   };
 
@@ -53,14 +53,14 @@ function MoreComp({ blog }) {
 
       if (response?.status === 200) {
         setIsFollowing(false);
-        toast.info(`You unfollowed ${blog.author.name}..`);
+        showToast(`You unfollowed ${blog.author.name}..`);
       } else {
-        toast.error(result?.message || "Some error occured");
+        showToast(result?.message || "Some error occured", "error");
       }
     } catch (err) {
       console.error(err);
       setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-      toast.error("Something went wrong");
+      showToast("Something went wrong", "error");
     }
   };
 

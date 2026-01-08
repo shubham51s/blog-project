@@ -9,13 +9,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import CommentsComp from "../../components/PostDetailsPageComponents/Comments comp";
 import BlogRecommendComp from "../../components/PostDetailsPageComponents/Blog Recommendation";
 import { useApi } from "../../hooks/useApi";
-import { toast } from "react-toastify";
 import { FaHandsClapping } from "react-icons/fa6";
 import MoreOptionsComp from "../../components/PostDetailsPageComponents/MoreOptionsComp";
 import { UserContext } from "../../context/userContext";
 import ShowClapsComp from "../../components/PostDetailsPageComponents/ShowLikes";
 import BlogDetailsSkeletonComp from "./skeleton";
 import BlogDetailsErrorComp from "./notFound";
+import { showToast } from "../../utils/toaster";
 
 function PostDetailsPage() {
   const { title, id } = useParams();
@@ -181,7 +181,7 @@ function PostDetailsPage() {
     } catch (err) {
       setIsAnyErr(true);
       console.error(err);
-      toast.error("Something went wrong!");
+      showToast("Something went wrong!", "error");
     }
   };
 
@@ -207,17 +207,17 @@ function PostDetailsPage() {
 
       if (response.status === 200) {
         setBlog({ ...blog, isBookmarked: false });
-        toast.info("Blog unsaved");
+        showToast("Blog unsaved");
       } else {
         if (response?.status === 500) {
-          toast.error("Some error occured");
+          showToast("Some error occured", "error");
         } else {
-          toast.error(result?.message || "Some error occured");
+          showToast(result?.message || "Some error occured", "error");
         }
       }
     } catch (err) {
       console.error(err);
-      toast.error("Some error occured");
+      showToast("Some error occured", "error");
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
     }
   };
@@ -237,16 +237,16 @@ function PostDetailsPage() {
 
       if (response.status === 200) {
         setBlog({ ...blog, isBookmarked: true });
-        toast.success("Blog saved");
+        showToast("Blog saved", "success");
       } else {
         if (response?.status === 500) {
-          toast.error("Some error occured");
+          showToast("Some error occured", "error");
         } else {
-          toast.error(result?.message || "Some error occured");
+          showToast(result?.message || "Some error occured", "error");
         }
       }
     } catch (err) {
-      toast.error("Some error occured");
+      showToast("Some error occured", "error");
       console.error(err);
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
     }
@@ -271,18 +271,18 @@ function PostDetailsPage() {
 
       if (response?.status === 200) {
         setBlog((prev) => ({ ...prev, author: { ...prev.author, isFollowing: true } }));
-        toast.success(`Success! You're now following ${blog.author.name}.`);
+        showToast(`Success! You're now following ${blog.author.name}.`, "success");
       } else {
         if (response?.status === 500) {
-          toast.error("Some error occured");
+          showToast("Some error occured", "error");
         } else {
-          toast.error(result?.message || "Some error occured");
+          showToast(result?.message || "Some error occured", "error");
         }
       }
     } catch (err) {
       console.error(err);
       setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-      toast.error("Something went wrong");
+      showToast("Something went wrong", "error");
     }
   };
 
@@ -299,18 +299,18 @@ function PostDetailsPage() {
 
       if (response?.status === 200) {
         setBlog((prev) => ({ ...prev, author: { ...prev.author, isFollowing: false } }));
-        toast.info(`You unfollowed ${blog.author.name}..`);
+        showToast(`You unfollowed ${blog.author.name}..`);
       } else {
         if (response?.status === 500) {
-          toast.error("Some error occured");
+          showToast("Some error occured", "error");
         } else {
-          toast.error(result?.message || "Some error occured");
+          showToast(result?.message || "Some error occured", "error");
         }
       }
     } catch (err) {
       console.error(err);
       setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-      toast.error("Something went wrong");
+      showToast("Something went wrong", "error");
     }
   };
 

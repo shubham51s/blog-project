@@ -5,6 +5,7 @@ import { LuCircleHelp } from "react-icons/lu";
 import { PiStarFourDuotone } from "react-icons/pi";
 import { UserContext } from "../../../../context/userContext";
 import { useApi } from "../../../../hooks/useApi";
+import { showToast } from "../../../../utils/toaster";
 
 function ProfileHeaderComp() {
   const { userInfo, isUserLoggedIn } = useContext(UserContext);
@@ -62,11 +63,11 @@ function ProfileHeaderComp() {
         window.location.reload();
       } else {
         const msg = "Something went wrong!";
-        toast.error(msg);
+        showToast(msg, "error");
       }
     } catch (err) {
       const msg = "Something went wrong!";
-      toast.error(msg);
+      showToast(msg, "error");
     }
   };
 

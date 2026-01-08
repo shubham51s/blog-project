@@ -4,10 +4,13 @@ import { Link, Outlet, useLocation, useOutletContext, useParams } from "react-ro
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import RightSectionComp from "../../../components/ProfileComp/RightSection";
 import Skeleton from "react-loading-skeleton";
+import * as Popover from "@radix-ui/react-popover";
+import { showToast } from "../../../utils/toaster";
 
 function ProfileCommonLayout() {
   const { user, isError } = useOutletContext();
   const { pathname } = useLocation();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const navOptions = [
     {
@@ -33,6 +36,16 @@ function ProfileCommonLayout() {
     if (id === 1) return pathname.includes("/lists");
 
     if (id === 2) return pathname.includes("/about");
+  };
+
+  const handleCopyProfileBtnClick = async () => {
+    try {
+      await navigator.clipboard.writeText("random text");
+      showToast("Link copied", "success");
+      setIsPopupOpen(false);
+    } catch (err) {
+      console.error("Failed to copy", err);
+    }
   };
 
   return (
@@ -66,13 +79,26 @@ function ProfileCommonLayout() {
                           </div>
                           <div className="margin-13 flex" style={{ marginRight: 0 }}>
                             {user && (
-                              <button className="cursor-pointer m-0 p-0 color16 opacity-[0.75] transition-all duration-100 linear hover:opacity-100">
-                                <div className="padding-23">
-                                  <div className="custom-h-2 aspect-square">
-                                    <MdOutlineMoreHoriz className="w-full h-full" />
+                              <Popover.Root open={isPopupOpen} onOpenChange={setIsPopupOpen}>
+                                <Popover.Trigger className="cursor-pointer m-0 p-0 color16 opacity-[0.75] transition-all duration-100 linear hover:opacity-100">
+                                  <div className="padding-23">
+                                    <div className="custom-h-2 aspect-square">
+                                      <MdOutlineMoreHoriz className="w-full h-full" />
+                                    </div>
                                   </div>
-                                </div>
-                              </button>
+                                </Popover.Trigger>
+                                <Popover.Content side="bottom" className="z-[700] box-border border-radius-3 box-shadow-4" align="middle" sideOffset={1}>
+                                  <div className="border-radius-3 custom-bg-8 overflow-hidden">
+                                    <ul className="flex flex-col items-stretch m-0 list-none px-0 custom-px-2">
+                                      <li className="custom-px-2 padding59 custom-fs-1 color-3 font-normal opacity-[0.85] transition-all duration-75 linear hover:opacity-100">
+                                        <button onClick={handleCopyProfileBtnClick} className="cursor-pointer m-0 p-0">
+                                          Copy link to profile
+                                        </button>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </Popover.Content>
+                              </Popover.Root>
                             )}
                           </div>
                         </div>

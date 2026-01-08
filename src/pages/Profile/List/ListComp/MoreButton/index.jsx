@@ -16,6 +16,7 @@ function MoreButton({ user }) {
   const [listName, setListName] = useState("");
   const [listDescription, setListDescription] = useState("");
   const [isListPrivate, setIsListPrivate] = useState(true);
+  const [isHideDescInput, setIsHideDescInp] = useState(true);
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModal(false);
@@ -39,7 +40,8 @@ function MoreButton({ user }) {
 
   const handleShowEditListModal = () => {
     setListName("default name");
-    setListDescription("default description");
+    setListDescription("");
+    setIsHideDescInp(true);
     setIsListPrivate(false);
 
     setIsEditListModal(true);
@@ -55,7 +57,7 @@ function MoreButton({ user }) {
                 <MdOutlineMoreHoriz className="w-full h-full" />
               </div>
             </Popover.Trigger>
-            <Popover.Content side="bottom" className="z-[98700] box-border border-radius-3 box-shadow-4" align="middle" sideOffset={1}>
+            <Popover.Content side="bottom" className="z-[700] box-border border-radius-3 box-shadow-4" align="middle" sideOffset={1}>
               <div className="custom-bg-8 border-radius-3 overflow-hidden">
                 {user._id === userInfo._id && (
                   <ul className="flex flex-col items-stretch custom-px-2 list-none m-0">
@@ -236,20 +238,27 @@ function MoreButton({ user }) {
                     </div>
 
                     <div className="padding-14" style={{ paddingTop: 0, paddingInline: 0 }}>
-                      <div className="height81 overflow-auto">
-                        <span className="color-3 custom-fs-1 line20 font-normal">
-                          <div className="w-full flex flex-col">
-                            <div className="custom-px-2 padding-28 bdr-5 border-radius-3 w-full flex bg-11">
-                              <textarea value={listDescription} onChange={(e) => setListDescription(e.target.value)} maxLength={listDescriptionMaxLength} type="text" className="p-0 grow shrink basis-0 outline-0 border-0 w-full m-0 bg-11 resize-none" placeholder="Description" />
+                      {!isHideDescInput && (
+                        <div className="height81 overflow-auto">
+                          <span className="color-3 custom-fs-1 line20 font-normal">
+                            <div className="w-full flex flex-col">
+                              <div className="custom-px-2 padding-28 bdr-5 border-radius-3 w-full flex bg-11">
+                                <textarea value={listDescription} onChange={(e) => setListDescription(e.target.value)} maxLength={listDescriptionMaxLength} type="text" className="p-0 grow shrink basis-0 outline-0 border-0 w-full m-0 bg-11 resize-none" placeholder="Description" />
+                              </div>
+                              <div className="margin-16 flex justify-end" style={{ marginBottom: 0, marginInline: 0 }}>
+                                <p className="font-4 color-4 line20 font-normal m-0">
+                                  <span className="color16">{listDescription.length}</span>/{listDescriptionMaxLength}
+                                </p>
+                              </div>
                             </div>
-                            <div className="margin-16 flex justify-end" style={{ marginBottom: 0, marginInline: 0 }}>
-                              <p className="font-4 color-4 line20 font-normal m-0">
-                                <span className="color16">{listDescription.length}</span>/{listDescriptionMaxLength}
-                              </p>
-                            </div>
-                          </div>
-                        </span>
-                      </div>
+                          </span>
+                        </div>
+                      )}
+                      {isHideDescInput && (
+                        <button onClick={() => setIsHideDescInp(false)} className="cursor-pointer m-0 p-0">
+                          <p className="text-[#1a8917] line-h-8 font-10 font-normal m-0">Add a description</p>
+                        </button>
+                      )}
                     </div>
 
                     <div>

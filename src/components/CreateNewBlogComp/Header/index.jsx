@@ -5,6 +5,7 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import * as Popover from "@radix-ui/react-popover";
 import { UserContext } from "../../../context/userContext";
 import { useApi } from "../../../hooks/useApi";
+import { showToast } from "../../../utils/toaster";
 
 function WriteBlogHeader({ blog, setBlog }) {
   const { userInfo, isUserLoggedIn } = useContext(UserContext);
@@ -60,11 +61,11 @@ function WriteBlogHeader({ blog, setBlog }) {
         window.location.reload();
       } else {
         const msg = "Something went wrong!";
-        toast.error(msg);
+        showToast(msg, "error");
       }
     } catch (err) {
       const msg = "Something went wrong!";
-      toast.error(msg);
+      showToast(msg, "error");
     }
   };
 

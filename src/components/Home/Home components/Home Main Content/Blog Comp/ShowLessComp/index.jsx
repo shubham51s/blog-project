@@ -3,7 +3,7 @@ import { CiCircleMinus } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { GoMute } from "react-icons/go";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
-import { toast } from "react-toastify";
+import { showToast } from "../../../../../../utils/toaster";
 
 function ShowLessComp({ isHideBlog, setIsHideBlog, blog }) {
   const [isShowModal, setIsShowModal] = useState(false);
@@ -31,11 +31,9 @@ function ShowLessComp({ isHideBlog, setIsHideBlog, blog }) {
 
   const handleMuteBtnClick = (type) => {
     if (type === "author") {
-      toast.info(`${blog.author.name} has been muted. You will no longer see their stories on your homepage or in your email digests`, {
-        position: "top-center",
-      });
+      showToast(`${blog.author.name} has been muted. You will no longer see their stories on your homepage or in your email digests`);
     } else if (type === "publication") {
-      toast.info(`${blog.community.name} has been muted. You will no longer see their stories on your homepage or in your email digests`);
+      showToast(`${blog.community.name} has been muted. You will no longer see their stories on your homepage or in your email digests`);
     }
 
     setIsShowModal(false);

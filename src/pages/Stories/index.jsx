@@ -3,8 +3,8 @@ import DraftContainer from "../../components/StoriesPageComp/DraftsContent";
 import PublishContainer from "../../components/StoriesPageComp/PublishedContent";
 import SubmissionContainer from "../../components/StoriesPageComp/SubmissionContent";
 import { useRequestHandler } from "../../hooks/requestHandler";
-import { toast } from "react-toastify";
 import { Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { showToast } from "../../utils/toaster";
 
 function StoriesPage() {
   const location = useLocation();
@@ -36,9 +36,9 @@ function StoriesPage() {
         setSubmissionsCount(submissions);
       } else {
         if (response?.status >= 500) {
-          toast.error("Some error occured");
+          showToast("Some error occured", "error");
         } else {
-          toast.error(result?.message || "Some error occured");
+          showToast(result?.message || "Some error occured", "error");
         }
       }
 
@@ -46,7 +46,7 @@ function StoriesPage() {
     } catch (err) {
       setIsInitialLoading(false);
       console.error(err);
-      toast.error("Some error occured");
+      showToast("Some error occured", "error");
     }
   };
 
