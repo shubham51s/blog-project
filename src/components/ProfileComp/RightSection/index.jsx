@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import FollowingComp from "./FollowingComp";
 import ListComp from "./ListComp";
 import { footerOptions } from "../../../constants/constant";
+import { IoIosArrowDown } from "react-icons/io";
 
 function RightSectionComp({ user }) {
+  const [isFollowing, setIsFollowing] = useState(true);
+  const [loaders, setLoaders] = useState({
+    isFollowLoader: false,
+  });
+
+  const handleUnfollowUser = async () => {
+    setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
+    try {
+      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+      setIsFollowing(false);
+    } catch (err) {
+      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+      console.error(err);
+    }
+  };
+
+  const handleFollowUser = async () => {
+    setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
+    try {
+      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+      setIsFollowing(true);
+    } catch (err) {
+      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+      console.error(err);
+    }
+  };
+
   return (
     <>
       {user && (
@@ -34,14 +62,35 @@ function RightSectionComp({ user }) {
                         </Link>
                       </span>
                     </div>
-                    <div className="margin-7" style={{ marginBottom: 0, marginInline: 0 }}></div>
-                    <div className="margin59 margin60">
+                    {/* for current user */}
+                    <div className="margin59 margin60 hidden">
                       <p className="text-[#1A8917] font-4 custom-line-h-1 font-medium m-0 p-0">
                         <Link to="/me/settings/account" className="cursor-pointer m-0 p-0 no-underline">
                           Edit profile
                         </Link>
                       </p>
                     </div>
+
+                    {/* for other user */}
+                    <div className="margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
+                      <p className="color-4 custom-fs-1 line20 font-normal m-0">
+                        <span className="break-all">I write about creativity, loving, language learning and psycho/spirituality. I’m a longtime painter and reader.</span>
+                      </p>
+                    </div>
+
+                    <div className="margin60 margin57 flex">
+                      {isFollowing && (
+                        <button onClick={handleUnfollowUser} disabled={loaders.isFollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex justify-center items-center cursor-pointer custom-bg-3">
+                          <span className="color-2 custom-fs-1 line20 font-normal flex items-center">Following</span>
+                        </button>
+                      )}
+                      {!isFollowing && (
+                        <button onClick={handleFollowUser} disabled={loaders.isFollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex justify-center items-center cursor-pointer custom-bg-3">
+                          <span className="color-2 custom-fs-1 line20 font-normal flex items-center">Follow</span>
+                        </button>
+                      )}
+                    </div>
+
                     <div className="relative">
                       <span className="font-10 font-medium color-3 custom-line-h-1">Following</span>
                       <ul className="margin-21 p-0 list-none" style={{ marginInline: 0 }}>

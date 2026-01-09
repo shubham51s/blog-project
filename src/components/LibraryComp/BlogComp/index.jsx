@@ -5,12 +5,12 @@ import { PiHandsClappingDuotone } from "react-icons/pi";
 import { FaRegComment } from "react-icons/fa";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { IoBookmark } from "react-icons/io5";
-import { toast } from "react-toastify";
 import MoreComp from "./MoreComp";
 import { formatMonthAndDayShort } from "../../../utils/monthDateFormatter";
 import { UserContext } from "../../../context/userContext";
 import { useApi } from "../../../hooks/useApi";
 import noPreviewImg from "../../../assets/images/noPreviewImage.png";
+import { showToast } from "../../../utils/toaster";
 
 function BlogComp({ item, handleRemoveBookmarkedBlog, bookmarkId }) {
   const { fetchRequest } = useApi();
@@ -45,11 +45,11 @@ function BlogComp({ item, handleRemoveBookmarkedBlog, bookmarkId }) {
         setBlog({ ...blog, isBookmarked: false });
         handleRemoveBookmarkedBlog(bookmarkId);
       } else {
-        toast.error(result?.message || "Some error occured");
+        showToast(result?.message || "Some error occured", "error");
       }
     } catch (err) {
       console.error(err);
-      toast.error("Some error occured");
+      showToast("Some error occured", "error");
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
     }
   };
