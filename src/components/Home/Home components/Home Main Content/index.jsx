@@ -40,9 +40,22 @@ function HomeMainContentComp() {
   ]);
 
   const [blogs, setBlogs] = useState([]);
+  const [list, setList] = useState([
+    { _id: 0, name: "Reading list", isPublic: true, isDefault: true },
+    { _id: 1, name: "Development", isPublic: true, isDefault: false },
+    { _id: 2, name: "Reading list", isPublic: false, isDefault: false },
+    { _id: 3, name: "Reading list", isPublic: true, isDefault: false },
+    { _id: 4, name: "Reading list", isPublic: true, isDefault: false },
+    { _id: 5, name: "Reading list", isPublic: true, isDefault: false },
+    { _id: 6, name: "Reading list", isPublic: false, isDefault: false },
+    { _id: 7, name: "Reading list", isPublic: false, isDefault: false },
+    { _id: 8, name: "Reading list", isPublic: true, isDefault: false },
+    { _id: 9, name: "Reading list", isPublic: true, isDefault: false },
+  ]);
   const [activeTopicIndex, setActiveTopicIndex] = useState(0);
   const [loaders, setLoaders] = useState({
     blogsLoader: true,
+    listLoader: false,
   });
 
   const handleActiveTabChange = (index) => {
@@ -119,9 +132,9 @@ function HomeMainContentComp() {
 
         {/* section-4 */}
         <div>
-          {(initialLoader || loaders.blogsLoader) && blogs.length > 0 && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
-          {!initialLoader && !loaders.blogsLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-          {!initialLoader && !loaders.blogsLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
+          {(initialLoader || loaders.blogsLoader || loaders.listLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
+          {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
+          {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} list={list} setList={setList} key={item._id} />)}
         </div>
       </div>
     </main>

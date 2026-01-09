@@ -3,94 +3,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { PiStarFourLight } from "react-icons/pi";
 import { PiHandsClappingDuotone } from "react-icons/pi";
 import { FaRegComment } from "react-icons/fa";
-import { CiBookmarkPlus } from "react-icons/ci";
-import { IoBookmark } from "react-icons/io5";
 import MoreComp from "./MoreComponent";
 import ShowLessComp from "./ShowLessComp";
 import { formatMonthAndDayShort } from "../../../../../utils/monthDateFormatter";
 import { UserContext } from "../../../../../context/userContext";
-import { useApi } from "../../../../../hooks/useApi";
 import noPreviewImg from "../../../../../assets/images/noPreviewImage.png";
-import { showToast } from "../../../../../utils/toaster";
+import Bookmark from "./Bookmark";
 
-function BlogComp({ item }) {
-  const { fetchRequest } = useApi();
+function BlogComp({ item, list, setList }) {
   const { userInfo } = useContext(UserContext);
 
   const navigate = useNavigate();
   const isMyBlog = userInfo._id === item.author._id;
   const [blog, setBlog] = useState({ ...item, isMyBlog });
   const [isHideBlog, setIsHideBlog] = useState(false);
-  const [loaders, setLoaders] = useState({
-    isBookmarkLoader: false,
-  });
 
   const handleUserProfileClick = () => {
     navigate("/");
-  };
-
-  const deleteBookmark = async () => {
-    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
-
-    try {
-      const params = {
-        blog: blog._id,
-      };
-
-      const response = await fetchRequest("/bookmarks/delete", "POST", params);
-
-      const result = await response.json();
-
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-
-      if (response.status === 200) {
-        setBlog({ ...blog, isBookmarked: false });
-        showToast("Blog unsaved");
-      } else {
-        showToast(result?.message || "Some error occured", "error");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured", "error");
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-    }
-  };
-
-  const addBookmark = async () => {
-    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
-
-    try {
-      const params = {
-        blog: blog._id,
-      };
-
-      const response = await fetchRequest("/bookmarks", "POST", params);
-
-      const result = await response.json();
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-
-      if (response.status === 200) {
-        setBlog({ ...blog, isBookmarked: true });
-        showToast("Blog saved", "success");
-      } else {
-        showToast(result?.message || "Some error occured", "error");
-      }
-    } catch (err) {
-      showToast("Some error occured", "error");
-      console.error(err);
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-    }
-  };
-
-  const handleBookmarkBlogBtnClick = (e) => {
-    if (loaders.isBookmarkLoader) return;
-
-    e.stopPropagation();
-    if (blog.isBookmarked) {
-      deleteBookmark();
-    } else {
-      addBookmark();
-    }
   };
 
   const handleShowDetailedBlog = () => {
@@ -187,14 +116,7 @@ function BlogComp({ item }) {
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
                                     {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
                                     <div>
-                                      <div className="inline-block">
-                                        <button onClick={(e) => handleBookmarkBlogBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
-                                          <div className="width-13 aspect-square">
-                                            {!blog?.isBookmarked && <CiBookmarkPlus className="w-full h-full align-middle" />}
-                                            {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />}
-                                          </div>
-                                        </button>
-                                      </div>
+                                      <Bookmark item={blog} list={list} setList={setList} />
                                     </div>
                                     <MoreComp blog={blog} />
                                   </div>
