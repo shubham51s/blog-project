@@ -3,6 +3,7 @@ import { useRequestHandler } from "../../../../../../hooks/requestHandler";
 import { showToast } from "../../../../../../utils/toaster";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { IoBookmark } from "react-icons/io5";
+import * as Popover from "@radix-ui/react-popover";
 
 function Bookmark({ item, list, setList }) {
   const { requestHandler } = useRequestHandler();
@@ -77,12 +78,33 @@ function Bookmark({ item, list, setList }) {
 
   return (
     <div className="inline-block">
-      <button onClick={(e) => handleBookmarkBlogBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
+      {/* <button onClick={(e) => handleBookmarkBlogBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
         <div className="width-13 aspect-square">
           {!blog?.isBookmarked && <CiBookmarkPlus className="w-full h-full align-middle" />}
           {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />}
         </div>
-      </button>
+      </button> */}
+
+      {/* {!blog?.isBookmarked && ( */}
+
+      <Popover.Root>
+        <Popover.Trigger className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
+          <div className="width-13 aspect-square">
+            <CiBookmarkPlus className="w-full h-full align-middle" />
+            {/* {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />} */}
+          </div>
+        </Popover.Trigger>
+        <Popover.Content side="bottom" className="z-[700] box-shadow-4 border-radius-3 box-border" onClick={(e) => e.stopPropagation()} align="middle" sideOffset={1}>
+          <div className="border-radius-3 custom-bg-8 overflow-hidden">
+            <div className="width82">
+              {/* working */}
+              <div className=""></div>
+              {/* bottom create new list */}
+              <div className=""></div>
+            </div>
+          </div>
+        </Popover.Content>
+      </Popover.Root>
     </div>
   );
 }
