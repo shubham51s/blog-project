@@ -10,9 +10,8 @@ import { UserContext } from "../../../../../context/userContext";
 import noPreviewImg from "../../../../../assets/images/noPreviewImage.png";
 import Bookmark from "./Bookmark";
 
-function BlogComp({ item, list, setList }) {
+function BlogComp({ item, lists, showCreateListModal }) {
   const { userInfo } = useContext(UserContext);
-
   const navigate = useNavigate();
   const isMyBlog = userInfo._id === item.author._id;
   const [blog, setBlog] = useState({ ...item, isMyBlog });
@@ -32,10 +31,10 @@ function BlogComp({ item, list, setList }) {
       <div className="flex justify-center">
         <div className="w-full max-width-2 margin-2 min-w-0">
           <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
-            <article onClick={() => handleShowDetailedBlog()}>
+            <article>
               <div className="box-content">
                 <div className="w-full h-full">
-                  <div className="flex relative">
+                  <div onClick={() => handleShowDetailedBlog()} className="flex relative">
                     <div className="w-full">
                       {/* writer section */}
                       <div className="flex w-full">
@@ -116,7 +115,7 @@ function BlogComp({ item, list, setList }) {
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
                                     {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
                                     <div>
-                                      <Bookmark item={blog} list={list} setList={setList} />
+                                      <Bookmark item={blog} lists={lists} showCreateListModal={showCreateListModal} />
                                     </div>
                                     <MoreComp blog={blog} />
                                   </div>

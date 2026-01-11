@@ -6,14 +6,17 @@ import { GrFormPrevious } from "react-icons/gr";
 import NoContentComp from "./No Content";
 import BlogComp from "./Blog Comp";
 import { UserContext } from "../../../../context/userContext";
-import { useApi } from "../../../../hooks/useApi";
 import BlogLoader from "./Blog Comp/skeleton";
+import { useRequestHandler } from "../../../../hooks/requestHandler";
+import CreateNewListModal from "../../../List/CreateList";
+import { showToast } from "../../../../utils/toaster";
 
 function HomeMainContentComp() {
   const { userInfo } = useContext(UserContext);
-  const { fetchRequest } = useApi();
+  const { requestHandler } = useRequestHandler();
   const [initialLoader, setInitialLoader] = useState(true);
   const loaderTimeout = useRef(null);
+  const [blogToSave, setBlogToSave] = useState({});
   const [recommendedTopics, setRecommendedTopics] = useState([
     {
       id: 0,
@@ -40,23 +43,14 @@ function HomeMainContentComp() {
   ]);
 
   const [blogs, setBlogs] = useState([]);
-  const [list, setList] = useState([
-    { _id: 0, name: "Reading list", isPublic: true, isDefault: true },
-    { _id: 1, name: "Development", isPublic: true, isDefault: false },
-    { _id: 2, name: "Reading list", isPublic: false, isDefault: false },
-    { _id: 3, name: "Reading list", isPublic: true, isDefault: false },
-    { _id: 4, name: "Reading list", isPublic: true, isDefault: false },
-    { _id: 5, name: "Reading list", isPublic: true, isDefault: false },
-    { _id: 6, name: "Reading list", isPublic: false, isDefault: false },
-    { _id: 7, name: "Reading list", isPublic: false, isDefault: false },
-    { _id: 8, name: "Reading list", isPublic: true, isDefault: false },
-    { _id: 9, name: "Reading list", isPublic: true, isDefault: false },
-  ]);
+  const [lists, setLists] = useState([]);
   const [activeTopicIndex, setActiveTopicIndex] = useState(0);
   const [loaders, setLoaders] = useState({
     blogsLoader: true,
     listLoader: false,
   });
+  const [isCreateListModal, setIsCreateListModal] = useState(false);
+  const [isCreateListLoader, setIsCreateListLoader] = useState(false);
 
   const handleActiveTabChange = (index) => {
     if (index === activeTopicIndex) return;
@@ -65,7 +59,7 @@ function HomeMainContentComp() {
 
   const fetchBlogs = async () => {
     try {
-      const response = await fetchRequest("/blogs", "GET");
+      const response = await requestHandler("/blogs");
       const result = await response.json();
 
       if (loaders.blogsLoader) setLoaders((prev) => ({ ...prev, blogsLoader: false }));
@@ -79,8 +73,53 @@ function HomeMainContentComp() {
     }
   };
 
+  const fetchUserLists = async () => {
+    setLoaders((prev) => ({ ...prev, listLoader: true }));
+    try {
+      const response = await requestHandler("/list");
+
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        setLists(result?.data?.lists || []);
+      }
+      setLoaders((prev) => ({ ...prev, listLoader: false }));
+    } catch (err) {
+      console.error(err);
+      setLoaders((prev) => ({ ...prev, listLoader: false }));
+    }
+  };
+
+  const showCreateListModal = (data) => {
+    setBlogToSave(data);
+    setIsCreateListModal(true);
+  };
+
+  const createNewUserList = async (params) => {
+    setIsCreateListLoader(true);
+    try {
+      const response = await requestHandler("/list/create", "POST", params);
+
+      const result = await response.json();
+
+      if (response?.status === 201) {
+        setLists((prev) => [...prev, { ...result?.data?.list }]);
+      } else {
+        showToast("Some error occured");
+      }
+      setIsCreateListLoader(false);
+      setIsCreateListModal(false);
+    } catch (err) {
+      console.error(err);
+      setIsCreateListLoader(false);
+      setIsCreateListModal(false);
+      showToast("Some error occured");
+    }
+  };
+
   useEffect(() => {
     fetchBlogs();
+    fetchUserLists();
 
     if (loaderTimeout.current) clearTimeout(loaderTimeout.current);
     // minimum loader time
@@ -91,53 +130,56 @@ function HomeMainContentComp() {
 
   return (
     // <main className="width-20 h-full overflow-y-auto grow flex-shrink basis-auto block">
-    <main className="width-20 h-full overflow-y-auto invisible-scrollbar grow flex-shrink basis-auto block">
-      <div className="block">
-        {/* section-1 */}
-        <div className="height-10"></div>
+    <>
+      <main className="width-20 h-full overflow-y-auto invisible-scrollbar grow flex-shrink basis-auto block">
+        <div className="block">
+          {/* section-1 */}
+          <div className="height-10"></div>
 
-        {/* section-2 */}
-        {/* <div className="sticky top-2 z-[499] custom-bg-8"> */}
-        <div className="custom-bg-8">
-          <div className="flex justify-center">
-            <div className="w-full max-width-2 my-0 margin-12 min-w-0">
-              <div className="padding-18 pb-0">
-                <div className="box-shadow-2 overflow-hidden relative">
-                  <div className="flex padding-18 w-full">
-                    <div className="flex items-center scrollbar-none overflow-y-hidden overflow-x-auto bdr-5 w-full" style={{ borderTop: 0, borderInline: 0 }}>
-                      {/* active topic border & all pending */}
-                      {recommendedTopics.map((item) => (
-                        <div className={`margin-21 min-w-max padding-18 pt-0 bdr-6`} key={item.id} title={item.title} style={{ marginBlock: 0, marginLeft: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: activeTopicIndex == item.id ? "" : "transparent" }}>
-                          <div className="inline-block outline-none">
-                            <div className="p-0 m-0 cursor-pointer no-underline">
-                              <div className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-300 ease-in-out hover:opacity-100 ${activeTopicIndex == item.id ? "opacity-100" : "opacity-75"}`}>
-                                <button onClick={() => handleActiveTabChange(item.id)} disabled={loaders.blogsLoader || initialLoader} className="whitespace-nowrap border-0 p-0 m-0 bg-transparent cursor-pointer">
-                                  {item.name}
-                                </button>
+          {/* section-2 */}
+          {/* <div className="sticky top-2 z-[499] custom-bg-8"> */}
+          <div className="custom-bg-8">
+            <div className="flex justify-center">
+              <div className="w-full max-width-2 my-0 margin-12 min-w-0">
+                <div className="padding-18 pb-0">
+                  <div className="box-shadow-2 overflow-hidden relative">
+                    <div className="flex padding-18 w-full">
+                      <div className="flex items-center scrollbar-none overflow-y-hidden overflow-x-auto bdr-5 w-full" style={{ borderTop: 0, borderInline: 0 }}>
+                        {/* active topic border & all pending */}
+                        {recommendedTopics.map((item) => (
+                          <div className={`margin-21 min-w-max padding-18 pt-0 bdr-6`} key={item.id} title={item.title} style={{ marginBlock: 0, marginLeft: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: activeTopicIndex == item.id ? "" : "transparent" }}>
+                            <div className="inline-block outline-none">
+                              <div className="p-0 m-0 cursor-pointer no-underline">
+                                <div className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-300 ease-in-out hover:opacity-100 ${activeTopicIndex == item.id ? "opacity-100" : "opacity-75"}`}>
+                                  <button onClick={() => handleActiveTabChange(item.id)} disabled={loaders.blogsLoader || initialLoader} className="whitespace-nowrap border-0 p-0 m-0 bg-transparent cursor-pointer">
+                                    {item.name}
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* section-3 */}
-        {/* <div className="height-16"></div> */}
+          {/* section-3 */}
+          {/* <div className="height-16"></div> */}
 
-        {/* section-4 */}
-        <div>
-          {(initialLoader || loaders.blogsLoader || loaders.listLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
-          {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-          {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} list={list} setList={setList} key={item._id} />)}
+          {/* section-4 */}
+          <div>
+            {(initialLoader || loaders.blogsLoader || loaders.listLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
+            {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
+            {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} lists={lists} showCreateListModal={showCreateListModal} key={item._id} />)}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+      <CreateNewListModal isCreateListModal={isCreateListModal} setIsCreateListModal={setIsCreateListModal} isCreateListLoader={isCreateListLoader} createNewUserList={createNewUserList} blogToSave={blogToSave} />
+    </>
   );
 }
 

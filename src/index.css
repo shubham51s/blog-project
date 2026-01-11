@@ -865,6 +865,10 @@ img {
     max-height: 170px;
   }
 
+  .height82 {
+    max-height: 240px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -1404,6 +1408,10 @@ img {
     width: 300px;
   }
 
+  .width83 {
+    width: 13px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -1723,6 +1731,22 @@ img {
 
   .padding79 {
     padding-block: 60px;
+  }
+
+  .padding80 {
+    padding-top: 24px;
+  }
+
+  .padding81 {
+    padding-right: 20px;
+  }
+
+  .padding82 {
+    padding-left: 24px;
+  }
+
+  .padding83 {
+    padding-bottom: 24px
   }
 
   .margin-3 {

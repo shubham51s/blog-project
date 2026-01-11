@@ -4,91 +4,26 @@ import { showToast } from "../../../../../../utils/toaster";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { IoBookmark } from "react-icons/io5";
 import * as Popover from "@radix-ui/react-popover";
+import ListItem from "./ListItem";
 
-function Bookmark({ item, list, setList }) {
+function Bookmark({ item, lists, showCreateListModal }) {
   const { requestHandler } = useRequestHandler();
   const [blog, setBlog] = useState({ ...item });
+  const [isShow, setIsShow] = useState(false);
   const [loaders, setLoaders] = useState({
-    isBookmarkLoader: false,
+    isDefaultBookmarkLoader: true,
   });
 
-  const deleteBookmark = async () => {
-    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
-
-    try {
-      const params = {
-        blog: blog._id,
-      };
-
-      const response = await requestHandler("/bookmarks/delete", "POST", params);
-
-      const result = await response.json();
-
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-
-      if (response.status === 200) {
-        setBlog({ ...blog, isBookmarked: false });
-        showToast("Blog unsaved");
-      } else {
-        showToast(result?.message || "Some error occured", "error");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured", "error");
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-    }
-  };
-
-  const addBookmark = async () => {
-    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
-
-    try {
-      const params = {
-        blog: blog._id,
-      };
-
-      const response = await requestHandler("/bookmarks", "POST", params);
-
-      const result = await response.json();
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-
-      if (response.status === 200) {
-        setBlog({ ...blog, isBookmarked: true });
-        showToast("Blog saved");
-      } else {
-        showToast(result?.message || "Some error occured", "error");
-      }
-    } catch (err) {
-      showToast("Some error occured", "error");
-      console.error(err);
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-    }
-  };
-
-  const handleBookmarkBlogBtnClick = (e) => {
-    if (loaders.isBookmarkLoader) return;
-
-    e.stopPropagation();
-    if (blog.isBookmarked) {
-      deleteBookmark();
-    } else {
-      addBookmark();
-    }
+  const handleCreateNewBlogBtnClick = () => {
+    showCreateListModal({ id: blog._id });
   };
 
   return (
     <div className="inline-block">
-      {/* <button onClick={(e) => handleBookmarkBlogBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
-        <div className="width-13 aspect-square">
-          {!blog?.isBookmarked && <CiBookmarkPlus className="w-full h-full align-middle" />}
-          {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />}
-        </div>
-      </button> */}
-
       {/* {!blog?.isBookmarked && ( */}
 
-      <Popover.Root>
-        <Popover.Trigger className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
+      <Popover.Root open={isShow} onOpenChange={setIsShow}>
+        <Popover.Trigger onClick={(e) => e.stopPropagation()} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
           <div className="width-13 aspect-square">
             <CiBookmarkPlus className="w-full h-full align-middle" />
             {/* {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />} */}
@@ -97,10 +32,22 @@ function Bookmark({ item, list, setList }) {
         <Popover.Content side="bottom" className="z-[700] box-shadow-4 border-radius-3 box-border" onClick={(e) => e.stopPropagation()} align="middle" sideOffset={1}>
           <div className="border-radius-3 custom-bg-8 overflow-hidden">
             <div className="width82">
-              {/* working */}
-              <div className=""></div>
+              <div className="padding-16 padding80 padding81 padding82 height82 overflow-y-auto">
+                <div>
+                  {lists.map((item) => (
+                    <ListItem list={item} blog={blog} setBlog={setBlog} setIsShow={setIsShow} key={item._id} />
+                  ))}
+                </div>
+              </div>
+
               {/* bottom create new list */}
-              <div className=""></div>
+              <div className="padding63 padding75 padding83 padding82 bdr-5" style={{ borderBottom: 0, borderInline: 0 }}>
+                <p className="text-[#1a8917] line-h-8 font-10 font-normal m-0">
+                  <button onClick={handleCreateNewBlogBtnClick} className="cursor-pointer m-0 p-0">
+                    Create new list
+                  </button>
+                </p>
+              </div>
             </div>
           </div>
         </Popover.Content>
