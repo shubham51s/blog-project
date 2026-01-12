@@ -25,8 +25,8 @@ function Bookmark({ item, lists, showCreateListModal }) {
       <Popover.Root open={isShow} onOpenChange={setIsShow}>
         <Popover.Trigger onClick={(e) => e.stopPropagation()} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
           <div className="width-13 aspect-square">
-            <CiBookmarkPlus className="w-full h-full align-middle" />
-            {/* {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />} */}
+            {!blog.lists.length > 0 && <CiBookmarkPlus className="w-full h-full align-middle" />}
+            {blog.lists.length > 0 && <IoBookmark className="w-full h-full align-middle" />}
           </div>
         </Popover.Trigger>
         <Popover.Content side="bottom" className="z-[700] box-shadow-4 border-radius-3 box-border" onClick={(e) => e.stopPropagation()} align="middle" sideOffset={1}>
@@ -35,7 +35,7 @@ function Bookmark({ item, lists, showCreateListModal }) {
               <div className="padding-16 padding80 padding81 padding82 height82 overflow-y-auto">
                 <div>
                   {lists.map((item) => (
-                    <ListItem list={item} blog={blog} setBlog={setBlog} setIsShow={setIsShow} key={item._id} />
+                    <ListItem list={item} blog={blog} setBlog={setBlog} key={item._id} />
                   ))}
                 </div>
               </div>

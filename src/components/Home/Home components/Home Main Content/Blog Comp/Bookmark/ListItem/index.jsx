@@ -4,9 +4,9 @@ import { IoLockClosedSharp } from "react-icons/io5";
 import { useRequestHandler } from "../../../../../../../hooks/requestHandler";
 import { showToast } from "../../../../../../../utils/toaster";
 
-function ListItem({ list, blog, setBlog, setIsShow }) {
+function ListItem({ list, blog, setBlog }) {
   const { requestHandler } = useRequestHandler();
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(blog.lists.includes(list._id));
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRemoveBlogFromList = async () => {
@@ -14,15 +14,14 @@ function ListItem({ list, blog, setBlog, setIsShow }) {
     try {
       const params = {
         blog: blog._id,
+        list: list._id,
       };
 
-      const response = await requestHandler("/bookmarks/delete", "POST", params);
+      const response = await requestHandler("/list/items/delete", "POST", params);
 
-      const result = await response.json();
-
-      if (response.status === 200) {
+      if (response.status === 204) {
         showToast("Blog unsaved");
-        setIsShow(false);
+        setIsChecked(false);
       } else {
         showToast("Some error occured", "error");
       }
@@ -47,9 +46,11 @@ function ListItem({ list, blog, setBlog, setIsShow }) {
 
       const result = await response.json();
 
+      console.log("result: ", result);
+
       if (response.status === 201) {
         showToast("Blog saved");
-        setIsShow(false);
+        setIsChecked(true);
       } else {
         showToast("Some error occured", "error");
       }
@@ -63,9 +64,13 @@ function ListItem({ list, blog, setBlog, setIsShow }) {
   };
 
   const handleToggleBookmark = (val) => {
-    setIsChecked(val);
+    console.log("val: ", val);
 
-    if (val) handleAddBlogToList();
+    if (val) {
+      handleAddBlogToList();
+    } else {
+      handleRemoveBlogFromList();
+    }
   };
 
   return (
