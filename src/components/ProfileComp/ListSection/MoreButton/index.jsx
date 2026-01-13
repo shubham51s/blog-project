@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
-import { UserContext } from "../../../../../context/userContext";
 import { Dialog } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import Checkbox from "@mui/material/Checkbox";
+import { UserContext } from "../../../../context/userContext";
 
 function MoreButton({ user }) {
   const listNameMaxLength = 60;

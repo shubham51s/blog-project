@@ -1,6 +1,6 @@
 import React from "react";
-import ListComp from "./ListComp";
 import { useOutletContext } from "react-router-dom";
+import ListComp from "../../../components/ProfileComp/ListSection";
 
 function List() {
   const { user } = useOutletContext();
