@@ -3,7 +3,7 @@ import { Dialog } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import Checkbox from "@mui/material/Checkbox";
 
-function CreateNewListModal({ isCreateListModal, setIsCreateListModal, isCreateListLoader, createNewUserList, blogToSave }) {
+function CreateNewListModal({ isCreateListModal, setIsCreateListModal, isCreateListLoader, createNewUserList }) {
   const listNameMaxLength = 60;
   const listDescriptionMaxLength = 280;
   const [listName, setListName] = useState("");

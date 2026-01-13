@@ -103,7 +103,8 @@ function HomeMainContentComp() {
       const result = await response.json();
 
       if (response?.status === 201) {
-        setLists((prev) => [...prev, { ...result?.data?.list }]);
+        // add new created list exactly after the default list
+        if (result?.data?.list) setLists((prev) => [prev[0], { ...result.data.list }, ...prev.slice(1)]);
       } else {
         showToast("Some error occured");
       }
@@ -178,7 +179,7 @@ function HomeMainContentComp() {
           </div>
         </div>
       </main>
-      <CreateNewListModal isCreateListModal={isCreateListModal} setIsCreateListModal={setIsCreateListModal} isCreateListLoader={isCreateListLoader} createNewUserList={createNewUserList} blogToSave={blogToSave} />
+      <CreateNewListModal isCreateListModal={isCreateListModal} setIsCreateListModal={setIsCreateListModal} isCreateListLoader={isCreateListLoader} createNewUserList={createNewUserList} />
     </>
   );
 }

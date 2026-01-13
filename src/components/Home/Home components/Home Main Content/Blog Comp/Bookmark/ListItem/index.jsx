@@ -20,7 +20,8 @@ function ListItem({ list, blog, setBlog }) {
       const response = await requestHandler("/list/items/delete", "POST", params);
 
       if (response.status === 204) {
-        showToast("Blog unsaved");
+        const updatedList = blog.lists.filter((item) => item !== list._id);
+        setBlog((prev) => ({ ...prev, lists: updatedList }));
         setIsChecked(false);
       } else {
         showToast("Some error occured", "error");
@@ -46,10 +47,10 @@ function ListItem({ list, blog, setBlog }) {
 
       const result = await response.json();
 
-      console.log("result: ", result);
-
-      if (response.status === 201) {
-        showToast("Blog saved");
+      if (response?.status === 201) {
+        if (result?.data?.listItem) {
+          setBlog((prev) => ({ ...prev, lists: [...prev.lists, result.data.listItem.list] }));
+        }
         setIsChecked(true);
       } else {
         showToast("Some error occured", "error");
@@ -64,8 +65,6 @@ function ListItem({ list, blog, setBlog }) {
   };
 
   const handleToggleBookmark = (val) => {
-    console.log("val: ", val);
-
     if (val) {
       handleAddBlogToList();
     } else {

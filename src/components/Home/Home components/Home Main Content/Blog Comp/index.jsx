@@ -16,9 +16,10 @@ function BlogComp({ item, lists, showCreateListModal }) {
   const isMyBlog = userInfo._id === item.author._id;
   const [blog, setBlog] = useState({ ...item, isMyBlog });
   const [isHideBlog, setIsHideBlog] = useState(false);
+  const [isBookmarkPopup, setIsBookmarkPopup] = useState(false);
 
   const handleUserProfileClick = () => {
-    navigate("/");
+    // navigate("/");
   };
 
   const handleShowDetailedBlog = () => {
@@ -34,7 +35,7 @@ function BlogComp({ item, lists, showCreateListModal }) {
             <article>
               <div className="box-content">
                 <div className="w-full h-full">
-                  <div onClick={() => handleShowDetailedBlog()} className="flex relative">
+                  <div onClick={() => handleShowDetailedBlog()} className={`flex relative ${isBookmarkPopup ? "cursor-default" : "cursor-pointer"}`}>
                     <div className="w-full">
                       {/* writer section */}
                       <div className="flex w-full">
@@ -63,7 +64,7 @@ function BlogComp({ item, lists, showCreateListModal }) {
                         {/* left section */}
                         <div className="grow shrink basis-auto" style={{ wordBreak: "break-word" }}>
                           <div>
-                            <div className="flex flex-col static cursor-pointer">
+                            <div className="flex flex-col static">
                               <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.previewTitle}</h2>
                               <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
                                 {blog.previewSubtitle && <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.previewSubtitle}</h3>}
@@ -72,13 +73,13 @@ function BlogComp({ item, lists, showCreateListModal }) {
                           </div>
 
                           <div>
-                            <div className="w-full padding-25 cursor-pointer" style={{ paddingBottom: 0, paddingInline: 0 }}>
+                            <div className="w-full padding-25" style={{ paddingBottom: 0, paddingInline: 0 }}>
                               <span className="font-4 color-4 custom-line-h-1 font-normal">
                                 <div className="height-50 flex justify-between items-center">
                                   <div className="flex items-center custom-gap-2 align-middle text-center">
                                     <div className="box-content flex">
                                       <div className="inline-block">
-                                        <button className="z-[2] relative border-none cursor-pointer p-0 m-0 bg-transparent" title="Member-only story">
+                                        <button className="z-[2] relative border-none p-0 m-0 bg-transparent" title="Member-only story">
                                           <div className="inline-block width-19 aspect-square">
                                             <PiStarFourLight className="w-full h-full align-middle text-yellow-600" />
                                           </div>
@@ -115,7 +116,7 @@ function BlogComp({ item, lists, showCreateListModal }) {
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
                                     {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
                                     <div>
-                                      <Bookmark item={blog} lists={lists} showCreateListModal={showCreateListModal} />
+                                      <Bookmark item={blog} lists={lists} showCreateListModal={showCreateListModal} isBookmarkPopup={isBookmarkPopup} setIsBookmarkPopup={setIsBookmarkPopup} />
                                     </div>
                                     <MoreComp blog={blog} />
                                   </div>
@@ -125,7 +126,7 @@ function BlogComp({ item, lists, showCreateListModal }) {
                           </div>
                         </div>
 
-                        <div className="margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
+                        <div className="margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
                           {blog.previewImg && <img src={blog.previewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
                           {!blog.previewImg && <img src={noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
                         </div>
