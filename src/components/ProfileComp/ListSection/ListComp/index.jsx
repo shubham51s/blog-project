@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoLockClosed } from "react-icons/io5";
 import MoreButton from "./MoreButton";
 
-function ListComp({ user }) {
+function ListComp({ user, item }) {
+  const [list, setList] = useState(item);
+
   return (
     <div className="relative w-full width55 z-0 flex justify-between margin57 bdr-5 border-radius-3 bg-10">
       {/* <Link to="" className=""></Link> */}
@@ -22,18 +24,20 @@ function ListComp({ user }) {
           </div>
         </Link>
         <div className="margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
-          <h2 className="height-61 line-h-8 font-3 overflow-hidden line-clamp-2 font-bold text-ellipsis color-3 m-0">Reading list</h2>
+          <h2 className="height-61 line-h-8 font-3 overflow-hidden line-clamp-2 font-bold text-ellipsis color-3 m-0">{list.name}</h2>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex margin-6 items-center">
-            <p className="font-4 color-4 line20 font-normal m-0">14 stories</p>
-            <div className="padding50" style={{ paddingRight: 0 }}>
-              <div className="width68 aspect-square opacity-[0.80]">
-                <IoLockClosed className="w-full h-full" />
+            <p className="font-4 color-4 line20 font-normal m-0">{list.savedCount}</p>
+            {list.isPrivate && (
+              <div className="padding50" style={{ paddingRight: 0 }}>
+                <div className="width68 aspect-square opacity-[0.80]">
+                  <IoLockClosed className="w-full h-full" />
+                </div>
               </div>
-            </div>
+            )}
           </div>
-          <MoreButton user={user} />
+          <MoreButton user={user} list={list} setList={setList} />
         </div>
       </div>
 

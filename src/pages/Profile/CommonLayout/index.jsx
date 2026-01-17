@@ -12,24 +12,6 @@ function ProfileCommonLayout() {
   const { pathname } = useLocation();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const navOptions = [
-    {
-      id: 0,
-      name: "Home",
-      path: "",
-    },
-    {
-      id: 1,
-      name: "Lists",
-      path: "lists",
-    },
-    {
-      id: 2,
-      name: "About",
-      path: "about",
-    },
-  ];
-
   const isActiveTab = (id) => {
     if (id === 0) return !pathname.includes("/about") && !pathname.includes("/lists");
 
@@ -104,19 +86,39 @@ function ProfileCommonLayout() {
                         </div>
                       </div>
                       <div className="relative overflow-hidden boxShadow10">
-                        <div className="flex items-center overflow-y-hidden overflow-x-auto">
-                          {navOptions.map((item) => (
-                            <div className="min-w-[-webkit-max-content]" key={item.id}>
-                              <div className={`margin-14 min-w-max padding-42 ${isActiveTab(item.id) ? "bdr-7" : ""}`} style={{ marginLeft: 0, marginBlock: 0, borderTop: 0, borderInline: 0 }}>
-                                <Link to={item.path} className="p-0 border-0 cursor-pointer">
-                                  <p className={`color-3 custom-fs-1 custom-line-h-1 font-medium m-0 transition-all duration-100 linear ${isActiveTab(item.id) ? "opacity-100" : "opacity-[0.85] hover:opacity-100"}`}>
-                                    <span>{item.name}</span>
+                        {user && (
+                          <div className="flex items-center overflow-y-hidden overflow-x-auto">
+                            <div className="min-w-[-webkit-max-content]">
+                              <div className={`margin-14 min-w-max padding-42 ${isActiveTab(0) ? "bdr-7" : ""}`} style={{ marginLeft: 0, marginBlock: 0, borderTop: 0, borderInline: 0 }}>
+                                <Link to="" className="p-0 border-0 cursor-pointer">
+                                  <p className={`color-3 custom-fs-1 custom-line-h-1 font-medium m-0 transition-all duration-100 linear ${isActiveTab(0) ? "opacity-100" : "opacity-[0.85] hover:opacity-100"}`}>
+                                    <span>Home</span>
                                   </p>
                                 </Link>
                               </div>
                             </div>
-                          ))}
-                        </div>
+                            {!user.isNoBlogPublished && (
+                              <div className="min-w-[-webkit-max-content]">
+                                <div className={`margin-14 min-w-max padding-42 ${isActiveTab(1) ? "bdr-7" : ""}`} style={{ marginLeft: 0, marginBlock: 0, borderTop: 0, borderInline: 0 }}>
+                                  <Link to="lists" className="p-0 border-0 cursor-pointer">
+                                    <p className={`color-3 custom-fs-1 custom-line-h-1 font-medium m-0 transition-all duration-100 linear ${isActiveTab(1) ? "opacity-100" : "opacity-[0.85] hover:opacity-100"}`}>
+                                      <span>Lists</span>
+                                    </p>
+                                  </Link>
+                                </div>
+                              </div>
+                            )}
+                            <div className="min-w-[-webkit-max-content]">
+                              <div className={`margin-14 min-w-max padding-42 ${isActiveTab(2) ? "bdr-7" : ""}`} style={{ marginLeft: 0, marginBlock: 0, borderTop: 0, borderInline: 0 }}>
+                                <Link to="about" className="p-0 border-0 cursor-pointer">
+                                  <p className={`color-3 custom-fs-1 custom-line-h-1 font-medium m-0 transition-all duration-100 linear ${isActiveTab(2) ? "opacity-100" : "opacity-[0.85] hover:opacity-100"}`}>
+                                    <span>About</span>
+                                  </p>
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

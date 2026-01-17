@@ -46,7 +46,7 @@ function MenuComp() {
     {
       id: 2,
       name: "Profile",
-      path: `/profile/@${userInfo.username}`,
+      path: `/profile/${userInfo.username}`,
       IconInactive: GoPerson,
       IconActive: GoPersonFill,
     },
@@ -95,7 +95,7 @@ function MenuComp() {
   const isActiveTab = (id) => {
     if (id === 0) return location.pathname === "/";
     if (id === 1) return location.pathname === "/me/saved";
-    if (id === 2) return location.pathname.includes(`/profile/@${userInfo.username}`);
+    if (id === 2) return location.pathname.includes(`/profile/${userInfo.username}`);
     if (id === 3) return location.pathname === "/me/stories";
   };
 

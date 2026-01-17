@@ -8,23 +8,21 @@ function ProfilePage() {
   const [user, setUser] = useState(null);
   const [isError, setIsError] = useState(false);
 
-  const fetchUserDetails = async (user) => {
+  const fetchUserDetails = async () => {
     try {
-      const userName = user.split("@").length > 1 ? user.split("@")[1] : null;
-
-      if (!userName) {
+      if (!username) {
         setIsError(true);
         return;
       }
 
-      const response = await requestHandler(`/users/${userName}`);
+      const response = await requestHandler(`/users/${username}`);
 
       const result = await response.json();
 
-      if (response?.status === 200) setUser(result?.data?.user || {});
+      if (response?.status === 200) setUser(result?.data?.user || null);
       else setIsError(true);
 
-      console.log("result: ", result);
+      console.log("user result: ", result);
     } catch (err) {
       console.error(err);
       setIsError(true);
@@ -32,7 +30,7 @@ function ProfilePage() {
   };
 
   useEffect(() => {
-    fetchUserDetails(username);
+    fetchUserDetails();
   }, []);
 
   return (
