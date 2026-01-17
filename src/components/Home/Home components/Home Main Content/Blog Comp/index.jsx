@@ -9,8 +9,12 @@ import { formatMonthAndDayShort } from "../../../../../utils/monthDateFormatter"
 import { UserContext } from "../../../../../context/userContext";
 import noPreviewImg from "../../../../../assets/images/noPreviewImage.png";
 import Bookmark from "./Bookmark";
+import CreateNewListModal from "../../../../List/CreateList";
+import { showToast } from "../../../../../utils/toaster";
+import { useRequestHandler } from "../../../../../hooks/requestHandler";
 
-function BlogComp({ item, lists, showCreateListModal }) {
+function BlogComp({ item, lists, updateUserListArr }) {
+  const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const navigate = useNavigate();
   const isMyBlog = userInfo._id === item.author._id;
@@ -116,7 +120,7 @@ function BlogComp({ item, lists, showCreateListModal }) {
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
                                     {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
                                     <div>
-                                      <Bookmark item={blog} lists={lists} showCreateListModal={showCreateListModal} isBookmarkPopup={isBookmarkPopup} setIsBookmarkPopup={setIsBookmarkPopup} />
+                                      <Bookmark item={blog} setBlog={setBlog} lists={lists} isBookmarkPopup={isBookmarkPopup} setIsBookmarkPopup={setIsBookmarkPopup} updateUserListArr={updateUserListArr} />
                                     </div>
                                     <MoreComp blog={blog} />
                                   </div>

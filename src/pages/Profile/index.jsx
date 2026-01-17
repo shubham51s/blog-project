@@ -21,8 +21,6 @@ function ProfilePage() {
 
       if (response?.status === 200) setUser(result?.data?.user || null);
       else setIsError(true);
-
-      console.log("user result: ", result);
     } catch (err) {
       console.error(err);
       setIsError(true);

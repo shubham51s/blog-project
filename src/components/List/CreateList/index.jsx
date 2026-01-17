@@ -3,13 +3,14 @@ import { Dialog } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import Checkbox from "@mui/material/Checkbox";
 
-function CreateNewListModal({ isCreateListModal, setIsCreateListModal, isCreateListLoader, createNewUserList }) {
+function CreateNewListModal({ isCreateListModal, setIsCreateListModal, createNewUserList }) {
   const listNameMaxLength = 60;
   const listDescriptionMaxLength = 280;
   const [listName, setListName] = useState("");
   const [listDescription, setListDescription] = useState("");
   const [isHideDescInput, setIsHideDescInp] = useState(true);
   const [isListPrivate, setIsListPrivate] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmitBtnClick = () => {
     const params = {
@@ -17,7 +18,7 @@ function CreateNewListModal({ isCreateListModal, setIsCreateListModal, isCreateL
       description: listDescription.trim(),
       isPrivate: isListPrivate,
     };
-    createNewUserList(params);
+    createNewUserList(params, setIsLoading);
   };
 
   const handleCloseListModal = () => {
@@ -117,8 +118,8 @@ function CreateNewListModal({ isCreateListModal, setIsCreateListModal, isCreateL
                   Cancel
                 </button>
                 <div className="padding50" style={{ paddingRight: 0 }}>
-                  <button onClick={() => handleSubmitBtnClick()} disabled={isCreateListLoader || listName.trim().length === 0} className={`bdr-3 border-[#1a8917] bg-[#1a8917] border-radius-9 text-center text-white custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 transition-all duration-75 linear ${isCreateListLoader || listName.trim().length === 0 ? "cursor-not-allowed opacity-50" : "cursor-pointer opacity-[0.9] hover:opacity-100"}`}>
-                    Done
+                  <button onClick={() => handleSubmitBtnClick()} disabled={isLoading || listName.trim().length === 0} className={`flex items-center custom-gap-3 bdr-3 border-[#1a8917] bg-[#1a8917] border-radius-9 text-center text-white custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 transition-all duration-75 linear ${isLoading || listName.trim().length === 0 ? "cursor-default opacity-50" : "cursor-pointer opacity-[0.9] hover:opacity-100"}`}>
+                    {isLoading && <div className="width83 aspect-square rounded-full border-2 border-white border-t-0 border-r-0 animate-spin"></div>}Done
                   </button>
                 </div>
               </div>

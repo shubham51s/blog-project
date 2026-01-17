@@ -5,11 +5,13 @@ import { CiBookmarkPlus } from "react-icons/ci";
 import { IoBookmark } from "react-icons/io5";
 import * as Popover from "@radix-ui/react-popover";
 import ListItem from "./ListItem";
+import CreateNewListModal from "../../../../../List/CreateList";
 
-function Bookmark({ item, lists, showCreateListModal, isBookmarkPopup, setIsBookmarkPopup }) {
+function Bookmark({ item, lists, isBookmarkPopup, setIsBookmarkPopup, updateUserListArr }) {
   const { requestHandler } = useRequestHandler();
   const [blog, setBlog] = useState({ ...item });
   const [isBookmarkLoader, setIsBookmarkLoader] = useState(false);
+  const [isCreateListModal, setIsCreateListModal] = useState(false);
 
   const saveBlogToDefaultList = async () => {
     setIsBookmarkLoader(true);
@@ -35,7 +37,7 @@ function Bookmark({ item, lists, showCreateListModal, isBookmarkPopup, setIsBook
   };
 
   const handleCreateNewBlogBtnClick = () => {
-    showCreateListModal({ id: blog._id });
+    setIsCreateListModal(true);
   };
 
   const handleBookmarkBtnClick = (e) => {
@@ -46,48 +48,109 @@ function Bookmark({ item, lists, showCreateListModal, isBookmarkPopup, setIsBook
     }
   };
 
-  return (
-    <div className="inline-block">
-      {/* {!blog?.isBookmarked && ( */}
+  const handleAddBlogToList = async (list, setIsLoading) => {
+    try {
+      const params = {
+        blog: blog._id,
+        list,
+      };
 
-      <Popover.Root open={isBookmarkPopup} onOpenChange={setIsBookmarkPopup}>
-        <Popover.Trigger onClick={(e) => handleBookmarkBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
-          <div className="width-13 aspect-square">
-            {!blog.lists.length > 0 && <CiBookmarkPlus className="w-full h-full align-middle" />}
-            {blog.lists.length > 0 && <IoBookmark className="w-full h-full align-middle" />}
-          </div>
-        </Popover.Trigger>
-        <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" className="z-[700] box-shadow-4 border-radius-3 box-border" align="middle" sideOffset={1}>
-          <div className="border-radius-3 custom-bg-8 overflow-hidden">
-            {!isBookmarkLoader && (
-              <div className="width82">
-                <div className="padding-16 padding80 padding81 padding82 height82 overflow-y-auto">
-                  <div>
-                    {lists.map((item) => (
-                      <ListItem list={item} blog={blog} setBlog={setBlog} key={item._id} />
-                    ))}
+      const response = await requestHandler("/list/items/create", "POST", params);
+
+      const result = await response.json();
+
+      if (response?.status === 201) {
+        if (result?.data?.listItem) {
+          setBlog((prev) => ({ ...prev, lists: [...prev.lists, result.data.listItem.list] }));
+        }
+      } else {
+        showToast("Some error occured");
+      }
+
+      setIsLoading(false);
+      setIsCreateListModal(false);
+    } catch (err) {
+      showToast("Some error occured");
+      console.error(err);
+      setIsLoading(false);
+      setIsCreateListModal(false);
+    }
+  };
+
+  const createNewUserList = async (params, setIsLoading) => {
+    setIsLoading(true);
+    try {
+      const response = await requestHandler("/list/create", "POST", params);
+
+      const result = await response.json();
+
+      if (response?.status === 201) {
+        // add new created list exactly after the default list
+        if (result?.data?.list) {
+          handleAddBlogToList(result.data.list._id, setIsLoading);
+          updateUserListArr(result.data.list);
+        } else {
+          setIsLoading(false);
+          setIsCreateListModal(false);
+        }
+      } else {
+        showToast("Some error occured");
+        setIsLoading(false);
+        setIsCreateListModal(false);
+      }
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+      setIsCreateListModal(false);
+      showToast("Some error occured");
+    }
+  };
+
+  return (
+    <>
+      <div className="inline-block">
+        {/* {!blog?.isBookmarked && ( */}
+
+        <Popover.Root open={isBookmarkPopup} onOpenChange={setIsBookmarkPopup}>
+          <Popover.Trigger onClick={(e) => handleBookmarkBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
+            <div className="width-13 aspect-square">
+              {!blog.lists.length > 0 && <CiBookmarkPlus className="w-full h-full align-middle" />}
+              {blog.lists.length > 0 && <IoBookmark className="w-full h-full align-middle" />}
+            </div>
+          </Popover.Trigger>
+          <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" className="z-[700] box-shadow-4 border-radius-3 box-border" align="middle" sideOffset={1}>
+            <div className="border-radius-3 custom-bg-8 overflow-hidden">
+              {!isBookmarkLoader && (
+                <div className="width82">
+                  <div className="padding-16 padding80 padding81 padding82 height82 overflow-y-auto">
+                    <div>
+                      {lists.map((item) => (
+                        <ListItem list={item} blog={blog} setBlog={setBlog} key={item._id} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* bottom create new list */}
+                  <div className="padding63 padding75 padding83 padding82 bdr-5" style={{ borderBottom: 0, borderInline: 0 }}>
+                    <p className="text-[#1a8917] line-h-8 font-10 font-normal m-0">
+                      <button onClick={handleCreateNewBlogBtnClick} className="cursor-pointer m-0 p-0">
+                        Create new list
+                      </button>
+                    </p>
                   </div>
                 </div>
-
-                {/* bottom create new list */}
-                <div className="padding63 padding75 padding83 padding82 bdr-5" style={{ borderBottom: 0, borderInline: 0 }}>
-                  <p className="text-[#1a8917] line-h-8 font-10 font-normal m-0">
-                    <button onClick={handleCreateNewBlogBtnClick} className="cursor-pointer m-0 p-0">
-                      Create new list
-                    </button>
-                  </p>
+              )}
+              {isBookmarkLoader && (
+                <div className="width82 height67 flex items-center justify-center">
+                  <div className="h-[25%] aspect-square border-2 border-gray-500 border-t-0 border-r-0 rounded-full animate-spin"></div>
                 </div>
-              </div>
-            )}
-            {isBookmarkLoader && (
-              <div className="width82 height67 flex items-center justify-center">
-                <div className="h-[25%] aspect-square border-2 border-gray-500 border-t-0 border-r-0 rounded-full animate-spin"></div>
-              </div>
-            )}
-          </div>
-        </Popover.Content>
-      </Popover.Root>
-    </div>
+              )}
+            </div>
+          </Popover.Content>
+        </Popover.Root>
+      </div>
+      <CreateNewListModal isCreateListModal={isCreateListModal} setIsCreateListModal={setIsCreateListModal} createNewUserList={createNewUserList} />
+    </>
   );
 }
 

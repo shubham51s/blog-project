@@ -16,7 +16,6 @@ function HomeMainContentComp() {
   const { requestHandler } = useRequestHandler();
   const [initialLoader, setInitialLoader] = useState(true);
   const loaderTimeout = useRef(null);
-  const [blogToSave, setBlogToSave] = useState({});
   const [recommendedTopics, setRecommendedTopics] = useState([
     {
       id: 0,
@@ -49,8 +48,6 @@ function HomeMainContentComp() {
     blogsLoader: true,
     listLoader: false,
   });
-  const [isCreateListModal, setIsCreateListModal] = useState(false);
-  const [isCreateListLoader, setIsCreateListLoader] = useState(false);
 
   const handleActiveTabChange = (index) => {
     if (index === activeTopicIndex) return;
@@ -90,32 +87,8 @@ function HomeMainContentComp() {
     }
   };
 
-  const showCreateListModal = (data) => {
-    setBlogToSave(data);
-    setIsCreateListModal(true);
-  };
-
-  const createNewUserList = async (params) => {
-    setIsCreateListLoader(true);
-    try {
-      const response = await requestHandler("/list/create", "POST", params);
-
-      const result = await response.json();
-
-      if (response?.status === 201) {
-        // add new created list exactly after the default list
-        if (result?.data?.list) setLists((prev) => [prev[0], { ...result.data.list }, ...prev.slice(1)]);
-      } else {
-        showToast("Some error occured");
-      }
-      setIsCreateListLoader(false);
-      setIsCreateListModal(false);
-    } catch (err) {
-      console.error(err);
-      setIsCreateListLoader(false);
-      setIsCreateListModal(false);
-      showToast("Some error occured");
-    }
+  const updateUserListArr = async (newList) => {
+    setLists((prev) => [prev[0], { ...newList }, ...prev.slice(1)]);
   };
 
   useEffect(() => {
@@ -175,11 +148,10 @@ function HomeMainContentComp() {
           <div>
             {(initialLoader || loaders.blogsLoader || loaders.listLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
             {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-            {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} lists={lists} showCreateListModal={showCreateListModal} key={item._id} />)}
+            {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} lists={lists} key={item._id} updateUserListArr={updateUserListArr} />)}
           </div>
         </div>
       </main>
-      <CreateNewListModal isCreateListModal={isCreateListModal} setIsCreateListModal={setIsCreateListModal} isCreateListLoader={isCreateListLoader} createNewUserList={createNewUserList} />
     </>
   );
 }

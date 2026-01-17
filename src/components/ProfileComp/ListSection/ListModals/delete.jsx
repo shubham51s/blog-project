@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 
-function DeleteListModal({ isDeleteModal, handleCloseDeleteModal }) {
+function DeleteListModal({ isDeleteModal, handleCloseDeleteModal, deleteList }) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDeleteListBtnClick = () => {
+    deleteList(setIsLoading);
+  };
+
   return (
     <Dialog
       open={isDeleteModal}
@@ -33,7 +39,9 @@ function DeleteListModal({ isDeleteModal, handleCloseDeleteModal }) {
                   Cancel
                 </button>
                 <div className="padding50" style={{ paddingRight: 0 }}>
-                  <button className="bdr-3 border-[#c94a4a] bg-[#c94a4a] border-radius-9 text-center color-2 custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 cursor-pointer opacity-[0.9] transition-all duration-75 linear hover:opacity-100">Delete</button>
+                  <button onClick={handleDeleteListBtnClick} disabled={isLoading} className={`flex items-center custom-gap-3 bdr-3 border-[#c94a4a] bg-[#c94a4a] border-radius-9 text-center color-2 custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 transition-all duration-75 linear ${isLoading ? "cursor-default opacity-[0.5]" : "cursor-pointer opacity-[0.9] hover:opacity-100"}`}>
+                    {isLoading && <div className="width83 aspect-square rounded-full border-2 border-white border-t-0 border-r-0 animate-spin"></div>}Delete
+                  </button>
                 </div>
               </div>
             </div>

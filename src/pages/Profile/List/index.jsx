@@ -37,6 +37,11 @@ function List() {
     }
   };
 
+  const filterOutDeletedList = (listId) => {
+    const updatedList = lists.filter((item) => item._id !== listId);
+    setLists(updatedList);
+  };
+
   useEffect(() => {
     if (user) fetchUserLists();
 
@@ -52,7 +57,7 @@ function List() {
       <div className="flex justify-center">
         <div className="min-w-0 w-full max-width-2 margin-12">
           <div>{(isLoading || defaultLoader || !user) && Array.from({ length: 2 }).map((_, i) => <ListLoader user={user} key={i} />)}</div>
-          <div>{!isLoading && !defaultLoader && user && lists.map((item) => <ListComp user={user} item={item} key={item._id} />)}</div>
+          <div>{!isLoading && !defaultLoader && user && lists.map((item) => <ListComp user={user} item={item} key={item._id} filterOutDeletedList={filterOutDeletedList} />)}</div>
         </div>
       </div>
     </div>

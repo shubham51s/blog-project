@@ -9,7 +9,7 @@ import EditListModal from "../../ListModals/edit";
 import { showToast } from "../../../../../utils/toaster";
 import { useRequestHandler } from "../../../../../hooks/requestHandler";
 
-function MoreButton({ user, list, setList }) {
+function MoreButton({ user, list, setList, filterOutDeletedList }) {
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -193,6 +193,27 @@ function MoreButton({ user, list, setList }) {
     }
   };
 
+  const deleteList = async (setIsLoading) => {
+    setIsLoading(true);
+    try {
+      const response = await requestHandler(`/list/delete/${list._id}`, "DELETE");
+
+      if (response?.status === 200) {
+        filterOutDeletedList(list._id);
+        showToast("List deleted and removed from Your library");
+      } else {
+        showToast("Some error occured");
+      }
+      setIsLoading(false);
+      handleCloseDeleteModal();
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured");
+      setIsLoading(false);
+      handleCloseDeleteModal();
+    }
+  };
+
   return (
     <>
       {user && userInfo && (
@@ -277,7 +298,7 @@ function MoreButton({ user, list, setList }) {
       )}
 
       {/* confirm delete list modal */}
-      <DeleteListModal isDeleteModal={isDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal} />
+      <DeleteListModal isDeleteModal={isDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal} deleteList={deleteList} />
 
       {/* confirm make private list modal */}
       <MakeListPrivateModal isPrivateListModal={isPrivateListModal} handleClosePrivateListModal={handleClosePrivateListModal} makeListPrivate={makeListPrivate} />
