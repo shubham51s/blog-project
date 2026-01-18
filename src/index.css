@@ -1996,4 +1996,8 @@ img {
   .margin64 {
     margin-left: -130px;
   }
+
+  .margin65 {
+    margin: 18px;
+  }
 }

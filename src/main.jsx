@@ -9,6 +9,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { Toaster } from "react-hot-toast";
+import "prosemirror-view/style/prosemirror.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -30,5 +31,5 @@ createRoot(document.getElementById("root")).render(
         />
       </UserProvider>
     </BrowserRouter>
-  </StrictMode>
+  </StrictMode>,
 );

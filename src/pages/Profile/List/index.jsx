@@ -21,7 +21,6 @@ function List() {
 
       if (response?.status === 200) {
         setLists(result?.data?.lists);
-        console.log("result?.data?.lists: ", result?.data?.lists);
       } else {
         if (response?.status >= 500) {
           showToast("Some error occured");

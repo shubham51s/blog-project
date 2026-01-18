@@ -5,7 +5,7 @@ import { useRequestHandler } from "../../hooks/requestHandler";
 function ProfilePage() {
   const { username } = useParams();
   const { requestHandler } = useRequestHandler();
-  const [user, setUser] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [isError, setIsError] = useState(false);
 
   const fetchUserDetails = async () => {
@@ -19,7 +19,9 @@ function ProfilePage() {
 
       const result = await response.json();
 
-      if (response?.status === 200) setUser(result?.data?.user || null);
+      console.log("user details: ", result.data.user);
+
+      if (response?.status === 200) setUserDetails(result?.data?.user || null);
       else setIsError(true);
     } catch (err) {
       console.error(err);
@@ -33,7 +35,7 @@ function ProfilePage() {
 
   return (
     <>
-      <Outlet context={{ user, isError }} />
+      <Outlet context={{ userDetails, isError }} />
     </>
   );
 }

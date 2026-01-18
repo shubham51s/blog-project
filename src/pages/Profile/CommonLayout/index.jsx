@@ -8,7 +8,8 @@ import * as Popover from "@radix-ui/react-popover";
 import { showToast } from "../../../utils/toaster";
 
 function ProfileCommonLayout() {
-  const { user, isError } = useOutletContext();
+  const { userDetails, isError } = useOutletContext();
+  const [user, setUser] = useState();
   const { pathname } = useLocation();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -29,6 +30,12 @@ function ProfileCommonLayout() {
       console.error("Failed to copy", err);
     }
   };
+
+  useEffect(() => {
+    if (userDetails) {
+      setUser({ ...userDetails });
+    }
+  }, [userDetails]);
 
   return (
     <>
@@ -126,10 +133,10 @@ function ProfileCommonLayout() {
               </div>
 
               {/* passing data to all outlet components */}
-              <Outlet context={{ user }} />
+              <Outlet context={{ user, setUser }} />
             </div>
           </main>
-          <RightSectionComp user={user} />
+          <RightSectionComp user={user} setUser={setUser} />
         </div>
       )}
     </>
