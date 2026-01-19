@@ -23,8 +23,6 @@ function Following() {
       const response = await requestHandler(`/follow/following/${user._id}?skip=${skip}`);
       const result = await response.json();
 
-      console.log("fetchPeopleFollowingList: ", result);
-
       if (response?.status === 200 && result?.data?.following) {
         if (skip === 0) setPeopleFollowing(result.data.following);
       }
@@ -64,7 +62,7 @@ function Following() {
               <div className="inline-block max-w-[50%] padding50 truncate" style={{ paddingLeft: 0 }}>
                 <span className="font-4 color-3 line20 font-normal opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
                   {user && (
-                    <Link to="/" className="no-underline cursor-pointer m-0 p-0">
+                    <Link to={`/profile/${user.username}`} className="no-underline cursor-pointer m-0 p-0">
                       {user.name}
                     </Link>
                   )}
@@ -80,7 +78,7 @@ function Following() {
           )}
           {!user && <Skeleton height={25} width={100} />}
           <div className="margin-9" style={{ marginBottom: 0, marginInline: 0 }}></div>
-          {user && <h2 className="letter-spacing-7 line-h-10 font-12 font-medium color-3 m-0">{formatNumberCompact(user.followingCount)} following</h2>}
+          {user && <h2 className="letter-spacing-7 line-h-10 font-12 font-semibold color-3 m-0">{formatNumberCompact(user.followingCount)} following</h2>}
           {!user && <Skeleton width={200} height={50} />}
         </div>
 
@@ -102,7 +100,7 @@ function Following() {
         <div>
           <div className="p-0 m-0">
             {peopleFollowing.map((item) => (
-              <FollowingList key={item._id} item={item} />
+              <FollowingList item={item} user={user} setUser={setUser} key={item._id} />
             ))}
           </div>
         </div>

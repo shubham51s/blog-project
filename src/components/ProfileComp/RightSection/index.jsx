@@ -8,6 +8,7 @@ import { footerOptions } from "../../../constants/constant";
 import { UserContext } from "../../../context/userContext";
 import Skeleton from "react-loading-skeleton";
 import { useRequestHandler } from "../../../hooks/requestHandler";
+import { showToast } from "../../../utils/toaster";
 
 function RightSectionComp({ user, setUser }) {
   const { requestHandler } = useRequestHandler();
@@ -15,36 +16,61 @@ function RightSectionComp({ user, setUser }) {
   const [isFollowing, setIsFollowing] = useState(true);
   const [followingArr, setFollowingArr] = useState([]);
   const [loaders, setLoaders] = useState({
-    followUnfollowLoader: false,
+    toggleFollowLoader: false,
     followingListLoader: true,
-    publicListFetchLoader: true,
   });
 
-  const handleUnfollowUser = async () => {
-    setLoaders((prev) => ({ ...prev, followUnfollowLoader: true }));
+  const followUser = async () => {
+    setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
     try {
-      setLoaders((prev) => ({ ...prev, followUnfollowLoader: false }));
-      setIsFollowing(false);
+      const params = {
+        userToFollow: user._id,
+      };
+      const response = await requestHandler("/follow/follow-user", "POST", params);
+
+      if (response?.status === 200) {
+        setUser((prev) => ({ ...prev, isFollowing: true }));
+        showToast(`Success! You're now following ${user.name}.`);
+      } else {
+        showToast("Some error occcured.");
+      }
+
+      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
     } catch (err) {
-      setLoaders((prev) => ({ ...prev, followUnfollowLoader: false }));
       console.error(err);
+      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
+      showToast("Some error occured.");
     }
   };
 
-  const handleFollowUser = async () => {
-    setLoaders((prev) => ({ ...prev, followUnfollowLoader: true }));
+  const unfollowUser = async () => {
+    setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
     try {
-      setLoaders((prev) => ({ ...prev, followUnfollowLoader: false }));
-      setIsFollowing(true);
+      const params = {
+        userToUnfollow: user._id,
+      };
+      const response = await requestHandler("/follow/unfollow-user", "POST", params);
+
+      if (response?.status === 200) {
+        setUser((prev) => ({ ...prev, isFollowing: false }));
+
+        showToast(`You unfollowed ${user.name}.`);
+      } else {
+        showToast("Some error occcured.");
+      }
+
+      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
     } catch (err) {
-      setLoaders((prev) => ({ ...prev, followUnfollowLoader: false }));
       console.error(err);
+      showToast("Some error occcured.");
+      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
     }
   };
 
   const fetchFollowingList = async () => {
     if (user.followingCount <= 0) {
       setLoaders((prev) => ({ ...prev, followingListLoader: false }));
+      return;
     }
     try {
       const response = await requestHandler(`/follow/following/${user._id}?skip=0&limit=5`);
@@ -62,9 +88,7 @@ function RightSectionComp({ user, setUser }) {
   };
 
   useEffect(() => {
-    if (user && loaders.followingListLoader) {
-      fetchFollowingList();
-    }
+    if (user && loaders.followingListLoader) fetchFollowingList();
   }, [user]);
 
   return (
@@ -124,25 +148,25 @@ function RightSectionComp({ user, setUser }) {
                 {/* if logged user and current user are not same */}
                 {user && user._id !== userInfo._id && (
                   <div className="margin60 margin57 flex">
-                    {isFollowing && (
-                      <button onClick={handleUnfollowUser} disabled={loaders.followUnfollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex justify-center items-center cursor-pointer custom-bg-3">
+                    {user.isFollowing && (
+                      <button onClick={unfollowUser} disabled={loaders.toggleFollowLoader} className={`bdr-7 padding-37 padding-38 border-radius-8 flex justify-center items-center custom-bg-3 ${loaders.toggleFollowLoader ? "cursor-default opacity-75" : "cursor-pointer opacity-100"}`}>
                         <span className="color-2 custom-fs-1 line20 font-normal flex items-center">Following</span>
                       </button>
                     )}
-                    {!isFollowing && (
-                      <button onClick={handleFollowUser} disabled={loaders.followUnfollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex justify-center items-center cursor-pointer custom-bg-3">
+                    {!user.isFollowing && (
+                      <button onClick={followUser} disabled={loaders.toggleFollowLoader} className={`bdr-7 padding-37 padding-38 border-radius-8 flex justify-center items-center custom-bg-3 ${loaders.toggleFollowLoader ? "cursor-default opacity-75" : "cursor-pointer opacity-100"}`}>
                         <span className="color-2 custom-fs-1 line20 font-normal flex items-center">Follow</span>
                       </button>
                     )}
                   </div>
                 )}
 
-                {user && followingArr.length > 0 && (
+                {followingArr.length > 0 && (
                   <div className="relative">
                     <span className="font-10 font-medium color-3 custom-line-h-1">Following</span>
                     <ul className="margin-21 p-0 list-none" style={{ marginInline: 0 }}>
                       {followingArr.map((item) => (
-                        <FollowingComp key={item._id} item={item} user={user} setUser={setUser} />
+                        <FollowingComp item={item} key={item._id} />
                       ))}
                     </ul>
                     <p className="font-4 color-3 custom-line-h-1 font-normal m-0 opacity-[0.8] transition-all duration-75 ease-in-out hover:opacity-100">

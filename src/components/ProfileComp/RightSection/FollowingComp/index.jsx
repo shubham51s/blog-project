@@ -3,13 +3,17 @@ import { Link } from "react-router-dom";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import Skeleton from "react-loading-skeleton";
+import { formatNumberCompact } from "../../../../utils/common";
+import { useRequestHandler } from "../../../../hooks/requestHandler";
+import { showToast } from "../../../../utils/toaster";
 
-function FollowingComp() {
+function FollowingComp({ item }) {
+  const { requestHandler } = useRequestHandler();
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const initialLoadingTimeout = useRef(null);
-  const [isFollowing, setIsFollowing] = useState(true);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [author, setAuthor] = useState(item);
 
   const toggleInitialLoader = () => {
     if (isInitialLoading) {
@@ -21,26 +25,74 @@ function FollowingComp() {
     }
   };
 
-  const toggleUserFollow = () => {
-    setIsFollowing(!isFollowing);
-    setIsPopupOpen(false);
+  const followUser = async () => {
+    setIsLoading(true);
+    try {
+      const params = {
+        userToFollow: author.followee._id,
+      };
+      const response = await requestHandler("/follow/follow-user", "POST", params);
+
+      if (response?.status === 200) {
+        setAuthor((prev) => ({ ...prev, followee: { ...prev.followee, isFollowing: true } }));
+        showToast(`Success! You're now following ${author.followee.name}.`);
+      } else {
+        showToast("Some error occcured.");
+      }
+
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+      showToast("Some error occured.");
+    }
+  };
+
+  const unfollowUser = async () => {
+    setIsLoading(true);
+    try {
+      const params = {
+        userToUnfollow: author.followee._id,
+      };
+      const response = await requestHandler("/follow/unfollow-user", "POST", params);
+
+      if (response?.status === 200) {
+        setAuthor((prev) => ({ ...prev, followee: { ...prev.followee, isFollowing: false } }));
+
+        showToast(`You unfollowed ${author.followee.name}.`);
+      } else {
+        showToast("Some error occcured.");
+      }
+
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+      showToast("Some error occcured.");
+    }
   };
 
   useEffect(() => {
     if (initialLoadingTimeout.current) clearTimeout(initialLoadingTimeout.current);
+
+    return () => {
+      if (initialLoadingTimeout.current) clearTimeout(initialLoadingTimeout.current);
+    };
   }, []);
 
   return (
     <li className="flex items-center justify-between">
-      <Link to={`/profile/@shubham`} className="cursor-pointer m-0 p-0 no-underline">
+      <Link to={`/profile/${author.followee.username}`} className="cursor-pointer m-0 p-0 no-underline">
         <div className="flex padding57">
           <div className="padding-15">
             <div className="relative">
-              <img src="https://miro.medium.com/v2/resize:fill:25:25/0*ZWkzPU5Nzy4P6Jyx.jpg" alt="" className="height-12 aspect-square rounded-full" />
+              <img src={author.followee.profileImg} alt={author.followee.name} className="height-12 aspect-square rounded-full" />
               <div className="absolute top-0 height-12 aspect-square rounded-full boxShadow7"></div>
             </div>
           </div>
-          <p className="height-6 overflow-hidden font-4 custom-line-h-1 font-normal m-0 text-ellipsis line-clamp-1 break-all color-3 opacity-[0.8] transition-all duration-75 ease-in-out hover:underline hover:opacity-[0.95]">David Price</p>
+          <p className="height-6 overflow-hidden font-4 custom-line-h-1 font-normal m-0 text-ellipsis line-clamp-1 break-all color-3 opacity-[0.8] transition-all duration-75 ease-in-out hover:underline hover:opacity-[0.95]" title={author.followee.name}>
+            {author.followee.name}
+          </p>
         </div>
       </Link>
       <div className="inline-block">
@@ -58,36 +110,47 @@ function FollowingComp() {
                     <div className="flex items-end justify-between">
                       <Link to="" className="no-underline cursor-pointer">
                         <div className="relative">
-                          <img src="https://miro.medium.com/v2/resize:fill:128:128/1*cTehjnmxL8tPiTMgMNxIkw.png" alt="" className="width76 aspect-square box-border rounded-full" />
+                          <img src={author.followee.profileImg} alt={author.followee.name} className="width76 aspect-square box-border rounded-full" />
                           <div className="absolute top-0 width76 aspect-square rounded-full boxShadow7"></div>
                         </div>
                       </Link>
-                      <button onClick={() => toggleUserFollow()} disabled={isLoading} title={isFollowing ? `Following ${"Grant Piper"}` : `Follow ${"Grant Piper"}`} className={`flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
-                        {isFollowing ? "Following" : "Follow"}
-                      </button>
+                      {author.followee.isFollowing && (
+                        <button onClick={() => unfollowUser()} disabled={isLoading} title={`Following ${author.followee.name}`} className={`flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
+                          Following
+                        </button>
+                      )}
+                      {!author.followee.isFollowing && (
+                        <button onClick={() => followUser()} disabled={isLoading} title={`Follow ${author.followee.name}`} className={`flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
+                          Follow
+                        </button>
+                      )}
                     </div>
 
                     <div className="flex flex-col margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
                       <Link to="" className="no-underline cursor-pointer">
                         <div className="flex flex-wrap items-baseline">
-                          <span className="break-all line-clamp-2 height-15 padding-23 text-ellipsis font-10 font-semibold color-3 overflow-hidden line20" style={{ paddingLeft: 0, paddingBlock: 0 }}>
-                            Grant Piper
+                          <span className="break-all line-clamp-2 height-15 padding-23 text-ellipsis font-10 font-semibold color-3 overflow-hidden line20" style={{ paddingLeft: 0, paddingBlock: 0 }} title={author.followee.name}>
+                            {author.followee.name}
                           </span>
                         </div>
                       </Link>
                       <div className="margin44">
                         <Link to="" className="cursor-pointer m-0 p-0 no-underline group">
-                          <span className="color-3 font-4 line20 font-normal">41K</span>
+                          <span className="color-3 font-4 line20 font-normal">{formatNumberCompact(author.followee.followersCount)}</span>
                           <span className="color-3 font-4 line20 font-normal opacity-[0.8] group-hover:opacity-100"> followers</span>
                         </Link>
                       </div>
                     </div>
 
-                    <div className="padding-33" style={{ paddingBottom: 0, paddingInline: 0 }}>
-                      <p className="line-clamp-4 height76 text-ellipsis color-3 overflow-hidden font-4 line20 font-normal m-0">
-                        <span className="break-all">Writing stories daily aimed at educating, entertaining, and informing. Christian. Husband. Father.</span>
-                      </p>
-                    </div>
+                    {author.followee.bio && (
+                      <div className="padding-33" style={{ paddingBottom: 0, paddingInline: 0 }}>
+                        <p className="line-clamp-4 height76 text-ellipsis color-3 overflow-hidden font-4 line20 font-normal m-0">
+                          <span className="break-all" title={author.followee.bio}>
+                            {author.followee.bio}
+                          </span>
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

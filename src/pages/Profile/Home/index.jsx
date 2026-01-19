@@ -12,6 +12,7 @@ function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const defaultLoader = useRef(null);
   const [isDefaultLoader, setIsDefaultLoader] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   const fetchBlogs = async (skip) => {
     setIsLoading(true);
@@ -31,16 +32,19 @@ function Home() {
   };
 
   useEffect(() => {
-    if (user && !user.isNoBlogPublished) {
+    if (user && !user.isNoBlogPublished && !isMounted) {
       fetchBlogs(0);
+      setIsMounted(true);
     }
+  }, [user]);
 
+  useEffect(() => {
     if (defaultLoader.current) clearTimeout(defaultLoader.current);
 
     defaultLoader.current = setTimeout(() => {
       setIsDefaultLoader(false);
     }, 150);
-  }, [user]);
+  }, []);
 
   return (
     <div className="grow-1 shrink-0 basis-auto">

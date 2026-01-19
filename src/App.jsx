@@ -21,6 +21,7 @@ import About from "./pages/Profile/About";
 import List from "./pages/Profile/List";
 import Follower from "./pages/Profile/Follower";
 import Following from "./pages/Profile/Following";
+import ProfilePage from "./pages/Profile";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -34,7 +35,8 @@ function App() {
           <Route index element={<HomePageProtected />} /> // home component
           <Route path="me/saved" element={<SavedBlogsPage />} />
           <Route path="me/stories" element={<StoriesPage />} />
-          <Route path="profile/:username" element={<ProfileCommonLayout />}>
+          {/* <Route path="profile/:username" element={<ProfileCommonLayout />}> */}
+          <Route path="profile/:username" element={<ProfilePage />}>
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="lists" element={<List />} />
