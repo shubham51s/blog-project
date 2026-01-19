@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { IoLockClosed } from "react-icons/io5";
 import MoreButton from "./MoreButton";
 
-function ListComp({ user, item, filterOutDeletedList }) {
+function ListComp({ user, setUser, item, filterOutDeletedList }) {
   const [list, setList] = useState(item);
 
   return (
@@ -37,7 +37,7 @@ function ListComp({ user, item, filterOutDeletedList }) {
               </div>
             )}
           </div>
-          <MoreButton user={user} list={list} setList={setList} filterOutDeletedList={filterOutDeletedList} />
+          <MoreButton user={user} setUser={setUser} list={list} setList={setList} filterOutDeletedList={filterOutDeletedList} />
         </div>
       </div>
 

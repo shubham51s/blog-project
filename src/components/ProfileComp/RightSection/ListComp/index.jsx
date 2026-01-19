@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function ListComp() {
+function ListComp({ list }) {
   return (
     <Link to="list/reading-list" className="flex items-start cursor-pointer no-underline p-0 margin-21" style={{ marginTop: 0, marginInline: 0 }}>
       <div className="width77 grow-0 shrink-0 basis-auto flex overflow-hidden relative">
@@ -22,8 +22,12 @@ function ListComp() {
         </div>
       </div>
       <div className="margin-21" style={{ marginRight: 0, marginBlock: 0 }}>
-        <h2 className="line-clamp-2 height-15 font-10 font-normal overflow-hidden line20 m-0 text-ellipsis color-3">Reading list</h2>
-        <div className="font-4 color-4 line20 flex font-normal">4 stories</div>
+        <h2 className="line-clamp-2 height-15 font-10 font-normal overflow-hidden line20 m-0 text-ellipsis color-3" title={list.name}>
+          {list.name}
+        </h2>
+        <div className="font-4 color-4 line20 flex font-normal" title={list.savedCount}>
+          {list.savedCount}
+        </div>
       </div>
     </Link>
   );

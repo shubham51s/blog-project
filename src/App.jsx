@@ -6,7 +6,6 @@ import CreatePostPage from "./pages/Create post";
 import EditPostPage from "./pages/Edit post";
 import PostDetailsPage from "./pages/Post Details";
 import MyBlogsPage from "./pages/My blogs";
-import ProfilePage from "./pages/Profile";
 import NotFoundPage from "./pages/Not found";
 import AboutPage from "./pages/About";
 import GlobalLoaderComp from "./components/Common/globalLoader";
@@ -35,12 +34,10 @@ function App() {
           <Route index element={<HomePageProtected />} /> // home component
           <Route path="me/saved" element={<SavedBlogsPage />} />
           <Route path="me/stories" element={<StoriesPage />} />
-          <Route path="profile/:username" element={<ProfilePage />}>
-            <Route element={<ProfileCommonLayout />}>
-              <Route index element={<Home />} />
-              <Route path="about" element={<About />} />
-              <Route path="lists" element={<List />} />
-            </Route>
+          <Route path="profile/:username" element={<ProfileCommonLayout />}>
+            <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
+            <Route path="lists" element={<List />} />
             <Route path="followers" element={<Follower />} />
             <Route path="following" element={<Following />} />
           </Route>
@@ -53,7 +50,6 @@ function App() {
         <Route path="/new-story" element={<CreatePostPage />} />
         <Route path="/edit/:id" element={<EditPostPage />} />
         <Route path="/my-blogs/:id" element={<MyBlogsPage />} />
-        <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
       {/* </BrowserRouter> */}

@@ -9,7 +9,7 @@ import EditListModal from "../../ListModals/edit";
 import { showToast } from "../../../../../utils/toaster";
 import { useRequestHandler } from "../../../../../hooks/requestHandler";
 
-function MoreButton({ user, list, setList, filterOutDeletedList }) {
+function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -62,8 +62,15 @@ function MoreButton({ user, list, setList, filterOutDeletedList }) {
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.updatedList) {
-        setList(result.data.updatedList);
+        const updatedList = result.data.updatedList;
+        setList(updatedList);
         showToast("List updated successfully");
+
+        const updatedPublicList = user.lists.filter((item) => {
+          return (!item.isPrivate && item._id !== updatedList._id) || (item._id === updatedList._id && !updatedList.isPrivate);
+        });
+
+        setUser((prev) => ({ ...prev, publicLists: updatedPublicList }));
       } else {
         if (response?.status < 500) {
           showToast(result?.message || "Some error occured");
@@ -103,6 +110,9 @@ function MoreButton({ user, list, setList, filterOutDeletedList }) {
       if (response?.status === 200) {
         setList((prev) => ({ ...prev, isPrivate: false }));
         showToast(`${list.name} is now public.`);
+
+        const updatedPublicList = user.lists.filter((item) => !item.isPrivate || item._id === list._id);
+        setUser((prev) => ({ ...prev, publicLists: updatedPublicList }));
       } else {
         showToast("Some error occured");
       }
@@ -128,6 +138,8 @@ function MoreButton({ user, list, setList, filterOutDeletedList }) {
       if (response?.status === 200) {
         setList((prev) => ({ ...prev, isPrivate: true }));
         showToast(`${list.name} is now private.`);
+        const updatedPublicList = user.publicLists.filter((item) => item._id !== list._id);
+        setUser((prev) => ({ ...prev, publicLists: updatedPublicList }));
       } else {
         showToast("Some error occured");
       }
@@ -305,6 +317,7 @@ function MoreButton({ user, list, setList, filterOutDeletedList }) {
 
       {/* hide responses modal */}
       <HideResponseModal isHideResponseModal={isHideResponseModal} handleCloseHideResponseModal={handleCloseHideResponseModal} hideResponses={hideResponses} />
+
       {/* edit list details */}
       <EditListModal isEditListModal={isEditListModal} handleCloseEditListModal={handleCloseEditListModal} list={list} editList={editList} />
     </>

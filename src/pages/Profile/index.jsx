@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import { useRequestHandler } from "../../hooks/requestHandler";
 
@@ -7,6 +7,7 @@ function ProfilePage() {
   const { requestHandler } = useRequestHandler();
   const [userDetails, setUserDetails] = useState(null);
   const [isError, setIsError] = useState(false);
+  const isCompMounted = useRef(null);
 
   const fetchUserDetails = async () => {
     try {
@@ -30,7 +31,10 @@ function ProfilePage() {
   };
 
   useEffect(() => {
-    fetchUserDetails();
+    if (!isCompMounted.current) {
+      isCompMounted.current = true;
+      fetchUserDetails();
+    }
   }, []);
 
   return (
