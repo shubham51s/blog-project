@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
@@ -6,9 +6,11 @@ import Skeleton from "react-loading-skeleton";
 import { formatNumberCompact } from "../../../../utils/common";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { showToast } from "../../../../utils/toaster";
+import { UserContext } from "../../../../context/userContext";
 
-function FollowingComp({ item }) {
+function FollowingComp({ item, user, setUser }) {
   const { requestHandler } = useRequestHandler();
+  const { userInfo } = useContext(UserContext);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const initialLoadingTimeout = useRef(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -36,6 +38,9 @@ function FollowingComp({ item }) {
       if (response?.status === 200) {
         setAuthor((prev) => ({ ...prev, followee: { ...prev.followee, isFollowing: true } }));
         showToast(`Success! You're now following ${author.followee.name}.`);
+        if (userInfo._id === user._id) {
+          setUser((prev) => ({ ...prev, followingCount: prev.followingCount + 1 }));
+        }
       } else {
         showToast("Some error occcured.");
       }
@@ -60,6 +65,10 @@ function FollowingComp({ item }) {
         setAuthor((prev) => ({ ...prev, followee: { ...prev.followee, isFollowing: false } }));
 
         showToast(`You unfollowed ${author.followee.name}.`);
+
+        if (userInfo._id === user._id) {
+          setUser((prev) => ({ ...prev, followingCount: prev.followingCount > 0 ? prev.followingCount - 1 : 0 }));
+        }
       } else {
         showToast("Some error occcured.");
       }

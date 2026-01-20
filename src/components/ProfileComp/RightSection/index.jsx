@@ -29,7 +29,7 @@ function RightSectionComp({ user, setUser }) {
       const response = await requestHandler("/follow/follow-user", "POST", params);
 
       if (response?.status === 200) {
-        setUser((prev) => ({ ...prev, isFollowing: true }));
+        setUser((prev) => ({ ...prev, isFollowing: true, followersCount: prev.followersCount + 1 }));
         showToast(`Success! You're now following ${user.name}.`);
       } else {
         showToast("Some error occcured.");
@@ -52,7 +52,7 @@ function RightSectionComp({ user, setUser }) {
       const response = await requestHandler("/follow/unfollow-user", "POST", params);
 
       if (response?.status === 200) {
-        setUser((prev) => ({ ...prev, isFollowing: false }));
+        setUser((prev) => ({ ...prev, isFollowing: false, followersCount: prev.followersCount > 0 ? prev.followersCount - 1 : 0 }));
 
         showToast(`You unfollowed ${user.name}.`);
       } else {
@@ -166,7 +166,7 @@ function RightSectionComp({ user, setUser }) {
                     <span className="font-10 font-medium color-3 custom-line-h-1">Following</span>
                     <ul className="margin-21 p-0 list-none" style={{ marginInline: 0 }}>
                       {followingArr.map((item) => (
-                        <FollowingComp item={item} key={item._id} />
+                        <FollowingComp item={item} user={user} setUser={setUser} key={item._id} />
                       ))}
                     </ul>
                     <p className="font-4 color-3 custom-line-h-1 font-normal m-0 opacity-[0.8] transition-all duration-75 ease-in-out hover:opacity-100">

@@ -22,6 +22,9 @@ function FollowersList({ item, user, setUser }) {
       if (response?.status === 200) {
         setAuthor((prev) => ({ ...prev, follower: { ...prev.follower, isFollowing: true } }));
         showToast(`Success! You're now following ${author.follower.name}.`);
+        if (userInfo._id === user._id) {
+          setUser((prev) => ({ ...prev, followingCount: prev.followingCount + 1 }));
+        }
       } else {
         showToast("Some error occcured.");
       }
@@ -45,6 +48,9 @@ function FollowersList({ item, user, setUser }) {
       if (response?.status === 200) {
         setAuthor((prev) => ({ ...prev, follower: { ...prev.follower, isFollowing: false } }));
         showToast(`You unfollowed ${author.follower.name}.`);
+        if (userInfo._id === user._id) {
+          setUser((prev) => ({ ...prev, followingCount: prev.followingCount > 0 ? prev.followingCount - 1 : 0 }));
+        }
       } else {
         showToast("Some error occcured.");
       }
