@@ -22,6 +22,7 @@ import List from "./pages/Profile/List";
 import Follower from "./pages/Profile/Follower";
 import Following from "./pages/Profile/Following";
 import ProfilePage from "./pages/Profile";
+import ListDetailsPage from "./pages/ListDetails";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -43,6 +44,7 @@ function App() {
             <Route path="followers" element={<Follower />} />
             <Route path="following" element={<Following />} />
           </Route>
+          <Route path="profile/:username/list/:listName/:listId" element={<ListDetailsPage />} />
           <Route path=":title/:id" element={<PostDetailsPage />} />
         </Route>
         {/* <Route path="/:title/:id" element={<PostDetailsPage />} /> */}

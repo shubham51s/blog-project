@@ -1,0 +1,186 @@
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useRequestHandler } from "../../hooks/requestHandler";
+import Skeleton from "react-loading-skeleton";
+import { IoLockClosedSharp } from "react-icons/io5";
+import { formatMonthAndDayLong } from "../../utils/monthDateLongFormatter";
+import { PiHandsClappingLight } from "react-icons/pi";
+import { BsChat } from "react-icons/bs";
+import { MdOutlineMoreHoriz } from "react-icons/md";
+
+function ListDetailsPage() {
+  const { username, listId } = useParams();
+  const { requestHandler } = useRequestHandler();
+  const isCompMounted = useRef(null);
+  const [isError, setIsError] = useState(false);
+  const [list, setList] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchListDetails = async () => {
+    try {
+      const response = await requestHandler(`/list/${listId}`);
+      const result = await response.json();
+
+      console.log("list result: ", result);
+
+      if (response?.status === 200 && result?.data?.list) {
+        setList(result.data.list);
+      } else {
+        setIsError(true);
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+      setIsError(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!isCompMounted.current) {
+      isCompMounted.current = true;
+      fetchListDetails();
+    }
+  }, []);
+
+  return (
+    <>
+      {!isLoading && isError && <div className="">Error</div>}
+      {!isError && (
+        <div className="grow shrink basis-auto width-17 box-border">
+          <div className="flex flex-col min-h-screen custom-bg-8">
+            {/* top section (profile) */}
+            <div className="flex justify-center">
+              <div className="min-w-0 w-full max-width-2 margin-12">
+                <header className="margin55 margin54 block">
+                  <div className="flex items-start justify-between">
+                    <div className="flex">
+                      <div className="margin-3">
+                        <Link to="" className="no-underline m-0 p-0 cursor-pointer">
+                          {list && (
+                            <div className="relative">
+                              <img src={list.user.profileImg} alt={list.user.name} className="width-15 aspect-square rounded-full" />
+                              <div className="absolute top-0 width-15 aspect-square rounded-full boxShadow7"></div>
+                            </div>
+                          )}
+                          {!list && <Skeleton circle className="width-15 aspect-square rounded-full" />}
+                        </Link>
+                      </div>
+                      <div>
+                        <div className="line-h-8 font-10 color-3 font-normal">
+                          <div className="flex items-center margin-19" style={{ marginTop: 0, marginInline: 0 }}>
+                            {list && (
+                              <Link to="" className="no-underline cursor-pointer m-0 p-0 font-medium">
+                                {list.user.name}
+                              </Link>
+                            )}
+                            {!list && <Skeleton width={100} height={18} />}
+                          </div>
+                        </div>
+                        {list && (
+                          <div className="flex items-center flex-wrap">
+                            <p className="color-4 custom-fs-1 line20 m-0 font-normal">
+                              <span className="">{formatMonthAndDayLong(list.createdAt)}</span>
+                            </p>
+                            <span className="margin-9" style={{ marginBlock: 0 }}>
+                              .
+                            </span>
+                            <div>
+                              <p className="color-4 custom-fs-1 line20 m-0 font-normal">{list.savedCount} stories</p>
+                            </div>
+                            {list.isPrivate && (
+                              <div className="margin-9" style={{ marginRight: 0, marginBlock: 0 }}>
+                                <div className="width68 aspect-square">
+                                  <IoLockClosedSharp className="w-full h-full" />
+                                </div>
+                              </div>
+                            )}
+                            {!list.isPrivate && (
+                              <span className="margin-9" style={{ marginBlock: 0 }}>
+                                .
+                              </span>
+                            )}
+                            {!list.isPrivate && (
+                              <div>
+                                <p className="color-4 custom-fs-1 line20 m-0 font-normal">{list.savedByUsersCount} saves</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {!list && <Skeleton width={110} height={11} />}
+                      </div>
+                    </div>
+                  </div>
+                </header>
+              </div>
+            </div>
+
+            {/* bottom section */}
+            <div>
+              <div className="padding69">
+                <div className="flex justify-center">
+                  <div className="min-w-0 w-full max-width-2 margin-12">
+                    <div className="padding-3" style={{ paddingTop: 0, paddingInline: 0 }}>
+                      {list && <h2 className="letter-spacing10 line-clamp-2 height83 line21 font15 font-bold color-3 m-0">{list.name}</h2>}
+                      {!list && (
+                        <div className="max-w-full overflow-hidden">
+                          <Skeleton width={220} height={30} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="custom-margin-b-1">
+                      <div className="flex justify-between padding50 padding84 m-0 bdr-5" style={{ borderInline: 0 }}>
+                        <div className="flex items-center">
+                          <div className="margin-12" style={{ marginLeft: 0 }}>
+                            <div className="flex items-center">
+                              <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
+                                <div className="width-13 aspect-square">
+                                  <PiHandsClappingLight className="w-full h-full" />
+                                </div>
+                              </div>
+                              <div>
+                                <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+                                  <button className="text-left cursor-pointer m-0 p-0">6</button>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <div className="flex items-center">
+                              <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
+                                <div className="width-13 aspect-square">
+                                  <BsChat className="w-full h-full" />
+                                </div>
+                              </div>
+                              <div>
+                                <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+                                  <button className="text-left cursor-pointer m-0 p-0">12</button>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          <button className="custom-px-2 padding-36 color-3 cursor-pointer m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+                            <div className="width-13 aspect-square">
+                              <MdOutlineMoreHoriz className="w-full h-full" />
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* map */}
+                <div className=""></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default ListDetailsPage;

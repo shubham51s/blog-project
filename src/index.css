@@ -349,6 +349,10 @@ img {
   letter-spacing: 0.083em;
 }
 
+.letter-spacing10 {
+  letter-spacing: -0.014em;
+}
+
 .line-h-2 {
   line-height: 100px;
 }
@@ -867,6 +871,10 @@ img {
 
   .height82 {
     max-height: 240px;
+  }
+
+  .height83 {
+    max-height: 76px;
   }
 
   .custom-max-w-1 {
@@ -1754,7 +1762,11 @@ img {
   }
 
   .padding83 {
-    padding-bottom: 24px
+    padding-bottom: 24px;
+  }
+
+  .padding84 {
+    padding-block: 3px;
   }
 
   .margin-3 {

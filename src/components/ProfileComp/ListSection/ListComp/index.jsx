@@ -1,16 +1,23 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoLockClosed } from "react-icons/io5";
 import MoreButton from "./MoreButton";
+import SaveList from "./Save";
+import { UserContext } from "../../../../context/userContext";
 
 function ListComp({ user, setUser, item, filterOutDeletedList }) {
+  const navigate = useNavigate();
+  const { userInfo } = useContext(UserContext);
   const [list, setList] = useState(item);
 
+  const handleNavigateToLink = () => {
+    navigate(`/profile/${user.username}/list/${list.name.toLowerCase().split(" ").join("-")}/${list._id}`);
+  };
+
   return (
-    <div className="relative w-full width55 z-0 flex justify-between margin57 bdr-5 border-radius-3 bg-10">
-      {/* <Link to="" className=""></Link> */}
+    <div onClick={handleNavigateToLink} className="relative w-full width55 z-0 flex justify-between margin57 bdr-5 border-radius-3 bg-10 cursor-pointer">
       <div className="grow shrink-0 basis-0 padding-3 padding76 flex flex-col break-all justify-between">
-        <Link to="" className="no-underline">
+        <Link to={`/profile/${user.username}`} onClick={(e) => e.stopPropagation()} className="no-underline">
           <div className="flex opacity-[0.95] transition-all duration-75 linear hover:opacity-100">
             <div className="relative">
               <img src={user.profileImg} alt="" className="height-12 aspect-square rounded-full" />
@@ -37,7 +44,10 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
               </div>
             )}
           </div>
-          <MoreButton user={user} setUser={setUser} list={list} setList={setList} filterOutDeletedList={filterOutDeletedList} />
+          <div className="flex items-center">
+            {userInfo._id !== user._id && <SaveList user={user} setUser={setUser} list={list} />}
+            <MoreButton user={user} setUser={setUser} list={list} setList={setList} filterOutDeletedList={filterOutDeletedList} />
+          </div>
         </div>
       </div>
 
