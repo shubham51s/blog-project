@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import FollowingComp from "./FollowingComp";
@@ -12,12 +12,12 @@ import { showToast } from "../../../utils/toaster";
 
 function RightSectionComp({ user, setUser }) {
   const { requestHandler } = useRequestHandler();
+  const { pathname } = useLocation();
   const { userInfo } = useContext(UserContext);
-  const [isFollowing, setIsFollowing] = useState(true);
   const [followingArr, setFollowingArr] = useState([]);
   const [loaders, setLoaders] = useState({
     toggleFollowLoader: false,
-    followingListLoader: true,
+    followingListLoader: false,
   });
 
   const followUser = async () => {
@@ -68,10 +68,7 @@ function RightSectionComp({ user, setUser }) {
   };
 
   const fetchFollowingList = async () => {
-    if (user.followingCount <= 0) {
-      setLoaders((prev) => ({ ...prev, followingListLoader: false }));
-      return;
-    }
+    setLoaders((prev) => ({ ...prev, followingListLoader: true }));
     try {
       const response = await requestHandler(`/follow/following/${user._id}?skip=0&limit=5`);
       const result = await response.json();
@@ -88,8 +85,12 @@ function RightSectionComp({ user, setUser }) {
   };
 
   useEffect(() => {
-    if (user && loaders.followingListLoader) fetchFollowingList();
-  }, [user]);
+    if ((pathname.includes("/followers") || pathname.includes("/following")) && followingArr.length > 0) {
+      setFollowingArr([]);
+    } else if (user && user.followingCount > 0 && followingArr.length === 0 && !loaders.followingListLoader) {
+      fetchFollowingList();
+    }
+  }, [user, pathname]);
 
   return (
     <div className="width-22 width-21 height-13 bdr-5 padding-24 padding75 box-border custom-bg-8" style={{ borderRight: 0, borderBlock: 0 }}>
