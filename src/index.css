@@ -877,6 +877,10 @@ img {
     max-height: 76px;
   }
 
+  .height84 {
+    max-height: 96px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -1101,6 +1105,14 @@ img {
 
   .bdr18 {
     border: 3px solid var(--border-14);
+  }
+
+  .bdr19 {
+    border: 3px solid var(--border-5);
+  }
+
+  .bdr20 {
+    border: 3px solid var(--border-3);
   }
 
   .bdr .translateY-1 {

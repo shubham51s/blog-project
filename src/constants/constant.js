@@ -1,4 +1,5 @@
 const urlBasePath = "http://localhost:3000/api/v1";
+const appRootPath = "http://localhost:5173";
 
 const footerOptions = [
   {
@@ -54,4 +55,4 @@ const footerOptions = [
   },
 ];
 
-export { urlBasePath, footerOptions };
+export { urlBasePath, footerOptions, appRootPath };

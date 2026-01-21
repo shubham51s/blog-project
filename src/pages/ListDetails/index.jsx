@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useRequestHandler } from "../../hooks/requestHandler";
 import Skeleton from "react-loading-skeleton";
@@ -6,10 +6,14 @@ import { IoLockClosedSharp } from "react-icons/io5";
 import { formatMonthAndDayLong } from "../../utils/monthDateLongFormatter";
 import { PiHandsClappingLight } from "react-icons/pi";
 import { BsChat } from "react-icons/bs";
-import { MdOutlineMoreHoriz } from "react-icons/md";
+import SaveList from "../../components/ListDetailsComp/SaveListButton";
+import { UserContext } from "../../context/userContext";
+import MoreButton from "../../components/ListDetailsComp/MoreButton";
+import List from "../../components/ListDetailsComp/List";
 
 function ListDetailsPage() {
   const { username, listId } = useParams();
+  const { userInfo } = useContext(UserContext);
   const { requestHandler } = useRequestHandler();
   const isCompMounted = useRef(null);
   const [isError, setIsError] = useState(false);
@@ -122,6 +126,11 @@ function ListDetailsPage() {
                   <div className="min-w-0 w-full max-width-2 margin-12">
                     <div className="padding-3" style={{ paddingTop: 0, paddingInline: 0 }}>
                       {list && <h2 className="letter-spacing10 line-clamp-2 height83 line21 font15 font-bold color-3 m-0">{list.name}</h2>}
+                      {list?.description && (
+                        <div className="custom-px-2 whitespace-pre-wrap" style={{ paddingBottom: 0, paddingInline: 0 }}>
+                          <h2 className="height84 line-h-8 font-9 line-clamp-4 color-4 font-normal m-0">{list.description}</h2>
+                        </div>
+                      )}
                       {!list && (
                         <div className="max-w-full overflow-hidden">
                           <Skeleton width={220} height={30} />
@@ -130,50 +139,52 @@ function ListDetailsPage() {
                     </div>
                     <div className="custom-margin-b-1">
                       <div className="flex justify-between padding50 padding84 m-0 bdr-5" style={{ borderInline: 0 }}>
-                        <div className="flex items-center">
-                          <div className="margin-12" style={{ marginLeft: 0 }}>
-                            <div className="flex items-center">
-                              <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                <div className="width-13 aspect-square">
-                                  <PiHandsClappingLight className="w-full h-full" />
+                        {list && (
+                          <div className="flex items-center">
+                            <div className="margin-12" style={{ marginLeft: 0 }}>
+                              <div className="flex items-center">
+                                <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
+                                  <div className="width-13 aspect-square">
+                                    <PiHandsClappingLight className="w-full h-full" />
+                                  </div>
+                                </div>
+                                <div>
+                                  <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+                                    <button className="text-left cursor-pointer m-0 p-0">6</button>
+                                  </p>
                                 </div>
                               </div>
-                              <div>
-                                <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
-                                  <button className="text-left cursor-pointer m-0 p-0">6</button>
-                                </p>
+                            </div>
+                            <div>
+                              <div className="flex items-center">
+                                <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
+                                  <div className="width-13 aspect-square">
+                                    <BsChat className="w-full h-full" />
+                                  </div>
+                                </div>
+                                <div>
+                                  <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+                                    <button className="text-left cursor-pointer m-0 p-0">12</button>
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
-                          <div>
-                            <div className="flex items-center">
-                              <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                <div className="width-13 aspect-square">
-                                  <BsChat className="w-full h-full" />
-                                </div>
-                              </div>
-                              <div>
-                                <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
-                                  <button className="text-left cursor-pointer m-0 p-0">12</button>
-                                </p>
-                              </div>
-                            </div>
+                        )}
+                        {list && (
+                          <div className="flex items-center">
+                            {!list.isPrivate && list.user._id !== userInfo._id && <SaveList list={list} />}
+
+                            <MoreButton list={list} setList={setList} fetchListDetails={fetchListDetails} />
                           </div>
-                        </div>
-                        <div className="flex items-center">
-                          <button className="custom-px-2 padding-36 color-3 cursor-pointer m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
-                            <div className="width-13 aspect-square">
-                              <MdOutlineMoreHoriz className="w-full h-full" />
-                            </div>
-                          </button>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* map */}
-                <div className=""></div>
+                <List />
               </div>
             </div>
           </div>
