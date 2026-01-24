@@ -10,3 +10,22 @@ export function formatMonthYearFromUTC(utcDateString) {
     return "-";
   }
 }
+
+export function formatUTCToLocalDate(utcString) {
+  try {
+    if (!utcString) return "-";
+
+    const date = new Date(utcString);
+
+    // Invalid date check
+    if (isNaN(date.getTime())) return "-";
+
+    return date.toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  } catch (e) {
+    return "-";
+  }
+}

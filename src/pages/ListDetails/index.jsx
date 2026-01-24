@@ -9,7 +9,7 @@ import { BsChat } from "react-icons/bs";
 import SaveList from "../../components/ListDetailsComp/SaveListButton";
 import { UserContext } from "../../context/userContext";
 import MoreButton from "../../components/ListDetailsComp/MoreButton";
-import List from "../../components/ListDetailsComp/List";
+import ListItem from "../../components/ListDetailsComp/List";
 
 function ListDetailsPage() {
   const { username, listId } = useParams();
@@ -19,6 +19,24 @@ function ListDetailsPage() {
   const [isError, setIsError] = useState(false);
   const [list, setList] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [listItems, setListItems] = useState([]);
+
+  const fetchListItems = async (listId, userId, skip) => {
+    try {
+      const response = await requestHandler(`/list/items/get/${listId}/${userId}?skip=${skip}`);
+      const result = await response.json();
+
+      if (response?.status === 200 && result?.data?.listItems) {
+        setListItems(result.data.listItems);
+        console.log("fetchListItems result ", result.data.listItems);
+      }
+
+      if (isLoading) setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      if (isLoading) setIsLoading(false);
+    }
+  };
 
   const fetchListDetails = async () => {
     try {
@@ -29,10 +47,11 @@ function ListDetailsPage() {
 
       if (response?.status === 200 && result?.data?.list) {
         setList(result.data.list);
+        fetchListItems(result.data.list._id, result.data.list.user._id, 0);
       } else {
         setIsError(true);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
@@ -183,8 +202,9 @@ function ListDetailsPage() {
                   </div>
                 </div>
 
-                {/* map */}
-                <List />
+                {listItems.map((item) => (
+                  <ListItem item={item} key={item._id} />
+                ))}
               </div>
             </div>
           </div>

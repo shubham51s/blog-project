@@ -1440,6 +1440,10 @@ img {
     width: 102px;
   }
 
+  .width86 {
+    width: 20px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -1779,6 +1783,10 @@ img {
 
   .padding84 {
     padding-block: 3px;
+  }
+
+  .padding85 {
+    padding-block: 4px;
   }
 
   .margin-3 {
