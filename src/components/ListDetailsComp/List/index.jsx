@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaHandsClapping } from "react-icons/fa6";
 import { FaComment } from "react-icons/fa";
@@ -9,8 +9,10 @@ import { formatNumberCompact } from "../../../utils/common";
 import errImg from "../../../assets/images/noPreviewImage.png";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { showToast } from "../../../utils/toaster";
+import { UserContext } from "../../../context/userContext";
 
-function ListItem({ item }) {
+function ListItem({ item, list, setListItems }) {
+  const { userInfo } = useContext(UserContext);
   const { requestHandler } = useRequestHandler();
   const [isFocused, setIsFocused] = useState(false);
   const [listItem, setListItem] = useState(item);
@@ -67,34 +69,36 @@ function ListItem({ item }) {
       <div className="flex justify-center">
         <div className="min-w-0 w-full max-width-2 margin-12">
           {/* note */}
-          <div className="flex items-start justify-between margin-17" style={{ marginTop: 0 }}>
-            <div className={`w-[80%] max-w-[80%] padding-17 italic font-4 color-4 ${isFocused ? "bdr20" : "bdr19"}`} style={{ paddingRight: 0, paddingBlock: 0, borderRight: 0, borderBlock: 0 }}>
-              <span className="color-3 custom-fs-1 line20 font-normal">
-                <div className="w-full flex flex-col">
-                  <div className={`w-full flex padding-28 custom-px-2 bg-10 border-radius-3 ${isFocused ? "bdr-7" : "bdr16"}`}>
-                    <input onInput={(e) => setNoteInput(e.target.value)} value={noteInput} onFocus={() => handleFocusToggle(true)} onBlur={() => handleFocusToggle(false)} placeholder={isFocused ? "Write a brief description" : "Add a note..."} type="text" className="grow shrink w-full p-0 outline-0 border-0 m-0 resize-none" />
+          {list.user._id === userInfo._id && (
+            <div className="flex items-start justify-between margin-17" style={{ marginTop: 0 }}>
+              <div className={`w-[80%] max-w-[80%] padding-17 italic font-4 color-4 ${isFocused ? "bdr20" : "bdr19"}`} style={{ paddingRight: 0, paddingBlock: 0, borderRight: 0, borderBlock: 0 }}>
+                <span className="color-3 custom-fs-1 line20 font-normal">
+                  <div className="w-full flex flex-col">
+                    <div className={`w-full flex padding-28 custom-px-2 bg-10 border-radius-3 ${isFocused ? "bdr-7" : "bdr16"}`}>
+                      <input onInput={(e) => setNoteInput(e.target.value)} value={noteInput} onFocus={() => handleFocusToggle(true)} onBlur={() => handleFocusToggle(false)} placeholder={isFocused ? "Write a brief description" : "Add a note..."} type="text" className="grow shrink w-full p-0 outline-0 border-0 m-0 resize-none" />
+                    </div>
                   </div>
-                </div>
-              </span>
-            </div>
-            {/* save button */}
-            {isShowBtn && (
-              <div className="flex items-center justify-end padding-7 w-[20%] max-w-[20%] padding85" style={{ paddingRight: 0 }}>
-                <div>
-                  <button onClick={() => handleCancelInput()} disabled={isLoading} className="font-4 color-3 line20 font-normal cursor-pointer m-0 p-0 opacity-[0.75] transition-all duration-75 ease hover:opacity-100">
-                    Cancel
-                  </button>
-                </div>
-                <div className="padding-7" style={{ paddingRight: 0 }}>
+                </span>
+              </div>
+              {/* save button */}
+              {isShowBtn && (
+                <div className="flex items-center justify-end padding-7 w-[20%] max-w-[20%] padding85" style={{ paddingRight: 0 }}>
                   <div>
-                    <button onClick={editNote} disabled={isLoading} className="font-4 text-[#156d12] line20 font-normal cursor-pointer m-0 p-0 opacity-[0.9] transition-all duration-75 ease hover:opacity-100">
-                      Done
+                    <button onClick={() => handleCancelInput()} disabled={isLoading} className="font-4 color-3 line20 font-normal cursor-pointer m-0 p-0 opacity-[0.75] transition-all duration-75 ease hover:opacity-100">
+                      Cancel
                     </button>
                   </div>
+                  <div className="padding-7" style={{ paddingRight: 0 }}>
+                    <div>
+                      <button onClick={editNote} disabled={isLoading} className="font-4 text-[#156d12] line20 font-normal cursor-pointer m-0 p-0 opacity-[0.9] transition-all duration-75 ease hover:opacity-100">
+                        Done
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {/* blog */}
           <article className="">
@@ -103,7 +107,7 @@ function ListItem({ item }) {
                 <div className="relative flex">
                   <div className="w-full">
                     <div className="flex">
-                      <div className="margin-21 flex items-center">
+                      <div className="margin-21 flex items-center" style={{ marginInline: 0, marginTop: 0 }}>
                         <div className="margin-9" style={{ marginLeft: 0 }}>
                           <Link to="" className="relative no-underline cursor-pointer">
                             <img src={listItem.blog.author.profileImg} className="width86 aspect-square box-border rounded-full" />
@@ -113,7 +117,7 @@ function ListItem({ item }) {
                         <div>
                           <Link to="" className="no-underline relative cursor-pointer m-0 p-0 flex items-center hover:underline">
                             <p className="break-all line-clamp-1 height-6 font-4 color-3 line20 font-normal m-0" title={listItem.blog.author.name}>
-                              {listItem.blog.author.name}
+                              {userInfo._id === listItem.blog.author._id ? "You" : listItem.blog.author.name}
                             </p>
                           </Link>
                         </div>
@@ -158,7 +162,7 @@ function ListItem({ item }) {
                               </div>
                               <div className="grow-0 shrink-0 flex justify-end items-center">
                                 <SaveBlog />
-                                <BlogMoreBtn />
+                                <BlogMoreBtn listItem={listItem} setListItems={setListItems} />
                               </div>
                             </div>
                           </span>

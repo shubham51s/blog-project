@@ -5,11 +5,12 @@ import Skeleton from "react-loading-skeleton";
 import { IoLockClosedSharp } from "react-icons/io5";
 import { formatMonthAndDayLong } from "../../utils/monthDateLongFormatter";
 import { PiHandsClappingLight } from "react-icons/pi";
-import { BsChat } from "react-icons/bs";
 import SaveList from "../../components/ListDetailsComp/SaveListButton";
 import { UserContext } from "../../context/userContext";
 import MoreButton from "../../components/ListDetailsComp/MoreButton";
 import ListItem from "../../components/ListDetailsComp/List";
+import { FaCommentSlash } from "react-icons/fa";
+import { FaRegComment } from "react-icons/fa6";
 
 function ListDetailsPage() {
   const { username, listId } = useParams();
@@ -163,9 +164,16 @@ function ListDetailsPage() {
                             <div className="margin-12" style={{ marginLeft: 0 }}>
                               <div className="flex items-center">
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                  <div className="width-13 aspect-square">
-                                    <PiHandsClappingLight className="w-full h-full" />
-                                  </div>
+                                  {userInfo._id !== list.user._id && (
+                                    <div className="width-13 cursor-pointer aspect-square opacity-[0.95] transition-all duration-75 ease hover:opacity-100">
+                                      <PiHandsClappingLight className="w-full h-full" />
+                                    </div>
+                                  )}
+                                  {userInfo._id === list.user._id && (
+                                    <div className="width-13 aspect-square cursor-not-allowed opacity-50" title="You cannot applaud your own story">
+                                      <PiHandsClappingLight className="w-full h-full" />
+                                    </div>
+                                  )}
                                 </div>
                                 <div>
                                   <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
@@ -177,15 +185,26 @@ function ListDetailsPage() {
                             <div>
                               <div className="flex items-center">
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                  <div className="width-13 aspect-square">
-                                    <BsChat className="w-full h-full" />
+                                  {list.allowComments && (
+                                    <div className="width-13 aspect-square flex items-center justify-center">
+                                      <div className="w-[85%] aspect-square cursor-pointer opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                                        <FaRegComment className="w-full h-full" />
+                                      </div>
+                                    </div>
+                                  )}
+                                  {!list.allowComments && (
+                                    <div className="width-13 aspect-square cursor-not-allowed opacity-50" title="Responses hidden">
+                                      <FaCommentSlash className="w-full h-full" />
+                                    </div>
+                                  )}
+                                </div>
+                                {list.allowComments && (
+                                  <div>
+                                    <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+                                      <button className="text-left cursor-pointer m-0 p-0">12</button>
+                                    </p>
                                   </div>
-                                </div>
-                                <div>
-                                  <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
-                                    <button className="text-left cursor-pointer m-0 p-0">12</button>
-                                  </p>
-                                </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -203,7 +222,7 @@ function ListDetailsPage() {
                 </div>
 
                 {listItems.map((item) => (
-                  <ListItem item={item} key={item._id} />
+                  <ListItem item={item} list={list} key={item._id} setListItems={setListItems} />
                 ))}
               </div>
             </div>

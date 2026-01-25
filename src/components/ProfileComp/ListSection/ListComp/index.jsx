@@ -15,7 +15,7 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
   };
 
   return (
-    <div onClick={handleNavigateToLink} className="relative w-full width55 z-0 flex justify-between margin57 bdr-5 border-radius-3 bg-10 cursor-pointer">
+    <div className="relative w-full width55 z-0 flex justify-between margin57 bdr-5 border-radius-3 bg-10 cursor-pointer">
       <div className="grow shrink-0 basis-0 padding-3 padding76 flex flex-col break-all justify-between">
         <Link to={`/profile/${user.username}`} onClick={(e) => e.stopPropagation()} className="no-underline">
           <div className="flex opacity-[0.95] transition-all duration-75 linear hover:opacity-100">
@@ -30,7 +30,7 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
             </div>
           </div>
         </Link>
-        <div className="margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
+        <div onClick={handleNavigateToLink} className="margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
           <h2 className="height-61 line-h-8 font-3 overflow-hidden line-clamp-2 font-bold text-ellipsis color-3 m-0">{list.name}</h2>
         </div>
         <div className="flex items-center justify-between">
@@ -51,7 +51,7 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
         </div>
       </div>
 
-      <div>
+      <div onClick={handleNavigateToLink}>
         <div className="relative h-full flex overflow-hidden justify-end">
           <div className="relative bg-10 z-[3] bdr18" style={{ borderLeft: 0, borderBlock: 0 }}>
             <div className="h-full">

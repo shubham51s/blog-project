@@ -231,7 +231,7 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
       {user && userInfo && (
         <div>
           <Popover.Root open={isPopupOpen} onOpenChange={setIsPopupOpen}>
-            <Popover.Trigger className="custom-px-2 padding-36 cursor-pointer opacity-[0.75] transition-all duration-200 linear hover:opacity-100" title="More">
+            <Popover.Trigger onClick={(e) => e.stopPropagation()} className="custom-px-2 padding-36 cursor-pointer opacity-[0.75] transition-all duration-200 linear hover:opacity-100" title="More">
               <div className="width-13 aspect-square color-3">
                 <MdOutlineMoreHoriz className="w-full h-full" />
               </div>
@@ -286,11 +286,13 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
                           </button>
                         </li>
                       )}
-                      <li className="custom-px-2 padding59 text-[#c94a4a] opacity-[0.85] custom-fs-1 font-normal transition-all duration-100 linear hover:opacity-100">
-                        <button onClick={handleShowDeleteModal} className="cursor-pointer m-0 p-0">
-                          <div className="inline-block">Delete list</div>
-                        </button>
-                      </li>
+                      {!list.isDefault && (
+                        <li className="custom-px-2 padding59 text-[#c94a4a] opacity-[0.85] custom-fs-1 font-normal transition-all duration-100 linear hover:opacity-100">
+                          <button onClick={handleShowDeleteModal} className="cursor-pointer m-0 p-0">
+                            <div className="inline-block">Delete list</div>
+                          </button>
+                        </li>
+                      )}
                     </ul>
                   )}
                   {user._id !== userInfo._id && (

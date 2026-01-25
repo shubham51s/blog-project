@@ -31,8 +31,8 @@ function SaveBlog() {
   return (
     <div className="color-3">
       {isSaved && (
-        <button onClick={unsaveBlogToList} disabled={isLoading} className="relative padding-33 cursor-pointer m-0">
-          <div className="width-13 color-3 aspect-square opacity-[0.75] transition-all duration-75 ease hover:opacity-100" title="Save">
+        <button onClick={unsaveBlogToList} disabled={isLoading} className="relative padding-33 cursor-pointer m-0" title="Unsave">
+          <div className="width-13 color-3 aspect-square opacity-[0.75] transition-all duration-75 ease hover:opacity-100">
             <IoMdBookmark className="w-full h-full" />
           </div>
         </button>
@@ -40,7 +40,7 @@ function SaveBlog() {
 
       {!isSaved && (
         <button onClick={saveBlogToList} disabled={isLoading} className="relative padding-33 cursor-pointer m-0">
-          <div className="width-13 color-3 aspect-square opacity-[0.75] transition-all duration-75 ease hover:opacity-100" title="Unsave">
+          <div className="width-13 color-3 aspect-square opacity-[0.75] transition-all duration-75 ease hover:opacity-100" title="Save">
             <MdOutlineBookmarkAdd className="w-full h-full" />
           </div>
         </button>
