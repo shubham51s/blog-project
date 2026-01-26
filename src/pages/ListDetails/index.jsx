@@ -21,6 +21,9 @@ function ListDetailsPage() {
   const [list, setList] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [listItems, setListItems] = useState([]);
+  const addClapTimeout = useRef(null);
+  const clapsClickedCount = useRef(0);
+  const [myPrevClapCount, setMyPrevClapCount] = useState(0);
 
   const fetchListItems = async (listId, userId, skip) => {
     try {
@@ -49,6 +52,9 @@ function ListDetailsPage() {
       if (response?.status === 200 && result?.data?.list) {
         setList(result.data.list);
         fetchListItems(result.data.list._id, result.data.list.user._id, 0);
+        if (result.data.list?.myClaps) {
+          setMyPrevClapCount(result.data.list.myClaps);
+        }
       } else {
         setIsError(true);
         setIsLoading(false);
@@ -58,6 +64,34 @@ function ListDetailsPage() {
       setIsLoading(false);
       setIsError(true);
     }
+  };
+
+  const addClaps = async (count) => {
+    try {
+      const params = {
+        listId: list._id,
+        clapsCount: count,
+      };
+
+      const response = await requestHandler("/list/claps/add", "POST", params);
+      const result = await response.json();
+
+      console.log("result: ", result);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleAddClapsBtnClick = () => {
+    if (list.myClaps >= 50) return;
+
+    clapsClickedCount.current++;
+
+    // if (addClapTimeout.current) clearTimeout(addClapTimeout.current);
+
+    // addClapTimeout.current = setTimeout(() => {
+    //   addClaps(2);
+    // }, 800);
   };
 
   useEffect(() => {
@@ -165,20 +199,22 @@ function ListDetailsPage() {
                               <div className="flex items-center">
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
                                   {userInfo._id !== list.user._id && (
-                                    <div className="width-13 cursor-pointer aspect-square opacity-[0.95] transition-all duration-75 ease hover:opacity-100">
+                                    <div onClick={handleAddClapsBtnClick} className="width-13 cursor-pointer aspect-square opacity-[0.95] transition-all duration-75 ease hover:opacity-100">
                                       <PiHandsClappingLight className="w-full h-full" />
                                     </div>
                                   )}
                                   {userInfo._id === list.user._id && (
-                                    <div className="width-13 aspect-square cursor-not-allowed opacity-50" title="You cannot applaud your own story">
+                                    <div className="width-13 aspect-square cursor-not-allowed opacity-[0.95]" title="You cannot applaud your own story">
                                       <PiHandsClappingLight className="w-full h-full" />
                                     </div>
                                   )}
                                 </div>
                                 <div>
-                                  <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
-                                    <button className="text-left cursor-pointer m-0 p-0">6</button>
-                                  </p>
+                                  {list.clapsCount > 0 && (
+                                    <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+                                      <button className="text-left cursor-pointer m-0 p-0">{list.clapsCount}</button>
+                                    </p>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -198,10 +234,10 @@ function ListDetailsPage() {
                                     </div>
                                   )}
                                 </div>
-                                {list.allowComments && (
+                                {list.allowComments && list.commentCount > 0 && (
                                   <div>
                                     <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
-                                      <button className="text-left cursor-pointer m-0 p-0">12</button>
+                                      <button className="text-left cursor-pointer m-0 p-0">{commentCount}</button>
                                     </p>
                                   </div>
                                 )}

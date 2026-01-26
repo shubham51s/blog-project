@@ -160,6 +160,7 @@ function BlogMoreBtn({ listItem, setListItems }) {
   };
 
   const removeListItem = async () => {
+    console.log("removeListItem: ");
     setLoaders((prev) => ({ ...prev, removeListItemLoader: true }));
     try {
       const params = {
@@ -222,7 +223,9 @@ function BlogMoreBtn({ listItem, setListItems }) {
               {userInfo._id === listItem.blog.author._id && (
                 <ul className="flex flex-col items-stretch m-0 custom-px-2 width59 list-none">
                   <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
-                    <button className="cursor-pointer m-0 p-0 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">Remove item</button>
+                    <button onClick={removeListItem} disabled={loaders.removeListItemLoader} className="cursor-pointer m-0 p-0 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                      Remove item
+                    </button>
                   </li>
                   <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
                     <button className="cursor-pointer m-0 p-0 transition-all opacity-[0.85] duration-75 ease hover:opacity-100">Edit story</button>
