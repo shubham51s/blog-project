@@ -11,6 +11,8 @@ import MoreButton from "../../components/ListDetailsComp/MoreButton";
 import ListItem from "../../components/ListDetailsComp/List";
 import { FaCommentSlash } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa6";
+import { showToast } from "../../utils/toaster";
+import { PiHandsClappingFill } from "react-icons/pi";
 
 function ListDetailsPage() {
   const { username, listId } = useParams();
@@ -23,7 +25,12 @@ function ListDetailsPage() {
   const [listItems, setListItems] = useState([]);
   const addClapTimeout = useRef(null);
   const clapsClickedCount = useRef(0);
-  const [myPrevClapCount, setMyPrevClapCount] = useState(0);
+  const [clapDetails, setClapDetails] = useState({
+    total: 0,
+  });
+  const [loaders, setLoaders] = useState({
+    clapLoader: false,
+  });
 
   const fetchListItems = async (listId, userId, skip) => {
     try {
@@ -52,8 +59,9 @@ function ListDetailsPage() {
       if (response?.status === 200 && result?.data?.list) {
         setList(result.data.list);
         fetchListItems(result.data.list._id, result.data.list.user._id, 0);
+
         if (result.data.list?.myClaps) {
-          setMyPrevClapCount(result.data.list.myClaps);
+          setClapDetails((prev) => ({ ...prev, total: result.data.list.clapsCount }));
         }
       } else {
         setIsError(true);
@@ -66,32 +74,55 @@ function ListDetailsPage() {
     }
   };
 
-  const addClaps = async (count) => {
+  const addClaps = async () => {
+    setLoaders((prev) => ({ ...prev, clapLoader: true }));
     try {
       const params = {
         listId: list._id,
-        clapsCount: count,
+        clapsCount: Math.min(clapsClickedCount.current, 50),
       };
 
       const response = await requestHandler("/list/claps/add", "POST", params);
       const result = await response.json();
 
-      console.log("result: ", result);
+      if (response?.status === 200 && result.clapsCount) {
+        const updatedTotal = list.clapsCount - list.myClaps + result.clapsCount;
+        setClapDetails((prev) => ({ ...prev, total: updatedTotal }));
+        setList((prev) => ({ ...prev, clapsCount: updatedTotal, myClaps: result.clapsCount }));
+      } else {
+        setClapDetails((prev) => ({ ...prev, total: list.clapsCount }));
+        showToast("Some error occured");
+      }
+
+      clapsClickedCount.current = 0;
+      setLoaders((prev) => ({ ...prev, clapLoader: false }));
     } catch (err) {
       console.error(err);
+      clapsClickedCount.current = 0;
+      showToast("Some error occured");
+      setClapDetails((prev) => ({ ...prev, total: list.clapsCount }));
+      setLoaders((prev) => ({ ...prev, clapLoader: false }));
     }
   };
 
   const handleAddClapsBtnClick = () => {
-    if (list.myClaps >= 50) return;
+    if (list.myClaps >= 50 || loaders.clapLoader) return;
 
     clapsClickedCount.current++;
 
-    // if (addClapTimeout.current) clearTimeout(addClapTimeout.current);
+    setClapDetails((prev) => {
+      const newTotal = list.clapsCount - list.myClaps + Math.min(list.myClaps + clapsClickedCount.current, 50);
+      return {
+        ...prev,
+        total: newTotal,
+      };
+    });
 
-    // addClapTimeout.current = setTimeout(() => {
-    //   addClaps(2);
-    // }, 800);
+    if (addClapTimeout.current) clearTimeout(addClapTimeout.current);
+
+    addClapTimeout.current = setTimeout(() => {
+      addClaps();
+    }, 800);
   };
 
   useEffect(() => {
@@ -199,8 +230,9 @@ function ListDetailsPage() {
                               <div className="flex items-center">
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
                                   {userInfo._id !== list.user._id && (
-                                    <div onClick={handleAddClapsBtnClick} className="width-13 cursor-pointer aspect-square opacity-[0.95] transition-all duration-75 ease hover:opacity-100">
-                                      <PiHandsClappingLight className="w-full h-full" />
+                                    <div onClick={handleAddClapsBtnClick} className="width-13 cursor-pointer aspect-square opacity-[0.95] transition-all duration-75 ease hover:opacity-100" title="Clap">
+                                      {!list.myClaps > 0 && <PiHandsClappingLight className="w-full h-full" />}
+                                      {list.myClaps > 0 && <PiHandsClappingFill className="w-full h-full" />}
                                     </div>
                                   )}
                                   {userInfo._id === list.user._id && (
@@ -210,9 +242,9 @@ function ListDetailsPage() {
                                   )}
                                 </div>
                                 <div>
-                                  {list.clapsCount > 0 && (
+                                  {clapDetails?.total > 0 && (
                                     <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
-                                      <button className="text-left cursor-pointer m-0 p-0">{list.clapsCount}</button>
+                                      <button className="text-left cursor-pointer m-0 p-0">{clapDetails.total}</button>
                                     </p>
                                   )}
                                 </div>
@@ -221,15 +253,15 @@ function ListDetailsPage() {
                             <div>
                               <div className="flex items-center">
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                  {list.allowComments && (
+                                  {!list.isPrivate && list.allowComments && (
                                     <div className="width-13 aspect-square flex items-center justify-center">
-                                      <div className="w-[85%] aspect-square cursor-pointer opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                                      <div className="w-[85%] aspect-square cursor-pointer opacity-[0.85] transition-all duration-75 ease hover:opacity-100" title="Respond">
                                         <FaRegComment className="w-full h-full" />
                                       </div>
                                     </div>
                                   )}
-                                  {!list.allowComments && (
-                                    <div className="width-13 aspect-square cursor-not-allowed opacity-50" title="Responses hidden">
+                                  {(!list.allowComments || list.isPrivate) && (
+                                    <div className="width-13 aspect-square cursor-not-allowed opacity-50" title={list.isPrivate ? "Responses are disabled for private lists." : "Responses hidden"}>
                                       <FaCommentSlash className="w-full h-full" />
                                     </div>
                                   )}
@@ -249,7 +281,7 @@ function ListDetailsPage() {
                           <div className="flex items-center">
                             {!list.isPrivate && list.user._id !== userInfo._id && <SaveList list={list} />}
 
-                            <MoreButton list={list} setList={setList} fetchListDetails={fetchListDetails} />
+                            <MoreButton list={list} setList={setList} fetchListDetails={fetchListDetails} setClapDetails={setClapDetails} />
                           </div>
                         )}
                       </div>

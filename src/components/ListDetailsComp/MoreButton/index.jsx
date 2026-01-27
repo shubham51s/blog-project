@@ -11,7 +11,7 @@ import { useRequestHandler } from "../../../hooks/requestHandler";
 import { useNavigate } from "react-router-dom";
 import { appRootPath } from "../../../constants/constant";
 
-function MoreButton({ list, setList, fetchListDetails }) {
+function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ function MoreButton({ list, setList, fetchListDetails }) {
   const [loaders, setLoaders] = useState({
     showResponseLoader: false,
     makeListPublicLoader: false,
+    clapLoader: false,
   });
 
   const handleCloseDeleteModal = () => {
@@ -217,6 +218,31 @@ function MoreButton({ list, setList, fetchListDetails }) {
     }
   };
 
+  const undoMyClaps = async () => {
+    setLoaders((prev) => ({ ...prev, clapLoader: true }));
+    try {
+      const params = {
+        listId: list._id,
+      };
+
+      const response = await requestHandler("/list/claps/remove", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        const newTotal = list.clapsCount - list.myClaps;
+        setList((prev) => ({ ...prev, clapsCount: newTotal, myClaps: 0 }));
+        setClapDetails((prev) => ({ ...prev, total: newTotal }));
+      } else {
+        showToast("Some error occured");
+      }
+      setLoaders((prev) => ({ ...prev, clapLoader: false }));
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured");
+      setLoaders((prev) => ({ ...prev, clapLoader: false }));
+    }
+  };
+
   return (
     <>
       <div>
@@ -283,6 +309,11 @@ function MoreButton({ list, setList, fetchListDetails }) {
                     <li className="custom-px-2 padding59 color-3 opacity-[0.85] custom-fs-1 font-normal transition-all duration-100 linear hover:opacity-100">
                       <button onClick={handleCopyLink} className="cursor-pointer m-0 p-0">
                         <div className="inline-block">Copy link</div>
+                      </button>
+                    </li>
+                    <li className="custom-px-2 padding59 color-3 opacity-[0.85] custom-fs-1 font-normal transition-all duration-100 linear hover:opacity-100">
+                      <button onClick={undoMyClaps} disabled={loaders.clapLoader} className="cursor-pointer m-0 p-0">
+                        <div className="inline-block">Undo applause for this list</div>
                       </button>
                     </li>
                   </ul>
