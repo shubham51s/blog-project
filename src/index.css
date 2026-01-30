@@ -1115,6 +1115,10 @@ img {
     border: 3px solid var(--border-3);
   }
 
+  .bdr21 {
+    border: 3px solid
+  }
+
   .bdr .translateY-1 {
     transform: translateY(149.8px);
   }

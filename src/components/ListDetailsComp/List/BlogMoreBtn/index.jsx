@@ -6,6 +6,7 @@ import { showToast } from "../../../../utils/toaster";
 import { UserContext } from "../../../../context/userContext";
 import DisableBlogCommentsModal from "../../../Common/Modals/DisableComments";
 import DeleteBlogModal from "../../../Common/Modals/ConfirmDeleteBlog";
+import { Tooltip } from "@mui/material";
 
 function BlogMoreBtn({ listItem, setListItems }) {
   const { requestHandler } = useRequestHandler();
@@ -190,9 +191,11 @@ function BlogMoreBtn({ listItem, setListItems }) {
     <>
       <div className="margin-26">
         <Popover.Root open={isPopupOpen} onOpenChange={setIsPopupOpen}>
-          <Popover.Trigger className="relative padding-33 cursor-pointer m-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100" title="More">
+          <Popover.Trigger className="relative padding-33 cursor-pointer m-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
             <div className="width-13 aspect-square">
-              <MdOutlineMoreHoriz className="w-full h-full" />
+              <Tooltip placement="top" arrow title="More">
+                <MdOutlineMoreHoriz className="w-full h-full" />
+              </Tooltip>
             </div>
           </Popover.Trigger>
           <Popover.Content side="bottom" className="z-[700] box-border border-radius-3 box-shadow-4" align="middle" sideOffset={1}>

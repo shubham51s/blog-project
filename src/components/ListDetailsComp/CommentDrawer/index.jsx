@@ -7,17 +7,21 @@ import CharacterCount from "@tiptap/extension-character-count";
 import { AiTwotoneSafetyCertificate } from "react-icons/ai";
 import { FaBold } from "react-icons/fa";
 import { FaItalic } from "react-icons/fa";
-import * as Popover from "@radix-ui/react-popover";
 import { UserContext } from "../../../context/userContext";
 import { formatMonthAndDayLong } from "../../../utils/monthDateLongFormatter";
+import { useRequestHandler } from "../../../hooks/requestHandler";
+import { showToast } from "../../../utils/toaster";
+import CommentList from "./CommentList";
 
-function ListCommentDrawer({ setIsCommentDrawerOpen }) {
+function ListCommentDrawer({ setIsCommentDrawerOpen, list, setList }) {
+  const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const commentsContainer = useRef(null);
   const [enableInp, setEnableInp] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [loaders, setLoaders] = useState({
-    commentLoader: false,
+    addCommentLoader: false,
+    initialLoader: true,
   });
 
   const [comments, setComments] = useState([]);
@@ -66,14 +70,49 @@ function ListCommentDrawer({ setIsCommentDrawerOpen }) {
     editor?.commands.focus();
   };
 
-  const handleAddComment = async (type) => {
+  const handleAddComment = async () => {
+    setLoaders((prev) => ({ ...prev, addCommentLoader: true }));
     try {
+      const params = { listId: list._id, content: editor?.getHTML() };
+
+      const response = await requestHandler("/list/comment/add", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200 && result?.data?.comment) {
+        setComments((prev) => [{ ...result.data.comment }, ...prev]);
+        setList((prev) => ({ ...prev, commentCount: prev.commentCount + 1 }));
+        handleDisableCommentInp();
+      } else {
+        if (response?.status < 500) {
+          showToast(result?.msg || "Some error occured");
+        } else {
+          showToast("Some error occured");
+        }
+      }
     } catch (err) {
       console.error(err);
+      showToast("Some error occured");
+    } finally {
+      setLoaders((prev) => ({ ...prev, addCommentLoader: false }));
     }
   };
 
-  const handleDeleteCommentBtnClick = () => {};
+  const fetchComments = async (skip) => {
+    try {
+      const response = await requestHandler(`/list/comment/${list._id}?$skip=${skip}`);
+      const result = await response.json();
+
+      if (response?.status === 200 && result?.data?.comments) {
+        if (skip === 0) {
+          setComments(result.data.comments);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      if (loaders.initialLoader) setLoaders((prev) => ({ ...prev, initialLoader: false }));
+    }
+  };
 
   const handleClickOutside = (e) => {
     const commentBtn = document.getElementById("listCommentBtn");
@@ -85,8 +124,8 @@ function ListCommentDrawer({ setIsCommentDrawerOpen }) {
 
   useEffect(() => {
     setIsShow(true);
+    fetchComments(0);
     document.addEventListener("click", handleClickOutside);
-    // fetchComments();
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
@@ -94,11 +133,11 @@ function ListCommentDrawer({ setIsCommentDrawerOpen }) {
   }, []);
 
   return (
-    <div ref={commentsContainer} className={`transition-all duration-200 ease box-shadow-3 bdr-5 fixed flex flex-col box-border h-full justify-stretch right-0 top-2 overflow-y-auto overflow-x-hidden custom-bg-8 z-[999]" ${isShow ? "width-40" : "w-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
-      <div className="overflow-auto">
+    <div ref={commentsContainer} onClick={(e) => e.stopPropagation()} className={`transition-all duration-200 ease box-shadow-3 bdr-5 fixed flex flex-col box-border height-11 justify-stretch right-0 top-2 overflow-y-auto overscroll-contain overflow-x-hidden custom-bg-8 z-[999]" ${isShow ? "width-40" : "w-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
+      <div>
         <div className="padding-3 flex items-center justify-between">
           <div className="flex">
-            <h2 className="font-3 line-h-8 font-medium color-3 m-0 p-0">{`Responses 20`}</h2>
+            <h2 className="font-3 line-h-8 font-medium color-3 m-0 p-0">{`Responses ${list.commentCount}`}</h2>
           </div>
           <div className="flex">
             <div className="custom-h-2 aspect-square">
@@ -114,7 +153,7 @@ function ListCommentDrawer({ setIsCommentDrawerOpen }) {
           </div>
         </div>
         <div className="bdr-5 padding-3 margin-2" style={{ borderBottom: 0, borderInline: 0, paddingInline: 0 }}>
-          <div className="flex flex-col relative bg-11 custom-fs-1">
+          <div className="flex flex-col relative bg-11 custom-fs-1 padding72" style={{ paddingTop: 0 }}>
             <div onClick={handleEnableAddComment} className={`transition-all duration-400 ease-in-out ${enableInp ? "padding-39 height-57" : "custom-px-2 padding-28 height-56 cursor-text"}`}>
               <div className="relative whitespace-pre-wrap wrap-break-word height-62">
                 <EditorContent editor={editor} className={`w-full border-0 outline-0 ${enableInp ? "pointer-events-auto" : "height-60 pointer-events-none"}`} />
@@ -149,7 +188,7 @@ function ListCommentDrawer({ setIsCommentDrawerOpen }) {
                       Cancel
                     </button>
                   </div>
-                  <button onClick={() => handleAddComment(2)} className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal cursor-pointer m-0 ${editor?.getText().length > 0 && !loaders.commentLoader ? "opacity-100" : "opacity-[0.2]"}`} disabled={editor?.getText().length === 0 || loaders.commentLoader}>
+                  <button onClick={() => handleAddComment()} className={`color-2 padding-27 padding-28 custom-bg-1 border-radius-9 text-center box-border inline-block font-4 custom-line-h-1 font-normal cursor-pointer m-0 ${editor?.getText().length > 0 && !loaders.addCommentLoader ? "opacity-100" : "opacity-[0.2]"}`} disabled={editor?.getText().length === 0 || loaders.addCommentLoader}>
                     Respond
                   </button>
                 </div>
@@ -158,73 +197,20 @@ function ListCommentDrawer({ setIsCommentDrawerOpen }) {
           </div>
         </div>
         <div className="margin-2">
-          {comments.map((item) => (
-            <div className="bdr-5" style={{ borderTop: 0, borderInline: 0 }} key={item._id}>
-              <div className="h-full w-full">
-                <div className="custom-p-y-1 padding-42" style={{ paddingInline: 0 }}>
-                  <div className="flex justify-between">
-                    <div className="flex items-center">
-                      <div className="inline-block cursor-pointer relative">
-                        <div className="relative">
-                          <img src={item.user.profileImg} className="width-11 aspect-square box-border rounded-full align-middle" />
-                        </div>
-                      </div>
-                      <div className="padding-33" style={{ paddingRight: 0, paddingBlock: 0 }}>
-                        <div className="flex items-center">
-                          <div className="cursor-pointer transition-all duration-400 ease-in-out hover:underline">
-                            <p className="break-all text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0">{item.user.name}</p>
-                          </div>
-                          {item.user._id === userInfo._id && (
-                            <div className="bg-[rgb(26,137,23)] text-white margin-19 border-radius-3 padding-6 line-h-7 font-8 font-normal" style={{ marginBlock: 0, marginRight: 0, paddingBlock: 0 }}>
-                              Author
-                            </div>
-                          )}
-                        </div>
-                        <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">
-                          <span>{formatMonthAndDayLong(item.updatedAt)}</span>
-                        </p>
-                      </div>
-                    </div>
-                    <div className="inline-block">
-                      <Popover.Root>
-                        <Popover.Trigger>
-                          <div className="custom-px-2 padding-36 cursor-pointer m-0">
-                            <div className="width-13 aspect-square">
-                              <IoIosMore className="w-full h-full" />
-                            </div>
-                          </div>
-                        </Popover.Trigger>
-                        <Popover.Content side="bottom" align="middle" sideOffset={1}>
-                          <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
-                            <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
-                              {item.user._id === userInfo._id && (
-                                <li className="padding-1 custom-fs-1 color-4 font-normal">
-                                  <button onClick={() => handleDeleteCommentBtnClick(item._id)} className="text-[#c94a4a] cursor-pointer m-0 p-0">
-                                    Delete response
-                                  </button>
-                                </li>
-                              )}
-
-                              {item.user._id !== userInfo._id && (
-                                <li className="padding-1 custom-fs-1 color-4 font-normal">
-                                  <button className="text-[#c94a4a] cursor-pointer m-0 p-0">Report response...</button>
-                                </li>
-                              )}
-                            </ul>
-                          </div>
-                        </Popover.Content>
-                      </Popover.Root>
-                    </div>
-                  </div>
-                  <div className="margin-35 break-words" style={{ marginBottom: 0, marginInline: 0 }}>
-                    <div className="padding-27">
-                      <div className="color-3 custom-fs-1 line-h-8 font-normal" dangerouslySetInnerHTML={{ __html: item.content }} />
-                    </div>
-                  </div>
-                </div>
+          {loaders.initialLoader && (
+            <div className="w-full h-full flex items-end justify-center margin-29" style={{ marginInline: 0 }}>
+              <div className="width-7 aspect-square">
+                <div className="w-full h-full bdr21 custom-bdr-3 animate-spin rounded-full" style={{ borderTopColor: "transparent", borderRightColor: "transparent" }}></div>
               </div>
             </div>
-          ))}
+          )}
+          {!loaders.initialLoader && comments.length > 0 && comments.map((item) => <CommentList key={item._id} item={item} setList={setList} />)}
+          {!loaders.initialLoader && comments.length === 0 && (
+            <div className="w-full h-full flex flex-col items-center justify-center margin-36" style={{ marginInline: 0 }}>
+              <p className="line-h-8 font-10 color-4 font-normal m-0">There are currently no responses for this list.</p>
+              <p className="line-h-8 font-10 color-4 font-normal m-0">Be the first to respond.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

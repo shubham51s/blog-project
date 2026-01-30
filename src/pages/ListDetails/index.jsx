@@ -14,6 +14,8 @@ import { FaRegComment } from "react-icons/fa6";
 import { showToast } from "../../utils/toaster";
 import { PiHandsClappingFill } from "react-icons/pi";
 import ListCommentDrawer from "../../components/ListDetailsComp/CommentDrawer";
+import { Tooltip } from "@mui/material";
+import NoData from "../../components/ListDetailsComp/NoData";
 
 function ListDetailsPage() {
   const { username, listId } = useParams();
@@ -27,6 +29,7 @@ function ListDetailsPage() {
   const addClapTimeout = useRef(null);
   const clapsClickedCount = useRef(0);
   const [isCommentDrawerOpen, setIsCommentDrawerOpen] = useState(false);
+  const [isDefaultLoader, setIsDefaultLoader] = useState(true);
   const [clapDetails, setClapDetails] = useState({
     total: 0,
   });
@@ -41,12 +44,10 @@ function ListDetailsPage() {
 
       if (response?.status === 200 && result?.data?.listItems) {
         setListItems(result.data.listItems);
-        console.log("fetchListItems result ", result.data.listItems);
       }
-
-      if (isLoading) setIsLoading(false);
     } catch (err) {
       console.error(err);
+    } finally {
       if (isLoading) setIsLoading(false);
     }
   };
@@ -56,11 +57,11 @@ function ListDetailsPage() {
       const response = await requestHandler(`/list/${listId}`);
       const result = await response.json();
 
-      console.log("list result: ", result);
-
       if (response?.status === 200 && result?.data?.list) {
         setList(result.data.list);
         fetchListItems(result.data.list._id, result.data.list.user._id, 0);
+
+        if (result.data.list.user.username !== username) setIsError(true);
 
         if (result.data.list?.myClaps) {
           setClapDetails((prev) => ({ ...prev, total: result.data.list.clapsCount }));
@@ -71,8 +72,8 @@ function ListDetailsPage() {
       }
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
       setIsError(true);
+      setIsLoading(false);
     }
   };
 
@@ -131,12 +132,16 @@ function ListDetailsPage() {
     if (!isCompMounted.current) {
       isCompMounted.current = true;
       fetchListDetails();
+
+      setTimeout(() => {
+        setIsDefaultLoader(false);
+      }, 400);
     }
   }, []);
 
   return (
     <>
-      {!isLoading && isError && <div className="">Error</div>}
+      {isError && <div className="">Error</div>}
       {!isError && (
         <div className="grow shrink basis-auto width-17 box-border">
           <div className="flex flex-col min-h-screen custom-bg-8">
@@ -232,14 +237,18 @@ function ListDetailsPage() {
                               <div className="flex items-center">
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
                                   {userInfo._id !== list.user._id && (
-                                    <div onClick={handleAddClapsBtnClick} className="width-13 cursor-pointer aspect-square opacity-[0.95] transition-all duration-75 ease hover:opacity-100" title="Clap">
-                                      {!list.myClaps > 0 && <PiHandsClappingLight className="w-full h-full" />}
-                                      {list.myClaps > 0 && <PiHandsClappingFill className="w-full h-full" />}
-                                    </div>
+                                    <Tooltip placement="top" arrow title="Clap">
+                                      <div onClick={handleAddClapsBtnClick} className="width-13 cursor-pointer aspect-square opacity-[0.95] transition-all duration-75 ease hover:opacity-100">
+                                        {!list.myClaps > 0 && <PiHandsClappingLight className="w-full h-full" />}
+                                        {list.myClaps > 0 && <PiHandsClappingFill className="w-full h-full" />}
+                                      </div>
+                                    </Tooltip>
                                   )}
                                   {userInfo._id === list.user._id && (
-                                    <div className="width-13 aspect-square cursor-not-allowed opacity-[0.95]" title="You cannot applaud your own story">
-                                      <PiHandsClappingLight className="w-full h-full" />
+                                    <div className="width-13 aspect-square cursor-not-allowed opacity-[0.95]">
+                                      <Tooltip placement="top" arrow title="You cannot applaud your own story">
+                                        <PiHandsClappingLight className="w-full h-full" />
+                                      </Tooltip>
                                     </div>
                                   )}
                                 </div>
@@ -257,21 +266,25 @@ function ListDetailsPage() {
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
                                   {!list.isPrivate && list.allowComments && (
                                     <div className="width-13 aspect-square flex items-center justify-center">
-                                      <div onClick={() => setIsCommentDrawerOpen((prev) => !prev)} id="listCommentBtn" className="w-[85%] aspect-square cursor-pointer opacity-[0.85] transition-all duration-75 ease hover:opacity-100" title="Respond">
-                                        <FaRegComment className="w-full h-full" />
+                                      <div onClick={() => setIsCommentDrawerOpen((prev) => !prev)} id="listCommentBtn" className="w-[85%] aspect-square cursor-pointer opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                                        <Tooltip placement="top" arrow title="Respond">
+                                          <FaRegComment className="w-full h-full" />
+                                        </Tooltip>
                                       </div>
                                     </div>
                                   )}
                                   {(!list.allowComments || list.isPrivate) && (
-                                    <div className="width-13 aspect-square cursor-not-allowed opacity-50" title={list.isPrivate ? "Responses are disabled for private lists." : "Responses hidden"}>
-                                      <FaCommentSlash className="w-full h-full" />
+                                    <div className="width-13 aspect-square cursor-not-allowed opacity-50">
+                                      <Tooltip placement="top" arrow title={list.isPrivate ? "Responses are disabled for private lists." : "Responses hidden"}>
+                                        <FaCommentSlash className="w-full h-full" />
+                                      </Tooltip>
                                     </div>
                                   )}
                                 </div>
                                 {list.allowComments && list.commentCount > 0 && (
                                   <div>
                                     <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
-                                      <button className="text-left cursor-pointer m-0 p-0">{commentCount}</button>
+                                      <button className="text-left cursor-pointer m-0 p-0">{list.commentCount}</button>
                                     </p>
                                   </div>
                                 )}
@@ -291,15 +304,24 @@ function ListDetailsPage() {
                   </div>
                 </div>
 
-                {listItems.map((item) => (
-                  <ListItem item={item} list={list} key={item._id} setListItems={setListItems} />
-                ))}
+                {/* list items loader */}
+                {(isLoading || isDefaultLoader) && (
+                  <div className="flex justify-center margin-28" style={{ marginInline: 0 }}>
+                    <div className="width-31 aspect-square bdr21 custom-bdr-3 animate-spin rounded-full" style={{ borderTopColor: "transparent", borderRightColor: "transparent" }}></div>
+                  </div>
+                )}
+
+                {/* no data */}
+                {!isLoading && !isDefaultLoader && listItems.length === 0 && <NoData />}
+
+                {/* list items */}
+                {!isLoading && !isDefaultLoader && listItems.length > 0 && listItems.map((item) => <ListItem item={item} list={list} key={item._id} setListItems={setListItems} />)}
               </div>
             </div>
           </div>
         </div>
       )}
-      {isCommentDrawerOpen && <ListCommentDrawer setIsCommentDrawerOpen={setIsCommentDrawerOpen} />}
+      {isCommentDrawerOpen && <ListCommentDrawer setIsCommentDrawerOpen={setIsCommentDrawerOpen} list={list} setList={setList} />}
     </>
   );
 }
