@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import { Link, Outlet, useLocation, useOutletContext, useParams } from "react-router-dom";
 import { useRequestHandler } from "../../../hooks/requestHandler";
@@ -6,10 +6,13 @@ import RightSectionComp from "../../../components/ProfileComp/RightSection";
 import Skeleton from "react-loading-skeleton";
 import * as Popover from "@radix-ui/react-popover";
 import { showToast } from "../../../utils/toaster";
+import { appRootPath } from "../../../constants/constant";
+import { FollowingContext } from "../../../context/followingContext";
 
 function ProfileCommonLayout() {
   const [isError, setIsError] = useState(false);
   const { username } = useParams();
+  const { followingAuthors } = useContext(FollowingContext);
   const { requestHandler } = useRequestHandler();
   const isCompMounted = useRef(null);
   const [user, setUser] = useState();
@@ -26,8 +29,8 @@ function ProfileCommonLayout() {
 
   const handleCopyProfileBtnClick = async () => {
     try {
-      await navigator.clipboard.writeText("random text");
-      showToast("Link copied", "success");
+      await navigator.clipboard.writeText(`${appRootPath}/profile/${username}`);
+      showToast("Link copied");
       setIsPopupOpen(false);
     } catch (err) {
       console.error("Failed to copy", err);

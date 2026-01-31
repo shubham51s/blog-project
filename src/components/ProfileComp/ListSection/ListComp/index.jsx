@@ -35,7 +35,7 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
         </div>
         <div className="flex items-center justify-between">
           <div className="flex margin-6 items-center">
-            <p className="font-4 color-4 line20 font-normal m-0">{list.savedCount}</p>
+            <p className="font-4 color-4 line20 font-normal m-0">{list.savedCount > 0 ? list.savedCount + " stories" : "No stories"}</p>
             {list.isPrivate && (
               <div className="padding50" style={{ paddingRight: 0 }}>
                 <div className="width68 aspect-square opacity-[0.80]">

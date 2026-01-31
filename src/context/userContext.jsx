@@ -1,12 +1,15 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { urlBasePath } from "../constants/constant";
 import { useLocation, useNavigate } from "react-router-dom";
+import { FollowingContext } from "./followingContext";
 
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const hasMounted = useRef(null);
+  const { fetchFollowingAuthorIds } = useContext(FollowingContext);
   const [userInfo, setUserInfo] = useState({});
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -22,25 +25,29 @@ const UserProvider = ({ children }) => {
         method: "GET",
       });
 
-      setIsInitialLoading(false);
+      const result = await response.json();
 
-      if (response.status === 200) {
-        const result = await response.json();
+      if (response.status === 200 && result?.data?.user) {
         setUserInfo({ ...result.data.user });
         setIsUserLoggedIn(true);
+        fetchFollowingAuthorIds();
       } else {
         // need to check later
         if (location.pathname !== "/") navigate("/");
       }
     } catch (err) {
-      setIsInitialLoading(false);
       // need to check later
       if (location.pathname !== "/") navigate("/");
+    } finally {
+      setIsInitialLoading(false);
     }
   };
 
   useEffect(() => {
-    verifyAuthentication();
+    if (!hasMounted.current) {
+      verifyAuthentication();
+      hasMounted.current = true;
+    }
   }, []);
 
   return <UserContext.Provider value={{ userInfo, setUserInfo, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu }}>{children}</UserContext.Provider>;

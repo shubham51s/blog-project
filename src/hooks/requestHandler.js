@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 // same as useApi custom hook but created later for better names
 export function useRequestHandler() {
-  const { setUserInfo, setIsUserLoggedIn } = useContext(UserContext);
+  // const { setUserInfo, setIsUserLoggedIn } = useContext(UserContext);
 
   async function requestHandler(url, method = "GET", param = null) {
     try {

@@ -76,21 +76,18 @@ function RightSectionComp({ user, setUser }) {
       if (response?.status === 200 && result?.data?.following) {
         setFollowingArr(result.data.following);
       }
-
-      setLoaders((prev) => ({ ...prev, followingListLoader: false }));
     } catch (err) {
       console.error(err);
+    } finally {
       setLoaders((prev) => ({ ...prev, followingListLoader: false }));
     }
   };
 
   useEffect(() => {
-    if ((pathname.includes("/followers") || pathname.includes("/following")) && followingArr.length > 0) {
-      setFollowingArr([]);
-    } else if (user && user.followingCount > 0 && followingArr.length === 0 && !loaders.followingListLoader) {
+    if (user && user.followingCount > 0 && followingArr.length === 0 && !loaders.followingListLoader) {
       fetchFollowingList();
     }
-  }, [user, pathname]);
+  }, [user]);
 
   return (
     <div className="width-22 width-21 height-13 bdr-5 padding-24 padding75 box-border custom-bg-8" style={{ borderRight: 0, borderBlock: 0 }}>
