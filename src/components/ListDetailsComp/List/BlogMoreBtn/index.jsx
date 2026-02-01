@@ -7,13 +7,15 @@ import { UserContext } from "../../../../context/userContext";
 import DisableBlogCommentsModal from "../../../Common/Modals/DisableComments";
 import DeleteBlogModal from "../../../Common/Modals/ConfirmDeleteBlog";
 import { Tooltip } from "@mui/material";
+import { FollowingContext } from "../../../../context/followingContext";
+import { useToggleUserFollow } from "../../../../hooks/toggleUserFollow";
 
 function BlogMoreBtn({ listItem, setListItems }) {
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
+  const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
+  const { followUser, unfollowUser } = useToggleUserFollow();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFollowing, setIsFollowing] = useState(listItem.blog.author.isFollowing);
   const [allowComments, setAllowComments] = useState(listItem.blog.allowComments);
   const [isHideResponseModal, setIsHideResponseModal] = useState(false);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
@@ -23,54 +25,38 @@ function BlogMoreBtn({ listItem, setListItems }) {
     removeListItemLoader: false,
   });
 
-  const followUser = async () => {
+  const handleFollowUser = async () => {
     setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
     try {
-      const params = {
-        userToFollow: listItem.blog.author._id,
-      };
+      const isSuccess = await followUser(listItem.blog.author._id);
 
-      const response = await requestHandler("/follow/follow-user", "POST", params);
-      const result = await response.json();
-
-      if (response?.status === 200) {
-        setIsFollowing(true);
-
+      if (isSuccess) {
         showToast(`Success! You're now following ${listItem.blog.author.name}`);
       } else {
         showToast("Some error occured");
       }
-
-      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+    } finally {
       setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
     }
   };
 
-  const unfollowUser = async () => {
+  const handleUnfollowUser = async () => {
     setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
     try {
-      const params = {
-        userToUnfollow: listItem.blog.author._id,
-      };
+      const isSuccess = await unfollowUser(listItem.blog.author._id);
 
-      const response = await requestHandler("/follow/unfollow-user", "POST", params);
-      const result = await response.json();
-
-      if (response?.status === 200) {
-        setIsFollowing(false);
-
+      if (isSuccess) {
         showToast(`You unfollowed ${listItem.blog.author.name}`);
       } else {
         showToast("Some error occured");
       }
-
-      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+    } finally {
       setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
     }
   };
@@ -127,8 +113,6 @@ function BlogMoreBtn({ listItem, setListItems }) {
       const response = await requestHandler("/blogs/show-responses", "POST", params);
       const result = await response.json();
 
-      console.log("result -> ", result);
-
       if (response?.status === 200) {
         setAllowComments(true);
         showToast("Responses are now shown for this post.");
@@ -161,7 +145,6 @@ function BlogMoreBtn({ listItem, setListItems }) {
   };
 
   const removeListItem = async () => {
-    console.log("removeListItem: ");
     setLoaders((prev) => ({ ...prev, removeListItemLoader: true }));
     try {
       const params = {
@@ -172,7 +155,6 @@ function BlogMoreBtn({ listItem, setListItems }) {
       const response = await requestHandler("/list/items/delete", "POST", params);
 
       if (response?.status === 204) {
-        console.log("list item deleted: ", listItem._id);
         showToast("Successfully deleted");
         setListItems((prev) => [...prev.filter((item) => item._id !== listItem._id)]);
       } else {
@@ -207,18 +189,18 @@ function BlogMoreBtn({ listItem, setListItems }) {
                       Remove item
                     </button>
                   </li>
-                  {isFollowing && (
+                  {!isFetchUserLoader && (
                     <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
-                      <button onClick={unfollowUser} disabled={loaders.toggleFollowLoader} className={`cursor-pointer m-0 p-0 transition-all opacity-[0.85] duration-75 ease ${loaders.toggleFollowLoader ? "" : " hover:opacity-100"}`}>
-                        Unfollow author
-                      </button>
-                    </li>
-                  )}
-                  {!isFollowing && (
-                    <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
-                      <button onClick={followUser} disabled={loaders.toggleFollowLoader} className={`cursor-pointer m-0 p-0 opacity-[0.85] transition-all duration-75 ease ${loaders.toggleFollowLoader ? "" : "hover:opacity-100"}`}>
-                        Follow author
-                      </button>
+                      {followingUsers[listItem.blog.author._id] && (
+                        <button onClick={handleUnfollowUser} disabled={loaders.toggleFollowLoader} className={`cursor-pointer m-0 p-0 transition-all opacity-[0.85] duration-75 ease ${loaders.toggleFollowLoader ? "" : " hover:opacity-100"}`}>
+                          Unfollow author
+                        </button>
+                      )}
+                      {!followingUsers[listItem.blog.author._id] && (
+                        <button onClick={handleFollowUser} disabled={loaders.toggleFollowLoader} className={`cursor-pointer m-0 p-0 opacity-[0.85] transition-all duration-75 ease ${loaders.toggleFollowLoader ? "" : "hover:opacity-100"}`}>
+                          Follow author
+                        </button>
+                      )}
                     </li>
                   )}
                 </ul>

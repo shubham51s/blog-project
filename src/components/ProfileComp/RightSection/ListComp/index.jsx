@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function ListComp({ list }) {
   return (
-    <Link to="list/reading-list" className="flex items-start cursor-pointer no-underline p-0 margin-21" style={{ marginTop: 0, marginInline: 0 }}>
+    <Link to={`list/${list.name.toLowerCase().split(" ").join("-")}/${list._id}`} className="flex items-start cursor-pointer no-underline p-0 margin-21" style={{ marginTop: 0, marginInline: 0 }}>
       <div className="width77 grow-0 shrink-0 basis-auto flex overflow-hidden relative">
         <div className="relative z-[3]">
           <div className="height-50 overflow-hidden">

@@ -6,14 +6,13 @@ const FollowingContext = createContext();
 
 const FollowingProvider = ({ children }) => {
   const { requestHandler } = useRequestHandler();
-  const [followingAuthors, setFollowingAuthors] = useState({});
+  const [followingUsers, setFollowingUsers] = useState({});
   const [followingCommunities, setFollowingCommunities] = useState({});
-  const [followingLoaders, setFollowingLoaders] = useState({
-    author: true,
-    publication: false,
-  });
+
+  const [isFetchUserLoader, setIsFetchUserLoader] = useState(true);
 
   const fetchFollowingAuthorIds = async () => {
+    setIsFetchUserLoader(true);
     try {
       const response = await fetch(`${urlBasePath}/follow/get-following-ids`, {
         headers: { "Content-Type": "application/json" },
@@ -31,16 +30,29 @@ const FollowingProvider = ({ children }) => {
           }
         });
 
-        setFollowingAuthors(followingObj);
+        setFollowingUsers(followingObj);
       }
     } catch (err) {
       console.error(err);
     } finally {
-      setFollowingLoaders((prev) => ({ ...prev, author: false }));
+      setIsFetchUserLoader(false);
     }
   };
 
-  return <FollowingContext.Provider value={{ followingAuthors, followingCommunities, followingLoaders, fetchFollowingAuthorIds }}>{children}</FollowingContext.Provider>;
+  const addUserFollowing = (userId) => {
+    if (!followingUsers[userId]) setFollowingUsers((prev) => ({ ...prev, [userId]: true }));
+  };
+
+  const removeFollowingUser = (userId) => {
+    if (followingUsers[userId])
+      setFollowingUsers((prev) => {
+        const copy = { ...prev };
+        delete copy[userId];
+        return copy;
+      });
+  };
+
+  return <FollowingContext.Provider value={{ isFetchUserLoader, fetchFollowingAuthorIds, addUserFollowing, removeFollowingUser, followingUsers }}>{children}</FollowingContext.Provider>;
 };
 
 export { FollowingContext };

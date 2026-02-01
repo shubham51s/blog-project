@@ -12,6 +12,7 @@ import Bookmark from "./Bookmark";
 import CreateNewListModal from "../../../../List/CreateList";
 import { showToast } from "../../../../../utils/toaster";
 import { useRequestHandler } from "../../../../../hooks/requestHandler";
+import { slugify } from "../../../../../utils/common";
 
 function BlogComp({ item, lists, updateUserListArr }) {
   const { requestHandler } = useRequestHandler();
@@ -22,12 +23,13 @@ function BlogComp({ item, lists, updateUserListArr }) {
   const [isHideBlog, setIsHideBlog] = useState(false);
   const [isBookmarkPopup, setIsBookmarkPopup] = useState(false);
 
-  const handleUserProfileClick = () => {
-    // navigate("/");
+  const handleUserProfileClick = (e) => {
+    e.stopPropagation();
+    navigate(`/profile/${blog.author.username}`);
   };
 
   const handleShowDetailedBlog = () => {
-    const title = blog.previewTitle.split(" ").join("-");
+    const title = slugify(blog.previewTitle);
     navigate(`/${title}/${blog._id}`);
   };
 
@@ -39,20 +41,20 @@ function BlogComp({ item, lists, updateUserListArr }) {
             <article>
               <div className="box-content">
                 <div className="w-full h-full">
-                  <div onClick={() => handleShowDetailedBlog()} className={`flex relative ${isBookmarkPopup ? "cursor-default" : "cursor-pointer"}`}>
+                  <div onClick={handleShowDetailedBlog} className={`flex relative ${isBookmarkPopup ? "cursor-default" : "cursor-pointer"}`}>
                     <div className="w-full">
                       {/* writer section */}
                       <div className="flex w-full">
                         <div className="margin-21 flex items-center w-full" style={{ marginTop: 0, marginInline: 0 }}>
                           <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
-                            <div onClick={() => handleUserProfileClick()} className="relative z-[2] no-underline cursor-pointer">
+                            <div onClick={(e) => handleUserProfileClick(e)} className="relative z-[2] no-underline cursor-pointer">
                               <div className="relative">
                                 <img className="height-12 aspect-square box-border rounded-full align-middle capitalize" src={blog.author.profileImg} alt={blog.author.name} />
                                 <div className="height-12 aspect-square absolute top-0 rounded-full"></div>
                               </div>
                             </div>
                           </div>
-                          <div onClick={() => handleUserProfileClick()} className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
+                          <div onClick={(e) => handleUserProfileClick(e)} className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
                             <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
                               {blog.communityName && <span className="font-light">In </span>}
                               {blog.communityName && <span className="font-normal no-underline hover:underline">{blog.communityName}</span>}
@@ -92,7 +94,7 @@ function BlogComp({ item, lists, updateUserListArr }) {
                                     </div>
                                     {formatMonthAndDayShort(blog.updatedAt)}
                                     <div className="width-28 height-51 relative flex items-center">
-                                      <Link className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
+                                      <div className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
                                         {blog.clapsCount > 0 && (
                                           <div className="flex" title={`${blog.clapsCount} claps`}>
                                             <div className="custom-gap-1 flex items-center">
@@ -113,7 +115,7 @@ function BlogComp({ item, lists, updateUserListArr }) {
                                             </div>
                                           </div>
                                         )}
-                                      </Link>
+                                      </div>
                                     </div>
                                   </div>
 

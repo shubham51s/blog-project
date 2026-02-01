@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CiCircleMinus } from "react-icons/ci";
 import * as Popover from "@radix-ui/react-popover";
 import { RiMoreLine } from "react-icons/ri";
@@ -6,11 +6,13 @@ import { MdModeEdit } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
 import { useApi } from "../../../../hooks/useApi";
 import { showToast } from "../../../../utils/toaster";
+import { FollowingContext } from "../../../../context/followingContext";
+import { useToggleUserFollow } from "../../../../hooks/toggleUserFollow";
 
 function MoreComp({ blog }) {
   const { fetchRequest } = useApi();
-
-  const [isFollowing, setIsFollowing] = useState(blog.author?.isFollowing || false);
+  const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
+  const { followUser, unfollowUser } = useToggleUserFollow();
 
   const [loaders, setLoaders] = useState({
     isFollowLoader: false,
@@ -19,48 +21,36 @@ function MoreComp({ blog }) {
   const handleFollowAuthor = async () => {
     setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
     try {
-      const params = { userToFollow: blog.author._id };
+      const isSuccess = await followUser(blog.author._id);
 
-      const response = await fetchRequest("/follow/follow-user", "POST", params);
-
-      const result = await response.json();
-
-      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-
-      if (response?.status === 200) {
-        setIsFollowing(true);
+      if (isSuccess) {
         showToast(`Success! You're now following ${blog.author.name}.`, "success");
       } else {
-        showToast(result?.message || "Some error occured", "error");
+        showToast("Some error occured");
       }
     } catch (err) {
       console.error(err);
+      showToast("Something went wrong");
+    } finally {
       setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-      showToast("Something went wrong", "error");
     }
   };
 
   const handleUnfollowAuthor = async () => {
     setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
     try {
-      const params = { userToUnfollow: blog.author._id };
+      const isSuccess = await unfollowUser(blog.author._id);
 
-      const response = await fetchRequest("/follow/unfollow-user", "POST", params);
-
-      const result = await response.json();
-
-      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-
-      if (response?.status === 200) {
-        setIsFollowing(false);
+      if (isSuccess) {
         showToast(`You unfollowed ${blog.author.name}..`);
       } else {
-        showToast(result?.message || "Some error occured", "error");
+        showToast("Some error occured");
       }
     } catch (err) {
       console.error(err);
+      showToast("Something went wrong");
+    } finally {
       setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-      showToast("Something went wrong", "error");
     }
   };
 
@@ -91,18 +81,20 @@ function MoreComp({ blog }) {
                     </button>
                   </li>
                   <li className="custom-px-2 bdr-5" style={{ borderInline: 0, borderBottom: 0 }}></li>
-                  <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
-                    {!isFollowing && (
-                      <button onClick={handleFollowAuthor} className="cursor-pointer m-0 p-0" disabled={loaders.isFollowLoader}>
-                        Follow author
-                      </button>
-                    )}
-                    {isFollowing && (
-                      <button onClick={handleUnfollowAuthor} className="cursor-pointer m-0 p-0" disabled={loaders.isFollowLoader}>
-                        Unfollow author
-                      </button>
-                    )}
-                  </li>
+                  {!isFetchUserLoader && (
+                    <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
+                      {!followingUsers[blog.author._id] && (
+                        <button onClick={handleFollowAuthor} className="cursor-pointer m-0 p-0" disabled={loaders.isFollowLoader}>
+                          Follow author
+                        </button>
+                      )}
+                      {followingUsers[blog.author._id] && (
+                        <button onClick={handleUnfollowAuthor} className="cursor-pointer m-0 p-0" disabled={loaders.isFollowLoader}>
+                          Unfollow author
+                        </button>
+                      )}
+                    </li>
+                  )}
                   {blog.community && (
                     <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
                       <button className="cursor-pointer m-0 p-0">Follow publication</button>

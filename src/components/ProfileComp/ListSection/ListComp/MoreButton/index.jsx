@@ -8,6 +8,7 @@ import HideResponseModal from "../../ListModals/hideResponses";
 import EditListModal from "../../ListModals/edit";
 import { showToast } from "../../../../../utils/toaster";
 import { useRequestHandler } from "../../../../../hooks/requestHandler";
+import { appRootPath } from "../../../../../constants/constant";
 
 function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
   const { requestHandler } = useRequestHandler();
@@ -90,7 +91,8 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText("random text");
+      const listName = `${appRootPath}/profile/${user.username}/list/${list.name.toLowerCase().split(" ").join("-")}/${list._id}`;
+      await navigator.clipboard.writeText(listName);
       showToast("Link copied");
       setIsPopupOpen(false);
     } catch (err) {
@@ -251,13 +253,6 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
                           <div className="inline-block">Edit list info</div>
                         </button>
                       </li>
-                      {list.savedCount > 0 && (
-                        <li className="custom-px-2 padding59 color-3 opacity-[0.85] custom-fs-1 font-normal transition-all duration-100 linear hover:opacity-100">
-                          <button className="cursor-pointer m-0 p-0">
-                            <div className="inline-block">Remove items</div>
-                          </button>
-                        </li>
-                      )}
                       {list.isPrivate && (
                         <li className="custom-px-2 padding59 color-3 opacity-[0.85] custom-fs-1 font-normal transition-all duration-100 linear hover:opacity-100">
                           <button disabled={loaders.makeListPublicLoader} onClick={handleMakeListPublic} className="cursor-pointer m-0 p-0">

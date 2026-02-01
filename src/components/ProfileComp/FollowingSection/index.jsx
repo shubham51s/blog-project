@@ -2,25 +2,23 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import { showToast } from "../../../utils/toaster";
-import { useRequestHandler } from "../../../hooks/requestHandler";
 import { UserContext } from "../../../context/userContext";
+import { FollowingContext } from "../../../context/followingContext";
+import { useToggleUserFollow } from "../../../hooks/toggleUserFollow";
 
 function FollowingList({ item, user, setUser }) {
-  const { requestHandler } = useRequestHandler();
+  const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
+  const { followUser, unfollowUser } = useToggleUserFollow();
   const { userInfo } = useContext(UserContext);
   const [author, setAuthor] = useState(item);
   const [isLoading, setIsLoading] = useState(false);
 
-  const followUser = async () => {
+  const handleFollowUser = async () => {
     setIsLoading(true);
     try {
-      const params = {
-        userToFollow: author.followee._id,
-      };
-      const response = await requestHandler("/follow/follow-user", "POST", params);
+      const isSuccess = await followUser(author.followee._id);
 
-      if (response?.status === 200) {
-        setAuthor((prev) => ({ ...prev, follower: { ...prev.follower, isFollowing: true } }));
+      if (isSuccess) {
         showToast(`Success! You're now following ${author.followee.name}.`);
         if (userInfo._id === user._id) {
           setUser((prev) => ({ ...prev, followingCount: prev.followingCount + 1 }));
@@ -28,25 +26,20 @@ function FollowingList({ item, user, setUser }) {
       } else {
         showToast("Some error occcured.");
       }
-
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
       showToast("Some error occured.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const unfollowUser = async () => {
+  const handleUnfollowUser = async () => {
     setIsLoading(true);
     try {
-      const params = {
-        userToUnfollow: author.followee._id,
-      };
-      const response = await requestHandler("/follow/unfollow-user", "POST", params);
+      const isSuccess = await unfollowUser(author.followee._id);
 
-      if (response?.status === 200) {
-        setAuthor((prev) => ({ ...prev, follower: { ...prev.follower, isFollowing: false } }));
+      if (isSuccess) {
         showToast(`You unfollowed ${author.followee.name}.`);
         if (userInfo._id === user._id) {
           setUser((prev) => ({ ...prev, followingCount: prev.followingCount > 0 ? prev.followingCount - 1 : 0 }));
@@ -54,12 +47,11 @@ function FollowingList({ item, user, setUser }) {
       } else {
         showToast("Some error occcured.");
       }
-
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
       showToast("Some error occcured.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -90,10 +82,10 @@ function FollowingList({ item, user, setUser }) {
           )}
         </div>
 
-        {author.followee._id !== userInfo._id && (
+        {author.followee._id !== userInfo._id && !isFetchUserLoader && (
           <div className="margin-14 flex justify-end items-start" style={{ marginRight: 0, marginBlock: 0 }}>
-            {author.followee.isFollowing && (
-              <button onClick={unfollowUser} disabled={isLoading} className={`bdr17-hover padding-28 padding-20 border-radius-7 flex items-center m-0 transition-all duration-500 ease ${isLoading ? "opacity-[0.7] cursor-default" : "opacity-100 cursor-pointer"}`}>
+            {followingUsers[author.followee._id] && (
+              <button onClick={handleUnfollowUser} disabled={isLoading} className={`bdr17-hover padding-28 padding-20 border-radius-7 flex items-center m-0 transition-all duration-500 ease ${isLoading ? "opacity-[0.7] cursor-default" : "opacity-100 cursor-pointer"}`}>
                 <div className="break-keep text-center inline-block">Following</div>
                 <div className="text-right padding-23" style={{ paddingRight: 0, paddingBlock: 0 }}>
                   <div className="width-19 aspect-square">
@@ -102,8 +94,8 @@ function FollowingList({ item, user, setUser }) {
                 </div>
               </button>
             )}
-            {!author.followee.isFollowing && (
-              <button onClick={followUser} disabled={isLoading} className={`bdr17-hover padding-28 padding-20 border-radius-7 flex items-center m-0 transition-all duration-500 ease ${isLoading ? "opacity-[0.7] cursor-default" : "opacity-100 cursor-pointer"}`}>
+            {!followingUsers[author.followee._id] && (
+              <button onClick={handleFollowUser} disabled={isLoading} className={`bdr17-hover padding-28 padding-20 border-radius-7 flex items-center m-0 transition-all duration-500 ease ${isLoading ? "opacity-[0.7] cursor-default" : "opacity-100 cursor-pointer"}`}>
                 <div className="break-keep text-center inline-block">Follow</div>
               </button>
             )}

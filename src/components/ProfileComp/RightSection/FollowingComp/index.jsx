@@ -7,8 +7,12 @@ import { formatNumberCompact } from "../../../../utils/common";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { showToast } from "../../../../utils/toaster";
 import { UserContext } from "../../../../context/userContext";
+import { FollowingContext } from "../../../../context/followingContext";
+import { useToggleUserFollow } from "../../../../hooks/toggleUserFollow";
 
 function FollowingComp({ item, user, setUser }) {
+  const { followUser, unfollowUser } = useToggleUserFollow();
+  const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -27,16 +31,12 @@ function FollowingComp({ item, user, setUser }) {
     }
   };
 
-  const followUser = async () => {
+  const handleFollowUser = async () => {
     setIsLoading(true);
     try {
-      const params = {
-        userToFollow: author.followee._id,
-      };
-      const response = await requestHandler("/follow/follow-user", "POST", params);
+      const isSuccess = await followUser(author.followee._id);
 
-      if (response?.status === 200) {
-        setAuthor((prev) => ({ ...prev, followee: { ...prev.followee, isFollowing: true } }));
+      if (isSuccess) {
         showToast(`Success! You're now following ${author.followee.name}.`);
         if (userInfo._id === user._id) {
           setUser((prev) => ({ ...prev, followingCount: prev.followingCount + 1 }));
@@ -44,26 +44,19 @@ function FollowingComp({ item, user, setUser }) {
       } else {
         showToast("Some error occcured.");
       }
-
-      setIsLoading(false);
     } catch (err) {
-      console.error(err);
-      setIsLoading(false);
       showToast("Some error occured.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const unfollowUser = async () => {
+  const handleUnfollowUser = async () => {
     setIsLoading(true);
     try {
-      const params = {
-        userToUnfollow: author.followee._id,
-      };
-      const response = await requestHandler("/follow/unfollow-user", "POST", params);
+      const isSuccess = await unfollowUser(author.followee._id);
 
-      if (response?.status === 200) {
-        setAuthor((prev) => ({ ...prev, followee: { ...prev.followee, isFollowing: false } }));
-
+      if (isSuccess) {
         showToast(`You unfollowed ${author.followee.name}.`);
 
         if (userInfo._id === user._id) {
@@ -72,12 +65,11 @@ function FollowingComp({ item, user, setUser }) {
       } else {
         showToast("Some error occcured.");
       }
-
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
       showToast("Some error occcured.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -123,13 +115,13 @@ function FollowingComp({ item, user, setUser }) {
                           <div className="absolute top-0 width76 aspect-square rounded-full boxShadow7"></div>
                         </div>
                       </Link>
-                      {author.followee.isFollowing && (
-                        <button onClick={() => unfollowUser()} disabled={isLoading} title={`Following ${author.followee.name}`} className={`flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
+                      {!isFetchUserLoader && followingUsers[author.followee._id] && (
+                        <button onClick={() => handleUnfollowUser()} disabled={isLoading} title={`Following ${author.followee.name}`} className={`flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
                           Following
                         </button>
                       )}
-                      {!author.followee.isFollowing && (
-                        <button onClick={() => followUser()} disabled={isLoading} title={`Follow ${author.followee.name}`} className={`flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
+                      {!isFetchUserLoader && !followingUsers[author.followee._id] && (
+                        <button onClick={() => handleFollowUser()} disabled={isLoading} title={`Follow ${author.followee.name}`} className={`flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
                           Follow
                         </button>
                       )}

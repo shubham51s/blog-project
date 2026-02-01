@@ -5,6 +5,7 @@ import { IoIosMore } from "react-icons/io";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { formatMonthAndDayShort } from "../../../utils/monthDateFormatter";
 import { useNavigate } from "react-router-dom";
+import noPreviewImg from "../../../assets/images/noPreviewImage.png";
 
 function BlogComp({ blogDetails }) {
   const [isCommunity, setIsCommunity] = useState(blogDetails.hasOwnProperty("community"));
@@ -25,7 +26,8 @@ function BlogComp({ blogDetails }) {
               <div className="grid relative h-full custom-gap-8 grid-rows-[auto_1fr] grid-cols-12 grid-area-1">
                 <div className="[grid-area:image]">
                   <div>
-                    <img src={blogDetails.previewImg} className="object-cover object-center aspect-[2/1] w-full align-middle" />
+                    {blogDetails.previewImg && <img src={blogDetails.previewImg} className="object-cover object-center aspect-[2/1] w-full align-middle" />}
+                    {!blogDetails.previewImg && <img src={noPreviewImg} className="object-cover object-center aspect-[2/1] w-full align-middle" />}
                   </div>
                 </div>
                 <div className="[grid-area:content] flex flex-col justify-center">

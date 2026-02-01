@@ -11,3 +11,12 @@ export function formatNumberCompact(value) {
 
   return Math.floor(value / 1_000_000_000) + "B";
 }
+
+export function slugify(text) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "") // remove special chars (including ?)
+    .replace(/\s+/g, "-") // spaces → -
+    .replace(/-+/g, "-");
+}

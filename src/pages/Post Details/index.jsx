@@ -16,12 +16,15 @@ import ShowClapsComp from "../../components/PostDetailsPageComponents/ShowLikes"
 import BlogDetailsSkeletonComp from "./skeleton";
 import BlogDetailsErrorComp from "./notFound";
 import { showToast } from "../../utils/toaster";
+import { FollowingContext } from "../../context/followingContext";
+import { useToggleUserFollow } from "../../hooks/toggleUserFollow";
 
 function PostDetailsPage() {
   const { title, id } = useParams();
   const { userInfo } = useContext(UserContext);
   const { fetchRequest } = useApi();
-  const navigate = useNavigate();
+  const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
+  const { followUser, unfollowUser } = useToggleUserFollow();
   const [isShowFullImg, setIsShowFullImg] = useState(false);
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState();
@@ -43,7 +46,8 @@ function PostDetailsPage() {
     clappedUsersCount: 0,
   });
 
-  let clapsTimeout = useRef(null);
+  const clapsTimeout = useRef(null);
+  const isMounted = useRef(null);
   const clapsClickedCount = useRef(0);
 
   const handlMarkupParentClick = (e) => {
@@ -181,7 +185,7 @@ function PostDetailsPage() {
     } catch (err) {
       setIsAnyErr(true);
       console.error(err);
-      showToast("Something went wrong!", "error");
+      showToast("Something went wrong!");
     }
   };
 
@@ -210,14 +214,14 @@ function PostDetailsPage() {
         showToast("Blog unsaved");
       } else {
         if (response?.status === 500) {
-          showToast("Some error occured", "error");
+          showToast("Some error occured");
         } else {
-          showToast(result?.message || "Some error occured", "error");
+          showToast(result?.message || "Some error occured");
         }
       }
     } catch (err) {
       console.error(err);
-      showToast("Some error occured", "error");
+      showToast("Some error occured");
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
     }
   };
@@ -237,16 +241,16 @@ function PostDetailsPage() {
 
       if (response.status === 200) {
         setBlog({ ...blog, isBookmarked: true });
-        showToast("Blog saved", "success");
+        showToast("Blog saved");
       } else {
         if (response?.status === 500) {
-          showToast("Some error occured", "error");
+          showToast("Some error occured");
         } else {
-          showToast(result?.message || "Some error occured", "error");
+          showToast(result?.message || "Some error occured");
         }
       }
     } catch (err) {
-      showToast("Some error occured", "error");
+      showToast("Some error occured");
       console.error(err);
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
     }
@@ -261,76 +265,54 @@ function PostDetailsPage() {
   const followAuthor = async () => {
     setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
     try {
-      const params = { userToFollow: blog.author._id };
+      const isSuccess = await followUser(blog.author._id);
 
-      const response = await fetchRequest("/follow/follow-user", "POST", params);
-
-      const result = await response.json();
-
-      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-
-      if (response?.status === 200) {
-        setBlog((prev) => ({ ...prev, author: { ...prev.author, isFollowing: true } }));
-        showToast(`Success! You're now following ${blog.author.name}.`, "success");
+      if (isSuccess) {
+        showToast(`Success! You're now following ${blog.author.name}.`);
       } else {
-        if (response?.status === 500) {
-          showToast("Some error occured", "error");
-        } else {
-          showToast(result?.message || "Some error occured", "error");
-        }
+        showToast("Some error occured");
       }
     } catch (err) {
       console.error(err);
+      showToast("Something went wrong");
+    } finally {
       setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-      showToast("Something went wrong", "error");
     }
   };
 
-  const unFollowAuthor = async () => {
+  const unfollowAuthor = async () => {
     setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
     try {
-      const params = { userToUnfollow: blog.author._id };
+      const isSuccess = await unfollowUser(blog.author._id);
 
-      const response = await fetchRequest("/follow/unfollow-user", "POST", params);
-
-      const result = await response.json();
-
-      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-
-      if (response?.status === 200) {
-        setBlog((prev) => ({ ...prev, author: { ...prev.author, isFollowing: false } }));
+      if (isSuccess) {
         showToast(`You unfollowed ${blog.author.name}..`);
       } else {
-        if (response?.status === 500) {
-          showToast("Some error occured", "error");
-        } else {
-          showToast(result?.message || "Some error occured", "error");
-        }
+        showToast("Some error occured");
       }
     } catch (err) {
       console.error(err);
+      showToast("Something went wrong");
+    } finally {
       setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-      showToast("Something went wrong", "error");
     }
-  };
-
-  const handleToggleAuthorFollow = () => {
-    if (loaders.isFollowLoader) return;
-
-    blog.author.isFollowing ? unFollowAuthor() : followAuthor();
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (!isMounted.current) {
+      isMounted.current = true;
 
-    fetchBlogDetails();
+      window.scrollTo(0, 0);
 
-    // minimun loading time
+      fetchBlogDetails();
+    }
+
+    // minimun default loading time
     if (loadingTimeout.current) clearTimeout(loadingTimeout.current);
 
     loadingTimeout.current = setTimeout(() => {
       setIsInitialLoading(false);
-    }, 1200);
+    }, 400);
 
     return () => {
       window.removeEventListener("scroll", handleOnScroll);
@@ -415,14 +397,20 @@ function PostDetailsPage() {
                                 <div className="flex items-center flex-nowrap">
                                   <div className="flex items-center custom-fs-1 custom-line-h-1 color-3 capitalize">{blog.author.name}</div>
                                   <div className="inline-block width-33"></div>
-                                  <div className="inline-block">
-                                    {userInfo?._id !== blog.author._id && (
-                                      <button onClick={handleToggleAuthorFollow} disabled={loaders.isFollowLoader} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
-                                        {blog.author.isFollowing && <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Unfollow</span>}
-                                        {!blog.author.isFollowing && <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Follow</span>}
-                                      </button>
-                                    )}
-                                  </div>
+                                  {userInfo?._id !== blog.author._id && !isFetchUserLoader && (
+                                    <div className="inline-block">
+                                      {followingUsers[blog.author._id] && (
+                                        <button onClick={unfollowAuthor} disabled={loaders.isFollowLoader} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
+                                          <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Unfollow</span>
+                                        </button>
+                                      )}
+                                      {!followingUsers[blog.author._id] && (
+                                        <button onClick={followAuthor} disabled={loaders.isFollowLoader} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
+                                          <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Follow</span>
+                                        </button>
+                                      )}
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </span>
@@ -670,29 +658,37 @@ function PostDetailsPage() {
                           </a>
                         </div>
                       </div>
-                      {blog.author.about && (
+                      {blog.author.bio && (
                         <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}>
                           <p className="color-3 custom-fs-1 custom-line-h-1 font-medium m-0 p-0">
-                            <span className="break-words">{blog.author.about}</span>
+                            <span className="break-words">{blog.author.bio}</span>
                           </p>
                         </div>
                       )}
                     </div>
                   </div>
                   <div className="">
-                    <div className="flex">
-                      {userInfo?._id !== blog.author._id && (
-                        <button onClick={handleToggleAuthorFollow} disabled={loaders.isFollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer">
-                          {blog.author.isFollowing && <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Unfollow</span>}
-                          {!blog.author.isFollowing && <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Follow</span>}
-                        </button>
-                      )}
-                      {userInfo?._id === blog.author._id && (
+                    {userInfo?._id !== blog.author._id && !isFetchUserLoader && (
+                      <div className="flex">
+                        {followingUsers[blog.author._id] && (
+                          <button onClick={unfollowAuthor} disabled={loaders.isFollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer">
+                            <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Unfollow</span>
+                          </button>
+                        )}
+                        {!followingUsers[blog.author._id] && (
+                          <button onClick={followAuthor} disabled={loaders.isFollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer">
+                            <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Follow</span>
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    {userInfo?._id === blog.author._id && (
+                      <div className="flex">
                         <Link className="text-center no-underline rounded-full bdr-6 custom-bg-1 custom-px-2 custom-py-2 color-2 box-border inline-block custom-fs-1 custom-line-h-1 font-normal opacity-[0.95] transition-all duration-200 linear hover:opacity-100">
                           <div className="whitespace-nowrap">Edit profile</div>
                         </Link>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -12,7 +12,6 @@ import { FollowingContext } from "../../../context/followingContext";
 function ProfileCommonLayout() {
   const [isError, setIsError] = useState(false);
   const { username } = useParams();
-  const { followingAuthors } = useContext(FollowingContext);
   const { requestHandler } = useRequestHandler();
   const isCompMounted = useRef(null);
   const [user, setUser] = useState();
