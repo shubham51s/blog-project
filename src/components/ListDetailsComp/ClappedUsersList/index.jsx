@@ -1,18 +1,23 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { PiHandsClappingThin } from "react-icons/pi";
-import { Link } from "react-router-dom";
-import { useApi } from "../../../hooks/useApi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import ClappedUser from "../../ListDetailsComp/ClappedUsersList/ClappedUser";
+import { useRequestHandler } from "../../../hooks/requestHandler";
+import { UserContext } from "../../../context/userContext";
+import { useToggleUserFollow } from "../../../hooks/toggleUserFollow";
+import { FollowingContext } from "../../../context/followingContext";
+import ClappedUser from "./ClappedUser";
 
-function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
-  const { fetchRequest } = useApi();
+function ClappedUsersList({ clapDetails, setClapDetails, list }) {
+  const { requestHandler } = useRequestHandler();
   const [isClose, setIsClose] = useState(false);
   const closeTimeout = useRef(null);
-  const [isInitialLoading, setIsInitialLoading] = useState(false);
+  const isMounted = useRef(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const initialTimeout = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [clappedUsers, setClappedUsers] = useState([]);
+  const [clappedUsersCount, setClappedUsersCount] = useState(0);
 
   const handleClose = () => {
     setIsClose(true);
@@ -20,44 +25,57 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
     if (closeTimeout.current) clearTimeout(closeTimeout.current);
 
     closeTimeout.current = setTimeout(() => {
-      setClapDetails((prev) => ({ ...prev, isShowClapsComp: false }));
+      setClapDetails((prev) => ({ ...prev, showClapedUsersList: false }));
     }, 300);
   };
 
-  const getClappedUsersList = async (skip) => {
-    let updatedSkip = 0;
+  const getClappedUsersCount = async () => {
     try {
-      const response = await fetchRequest(`/claps/users/${blog._id}?skip=${skip}`, "GET");
+      const response = await requestHandler(`/list/claps/users/count/${list._id}`);
+      const result = await response.json();
+
+      if (response?.status === 200 && result?.data?.clappedUsersCount) {
+        setClappedUsersCount(result.data.clappedUsersCount);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const getClappedUsersList = async (skip) => {
+    try {
+      const response = await requestHandler(`/list/claps/users/${list._id}?skip=${skip}`);
 
       const result = await response.json();
 
-      if (response.status === 200) {
-        setClapDetails((prev) => ({ ...prev, clappedUsers: result?.data?.usersList || [], clappedUsersCount: result?.data?.totalCount || 0 }));
+      if (response.status === 200 && result?.data?.usersList) {
+        // setClapDetails((prev) => ({ ...prev, clappedUsers: result.data.usersList }));
+        setClappedUsers(result.data.usersList);
       }
-
-      updatedSkip = result?.data?.usersList?.length > 0 ? skip + result.data.usersList.length : -1;
     } catch (err) {
       console.error(err);
-      updatedSkip = -1;
+    } finally {
+      setIsLoading(false);
     }
-
-    setClapDetails((prev) => ({ ...prev, skip: updatedSkip }));
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    if (clapDetails.clappedUsers.length === 0) {
-      setIsInitialLoading(true);
+    if (!isMounted.current) {
+      isMounted.current = true;
+
       getClappedUsersList(0);
-
-      if (initialTimeout.current) clearTimeout(initialTimeout.current);
-
-      // minimum loading time
-      initialTimeout.current = setTimeout(() => {
-        setIsInitialLoading(false);
-      }, 800);
+      getClappedUsersCount();
     }
+
+    if (initialTimeout.current) clearTimeout(initialTimeout.current);
+
+    // minimum loading time
+    initialTimeout.current = setTimeout(() => {
+      setIsInitialLoading(false);
+      initialTimeout.current = null;
+    }, 300);
 
     return () => {
       if (initialTimeout.current) clearTimeout(initialTimeout.current);
@@ -66,15 +84,15 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
 
   return (
     <div onClick={() => handleClose()} className={`fixed inset-0 overflow-x-hidden overflow-y-auto flex justify-center items-center bg13 scroll-smooth z-[800] transition-all duration-300 linear ${isClose ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"}`}>
-      {!isInitialLoading && clapDetails.clappedUsers.length > 0 && (
+      {!isInitialLoading && !isLoading && clappedUsers.length > 0 && (
         <div className="mb-auto padding64">
           <div onClick={(e) => e.stopPropagation()} className="width63 padding-44">
             <div className="margin-17 text-center flex flex-col" style={{ marginTop: 0 }}>
-              <h2 className="font-3 line-h-8 font-semibold tracking-normal color-3 m-0">{`${clapDetails.totalClaps} ${clapDetails.totalClaps > 1 ? "claps" : "clap"} from ${clapDetails.clappedUsersCount} people for " ${blog.previewTitle}"`}</h2>
+              <h2 className="font-3 line-h-8 font-semibold tracking-normal color-3 m-0">{`${clapDetails.total} ${clapDetails.total > 1 ? "claps" : "clap"} ${clappedUsersCount > 0 ? `from ${clappedUsersCount} people ` : " "}for " ${list.name}"`}</h2>
             </div>
             <div className="">
-              {clapDetails.clappedUsers.map((item) => (
-                <ClappedUser item={item} key={item.user._id} />
+              {clappedUsers.map((item) => (
+                <ClappedUser item={item} key={item._id} />
               ))}
             </div>
           </div>
@@ -82,12 +100,12 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
       )}
 
       {/* loader */}
-      {(isInitialLoading || clapDetails.clappedUsers.length === 0) && (
+      {(isInitialLoading || isLoading) && (
         <div className="mb-auto padding64">
           <div onClick={(e) => e.stopPropagation()} className="width63 overflow-hidden padding-44">
             <Skeleton height={40} width={23434} className="mb-10" />
             <div className="">
-              {Array.from({ length: 5 }).map((_, i) => (
+              {Array.from({ length: 3 }).map((_, i) => (
                 <div className="padding-33 flex items-start justify-between" key={i} style={{ paddingInline: 0 }}>
                   <div className="width64 flex items-start overflow-hidden">
                     <div className="padding-7" style={{ paddingLeft: 0 }}>
@@ -123,4 +141,4 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
   );
 }
 
-export default ShowClapsComp;
+export default ClappedUsersList;

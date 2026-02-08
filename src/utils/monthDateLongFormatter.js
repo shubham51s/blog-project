@@ -37,7 +37,7 @@ export function formatMonthAndDayLong(dateString) {
 
     return `${day} ${month} ${year}`;
   } catch (err) {
-    console.log("format month and date: ", err);
+    console.error(err);
     return "-";
   }
 }

@@ -8,7 +8,6 @@ const FollowingProvider = ({ children }) => {
   const { requestHandler } = useRequestHandler();
   const [followingUsers, setFollowingUsers] = useState({});
   const [followingCommunities, setFollowingCommunities] = useState({});
-
   const [isFetchUserLoader, setIsFetchUserLoader] = useState(true);
 
   const fetchFollowingAuthorIds = async () => {

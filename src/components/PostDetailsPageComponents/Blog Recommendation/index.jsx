@@ -78,7 +78,7 @@ function BlogRecommendComp({ blog }) {
         }
       }
     } catch (err) {
-      console.log("getRecommendedBlogsByAuthor catch block: ", err);
+      console.error(err);
     }
   };
 
@@ -96,7 +96,7 @@ function BlogRecommendComp({ blog }) {
         setRecommendedBlogs(result.data.blogs);
       }
     } catch (err) {
-      console.log("getRecommendedBlogsByCategory catch block: ", err);
+      console.error(err);
     }
   };
 

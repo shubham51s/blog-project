@@ -99,7 +99,7 @@ function HomeMainContentComp() {
     // minimum loader time
     loaderTimeout.current = setTimeout(() => {
       setInitialLoader(false);
-    }, 800);
+    }, 400);
   }, []);
 
   return (

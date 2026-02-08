@@ -45,7 +45,7 @@ function SaveList({ list }) {
       const response = await requestHandler("/list/toggle-save/unsave", "POST", params);
       const result = await response.json();
 
-      console.log("result: ", result);
+      console.error(result);
 
       if (response?.status === 200) {
         setIsSaved(false);

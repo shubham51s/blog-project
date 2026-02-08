@@ -12,7 +12,6 @@ import Bookmark from "./Bookmark";
 import CreateNewListModal from "../../../../List/CreateList";
 import { showToast } from "../../../../../utils/toaster";
 import { useRequestHandler } from "../../../../../hooks/requestHandler";
-import { slugify } from "../../../../../utils/common";
 
 function BlogComp({ item, lists, updateUserListArr }) {
   const { requestHandler } = useRequestHandler();
@@ -29,8 +28,7 @@ function BlogComp({ item, lists, updateUserListArr }) {
   };
 
   const handleShowDetailedBlog = () => {
-    const title = slugify(blog.previewTitle);
-    navigate(`/${title}/${blog._id}`);
+    navigate(`/${blog.slug}/${blog._id}`);
   };
 
   return (

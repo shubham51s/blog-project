@@ -16,6 +16,7 @@ import { PiHandsClappingFill } from "react-icons/pi";
 import ListCommentDrawer from "../../components/ListDetailsComp/CommentDrawer";
 import { Tooltip } from "@mui/material";
 import NoData from "../../components/ListDetailsComp/NoData";
+import ClappedUsersList from "../../components/ListDetailsComp/ClappedUsersList";
 
 function ListDetailsPage() {
   const { username, listId } = useParams();
@@ -32,6 +33,7 @@ function ListDetailsPage() {
   const [isDefaultLoader, setIsDefaultLoader] = useState(true);
   const [clapDetails, setClapDetails] = useState({
     total: 0,
+    showClapedUsersList: false,
   });
   const [loaders, setLoaders] = useState({
     clapLoader: false,
@@ -63,7 +65,7 @@ function ListDetailsPage() {
 
         if (result.data.list.user.username !== username) setIsError(true);
 
-        if (result.data.list?.myClaps) {
+        if (result.data.list?.clapsCount) {
           setClapDetails((prev) => ({ ...prev, total: result.data.list.clapsCount }));
         }
       } else {
@@ -126,6 +128,10 @@ function ListDetailsPage() {
     addClapTimeout.current = setTimeout(() => {
       addClaps();
     }, 800);
+  };
+
+  const showClappedUsersModal = () => {
+    setClapDetails((prev) => ({ ...prev, showClapedUsersList: true }));
   };
 
   useEffect(() => {
@@ -254,7 +260,7 @@ function ListDetailsPage() {
                                 </div>
                                 <div>
                                   {clapDetails?.total > 0 && (
-                                    <p className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+                                    <p onClick={showClappedUsersModal} className="font-4 color-3 line20 font-normal m-0 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
                                       <button className="text-left cursor-pointer m-0 p-0">{clapDetails.total}</button>
                                     </p>
                                   )}
@@ -321,7 +327,9 @@ function ListDetailsPage() {
           </div>
         </div>
       )}
+
       {isCommentDrawerOpen && <ListCommentDrawer setIsCommentDrawerOpen={setIsCommentDrawerOpen} list={list} setList={setList} />}
+      {clapDetails.showClapedUsersList && <ClappedUsersList clapDetails={clapDetails} setClapDetails={setClapDetails} list={list} />}
     </>
   );
 }

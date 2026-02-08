@@ -52,7 +52,7 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
       const sortedResult = result?.data?.topics.map((item) => ({ label: item.name.charAt(0).toUpperCase() + item.name.slice(1), value: item._id }));
       setTopics(sortedResult || []);
     } catch (err) {
-      console.log("err: ", err);
+      console.error(err);
     }
   };
 
@@ -102,7 +102,7 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
         showToast(msg);
       }
     } catch (err) {
-      console.log("publishBlog catch block: ", err);
+      console.error(err);
       setIsLoading(false);
     }
   };

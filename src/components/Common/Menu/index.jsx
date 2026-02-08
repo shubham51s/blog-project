@@ -15,12 +15,12 @@ import { UserContext } from "../../../context/userContext";
 import { GoPersonFill } from "react-icons/go";
 import { RiContactsLine, RiContactsFill } from "react-icons/ri";
 import { IoMdAdd } from "react-icons/io";
-import { useApi } from "../../../hooks/useApi";
 import { RiArrowDownSLine } from "react-icons/ri";
+import { useRequestHandler } from "../../../hooks/requestHandler";
 
 function MenuComp() {
   const { isShowMenu } = useContext(UserContext);
-  const { fetchRequest } = useApi();
+  const { requestHandler } = useRequestHandler();
   const isMounted = useRef(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ function MenuComp() {
   const fetchFollowingUsersList = async () => {
     setFetchDetails((prev) => ({ ...prev, isLoading: true }));
     try {
-      const response = await fetchRequest(`/follow/following?skip=${fetchDetails.skip}&limit=${limit}`, "GET");
+      const response = await requestHandler(`/follow/following?skip=${fetchDetails.skip}&limit=${limit}`, "GET");
       const result = await response.json();
 
       if (response.status === 200) {
@@ -97,6 +97,10 @@ function MenuComp() {
     if (id === 1) return location.pathname === "/me/saved";
     if (id === 2) return location.pathname.includes(`/profile/${userInfo.username}`);
     if (id === 3) return location.pathname === "/me/stories";
+  };
+
+  const handleUserProfileBtnClick = (username) => {
+    navigate(`/profile/${username}`);
   };
 
   useEffect(() => {
@@ -137,12 +141,12 @@ function MenuComp() {
 
               {/* followers list here */}
               {following.map((item) => (
-                <div key={item._id} className="margin-21 flex items-center custom-gap-2 padding-3 cursor-pointer transition-all duration-200 linear opacity-75 hover:opacity-100" style={{ marginBottom: 0, marginInline: 0, paddingBlock: 0 }} title={item.follower.name}>
+                <div key={item._id} onClick={() => handleUserProfileBtnClick(item.followee.username)} className="margin-7 flex items-center custom-gap-2 padding-3 cursor-pointer transition-all duration-200 linear opacity-75 hover:opacity-100" style={{ marginBottom: 0, marginInline: 0, paddingBlock: 0 }} title={item.followee.name}>
                   <div className="padding-23 flex-none color-6" style={{ paddingBlock: 0 }}>
-                    <img className="width-19 aspect-square rounded-full" src={item.follower.profileImg} />
+                    <img className="width-19 aspect-square rounded-full" src={item.followee.profileImg} />
                   </div>
                   <div className="flex flex-col custom-gap-3 items-start text-start max-w-full flex-nowrap truncate">
-                    <p className="font-10 color-6 custom-line-h-1 font-normal m-0 p-0">{item.follower.name}</p>
+                    <p className="font13 color-6 custom-line-h-1 font-normal m-0 p-0">{item.followee.name}</p>
                   </div>
                 </div>
               ))}

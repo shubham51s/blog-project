@@ -16,7 +16,7 @@ function BlogDetailsErrorComp() {
         setRecommendedBlogs(result.data.blogs);
       }
     } catch (err) {
-      console.log("fetchBlogs catch block: ", err);
+      console.error(err);
     }
   };
 

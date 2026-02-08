@@ -62,8 +62,6 @@ function ProfileCommonLayout() {
 
       const result = await response.json();
 
-      console.log("user details: ", result.data.user);
-
       if (response?.status === 200 && result?.data?.user) {
         setUser({ ...result.data.user, lists: [], publicLists: [] });
         fetchUserLists(result.data.user._id);

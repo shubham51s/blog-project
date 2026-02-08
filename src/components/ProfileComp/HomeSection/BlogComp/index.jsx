@@ -11,7 +11,6 @@ import { UserContext } from "../../../../context/userContext";
 import MoreButton from "./MoreButtonComp";
 import noPreviewImg from "../../../../assets/images/noPreviewImage.png";
 import { showToast } from "../../../../utils/toaster";
-import { slugify } from "../../../../utils/common";
 
 function BlogComp({ item }) {
   const { requestHandler } = useRequestHandler();
@@ -90,8 +89,7 @@ function BlogComp({ item }) {
   };
 
   const handleShowDetailedBlog = () => {
-    const title = slugify(blog.previewTitle);
-    navigate(`/${title}/${blog._id}`);
+    navigate(`/${blog.slug}/${blog._id}`);
   };
 
   return (
