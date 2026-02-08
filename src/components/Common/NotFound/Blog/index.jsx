@@ -1,13 +1,13 @@
 import React from "react";
-import { formatMonthAndDayLong } from "../../../utils/monthDateLongFormatter";
 import { useNavigate } from "react-router-dom";
+import { formatMonthAndDayLong } from "../../../../utils/monthDateLongFormatter";
+import defaultImg from "../../../../assets/images/noPreviewImage.png";
 
-function Blog2Comp({ blog }) {
+function Blog({ blog }) {
   const navigate = useNavigate();
 
   const handleShowDetailedBlog = () => {
-    const title = blog.previewTitle.split(" ").join("-");
-    navigate(`/${title}/${blog._id}`);
+    navigate(`/${blog.slug}/${blog._id}`);
   };
 
   return (
@@ -17,7 +17,7 @@ function Blog2Comp({ blog }) {
           onClick={handleShowDetailedBlog}
           className="width66 height73 bg-center bg-cover bg-origin-border cursor-pointer"
           style={{
-            backgroundImage: `url('${blog.previewImg}')`,
+            backgroundImage: `url('${blog.previewImg ? blog.previewImg : defaultImg}')`,
           }}
         ></div>
         <div className="margin-21 grow shrink-0 basis-auto cursor-pointer" style={{ marginBottom: 0 }}>
@@ -49,4 +49,4 @@ function Blog2Comp({ blog }) {
   );
 }
 
-export default Blog2Comp;
+export default Blog;

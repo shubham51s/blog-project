@@ -4,7 +4,6 @@ import LoginPage from "./pages/Authentication/login";
 import SignupPage from "./pages/Authentication/signup";
 import CreatePostPage from "./pages/Create post";
 import EditPostPage from "./pages/Edit post";
-import PostDetailsPage from "./pages/Post Details";
 import MyBlogsPage from "./pages/My blogs";
 import NotFoundPage from "./pages/Not found";
 import AboutPage from "./pages/About";
@@ -13,9 +12,7 @@ import { useContext } from "react";
 import { UserContext } from "./context/userContext";
 import MainComp from "./pages/Common";
 import HomePageProtected from "./pages/Home/Home Protected";
-import SavedBlogsPage from "./pages/Library";
 import StoriesPage from "./pages/Stories";
-import ProfileCommonLayout from "./pages/Profile/CommonLayout";
 import Home from "./pages/Profile/Home";
 import About from "./pages/Profile/About";
 import List from "./pages/Profile/List";
@@ -23,20 +20,27 @@ import Follower from "./pages/Profile/Follower";
 import Following from "./pages/Profile/Following";
 import ProfilePage from "./pages/Profile";
 import ListDetailsPage from "./pages/ListDetails";
+import PostDetailsPageWrapper from "./pages/Post Details/pageWrapper";
+import LibraryPage from "./pages/Library";
+import MyLists from "./pages/Library/Home";
+import SavedLists from "./pages/Library/SavedLists";
+import ReadingHistory from "./pages/Library/ReadingHistory";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
   return (
     <>
       {isInitialLoading && <GlobalLoaderComp />}
-      {/* <BrowserRouter> */}
       <Routes>
         <Route path="/" element={<MainComp />}>
           // nested routes
-          <Route index element={<HomePageProtected />} /> // home component
-          <Route path="me/saved" element={<SavedBlogsPage />} />
+          <Route index element={<HomePageProtected />} />
           <Route path="me/stories" element={<StoriesPage />} />
-          {/* <Route path="profile/:username" element={<ProfileCommonLayout />}> */}
+          <Route path="me/lists" element={<LibraryPage />}>
+            <Route index element={<MyLists />} />
+            <Route path="saved" element={<SavedLists />} />
+            <Route path="reading-history" element={<ReadingHistory />} />
+          </Route>
           <Route path="profile/:username" element={<ProfilePage />}>
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
@@ -44,10 +48,9 @@ function App() {
             <Route path="followers" element={<Follower />} />
             <Route path="following" element={<Following />} />
           </Route>
-          <Route path="profile/:username/list/:listName/:listId" element={<ListDetailsPage />} />
-          <Route path=":title/:id" element={<PostDetailsPage />} />
+          <Route path="profile/:username/list/:slug/:listId" element={<ListDetailsPage />} />
+          <Route path=":slug/:id" element={<PostDetailsPageWrapper />} />
         </Route>
-        {/* <Route path="/:title/:id" element={<PostDetailsPage />} /> */}
         <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<SignupPage />} />
@@ -56,7 +59,6 @@ function App() {
         <Route path="/my-blogs/:id" element={<MyBlogsPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
-      {/* </BrowserRouter> */}
     </>
   );
 }

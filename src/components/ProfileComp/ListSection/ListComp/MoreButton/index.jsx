@@ -8,9 +8,9 @@ import HideResponseModal from "../../ListModals/hideResponses";
 import EditListModal from "../../ListModals/edit";
 import { showToast } from "../../../../../utils/toaster";
 import { useRequestHandler } from "../../../../../hooks/requestHandler";
-import { appRootPath } from "../../../../../constants/constant";
 
 function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
+  const rootUrl = window.location.origin;
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -91,7 +91,7 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
 
   const handleCopyLink = async () => {
     try {
-      const listName = `${appRootPath}/profile/${user.username}/list/${list.name.toLowerCase().split(" ").join("-")}/${list._id}`;
+      const listName = `${rootUrl}/profile/${user.username}/list/${list.slug}/${list._id}`;
       await navigator.clipboard.writeText(listName);
       showToast("Link copied");
       setIsPopupOpen(false);

@@ -9,9 +9,9 @@ import EditListModal from "../../ProfileComp/ListSection/ListModals/edit";
 import { UserContext } from "../../../context/userContext";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { useNavigate } from "react-router-dom";
-import { appRootPath } from "../../../constants/constant";
 
 function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
+  const rootUrl = window.location.origin;
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const navigate = useNavigate();
@@ -85,7 +85,7 @@ function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
 
   const handleCopyLink = async () => {
     try {
-      const text = `${appRootPath}/profile/${list.user.username}/list/${list.name.toLowerCase().split(" ").join("-")}/${list._id}`;
+      const text = `${rootUrl}/profile/${list.user.username}/list/${list.name.toLowerCase().split(" ").join("-")}/${list._id}`;
 
       await navigator.clipboard.writeText(text);
       showToast("Link copied");

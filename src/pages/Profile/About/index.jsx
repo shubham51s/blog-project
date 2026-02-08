@@ -136,13 +136,13 @@ function About() {
           <div className="padding-3" style={{ paddingTop: 0, paddingInline: 0 }}>
             {user && (
               <h4 className="text-[#1A8917] custom-fs-1 line20 font-normal m-0 p-0">
-                <Link to="" className="cursor-pointer m-0 p-0 no-underline transition-all duration-75 ease hover:text-[#156D12]">
+                <Link to={`/profile/${user.username}/followers`} className="cursor-pointer m-0 p-0 no-underline transition-all duration-75 ease hover:text-[#156D12]">
                   {formatNumberCompact(user.followersCount)} followers
                 </Link>
                 <span className="inline-block margin-13">
                   <p className="color-3 custom-fs-1 line20 font-normal m-0">.</p>
                 </span>
-                <Link to="" className="cursor-pointer m-0 p-0 no-underline transition-all duration-75 ease hover:text-[#156D12]">
+                <Link to={`/profile/${user.username}/following`} className="cursor-pointer m-0 p-0 no-underline transition-all duration-75 ease hover:text-[#156D12]">
                   {formatNumberCompact(user.followingCount)} following
                 </Link>
               </h4>

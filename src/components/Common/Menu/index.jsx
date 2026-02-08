@@ -39,7 +39,7 @@ function MenuComp() {
     {
       id: 1,
       name: "Library",
-      path: "/me/saved",
+      path: "/me/lists",
       IconInactive: BsBookmarks,
       IconActive: BsBookmarksFill,
     },

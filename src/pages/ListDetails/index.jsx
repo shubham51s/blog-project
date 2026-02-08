@@ -17,9 +17,10 @@ import ListCommentDrawer from "../../components/ListDetailsComp/CommentDrawer";
 import { Tooltip } from "@mui/material";
 import NoData from "../../components/ListDetailsComp/NoData";
 import ClappedUsersList from "../../components/ListDetailsComp/ClappedUsersList";
+import NotFoundComp from "../../components/Common/NotFound";
 
 function ListDetailsPage() {
-  const { username, listId } = useParams();
+  const { username, slug, listId } = useParams();
   const { userInfo } = useContext(UserContext);
   const { requestHandler } = useRequestHandler();
   const isCompMounted = useRef(null);
@@ -56,14 +57,12 @@ function ListDetailsPage() {
 
   const fetchListDetails = async () => {
     try {
-      const response = await requestHandler(`/list/${listId}`);
+      const response = await requestHandler(`/list/${slug}/${listId}`);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.list) {
+      if (response?.status === 200 && result?.data?.list && result?.data?.list?.user.username === username) {
         setList(result.data.list);
         fetchListItems(result.data.list._id, result.data.list.user._id, 0);
-
-        if (result.data.list.user.username !== username) setIsError(true);
 
         if (result.data.list?.clapsCount) {
           setClapDetails((prev) => ({ ...prev, total: result.data.list.clapsCount }));
@@ -135,6 +134,7 @@ function ListDetailsPage() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (!isCompMounted.current) {
       isCompMounted.current = true;
       fetchListDetails();
@@ -147,7 +147,7 @@ function ListDetailsPage() {
 
   return (
     <>
-      {isError && <div className="">Error</div>}
+      {isError && <NotFoundComp />}
       {!isError && (
         <div className="grow shrink basis-auto width-17 box-border">
           <div className="flex flex-col min-h-screen custom-bg-8">

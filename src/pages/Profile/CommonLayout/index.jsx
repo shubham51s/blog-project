@@ -6,10 +6,11 @@ import RightSectionComp from "../../../components/ProfileComp/RightSection";
 import Skeleton from "react-loading-skeleton";
 import * as Popover from "@radix-ui/react-popover";
 import { showToast } from "../../../utils/toaster";
-import { appRootPath } from "../../../constants/constant";
 import { FollowingContext } from "../../../context/followingContext";
+import NotFoundComp from "../../../components/Common/NotFound";
 
 function ProfileCommonLayout() {
+  const rootUrl = window.location.origin;
   const [isError, setIsError] = useState(false);
   const { username } = useParams();
   const { requestHandler } = useRequestHandler();
@@ -28,7 +29,7 @@ function ProfileCommonLayout() {
 
   const handleCopyProfileBtnClick = async () => {
     try {
-      await navigator.clipboard.writeText(`${appRootPath}/profile/${username}`);
+      await navigator.clipboard.writeText(`${rootUrl}/profile/${username}`);
       showToast("Link copied");
       setIsPopupOpen(false);
     } catch (err) {
@@ -81,7 +82,7 @@ function ProfileCommonLayout() {
 
   return (
     <>
-      {isError && <div className="">Error</div>}
+      {isError && <NotFoundComp />}
       {!isError && (
         <div className="width-18 m-auto flex justify-evenly">
           <main className="grow shrink basis-auto width-20 block">

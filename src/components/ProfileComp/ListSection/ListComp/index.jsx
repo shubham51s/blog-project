@@ -11,7 +11,7 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
   const [list, setList] = useState(item);
 
   const handleNavigateToLink = () => {
-    navigate(`/profile/${user.username}/list/${list.name.toLowerCase().split(" ").join("-")}/${list._id}`);
+    navigate(`/profile/${user.username}/list/${list.slug}/${list._id}`);
   };
 
   return (

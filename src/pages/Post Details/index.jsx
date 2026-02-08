@@ -14,13 +14,13 @@ import MoreOptionsComp from "../../components/PostDetailsPageComponents/MoreOpti
 import { UserContext } from "../../context/userContext";
 import ShowClapsComp from "../../components/PostDetailsPageComponents/ShowLikes";
 import BlogDetailsSkeletonComp from "./skeleton";
-import BlogDetailsErrorComp from "./notFound";
 import { showToast } from "../../utils/toaster";
 import { FollowingContext } from "../../context/followingContext";
 import { useToggleUserFollow } from "../../hooks/toggleUserFollow";
+import NotFoundComp from "../../components/Common/NotFound";
 
 function PostDetailsPage() {
-  const { title, id } = useParams();
+  const { slug, id } = useParams();
   const { userInfo } = useContext(UserContext);
   const { fetchRequest } = useApi();
   const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
@@ -33,6 +33,7 @@ function PostDetailsPage() {
   const [isAnyErr, setIsAnyErr] = useState(false);
   const loadingTimeout = useRef(null);
   const [loaders, setLoaders] = useState({
+    fetchBlogLoader: true,
     isBookmarkLoader: false,
     isFollowLoader: false,
   });
@@ -169,13 +170,14 @@ function PostDetailsPage() {
   };
 
   const fetchBlogDetails = async () => {
+    setLoaders((prev) => ({ ...prev, fetchBlogLoader: true }));
     try {
-      const response = await fetchRequest(`/blogs/${id}`, "GET");
+      const response = await fetchRequest(`/blogs/${slug}/${id}`, "GET");
 
       const result = await response.json();
 
-      if (response?.status === 200) {
-        const blog = result?.data?.blog;
+      if (response?.status === 200 && result?.data?.blog) {
+        const blog = result.data.blog;
         setClapDetails((prev) => ({ ...prev, totalClaps: blog.clapsCount }));
         getMyClapsCount(blog._id);
         setBlog(blog);
@@ -186,6 +188,8 @@ function PostDetailsPage() {
       setIsAnyErr(true);
       console.error(err);
       showToast("Something went wrong!");
+    } finally {
+      setLoaders((prev) => ({ ...prev, fetchBlogLoader: false }));
     }
   };
 
@@ -323,8 +327,8 @@ function PostDetailsPage() {
   return (
     <>
       {/* home content */}
-      {isInitialLoading && <BlogDetailsSkeletonComp />}
-      {blog && !isInitialLoading && !isAnyErr && (
+      {(isInitialLoading || loaders.fetchBlogLoader) && <BlogDetailsSkeletonComp />}
+      {!isInitialLoading && !loaders.fetchBlogLoader && !isAnyErr && (
         <div className="h-full overflow-y-auto">
           {blog.community && (
             <div className="bdr-5 w-full">
@@ -701,8 +705,6 @@ function PostDetailsPage() {
         </div>
       )}
 
-      {!isInitialLoading && isAnyErr && <BlogDetailsErrorComp />}
-
       {/* full screen image view */}
       {isShowFullImg && (
         <div onClick={() => handleCloseFullImg()} className="w-screen h-screen max-w-screen max-h-screen fixed inset-0 z-[999] flex items-center justify-center custom-bg-4 select-none pointer-events-auto">
@@ -711,6 +713,8 @@ function PostDetailsPage() {
       )}
 
       {clapDetails.isShowClapsComp && <ShowClapsComp clapDetails={clapDetails} setClapDetails={setClapDetails} blog={blog} />}
+
+      {!isInitialLoading && !loaders.fetchBlogLoader && isAnyErr && <NotFoundComp />}
     </>
   );
 }

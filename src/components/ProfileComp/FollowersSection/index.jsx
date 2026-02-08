@@ -86,7 +86,7 @@ function FollowersList({ item, user, setUser }) {
           <div className="margin-14 flex justify-end items-start" style={{ marginRight: 0, marginBlock: 0 }}>
             {!isFetchUserLoader && followingUsers[author.follower._id] && (
               <button onClick={handleUnfollowUser} disabled={isLoading} className={`bdr17-hover padding-28 padding-20 border-radius-7 flex items-center m-0 transition-all duration-500 ease ${isLoading ? "opacity-[0.7] cursor-default" : "opacity-100 cursor-pointer"}`}>
-                <div className="break-keep text-center inline-block">Following</div>
+                <div className="break-keep text-center inline-block custom-fs-1">Following</div>
                 <div className="text-right padding-23" style={{ paddingRight: 0, paddingBlock: 0 }}>
                   <div className="width-19 aspect-square">
                     <IoIosArrowDown className="w-full h-full" />
@@ -96,7 +96,7 @@ function FollowersList({ item, user, setUser }) {
             )}
             {!isFetchUserLoader && !followingUsers[author.follower._id] && (
               <button onClick={handleFollowUser} disabled={isLoading} className={`bdr17-hover padding-28 padding-20 border-radius-7 flex items-center m-0 transition-all duration-500 ease ${isLoading ? "opacity-[0.7] cursor-default" : "opacity-100 cursor-pointer"}`}>
-                <div className="break-keep text-center inline-block">Follow</div>
+                <div className="break-keep text-center inline-block custom-fs-1">Follow</div>
               </button>
             )}
           </div>

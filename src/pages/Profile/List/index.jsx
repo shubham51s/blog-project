@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { useRequestHandler } from "../../../hooks/requestHandler";
 import ListComp from "../../../components/ProfileComp/ListSection/ListComp";
 import ListLoader from "../../../components/ProfileComp/ListSection/ListComp/skeleton";
-import { showToast } from "../../../utils/toaster";
 
 function List() {
-  const { requestHandler } = useRequestHandler();
   const defaultLoaderTimeout = useRef(null);
   const { user, setUser } = useOutletContext();
   const [defaultLoader, setDefaultLoader] = useState(true);

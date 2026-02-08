@@ -1,27 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import Blog2Comp from "../../components/PostDetailsPageComponents/BlogComp2";
-import { useApi } from "../../hooks/useApi";
+import Blog from "./Blog";
+import { useRequestHandler } from "../../../hooks/requestHandler";
+import Spinner from "../Spinner";
 
-function BlogDetailsErrorComp() {
-  const { fetchRequest } = useApi();
+function NotFoundComp() {
+  const { requestHandler } = useRequestHandler();
   const [recommendedBlogs, setRecommendedBlogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useRef(null);
 
   const fetchBlogs = async () => {
+    setIsLoading(true);
     try {
-      const response = await fetchRequest("/blogs/recommended?skip=0&limit=4", "GET");
+      const response = await requestHandler("/blogs/recommended?skip=0&limit=4");
       const result = await response.json();
 
-      if (response.status === 200) {
+      if (response.status === 200 && result?.data?.blogs) {
         setRecommendedBlogs(result.data.blogs);
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchBlogs();
+    if (!isMounted.current) {
+      isMounted.current = true;
+      fetchBlogs();
+    }
   }, []);
 
   return (
@@ -54,15 +63,22 @@ function BlogDetailsErrorComp() {
 
         {/* bottom section */}
         <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
-          <div className="mx-0 flex flex-wrap w-full items-center gap-[2%]">
-            {recommendedBlogs.map((item) => (
-              <Blog2Comp blog={item} key={item._id} />
-            ))}
-          </div>
+          {!isLoading && (
+            <div className="mx-0 flex flex-wrap w-full items-center gap-[2%]">
+              {recommendedBlogs.map((item) => (
+                <Blog blog={item} key={item._id} />
+              ))}
+            </div>
+          )}
+          {isLoading && (
+            <div className="w-full flex items-center justify-center margin-39">
+              <Spinner />
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export default BlogDetailsErrorComp;
+export default NotFoundComp;
