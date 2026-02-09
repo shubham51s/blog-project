@@ -1793,6 +1793,10 @@ img {
     padding-block: 4px;
   }
 
+  .padding86 {
+    padding: 50px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -2043,5 +2047,9 @@ img {
 
   .margin65 {
     margin: 18px;
+  }
+
+  .margin66 {
+    margin-bottom: 20px;
   }
 }
