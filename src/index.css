@@ -881,6 +881,10 @@ img {
     max-height: 96px;
   }
 
+  .height85 {
+    height: 174px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -2051,5 +2055,9 @@ img {
 
   .margin66 {
     margin-bottom: 20px;
+  }
+
+  .margin67 {
+    margin-block: 22px;
   }
 }
