@@ -93,10 +93,10 @@ function MenuComp() {
   };
 
   const isActiveTab = (id) => {
-    if (id === 0) return location.pathname === "/";
-    if (id === 1) return location.pathname === "/me/saved";
+    if (id === 0) return !location.pathname.includes("/me/lists") && !location.pathname.includes("/profile") && !location.pathname.includes("/me/stories");
+    if (id === 1) return location.pathname.includes("/me/lists");
     if (id === 2) return location.pathname.includes(`/profile/${userInfo.username}`);
-    if (id === 3) return location.pathname === "/me/stories";
+    if (id === 3) return location.pathname.includes("/me/stories");
   };
 
   const handleUserProfileBtnClick = (username) => {
