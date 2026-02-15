@@ -57,6 +57,7 @@ function MyLists() {
       {isShowListBanner && <CreateListBanner setIsShowListBanner={setIsShowListBanner} />}
 
       <div>{(defaultLoader || isLoading) && Array.from({ length: 4 }).map((_, i) => <ListLoader key={i} />)}</div>
+
       <div>{!defaultLoader && !isLoading && lists.map((item) => <ListComp key={item._id} user={user} setUser={setUser} item={item} filterOutDeletedList={filterOutDeletedList} />)}</div>
     </>
   );

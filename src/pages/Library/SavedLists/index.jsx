@@ -51,7 +51,18 @@ function SavedLists() {
   return (
     <>
       <div>{(defaultLoader || isLoading) && Array.from({ length: 4 }).map((_, i) => <ListLoader key={i} />)}</div>
+
       <div>{!defaultLoader && !isLoading && lists.map((item) => <SavedListItem key={item._id} item={item} filterUnsavedList={filterUnsavedList} />)}</div>
+
+      {/* no data */}
+      {!defaultLoader && !isLoading && (
+        <div className="flex flex-col items-center">
+          <h2 className="font-10 font-semibold color-3 line20 m-0">No lists from others</h2>
+          <div className="padding68">
+            <p className="custom-fs-1 color-4 line20 m-0 font-normal">Save someone else's list and it will appear here.</p>
+          </div>
+        </div>
+      )}
     </>
   );
 }
