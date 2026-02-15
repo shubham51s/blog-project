@@ -2,26 +2,24 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../../context/userContext";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import ListLoader from "../../../components/ProfileComp/ListSection/ListComp/skeleton";
-import ListComp from "../../../components/ProfileComp/ListSection/ListComp";
+import SavedListItem from "../../../components/LibraryComp/SavedListItem";
 
 function SavedLists() {
-  const { userInfo } = useContext(UserContext);
-  const [user, setUser] = useState({ ...userInfo, lists: [], publicLists: [] });
   const { requestHandler } = useRequestHandler();
-  const isMounted = useRef();
+  const isMounted = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [lists, setLists] = useState([]);
   const [defaultLoader, setDefaultLoader] = useState(true);
-  const defaultLoaderTimeout = useRef();
+  const defaultLoaderTimeout = useRef(null);
 
   const fetchSavedLists = async (skip) => {
     try {
-      const response = await requestHandler(`/list/toggle-save/get-saved-lists?skip=${skip}`);
+      const response = await requestHandler(`/list/toggle-save/get-saved-lists`);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.lists) {
         if (lists.length === 0) {
-          // setLists(result.data.lists);
+          setLists(result.data.lists);
         }
       }
     } catch (err) {
@@ -31,12 +29,7 @@ function SavedLists() {
     }
   };
 
-  const filterOutDeletedList = (listId) => {
-    // const updatedList = lists.filter((item) => item._id !== listId);
-    // setLists(updatedList);
-  };
-
-  const filterOutUnsavedLists = (listId) => {
+  const filterUnsavedList = (listId) => {
     const updatedList = lists.filter((item) => item._id !== listId);
     setLists(updatedList);
   };
@@ -58,7 +51,7 @@ function SavedLists() {
   return (
     <>
       <div>{(defaultLoader || isLoading) && Array.from({ length: 4 }).map((_, i) => <ListLoader key={i} />)}</div>
-      <div>{!defaultLoader && !isLoading && lists.map((item) => <ListComp key={item._id} user={user} setUser={setUser} item={item} filterOutDeletedList={filterOutDeletedList} />)}</div>
+      <div>{!defaultLoader && !isLoading && lists.map((item) => <SavedListItem key={item._id} item={item} filterUnsavedList={filterUnsavedList} />)}</div>
     </>
   );
 }
