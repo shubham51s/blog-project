@@ -28,6 +28,8 @@ import ReadingHistory from "./pages/Library/ReadingHistory";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
+
+  // onPointerDownOutside={(e) => e.preventDefault()}
   return (
     <>
       {isInitialLoading && <GlobalLoaderComp />}
