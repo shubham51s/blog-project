@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DeleteReadingHistoryModal from "../../../components/Common/Modals/DeleteReadingHistory";
 import ReadingHistoryItem from "../../../components/LibraryComp/ReadingHistoryItem";
+import { useRequestHandler } from "../../../hooks/requestHandler";
 
-function ReadingHistory({}) {
+function ReadingHistory() {
+  const { requestHandler } = useRequestHandler();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const isMounted = useRef(null);
+  const loaderTimeout = useRef(null);
+  const [blogs, setBlogs] = useState([]);
+  const [loaders, setLoaders] = useState({
+    default: true,
+    fetchHistory: true,
+  });
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModal(false);
@@ -24,6 +33,36 @@ function ReadingHistory({}) {
     }
   };
 
+  const fetchMyBlogHistory = async (skip) => {
+    try {
+      const response = await requestHandler(`/blog/read/user/all-history?skip=${skip}`);
+      const result = await response.json();
+
+      console.log("all history result ", result);
+
+      if (response?.status === 200 && result?.data?.blogs) {
+        setBlogs(result.data.blogs);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      if (loaders.fetchHistory) setLoaders((prev) => ({ ...prev, fetchHistory: false }));
+    }
+  };
+
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      fetchMyBlogHistory(0);
+    }
+
+    if (loaderTimeout.current) clearTimeout(loaderTimeout.current);
+
+    loaderTimeout.current = setTimeout(() => {
+      setLoaders((prev) => ({ ...prev, default: false }));
+    }, 500);
+  }, []);
+
   return (
     <>
       <div className="margin56">
@@ -41,8 +80,8 @@ function ReadingHistory({}) {
             </div>
           </div>
 
-          {/* map */}
-          <ReadingHistoryItem />
+          {/* list */}
+          {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && blogs.map((item) => <ReadingHistoryItem key={item._id} item={item.blog} />)}
         </div>
       </div>
 

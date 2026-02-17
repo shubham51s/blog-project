@@ -8,7 +8,6 @@ import { GoShare } from "react-icons/go";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CommentsComp from "../../components/PostDetailsPageComponents/Comments comp";
 import BlogRecommendComp from "../../components/PostDetailsPageComponents/Blog Recommendation";
-import { useApi } from "../../hooks/useApi";
 import { FaHandsClapping } from "react-icons/fa6";
 import MoreOptionsComp from "../../components/PostDetailsPageComponents/MoreOptionsComp";
 import { UserContext } from "../../context/userContext";
@@ -18,11 +17,12 @@ import { showToast } from "../../utils/toaster";
 import { FollowingContext } from "../../context/followingContext";
 import { useToggleUserFollow } from "../../hooks/toggleUserFollow";
 import NotFoundComp from "../../components/Common/NotFound";
+import { useRequestHandler } from "../../hooks/requestHandler";
 
 function PostDetailsPage() {
   const { slug, id } = useParams();
   const { userInfo } = useContext(UserContext);
-  const { fetchRequest } = useApi();
+  const { requestHandler } = useRequestHandler();
   const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
   const { followUser, unfollowUser } = useToggleUserFollow();
   const [isShowFullImg, setIsShowFullImg] = useState(false);
@@ -95,7 +95,7 @@ function PostDetailsPage() {
 
   const getMyClapsCount = async (blogId) => {
     try {
-      const response = await fetchRequest(`/claps/${blogId}`, "GET");
+      const response = await requestHandler(`/claps/${blogId}`);
 
       if (response.status === 200) {
         const result = await response.json();
@@ -109,7 +109,7 @@ function PostDetailsPage() {
 
   const undoMyClaps = async () => {
     try {
-      const response = await fetchRequest(`/claps/${blog._id}`, "DELETE");
+      const response = await requestHandler(`/claps/${blog._id}`, "DELETE");
       // const result = await response.json();
 
       if (response.status === 200) {
@@ -134,7 +134,7 @@ function PostDetailsPage() {
         blog: blog._id,
       };
 
-      const response = await fetchRequest(`/claps`, "POST", params);
+      const response = await requestHandler(`/claps`, "POST", params);
 
       setClapDetails((prev) => ({ ...prev, isLoading: false }));
 
@@ -169,10 +169,22 @@ function PostDetailsPage() {
     }, 2000);
   };
 
+  const readBlog = async (blogId) => {
+    try {
+      const params = {
+        blogId,
+      };
+
+      await requestHandler("/blog/read", "POST", params);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const fetchBlogDetails = async () => {
     setLoaders((prev) => ({ ...prev, fetchBlogLoader: true }));
     try {
-      const response = await fetchRequest(`/blogs/${slug}/${id}`, "GET");
+      const response = await requestHandler(`/blogs/${slug}/${id}`);
 
       const result = await response.json();
 
@@ -181,6 +193,7 @@ function PostDetailsPage() {
         setClapDetails((prev) => ({ ...prev, totalClaps: blog.clapsCount }));
         getMyClapsCount(blog._id);
         setBlog(blog);
+        readBlog(blog._id);
       } else {
         setIsAnyErr(true);
       }
@@ -207,7 +220,7 @@ function PostDetailsPage() {
         blog: blog._id,
       };
 
-      const response = await fetchRequest("/bookmarks/delete", "POST", params);
+      const response = await requestHandler("/bookmarks/delete", "POST", params);
 
       const result = await response.json();
 
@@ -238,7 +251,7 @@ function PostDetailsPage() {
         blog: blog._id,
       };
 
-      const response = await fetchRequest("/bookmarks", "POST", params);
+      const response = await requestHandler("/bookmarks", "POST", params);
 
       const result = await response.json();
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));

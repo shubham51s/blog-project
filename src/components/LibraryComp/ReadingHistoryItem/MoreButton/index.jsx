@@ -6,7 +6,7 @@ import * as Popover from "@radix-ui/react-popover";
 function MoreButton() {
   return (
     <Popover.Root modal>
-      <Popover.Trigger className="cursor-pointer m-0 padding-33 color-3 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+      <Popover.Trigger onClick={(e) => e.stopPropagation()} className="cursor-pointer m-0 padding-33 color-3 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
         <Tooltip arrow placement="top" enterDelay={500} title="More">
           <div className="width-13 aspect-square">
             <MdOutlineMoreHoriz className="w-full h-full" />

@@ -7,12 +7,13 @@ function ToggleAddToListButton() {
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleAddToList = () => {
+  const handleAddToList = (e) => {
+    e.stopPropagation();
     setIsSaved((prev) => !prev);
   };
 
   return (
-    <button onClick={handleAddToList} disabled={isLoading} className="cursor-pointer m-0 padding-33 color-3 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+    <button onClick={(e) => handleAddToList(e)} disabled={isLoading} className="cursor-pointer m-0 padding-33 color-3 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
       <Tooltip arrow placement="top" enterDelay={500} title="Save">
         <div className="width-13 aspect-square">
           {!isSaved && <MdOutlineBookmarkAdd className="w-full h-full" />}

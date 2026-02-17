@@ -29,3 +29,23 @@ export function formatUTCToLocalDate(utcString) {
     return "-";
   }
 }
+
+export function formatDateInMonthDayYear(utcDateString) {
+  try {
+    const date = new Date(utcDateString);
+    const now = new Date();
+
+    const isSameYear = date.getFullYear() === now.getFullYear();
+
+    const options = {
+      month: "short",
+      day: "numeric",
+      ...(isSameYear ? {} : { year: "numeric" }),
+    };
+
+    return date.toLocaleDateString(undefined, options);
+  } catch (err) {
+    console.error(err);
+    return "-";
+  }
+}
