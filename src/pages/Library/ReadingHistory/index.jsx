@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import DeleteReadingHistoryModal from "../../../components/Common/Modals/DeleteReadingHistory";
 import ReadingHistoryItem from "../../../components/LibraryComp/ReadingHistoryItem";
 import { useRequestHandler } from "../../../hooks/requestHandler";
+import { showToast } from "../../../utils/toaster";
 
 function ReadingHistory() {
   const { requestHandler } = useRequestHandler();
@@ -50,6 +51,21 @@ function ReadingHistory() {
     }
   };
 
+  const removeBlogFromHistory = async (params) => {
+    try {
+      const response = await requestHandler(`/blog/read/user/remove/${params.blogId}`, "DELETE");
+      const result = await response.json();
+
+      if (response?.status !== 200) showToast(result?.message || "Some error occured.");
+
+      return response?.status === 200;
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+      return false;
+    }
+  };
+
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
@@ -81,7 +97,7 @@ function ReadingHistory() {
           </div>
 
           {/* list */}
-          {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && blogs.map((item) => <ReadingHistoryItem key={item._id} item={item.blog} />)}
+          {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && blogs.map((item) => <ReadingHistoryItem removeBlogFromHistory={removeBlogFromHistory} key={item._id} item={item} />)}
         </div>
       </div>
 

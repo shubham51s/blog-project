@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import Tooltip from "@mui/material/Tooltip";
 import * as Popover from "@radix-ui/react-popover";
 
-function MoreButton() {
+function MoreButton({ blog, setBlog, removeBlogFromHistory }) {
+  const [loaders, setLoaders] = useState({
+    delete: false,
+  });
+
+  const handleRemoveBlogBtnClick = async () => {
+    setLoaders((prev) => ({ ...prev, delete: true }));
+    try {
+      const params = {
+        blogId: blog._id,
+      };
+      const isDeleted = await removeBlogFromHistory(params);
+
+      if (isDeleted) setBlog(null);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoaders((prev) => ({ ...prev, delete: false }));
+    }
+  };
+
   return (
     <Popover.Root modal>
       <Popover.Trigger onClick={(e) => e.stopPropagation()} className="cursor-pointer m-0 padding-33 color-3 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
@@ -14,11 +34,13 @@ function MoreButton() {
         </Tooltip>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content side="bottom" align="middle" sideOffset={1} className="box-shadow-4 border-radius-3 box-border custom-bg-8">
+        <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" align="middle" sideOffset={1} className="box-shadow-4 border-radius-3 box-border custom-bg-8">
           <Popover.Arrow className="fill-white" />
           <ul className="flex flex-col items-stretch p-0 m-0 list-none custom-px-2 width59 overflow-hidden">
             <li className="custom-px-2 padding59 custom-fs-1 color-3 font-normal">
-              <button className="cursor-pointer m-0 p-0 text-[#c94a4a] transition-all duration-75 ease hover:text-[#b63636]">Remove from reading history</button>
+              <button onClick={handleRemoveBlogBtnClick} disabled={loaders.delete} className="cursor-pointer m-0 p-0 text-[#c94a4a] transition-all duration-75 ease hover:text-[#b63636]">
+                Remove from reading history
+              </button>
             </li>
             <li className="custom-px-2">
               <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
