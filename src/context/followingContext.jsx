@@ -1,13 +1,10 @@
 import { createContext, useState } from "react";
-import { useRequestHandler } from "../hooks/requestHandler";
 import { urlBasePath } from "../constants/constant";
 
 const FollowingContext = createContext();
 
 const FollowingProvider = ({ children }) => {
-  const { requestHandler } = useRequestHandler();
   const [followingUsers, setFollowingUsers] = useState({});
-  const [followingCommunities, setFollowingCommunities] = useState({});
   const [isFetchUserLoader, setIsFetchUserLoader] = useState(true);
 
   const fetchFollowingAuthorIds = async () => {

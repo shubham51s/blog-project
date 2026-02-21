@@ -10,6 +10,7 @@ function ReadingHistory() {
   const isMounted = useRef(null);
   const loaderTimeout = useRef(null);
   const [blogs, setBlogs] = useState([]);
+  const [deletedCount, setDeletedCount] = useState(true);
   const [loaders, setLoaders] = useState({
     default: true,
     fetchHistory: true,
@@ -56,7 +57,9 @@ function ReadingHistory() {
       const response = await requestHandler(`/blog/read/user/remove/${params.blogId}`, "DELETE");
       const result = await response.json();
 
-      if (response?.status !== 200) showToast(result?.message || "Some error occured.");
+      if (response?.status === 200) {
+        setDeletedCount((prev) => prev + 1);
+      } else showToast(result?.message || "Some error occured.");
 
       return response?.status === 200;
     } catch (err) {
