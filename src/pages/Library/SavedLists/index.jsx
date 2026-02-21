@@ -3,6 +3,7 @@ import { UserContext } from "../../../context/userContext";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import ListLoader from "../../../components/ProfileComp/ListSection/ListComp/skeleton";
 import SavedListItem from "../../../components/LibraryComp/SavedListItem";
+import { defaultLoaderTime } from "../../../constants/constant";
 
 function SavedLists() {
   const { requestHandler } = useRequestHandler();
@@ -44,7 +45,7 @@ function SavedLists() {
       defaultLoaderTimeout.current = setTimeout(() => {
         setDefaultLoader(false);
         defaultLoaderTimeout.current = true;
-      }, 300);
+      }, defaultLoaderTime);
     }
   }, []);
 
@@ -56,11 +57,11 @@ function SavedLists() {
 
       {/* no data */}
       {!defaultLoader && !isLoading && (
-        <div className="flex flex-col items-center">
-          <h2 className="font-10 font-semibold color-3 line20 m-0">No lists from others</h2>
-          <div className="padding68">
-            <p className="custom-fs-1 color-4 line20 m-0 font-normal">Save someone else's list and it will appear here.</p>
+        <div className="text-center padding-42">
+          <div className="padding-42 padding89">
+            <h2 className="font-10 font-medium color-3 line20 m-0">No lists from others</h2>
           </div>
+          <p className="color-4 custom-fs-1 line20 font-normal m-0">Save someone else's list and it will appear here.</p>
         </div>
       )}
     </>

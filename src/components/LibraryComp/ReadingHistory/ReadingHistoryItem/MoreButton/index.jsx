@@ -2,10 +2,10 @@ import React, { useContext, useState } from "react";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import Tooltip from "@mui/material/Tooltip";
 import * as Popover from "@radix-ui/react-popover";
-import { useToggleUserFollow } from "../../../../hooks/toggleUserFollow";
-import { FollowingContext } from "../../../../context/followingContext";
-import { showToast } from "../../../../utils/toaster";
-import { UserContext } from "../../../../context/userContext";
+import { useToggleUserFollow } from "../../../../../hooks/toggleUserFollow";
+import { FollowingContext } from "../../../../../context/followingContext";
+import { showToast } from "../../../../../utils/toaster";
+import { UserContext } from "../../../../../context/userContext";
 
 function MoreButton({ blog, setBlog, removeBlogFromHistory }) {
   const { userInfo } = useContext(UserContext);

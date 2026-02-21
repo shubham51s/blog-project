@@ -5,8 +5,8 @@ import { IoChatbubbleSharp } from "react-icons/io5";
 import DeleteButton from "./DeleteButton";
 import ToggleAddToListButton from "./ToggleAddToListButton";
 import MoreButton from "./MoreButton";
-import { formatDateInMonthDayYear } from "../../../utils/dates";
-import noImage from "../../../assets/images/noPreviewImage.png";
+import { formatDateInMonthDayYear } from "../../../../utils/dates";
+import noImage from "../../../../assets/images/noPreviewImage.png";
 
 function ReadingHistoryItem({ item, removeBlogFromHistory }) {
   const navigate = useNavigate();

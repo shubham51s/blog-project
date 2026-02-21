@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import DeleteReadingHistoryModal from "../../../components/Common/Modals/DeleteReadingHistory";
-import ReadingHistoryItem from "../../../components/LibraryComp/ReadingHistoryItem";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { showToast } from "../../../utils/toaster";
+import ReadingHistoryItem from "../../../components/LibraryComp/ReadingHistory/ReadingHistoryItem";
+import Loader from "../../../components/LibraryComp/ReadingHistory/Loader";
+import { defaultLoaderTime } from "../../../constants/constant";
 
 function ReadingHistory() {
   const { requestHandler } = useRequestHandler();
@@ -10,7 +12,7 @@ function ReadingHistory() {
   const isMounted = useRef(null);
   const loaderTimeout = useRef(null);
   const [blogs, setBlogs] = useState([]);
-  const [deletedCount, setDeletedCount] = useState(true);
+  const [deletedCount, setDeletedCount] = useState(0);
   const [loaders, setLoaders] = useState({
     default: true,
     fetchHistory: true,
@@ -27,7 +29,16 @@ function ReadingHistory() {
 
   const clearReadingHistory = async (setIsLoading) => {
     setIsLoading(true);
+
     try {
+      const response = await requestHandler("/blog/read/user/clear-all", "DELETE");
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        setDeletedCount(0);
+        setBlogs([]);
+        handleCloseDeleteModal();
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -79,25 +90,39 @@ function ReadingHistory() {
 
     loaderTimeout.current = setTimeout(() => {
       setLoaders((prev) => ({ ...prev, default: false }));
-    }, 500);
+    }, defaultLoaderTime);
   }, []);
 
   return (
     <>
       <div className="margin56">
         <div>
-          {/* clear all history */}
-          <div className="flex justify-between items-center bg-10 padding-3 margin57">
-            <p className="color-3 custom-fs-1 line20 font-normal m-0">You can clear your reading history for a fresh start.</p>
+          {/* loader */}
+          {(loaders.default || loaders.fetchHistory) && Array.from({ length: 4 }).map((_, index) => <Loader key={index} />)}
 
-            <div className="margin-18" style={{ marginRight: 0 }}>
-              <div>
-                <button onClick={(e) => showDeleteHistoryModal(e)} className="bdr-3 border-[#c94a4a] bg-[#c94a4a] padding-27 padding-28 text-white text-center border-radius-9 font-4 line20 font-normal m-0 transition-all duration-75 ease cursor-pointer hover:border-[#b63636] hover:bg-[#b63636]">
-                  Clear history
-                </button>
+          {/* clear all history */}
+          {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && (
+            <div className="flex justify-between items-center bg-10 padding-3 margin57">
+              <p className="color-3 custom-fs-1 line20 font-normal m-0">You can clear your reading history for a fresh start.</p>
+              <div className="margin-18" style={{ marginRight: 0 }}>
+                <div>
+                  <button onClick={(e) => showDeleteHistoryModal(e)} className="bdr-3 border-[#c94a4a] bg-[#c94a4a] padding-27 padding-28 text-white text-center border-radius-9 font-4 line20 font-normal m-0 transition-all duration-75 ease cursor-pointer hover:border-[#b63636] hover:bg-[#b63636]">
+                    Clear history
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* no data */}
+          {!loaders.default && !loaders.fetchHistory && blogs.length === 0 && (
+            <div className="text-center padding-42">
+              <div className="padding-42 padding89">
+                <h2 className="font-10 font-medium color-3 line20 m-0">You haven't read any stories yet</h2>
+              </div>
+              <p className="color-4 custom-fs-1 line20 font-normal m-0">Stories you've read on Medium will appear here.</p>
+            </div>
+          )}
 
           {/* list */}
           {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && blogs.map((item) => <ReadingHistoryItem removeBlogFromHistory={removeBlogFromHistory} key={item._id} item={item} />)}

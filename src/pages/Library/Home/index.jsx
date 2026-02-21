@@ -4,6 +4,7 @@ import CreateListBanner from "../../../components/LibraryComp/MyLists/CreateList
 import ListLoader from "../../../components/ProfileComp/ListSection/ListComp/skeleton";
 import { UserContext } from "../../../context/userContext";
 import ListComp from "../../../components/ProfileComp/ListSection/ListComp";
+import { defaultLoaderTime } from "../../../constants/constant";
 
 function MyLists() {
   const { userInfo } = useContext(UserContext);
@@ -48,7 +49,7 @@ function MyLists() {
       defaultLoaderTimeout.current = setTimeout(() => {
         setDefaultLoader(false);
         defaultLoaderTimeout.current = true;
-      }, 300);
+      }, defaultLoaderTime);
     }
   }, []);
 
