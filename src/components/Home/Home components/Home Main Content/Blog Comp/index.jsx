@@ -8,19 +8,15 @@ import ShowLessComp from "./ShowLessComp";
 import { formatMonthAndDayShort } from "../../../../../utils/monthDateFormatter";
 import { UserContext } from "../../../../../context/userContext";
 import noPreviewImg from "../../../../../assets/images/noPreviewImage.png";
-import Bookmark from "./Bookmark";
-import CreateNewListModal from "../../../../List/CreateList";
-import { showToast } from "../../../../../utils/toaster";
-import { useRequestHandler } from "../../../../../hooks/requestHandler";
+import SaveBlog from "../../../../Common/Buttons/ToggleBlogSave";
+import { ListContext } from "../../../../../context/listContext";
 
-function BlogComp({ item, lists, updateUserListArr }) {
-  const { requestHandler } = useRequestHandler();
+function BlogComp({ item }) {
   const { userInfo } = useContext(UserContext);
   const navigate = useNavigate();
   const isMyBlog = userInfo._id === item.author._id;
   const [blog, setBlog] = useState({ ...item, isMyBlog });
   const [isHideBlog, setIsHideBlog] = useState(false);
-  const [isBookmarkPopup, setIsBookmarkPopup] = useState(false);
 
   const handleUserProfileClick = (e) => {
     e.stopPropagation();
@@ -39,7 +35,7 @@ function BlogComp({ item, lists, updateUserListArr }) {
             <article>
               <div className="box-content">
                 <div className="w-full h-full">
-                  <div onClick={handleShowDetailedBlog} className={`flex relative ${isBookmarkPopup ? "cursor-default" : "cursor-pointer"}`}>
+                  <div onClick={handleShowDetailedBlog} className={`flex relative cursor-pointer`}>
                     <div className="w-full">
                       {/* writer section */}
                       <div className="flex w-full">
@@ -120,7 +116,7 @@ function BlogComp({ item, lists, updateUserListArr }) {
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
                                     {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
                                     <div>
-                                      <Bookmark item={blog} setBlog={setBlog} lists={lists} isBookmarkPopup={isBookmarkPopup} setIsBookmarkPopup={setIsBookmarkPopup} updateUserListArr={updateUserListArr} />
+                                      <SaveBlog item={blog} />
                                     </div>
                                     <MoreComp blog={blog} />
                                   </div>

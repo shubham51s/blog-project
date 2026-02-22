@@ -2,14 +2,16 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { urlBasePath } from "../constants/constant";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FollowingContext } from "./followingContext";
+import { ListContext } from "./listContext";
 
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const hasMounted = useRef(null);
+  const isMounted = useRef(null);
   const { fetchFollowingAuthorIds } = useContext(FollowingContext);
+  const { fetchMyLists } = useContext(ListContext);
   const [userInfo, setUserInfo] = useState({});
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -31,6 +33,7 @@ const UserProvider = ({ children }) => {
         setUserInfo({ ...result.data.user });
         setIsUserLoggedIn(true);
         fetchFollowingAuthorIds();
+        fetchMyLists();
       } else {
         // need to check later
         if (location.pathname !== "/") navigate("/");
@@ -44,9 +47,9 @@ const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!hasMounted.current) {
+    if (!isMounted.current) {
+      isMounted.current = true;
       verifyAuthentication();
-      hasMounted.current = true;
     }
   }, []);
 

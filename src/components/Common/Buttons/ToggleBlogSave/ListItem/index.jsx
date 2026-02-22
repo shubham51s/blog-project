@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { IoLockClosedSharp } from "react-icons/io5";
-import { useRequestHandler } from "../../../../../../../hooks/requestHandler";
-import { showToast } from "../../../../../../../utils/toaster";
+import { useRequestHandler } from "../../../../../hooks/requestHandler";
+import { showToast } from "../../../../../utils/toaster";
 
 function ListItem({ list, blog, setBlog }) {
   const { requestHandler } = useRequestHandler();

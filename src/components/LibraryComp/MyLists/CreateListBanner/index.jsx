@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
-import CreateNewListModal from "../../../List/CreateList";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { showToast } from "../../../../utils/toaster";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../../context/userContext";
+import CreateNewListModal from "../../../Common/Modals/CreateNewList";
 
 function CreateListBanner({ setIsShowListBanner }) {
   const { requestHandler } = useRequestHandler();
@@ -13,25 +13,9 @@ function CreateListBanner({ setIsShowListBanner }) {
   const { userInfo } = useContext(UserContext);
   const [isCreateListModal, setIsCreateListModal] = useState(false);
 
-  const createNewUserList = async (params, setIsLoading) => {
-    setIsLoading(true);
-    try {
-      const response = await requestHandler("/list/create", "POST", params);
-
-      const result = await response.json();
-
-      if (response?.status === 201 && result?.data?.list) {
-        const list = result.data.list;
-        navigate(`/profile/${userInfo.username}/list/${list.slug}/${list._id}`);
-      } else {
-        showToast("Some error occured");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-    } finally {
-      setIsLoading(false);
-    }
+  const createNewUserList = async (list, setIsLoading) => {
+    setIsLoading(false);
+    navigate(`/profile/${userInfo.username}/list/${list.slug}/${list._id}`);
   };
 
   const handleCreateNewBlogBtnClick = () => {

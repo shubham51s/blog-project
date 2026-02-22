@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import DeleteReadingHistoryModal from "../../../components/Common/Modals/DeleteReadingHistory";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { showToast } from "../../../utils/toaster";
 import ReadingHistoryItem from "../../../components/LibraryComp/ReadingHistory/ReadingHistoryItem";
 import Loader from "../../../components/LibraryComp/ReadingHistory/Loader";
 import { defaultLoaderTime } from "../../../constants/constant";
+import { ListContext } from "../../../context/listContext";
 
 function ReadingHistory() {
   const { requestHandler } = useRequestHandler();
@@ -51,9 +52,8 @@ function ReadingHistory() {
       const response = await requestHandler(`/blog/read/user/all-history?skip=${skip}`);
       const result = await response.json();
 
-      console.log("all history result ", result);
-
       if (response?.status === 200 && result?.data?.blogs) {
+        console.log("result history: ", result.data.blogs);
         setBlogs(result.data.blogs);
       }
     } catch (err) {

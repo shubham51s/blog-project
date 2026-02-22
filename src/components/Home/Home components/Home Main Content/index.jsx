@@ -1,15 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { IoMdAdd } from "react-icons/io";
-import { MdNavigateNext } from "react-icons/md";
-import { GrFormPrevious } from "react-icons/gr";
 import NoContentComp from "./No Content";
 import BlogComp from "./Blog Comp";
 import { UserContext } from "../../../../context/userContext";
 import BlogLoader from "./Blog Comp/skeleton";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
-import CreateNewListModal from "../../../List/CreateList";
-import { showToast } from "../../../../utils/toaster";
 
 function HomeMainContentComp() {
   const { userInfo } = useContext(UserContext);
@@ -42,11 +36,9 @@ function HomeMainContentComp() {
   ]);
 
   const [blogs, setBlogs] = useState([]);
-  const [lists, setLists] = useState([]);
   const [activeTopicIndex, setActiveTopicIndex] = useState(0);
   const [loaders, setLoaders] = useState({
     blogsLoader: true,
-    listLoader: false,
   });
 
   const handleActiveTabChange = (index) => {
@@ -70,30 +62,8 @@ function HomeMainContentComp() {
     }
   };
 
-  const fetchUserLists = async () => {
-    setLoaders((prev) => ({ ...prev, listLoader: true }));
-    try {
-      const response = await requestHandler("/list");
-
-      const result = await response.json();
-
-      if (response?.status === 200) {
-        setLists(result?.data?.lists || []);
-      }
-      setLoaders((prev) => ({ ...prev, listLoader: false }));
-    } catch (err) {
-      console.error(err);
-      setLoaders((prev) => ({ ...prev, listLoader: false }));
-    }
-  };
-
-  const updateUserListArr = async (newList) => {
-    setLists((prev) => [prev[0], { ...newList }, ...prev.slice(1)]);
-  };
-
   useEffect(() => {
     fetchBlogs();
-    fetchUserLists();
 
     if (loaderTimeout.current) clearTimeout(loaderTimeout.current);
     // minimum loader time
@@ -146,9 +116,9 @@ function HomeMainContentComp() {
 
           {/* section-4 */}
           <div>
-            {(initialLoader || loaders.blogsLoader || loaders.listLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
-            {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-            {!initialLoader && !loaders.blogsLoader && !loaders.listLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} lists={lists} key={item._id} updateUserListArr={updateUserListArr} />)}
+            {(initialLoader || loaders.blogsLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
+            {!initialLoader && !loaders.blogsLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
+            {!initialLoader && !loaders.blogsLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
           </div>
         </div>
       </main>

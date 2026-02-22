@@ -8,8 +8,10 @@ import HideResponseModal from "../../ListModals/hideResponses";
 import EditListModal from "../../ListModals/edit";
 import { showToast } from "../../../../../utils/toaster";
 import { useRequestHandler } from "../../../../../hooks/requestHandler";
+import { ListContext } from "../../../../../context/listContext";
 
 function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
+  const { deleteListFromArr, updateListItemInArr, makeListItemPublic, makeListItemPrivate } = useContext(ListContext);
   const rootUrl = window.location.origin;
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
@@ -64,6 +66,7 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
 
       if (response?.status === 200 && result?.data?.updatedList) {
         const updatedList = result.data.updatedList;
+        updateListItemInArr(updatedList);
         setList(updatedList);
         showToast("List updated successfully");
 
@@ -108,15 +111,17 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
       };
 
       const response = await requestHandler("/list/make-public", "POST", params);
+      const result = response.json();
 
       if (response?.status === 200) {
         setList((prev) => ({ ...prev, isPrivate: false }));
         showToast(`${list.name} is now public.`);
+        makeListItemPublic(list._id);
 
         const updatedPublicList = user.lists.filter((item) => !item.isPrivate || item._id === list._id);
         setUser((prev) => ({ ...prev, publicLists: updatedPublicList }));
       } else {
-        showToast("Some error occured");
+        showToast(result?.message || "Some error occured");
       }
       setLoaders((prev) => ({ ...prev, makeListPublicLoader: false }));
       setIsPopupOpen(false);
@@ -136,14 +141,16 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
       };
 
       const response = await requestHandler("/list/make-private", "POST", params);
+      const result = await response.json();
 
       if (response?.status === 200) {
         setList((prev) => ({ ...prev, isPrivate: true }));
         showToast(`${list.name} is now private.`);
         const updatedPublicList = user.publicLists.filter((item) => item._id !== list._id);
         setUser((prev) => ({ ...prev, publicLists: updatedPublicList }));
+        makeListItemPrivate(list._id);
       } else {
-        showToast("Some error occured");
+        showToast(result?.message || "Some error occured");
       }
 
       setIsLoading(false);
@@ -213,6 +220,7 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
       const response = await requestHandler(`/list/delete/${list._id}`, "DELETE");
 
       if (response?.status === 200) {
+        deleteListFromArr(list._id);
         filterOutDeletedList(list._id);
         showToast("List deleted and removed from Your library");
       } else {

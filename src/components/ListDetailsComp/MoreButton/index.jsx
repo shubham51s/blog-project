@@ -9,8 +9,10 @@ import EditListModal from "../../ProfileComp/ListSection/ListModals/edit";
 import { UserContext } from "../../../context/userContext";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { useNavigate } from "react-router-dom";
+import { ListContext } from "../../../context/listContext";
 
 function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
+  const { deleteListFromArr, updateListItemInArr, makeListItemPublic, makeListItemPrivate } = useContext(ListContext);
   const rootUrl = window.location.origin;
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
@@ -65,6 +67,7 @@ function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.updatedList) {
+        updateListItemInArr(result.data.updatedList);
         fetchListDetails();
       } else {
         if (response?.status < 500) {
@@ -103,12 +106,14 @@ function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
       };
 
       const response = await requestHandler("/list/make-public", "POST", params);
+      const result = await response.json();
 
       if (response?.status === 200) {
         setList((prev) => ({ ...prev, isPrivate: false }));
         showToast(`${list.name} is now public.`);
+        makeListItemPublic(list._id);
       } else {
-        showToast("Some error occured");
+        showToast(result?.message || "Some error occured");
       }
       setLoaders((prev) => ({ ...prev, makeListPublicLoader: false }));
       setIsPopupOpen(false);
@@ -128,12 +133,14 @@ function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
       };
 
       const response = await requestHandler("/list/make-private", "POST", params);
+      const result = await response.json();
 
       if (response?.status === 200) {
         setList((prev) => ({ ...prev, isPrivate: true }));
         showToast(`${list.name} is now private.`);
+        makeListItemPrivate(list._id);
       } else {
-        showToast("Some error occured");
+        showToast(result?.message || "Some error occured");
       }
 
       setIsLoading(false);
@@ -203,6 +210,7 @@ function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
       const response = await requestHandler(`/list/delete/${list._id}`, "DELETE");
 
       if (response?.status === 200) {
+        deleteListFromArr(list._id);
         showToast("List deleted and removed from Your library");
         navigate(`/profile/${list.user.username}/lists`);
       } else {

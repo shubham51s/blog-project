@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaHandsClapping } from "react-icons/fa6";
 import { IoChatbubbleSharp } from "react-icons/io5";
 import DeleteButton from "./DeleteButton";
-import ToggleAddToListButton from "./ToggleAddToListButton";
 import MoreButton from "./MoreButton";
 import { formatDateInMonthDayYear } from "../../../../utils/dates";
 import noImage from "../../../../assets/images/noPreviewImage.png";
+import SaveBlog from "../../../Common/Buttons/ToggleBlogSave";
 
 function ReadingHistoryItem({ item, removeBlogFromHistory }) {
   const navigate = useNavigate();
@@ -109,7 +109,7 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                                   </div>
                                   <div className="grow-0 shrink-0 basis-0 flex items-center justify-end">
                                     <DeleteButton removeBlogFromHistory={removeBlogFromHistory} blog={blog} setBlog={setBlog} />
-                                    <ToggleAddToListButton />
+                                    <SaveBlog item={item.blog} />
                                     <MoreButton removeBlogFromHistory={removeBlogFromHistory} blog={blog} setBlog={setBlog} />
                                     <div></div>
                                   </div>

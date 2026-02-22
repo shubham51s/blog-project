@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Dialog } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import Checkbox from "@mui/material/Checkbox";
+import { showToast } from "../../../../utils/toaster";
+import { useRequestHandler } from "../../../../hooks/requestHandler";
+import { ListContext } from "../../../../context/listContext";
 
 function CreateNewListModal({ isCreateListModal, setIsCreateListModal, createNewUserList }) {
+  const { requestHandler } = useRequestHandler();
+  const { addNewListInArr } = useContext(ListContext);
   const listNameMaxLength = 60;
   const listDescriptionMaxLength = 280;
   const [listName, setListName] = useState("");
@@ -12,13 +17,33 @@ function CreateNewListModal({ isCreateListModal, setIsCreateListModal, createNew
   const [isListPrivate, setIsListPrivate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmitBtnClick = () => {
-    const params = {
-      name: listName.trim(),
-      description: listDescription.trim(),
-      isPrivate: isListPrivate,
-    };
-    createNewUserList(params, setIsLoading);
+  const handleSubmitBtnClick = async () => {
+    setIsLoading(true);
+    try {
+      const params = {
+        name: listName.trim(),
+        description: listDescription.trim(),
+        isPrivate: isListPrivate,
+      };
+
+      const response = await requestHandler("/list/create", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 201 && result.data.list) {
+        // add new created list exactly after the default list
+        addNewListInArr(result.data.list);
+        createNewUserList(result.data.list, setIsLoading);
+      } else {
+        showToast(result?.message || "Some error occured");
+        setIsLoading(false);
+        handleCloseListModal(false);
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured");
+      setIsLoading(false);
+      handleCloseListModal(false);
+    }
   };
 
   const handleCloseListModal = () => {
