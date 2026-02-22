@@ -18,6 +18,8 @@ import { FollowingContext } from "../../context/followingContext";
 import { useToggleUserFollow } from "../../hooks/toggleUserFollow";
 import NotFoundComp from "../../components/Common/NotFound";
 import { useRequestHandler } from "../../hooks/requestHandler";
+import SaveBlog from "../../components/Common/Buttons/ToggleBlogSave";
+import { defaultLoaderTime } from "../../constants/constant";
 
 function PostDetailsPage() {
   const { slug, id } = useParams();
@@ -27,14 +29,13 @@ function PostDetailsPage() {
   const { followUser, unfollowUser } = useToggleUserFollow();
   const [isShowFullImg, setIsShowFullImg] = useState(false);
   const fullImgRef = useRef(null);
-  const [blog, setBlog] = useState();
+  const [blog, setBlog] = useState(null);
   const [myPrevClapsCount, setMyPrevClapsCount] = useState(0);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isAnyErr, setIsAnyErr] = useState(false);
   const loadingTimeout = useRef(null);
   const [loaders, setLoaders] = useState({
     fetchBlogLoader: true,
-    isBookmarkLoader: false,
     isFollowLoader: false,
   });
   const [clapDetails, setClapDetails] = useState({
@@ -212,73 +213,6 @@ function PostDetailsPage() {
     setClapDetails((prev) => ({ ...prev, isShowClapsComp: true }));
   };
 
-  const deleteBookmark = async () => {
-    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
-
-    try {
-      const params = {
-        blog: blog._id,
-      };
-
-      const response = await requestHandler("/bookmarks/delete", "POST", params);
-
-      const result = await response.json();
-
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-
-      if (response.status === 200) {
-        setBlog({ ...blog, isBookmarked: false });
-        showToast("Blog unsaved");
-      } else {
-        if (response?.status === 500) {
-          showToast("Some error occured");
-        } else {
-          showToast(result?.message || "Some error occured");
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-    }
-  };
-
-  const addBookmark = async () => {
-    setLoaders((prev) => ({ ...prev, isBookmarkLoader: true }));
-
-    try {
-      const params = {
-        blog: blog._id,
-      };
-
-      const response = await requestHandler("/bookmarks", "POST", params);
-
-      const result = await response.json();
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-
-      if (response.status === 200) {
-        setBlog({ ...blog, isBookmarked: true });
-        showToast("Blog saved");
-      } else {
-        if (response?.status === 500) {
-          showToast("Some error occured");
-        } else {
-          showToast(result?.message || "Some error occured");
-        }
-      }
-    } catch (err) {
-      showToast("Some error occured");
-      console.error(err);
-      setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
-    }
-  };
-
-  const handleToggleBookmark = () => {
-    if (loaders.isBookmarkLoader) return;
-
-    blog.isBookmarked ? deleteBookmark() : addBookmark();
-  };
-
   const followAuthor = async () => {
     setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
     try {
@@ -315,6 +249,15 @@ function PostDetailsPage() {
     }
   };
 
+  // to update saved blogs in parent also (to sync, not required in every parent but for some cases like blog details page where there are 2 button for save blog so to sync both)
+  const handleToggleBlogSaveInParent = (type, listId) => {
+    if (type === "add") setBlog((prev) => ({ ...prev, lists: [...prev.lists, listId] }));
+    if (type === "remove") {
+      const updatedList = blog.lists.filter((item) => item !== listId);
+      setBlog((prev) => ({ ...prev, lists: updatedList }));
+    }
+  };
+
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
@@ -329,7 +272,7 @@ function PostDetailsPage() {
 
     loadingTimeout.current = setTimeout(() => {
       setIsInitialLoading(false);
-    }, 400);
+    }, defaultLoaderTime);
 
     return () => {
       window.removeEventListener("scroll", handleOnScroll);
@@ -478,12 +421,13 @@ function PostDetailsPage() {
                           </div>
                           <div className="flex items-center">
                             <div className="margin-12 shrink-0 inline-block" style={{ marginLeft: 0 }}>
-                              <button onClick={handleToggleBookmark} disabled={loaders.isBookmarkLoader} className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" title="Save">
+                              {/* <button onClick={handleToggleBookmark} disabled={loaders.isBookmarkLoader} className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" title="Save">
                                 <div className="width-13 aspect-square">
                                   {blog.isBookmarked && <IoBookmarkSharp className="w-full h-full" />}
                                   {!blog.isBookmarked && <MdOutlineBookmarkAdd className="w-full h-full" />}
                                 </div>
-                              </button>
+                              </button> */}
+                              <SaveBlog item={blog} handleToggleBlogSaveInParent={handleToggleBlogSaveInParent} />
                             </div>
                             <div className="margin-12 shrink-0 inline-flex items-start" style={{ marginLeft: 0 }}>
                               <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" title="Listen">
@@ -558,15 +502,16 @@ function PostDetailsPage() {
                     </div>
                   </div>
                   <div className="flex items-center">
-                    <div className="margin-18 flex-grow: 0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
-                      <button onClick={handleToggleBookmark} disabled={loaders.isBookmarkLoader} className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 linear cursor-pointer hover:opacity-100">
+                    <div className="margin-18 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
+                      {/* <button onClick={handleToggleBookmark} disabled={loaders.isBookmarkLoader} className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 linear cursor-pointer hover:opacity-100">
                         <div className="width-13 aspect-square">
                           {blog.isBookmarked && <IoBookmarkSharp className="w-full h-full" title="Save" />}
                           {!blog.isBookmarked && <MdOutlineBookmarkAdd className="w-full h-full" title="Save" />}
                         </div>
-                      </button>
+                      </button> */}
+                      <SaveBlog item={blog} handleToggleBlogSaveInParent={handleToggleBlogSaveInParent} />
                     </div>
-                    <div className="margin-18 flex-grow: 0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
+                    <div className="margin-18 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
                       <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 linear cursor-pointer hover:opacity-100">
                         <div className="width-13 aspect-square">
                           <GoShare className="w-full h-full" title="Share" />

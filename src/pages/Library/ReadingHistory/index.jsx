@@ -53,7 +53,6 @@ function ReadingHistory() {
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.blogs) {
-        console.log("result history: ", result.data.blogs);
         setBlogs(result.data.blogs);
       }
     } catch (err) {

@@ -4,7 +4,7 @@ import { IoLockClosedSharp } from "react-icons/io5";
 import { useRequestHandler } from "../../../../../hooks/requestHandler";
 import { showToast } from "../../../../../utils/toaster";
 
-function ListItem({ list, blog, setBlog }) {
+function ListItem({ list, blog, setBlog, handleToggleBlogSaveInParent }) {
   const { requestHandler } = useRequestHandler();
   const [isChecked, setIsChecked] = useState(blog.lists.includes(list._id));
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +22,7 @@ function ListItem({ list, blog, setBlog }) {
       if (response.status === 204) {
         const updatedList = blog.lists.filter((item) => item !== list._id);
         setBlog((prev) => ({ ...prev, lists: updatedList }));
+        handleToggleBlogSaveInParent("remove", list._id);
         setIsChecked(false);
       } else {
         showToast("Some error occured", "error");
@@ -47,10 +48,9 @@ function ListItem({ list, blog, setBlog }) {
 
       const result = await response.json();
 
-      if (response?.status === 201) {
-        if (result?.data?.listItem) {
-          setBlog((prev) => ({ ...prev, lists: [...prev.lists, result.data.listItem.list] }));
-        }
+      if (response?.status === 201 && result?.data?.listItem) {
+        setBlog((prev) => ({ ...prev, lists: [...prev.lists, result.data.listItem.list] }));
+        handleToggleBlogSaveInParent("add", result.data.listItem.list);
         setIsChecked(true);
       } else {
         showToast("Some error occured", "error");

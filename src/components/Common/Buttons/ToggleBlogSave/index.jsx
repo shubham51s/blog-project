@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { IoBookmark } from "react-icons/io5";
 import * as Popover from "@radix-ui/react-popover";
@@ -8,10 +8,10 @@ import CreateNewListModal from "../../Modals/CreateNewList";
 import { ListContext } from "../../../../context/listContext";
 import { showToast } from "../../../../utils/toaster";
 
-function SaveBlog({ item }) {
+function SaveBlog({ item, handleToggleBlogSaveInParent = () => {} }) {
+  const [blog, setBlog] = useState({ ...item });
   const { requestHandler } = useRequestHandler();
   const { myLists, isListLoader } = useContext(ListContext);
-  const [blog, setBlog] = useState({ ...item });
   const [isBookmarkLoader, setIsBookmarkLoader] = useState(false);
   const [isCreateListModal, setIsCreateListModal] = useState(false);
 
@@ -24,10 +24,9 @@ function SaveBlog({ item }) {
       const response = await requestHandler("/list/items/save-to-default-list", "POST", params);
       const result = await response.json();
 
-      if (response?.status === 200) {
-        if (result?.data?._id) {
-          setBlog((prev) => ({ ...prev, lists: [...prev.lists, result.data._id] }));
-        }
+      if (response?.status === 200 && result?.data?._id) {
+        setBlog((prev) => ({ ...prev, lists: [...prev.lists, result.data._id] }));
+        handleToggleBlogSaveInParent("add", result.data._id);
       }
 
       setIsBookmarkLoader(false);
@@ -61,6 +60,7 @@ function SaveBlog({ item }) {
 
       if (response?.status === 201 && result?.data?.listItem) {
         setBlog((prev) => ({ ...prev, lists: [...prev.lists, result.data.listItem.list] }));
+        handleToggleBlogSaveInParent("add", result.data.listItem.list);
       } else {
         showToast(result?.message || "Some error occured");
       }
@@ -77,13 +77,17 @@ function SaveBlog({ item }) {
     handleAddBlogToList(list._id, setIsLoading);
   };
 
+  useEffect(() => {
+    setBlog({ ...item });
+  }, [item]);
+
   return (
     <>
       {!isListLoader && (
         <div className="inline-block">
           <Popover.Root>
             <Popover.Trigger onClick={(e) => handleBookmarkBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out color-3 opacity-[0.8] hover:opacity-100" title="Save">
-              <div className="width-13 aspect-squar">
+              <div className="width-13 aspect-square">
                 {!blog.lists.length > 0 && <MdOutlineBookmarkAdd className="w-full h-full align-middle" />}
                 {blog.lists.length > 0 && <IoBookmark className="w-full h-full align-middle" />}
               </div>
@@ -95,7 +99,7 @@ function SaveBlog({ item }) {
                     <div className="padding-16 padding80 padding81 padding82 height82 overflow-y-auto">
                       <div>
                         {myLists.map((item) => (
-                          <ListItem list={item} blog={blog} setBlog={setBlog} key={item._id} />
+                          <ListItem list={item} blog={blog} setBlog={setBlog} handleToggleBlogSaveInParent={handleToggleBlogSaveInParent} key={item._id} />
                         ))}
                       </div>
                     </div>
