@@ -22,7 +22,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { showToast } from "../../utils/toaster";
 
 function LoginSignupComp() {
-  const { setIsShowLoginPopup, isLoginTabActive, setIsLoginTabActive, setIsUserLoggedIn, setUserInfo } = useContext(UserContext);
+  const { setIsShowLoginPopup, isLoginTabActive, setIsLoginTabActive, setIsUserLoggedIn, setUserInfo, verifyAuthentication } = useContext(UserContext);
   const { fetchRequest } = useApi();
 
   const sliderOptions = {
@@ -206,22 +206,16 @@ function LoginSignupComp() {
       });
 
       const result = await response.json();
-      setIsLoading(false);
 
       if (response?.status === 200) {
-        const user = {
-          ...result.data.user,
-        };
-        setUserInfo(user);
-        setIsUserLoggedIn(true);
-        setIsShowLoginPopup(false);
+        verifyAuthentication();
       } else {
-        const msg = result?.message || "Something went wrong!";
-        showToast(msg, "error");
+        showToast(result?.message || "Some error occured.");
       }
     } catch (err) {
       console.error(err);
-      showToast("Something went wrong", "error");
+      showToast("Some error occured.");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -271,17 +265,17 @@ function LoginSignupComp() {
       });
 
       const result = await response.json();
-      setIsLoading(false);
 
       if (response?.status === 201) {
-        setUserInfo({ ...result.data.user });
-        setIsUserLoggedIn(true);
-        setIsShowLoginPopup(false);
+        verifyAuthentication();
       } else {
-        showToast(result?.message || "Something went wrong", "error");
+        showToast(result?.message || "Some error occured.");
       }
     } catch (err) {
       console.error(err);
+      showToast("Some error occured.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
