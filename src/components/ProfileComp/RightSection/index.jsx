@@ -102,7 +102,7 @@ function RightSectionComp({ user, setUser }) {
                 <div className="flex items-baseline flex-wrap margin-37">
                   {user && (
                     <h2 className="font-10 font-semibold color-3 custom-line-h-1 m-0 p-0">
-                      <span className="padding50 break-all" style={{ paddingLeft: 0 }} title={user.name}>
+                      <span className="padding50 break-words" style={{ paddingLeft: 0 }} title={user.name}>
                         {user.name}
                       </span>
                     </h2>
@@ -123,7 +123,7 @@ function RightSectionComp({ user, setUser }) {
                 {user && user.bio && (
                   <div className="margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
                     <p className="color-4 custom-fs-1 line20 font-normal m-0">
-                      <span className="break-all">{user.bio}</span>
+                      <span className="break-words">{user.bio}</span>
                     </p>
                   </div>
                 )}

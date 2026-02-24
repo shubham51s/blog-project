@@ -44,7 +44,7 @@ function BlogComp({ blogDetails }) {
                       )}
                       {isCommunity && (
                         <div className="">
-                          <p className="break-all text-ellipsis height-6 color-3 overflow-hidden capitalize font-4 custom-line-h-1 font-normal m-0 p-0" title={blogDetails.community.name}>
+                          <p className="break-words text-ellipsis height-6 color-3 overflow-hidden capitalize font-4 custom-line-h-1 font-normal m-0 p-0" title={blogDetails.community.name}>
                             {blogDetails.community.name}
                           </p>
                         </div>
@@ -55,7 +55,7 @@ function BlogComp({ blogDetails }) {
                         </div>
                       )}
                       <div className="">
-                        <p className="break-all text-ellipsis height-6 color-3 overflow-hidden font-4 capitalize custom-line-h-1 font-normal m-0 p-0" title={blogDetails.author.name}>
+                        <p className="break-words text-ellipsis height-6 color-3 overflow-hidden font-4 capitalize custom-line-h-1 font-normal m-0 p-0" title={blogDetails.author.name}>
                           {blogDetails.author.name}
                         </p>
                       </div>

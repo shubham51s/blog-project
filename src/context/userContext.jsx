@@ -54,7 +54,7 @@ const UserProvider = ({ children }) => {
     }
   }, []);
 
-  return <UserContext.Provider value={{ userInfo, setUserInfo, isUserLoggedIn, setIsUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu, verifyAuthentication }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ userInfo, isUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu, verifyAuthentication }}>{children}</UserContext.Provider>;
 };
 
 export { UserContext };

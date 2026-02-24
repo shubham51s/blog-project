@@ -75,7 +75,7 @@ function FollowersList({ item, user, setUser }) {
           </div>
           {author.follower.bio && (
             <Link to={`/profile/${item.follower.username}`} className="cursor-pointer m-0 p-0 no-underline">
-              <div className="whitespace-pre-wrap w-full max-w-full margin44 break-all">
+              <div className="whitespace-pre-wrap w-full max-w-full margin44 break-words">
                 <p className="color-4 custom-fs-1 line20 font-normal m-0">{author.follower.bio}</p>
               </div>
             </Link>

@@ -8,14 +8,14 @@ function ListLoader() {
   return (
     <div className="relative w-full width55 z-0 flex justify-between margin57 bdr-5 border-radius-3">
       {/* <Link to="" className=""></Link> */}
-      <div className="grow shrink-0 basis-0 padding-3 padding76 flex flex-col break-all justify-between">
+      <div className="grow shrink-0 basis-0 padding-3 padding76 flex flex-col break-words justify-between">
         <Link to="" className="no-underline">
           <div className="flex opacity-[0.95] transition-all duration-75 linear hover:opacity-100">
             <div className="relative">
               <Skeleton circle className="height-12 aspect-square" />
             </div>
             <div className="flex items-center z-[1] padding50" style={{ paddingRight: 0 }}>
-              <p className="height-6 break-all overflow-hidden line-clamp-1 text-ellipsis color-3 custom-fs-1 line20 font-normal m-0">
+              <p className="height-6 break-words overflow-hidden line-clamp-1 text-ellipsis color-3 custom-fs-1 line20 font-normal m-0">
                 <Skeleton width={90} height={450} />
               </p>
             </div>

@@ -79,7 +79,7 @@ function ListItem({ list, blog, setBlog, handleToggleBlogSaveInParent }) {
           <Checkbox checked={isChecked} disabled={isLoading} onChange={(e) => handleToggleBookmark(e.target.checked)} className="w-full h-full" />
         </div>
         <button disabled={isLoading} onClick={() => handleToggleBookmark(!isChecked)}>
-          <p className="height-60 line-h-8 break-all line-clamp-1 font-10 color-3 font-normal m-0">{list.name}</p>
+          <p className="height-60 line-h-8 break-words line-clamp-1 font-10 color-3 font-normal m-0">{list.name}</p>
         </button>
       </div>
       {list.isPrivate && (

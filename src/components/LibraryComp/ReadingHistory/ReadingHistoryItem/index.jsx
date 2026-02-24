@@ -68,7 +68,7 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                       </div>
 
                       <div className="flex">
-                        <div className="break-all grow shrink basis-auto">
+                        <div className="break-words grow shrink basis-auto">
                           <div>
                             <Link to={`/${blog.slug}/${blog._id}`} className="flex flex-col cursor-pointer no-underline m-0 p-0">
                               <h2 className="letter-spacing-6line-clamp-3 height-19 line-h-9 font-11 font-bold color-3 m-0">{blog.previewTitle}</h2>

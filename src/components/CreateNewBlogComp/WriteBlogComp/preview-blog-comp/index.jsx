@@ -77,8 +77,8 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
         formData.append("blobUrls[]", url);
       });
 
-      selectedTopic.map((item) => {
-        formData.append("categories", item.value);
+      selectedTopic.forEach((item) => {
+        formData.append("categories[]", item.value);
       });
 
       for (const key in blog) {
@@ -107,7 +107,7 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
     }
   };
 
-  const handlePublishBtnClick = async () => {
+  const handlePublishBtnClick = () => {
     if (isLoading) return;
 
     if (blog.previewTitle.length <= 0) {

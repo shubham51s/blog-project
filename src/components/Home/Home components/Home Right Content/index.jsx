@@ -142,7 +142,7 @@ function HomeRightSectionComp() {
                           {/* need to check */}
                           <div className="padding-23 flex-nowrap" style={{ paddingLeft: 0, paddingBlock: 0 }}>
                             <a href="#" className="cursor-pointer no-underline p-0 m-0 flex items-center">
-                              <p className="break-all text-ellipsis height-6 overflow-hidden color-3 font-4 custom-line-h-1 font-normal m-0 p-0">{item.name}</p>
+                              <p className="break-words text-ellipsis height-6 overflow-hidden color-3 font-4 custom-line-h-1 font-normal m-0 p-0">{item.name}</p>
                             </a>
                           </div>
                         </div>
@@ -258,7 +258,7 @@ function HomeRightSectionComp() {
                                 <div className="inline-block">
                                   <button className="flex items-center justify-center bdr-7 padding-20 padding-28 border-radius-7 bg-transparent cursor-pointer m-0">
                                     <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-normal">
-                                      <span className="break-all inline-block">Follow</span>
+                                      <span className="break-words inline-block">Follow</span>
                                     </span>
                                   </button>
                                 </div>

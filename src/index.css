@@ -885,6 +885,10 @@ img {
     height: 174px;
   }
 
+  .height86 {
+    height: 1px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -1143,7 +1147,7 @@ img {
     line-height: 32px;
     margin-top: 2.14em;
     font-size: 20px;
-    word-break: break-all;
+    word-break: break-words;
     color: var(--txt-color-3);
     font-weight: 400;
     padding: 0;

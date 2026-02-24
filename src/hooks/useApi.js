@@ -4,8 +4,6 @@ import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 
 export function useApi() {
-  const { setUserInfo, setIsUserLoggedIn } = useContext(UserContext);
-
   async function fetchRequest(url, method, param = null) {
     try {
       const response = await fetch(`${urlBasePath}${url}`, {
@@ -16,8 +14,6 @@ export function useApi() {
       });
 
       if (response?.status === 401) {
-        // setIsUserLoggedIn(false);
-        // setUserInfo({});
         // useNavigate("/");
         window.location.reload();
       }

@@ -25,7 +25,7 @@ function Loader() {
                     </div>
 
                     <div className="flex">
-                      <div className="break-all grow shrink basis-auto overflow-hidden">
+                      <div className="break-words grow shrink basis-auto overflow-hidden">
                         <div>
                           <div className="flex flex-col cursor-pointer no-underline m-0 p-0">
                             <Skeleton height={35} width={5000} className="letter-spacing-6line-clamp-3 height-19 line-h-9 font-11 font-bold color-3 m-0"></Skeleton>

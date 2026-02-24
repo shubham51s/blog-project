@@ -208,7 +208,7 @@ function SearchHomeComp() {
                               <div className="margin-3 flex-none">
                                 <MdOutlineExplore className="width-13 aspect-square color-6 align-middle transition-all duration-300 ease-in-out opacity-75 hover:opacity-100" />
                               </div>
-                              <p className="break-all text-ellipsis height-6 overflow-hidden color-3 custom-fs-1 custom-line-h-1 font-medium m-0 p-0">Explore topics</p>
+                              <p className="break-words text-ellipsis height-6 overflow-hidden color-3 custom-fs-1 custom-line-h-1 font-medium m-0 p-0">Explore topics</p>
                             </div>
                           </a>
                         </div>

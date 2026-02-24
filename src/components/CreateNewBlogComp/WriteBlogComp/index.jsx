@@ -134,7 +134,7 @@ function WriteBlogComp({ blog, setBlog }) {
     <>
       <main className="block">
         <article className="relative height65 overflow-hidden block">
-          <div className="margin40 margin41 break-all relative">
+          <div className="margin40 margin41 break-words relative">
             <section className="block margin-11 relative clear-both padding-27" style={{ marginBottom: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
               <div ref={editorWrapperRef} className="w-full width55 padding-14 my-0 mx-auto box-border relative editor-wrapper" style={{ paddingBlock: 0 }}>
                 <textarea

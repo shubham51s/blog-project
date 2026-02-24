@@ -71,8 +71,8 @@ function ShowLessComp({ isHideBlog, setIsHideBlog, blog }) {
                         <GoMute className="w-full h-full color-3" />
                       </div>
                       <div className="flex flex-col custom-gap-1 text-left margin-12" style={{ marginRight: 0 }}>
-                        <p className="break-all line-clamp-1 text-ellipsis height-6 color-3 custom-fs-1 overflow-hidden custom-line-h-1 font-medium m-0 p-0">Mute author</p>
-                        <p className="break-all line-clamp-1 text-ellipsis height-6 color-3 custom-fs-1 overflow-hidden custom-line-h-1 font-normal m-0 p-0">Thomas Oppong</p>
+                        <p className="break-words line-clamp-1 text-ellipsis height-6 color-3 custom-fs-1 overflow-hidden custom-line-h-1 font-medium m-0 p-0">Mute author</p>
+                        <p className="break-words line-clamp-1 text-ellipsis height-6 color-3 custom-fs-1 overflow-hidden custom-line-h-1 font-normal m-0 p-0">Thomas Oppong</p>
                       </div>
                     </button>
                     {blog.community && (
@@ -81,8 +81,8 @@ function ShowLessComp({ isHideBlog, setIsHideBlog, blog }) {
                           <GoMute className="w-full h-full color-3" />
                         </div>
                         <div className="flex flex-col custom-gap-1 text-left margin-12" style={{ marginRight: 0 }}>
-                          <p className="break-all line-clamp-1 text-ellipsis height-6 color-3 custom-fs-1 overflow-hidden custom-line-h-1 font-medium m-0 p-0">Mute publication</p>
-                          <p className="break-all line-clamp-1 text-ellipsis height-6 color-3 custom-fs-1 overflow-hidden custom-line-h-1 font-normal m-0 p-0">Thomas Oppong</p>
+                          <p className="break-words line-clamp-1 text-ellipsis height-6 color-3 custom-fs-1 overflow-hidden custom-line-h-1 font-medium m-0 p-0">Mute publication</p>
+                          <p className="break-words line-clamp-1 text-ellipsis height-6 color-3 custom-fs-1 overflow-hidden custom-line-h-1 font-normal m-0 p-0">Thomas Oppong</p>
                         </div>
                       </button>
                     )}
@@ -91,7 +91,7 @@ function ShowLessComp({ isHideBlog, setIsHideBlog, blog }) {
                         <MdOutlineReportGmailerrorred className="w-full h-full" />
                       </div>
                       <div className="flex flex-col custom-gap-1 text-left margin-12" style={{ marginRight: 0 }}>
-                        <p className="break-all line-clamp-1 text-ellipsis height-6 color-9 custom-fs-1 overflow-hidden custom-line-h-1 font-medium m-0 p-0">Report story...</p>
+                        <p className="break-words line-clamp-1 text-ellipsis height-6 color-9 custom-fs-1 overflow-hidden custom-line-h-1 font-medium m-0 p-0">Report story...</p>
                       </div>
                     </button>
                   </div>

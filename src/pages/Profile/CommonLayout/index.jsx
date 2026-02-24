@@ -99,7 +99,7 @@ function ProfileCommonLayout() {
                             <div className="grow shrink basis-auto flex items-center justify-start">
                               <div className="flex flex-nowrap">
                                 {user && (
-                                  <span className="letter-spacing-7 height-53 line-h-10 font-12 color16 padding50 break-all line-clamp-1 text-ellipsis font-bold overflow-hidden" style={{ paddingLeft: 0 }}>
+                                  <span className="letter-spacing-7 height-53 line-h-10 font-12 color16 padding50 break-words line-clamp-1 text-ellipsis font-bold overflow-hidden" style={{ paddingLeft: 0 }}>
                                     {user.name}
                                   </span>
                                 )}

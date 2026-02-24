@@ -22,7 +22,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { showToast } from "../../utils/toaster";
 
 function LoginSignupComp() {
-  const { setIsShowLoginPopup, isLoginTabActive, setIsLoginTabActive, setIsUserLoggedIn, setUserInfo, verifyAuthentication } = useContext(UserContext);
+  const { setIsShowLoginPopup, isLoginTabActive, setIsLoginTabActive, verifyAuthentication } = useContext(UserContext);
   const { fetchRequest } = useApi();
 
   const sliderOptions = {
@@ -253,9 +253,12 @@ function LoginSignupComp() {
         lastName: userDetails.lastName,
         email: userDetails.email,
         password: userDetails.password,
-        gender: userDetails.gender,
         interests,
       };
+
+      if (userDetails.gender) {
+        params.gender = userDetails.gender;
+      }
 
       const response = await fetch(urlBasePath + "/users/signup", {
         headers: { "Content-Type": "application/json" },

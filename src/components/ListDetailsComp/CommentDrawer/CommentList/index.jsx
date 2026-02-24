@@ -122,7 +122,7 @@ function CommentList({ item, setList }) {
                     <div className="padding-33" style={{ paddingRight: 0, paddingBlock: 0 }}>
                       <div className="flex items-center">
                         <div className="cursor-pointer transition-all duration-400 ease-in-out hover:underline">
-                          <p className="break-all text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0">{comment.user.name}</p>
+                          <p className="break-words text-ellipsis color-3 custom-fs-1 overflow-hidden font-normal m-0 p-0">{comment.user.name}</p>
                         </div>
                         {comment.user._id === userInfo._id && (
                           <div className="bg-[rgb(26,137,23)] text-white margin-19 border-radius-3 padding-6 line-h-7 font-8 font-normal" style={{ marginBlock: 0, marginRight: 0, paddingBlock: 0 }}>

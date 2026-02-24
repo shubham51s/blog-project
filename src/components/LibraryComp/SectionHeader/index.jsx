@@ -38,7 +38,7 @@ function SectionHeader({ handleCreateNewBlogBtnClick }) {
       <div className="margin57">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="letter-spacing-7 height-53 line-h-10 font-12 break-all line-clamp-1 text-ellipsis font-medium overflow-hidden color-3 m-0">Your library</h1>
+            <h1 className="letter-spacing-7 height-53 line-h-10 font-12 break-words line-clamp-1 text-ellipsis font-medium overflow-hidden color-3 m-0">Your library</h1>
           </div>
           {isTabActive(0) && (
             <button onClick={handleCreateNewBlogBtnClick} className="cursor-pointer text-center border-radius-9 bdr-3 border-[#1A8917] bg-[#1A8917] custom-px-2 padding59 text-white line-h-8 font-10 font-medium m-0 transition-all duration-75 ease hover:bg-[#156d12]">

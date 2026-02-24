@@ -176,9 +176,9 @@ function MenuComp() {
                   <div className="flex flex-col custom-gap-3 items-start text-start">
                     <p className="font-10 color-6 opacity-75 custom-line-h-1 font-normal m-0 p-0">Find writers and publications to follow.</p>
                     <div className="font-10 color-6 custom-line-h-1 font-normal opacity-75 transition-all duration-300 ease-in-out hover:opacity-100">
-                      <a href="#" className="cursor-pointer m-0 p-0 underline">
+                      <Link to="me/following/suggestions" className="cursor-pointer m-0 p-0 underline">
                         See suggestions
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

@@ -109,8 +109,8 @@ function ProfileHeaderComp() {
                             <div className="absolute width-15 aspect-square top-0 rounded-full"></div>
                           </div>
                           <div className="flex flex-col custom-gap-1">
-                            <p className="break-all text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">{userInfo?.username}</p>
-                            <p className="height-9 break-all text-ellipsis overflow-hidden font-8 line-h-7 color-6 font-medium m-0 p-0">View profile</p>
+                            <p className="break-words text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">{userInfo?.username}</p>
+                            <p className="height-9 break-words text-ellipsis overflow-hidden font-8 line-h-7 color-6 font-medium m-0 p-0">View profile</p>
                           </div>
                         </div>
                       </div>
@@ -122,7 +122,7 @@ function ProfileHeaderComp() {
                           <div className="flex items-center custom-gap-2">
                             <IoSettingsOutline className="width-13 height-10 align-middle overflow-hidden color-6" />
                             <div className="flex flex-col custom-gap-1">
-                              <p className="break-all text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">Settings</p>
+                              <p className="break-words text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">Settings</p>
                             </div>
                           </div>
                         </div>
@@ -132,7 +132,7 @@ function ProfileHeaderComp() {
                           <div className="flex items-center custom-gap-2">
                             <IoIosStats className="width-13 height-10 align-middle overflow-hidden color-6" />
                             <div className="flex flex-col custom-gap-1">
-                              <p className="break-all text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">Stats</p>
+                              <p className="break-words text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">Stats</p>
                             </div>
                           </div>
                         </div>
@@ -142,7 +142,7 @@ function ProfileHeaderComp() {
                           <div className="flex items-center custom-gap-2">
                             <LuCircleHelp className="width-13 height-10 align-middle overflow-hidden color-6" />
                             <div className="flex flex-col custom-gap-1">
-                              <p className="break-all text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">Help</p>
+                              <p className="break-words text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">Help</p>
                             </div>
                           </div>
                         </div>
@@ -171,7 +171,7 @@ function ProfileHeaderComp() {
                           <div className="margin-19" style={{ marginTop: 0, marginInline: 0 }}>
                             Sign out
                           </div>
-                          <p className="height-9 break-all text-ellipsis overflow-hidden line-h-7 font-8 color-6 font-medium m-0 p-0">{userInfo.email}</p>
+                          <p className="height-9 break-words text-ellipsis overflow-hidden line-h-7 font-8 color-6 font-medium m-0 p-0">{userInfo.email}</p>
                         </div>
                       </button>
                     </div>

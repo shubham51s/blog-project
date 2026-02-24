@@ -91,7 +91,7 @@ function FollowingComp({ item, user, setUser }) {
               <div className="absolute top-0 height-12 aspect-square rounded-full boxShadow7"></div>
             </div>
           </div>
-          <p className="height-6 overflow-hidden font-4 custom-line-h-1 font-normal m-0 text-ellipsis line-clamp-1 break-all color-3 opacity-[0.8] transition-all duration-75 ease-in-out hover:underline hover:opacity-[0.95]" title={author.followee.name}>
+          <p className="height-6 overflow-hidden font-4 custom-line-h-1 font-normal m-0 text-ellipsis line-clamp-1 break-words color-3 opacity-[0.8] transition-all duration-75 ease-in-out hover:underline hover:opacity-[0.95]" title={author.followee.name}>
             {author.followee.name}
           </p>
         </div>
@@ -130,7 +130,7 @@ function FollowingComp({ item, user, setUser }) {
                     <div className="flex flex-col margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
                       <Link to="" className="no-underline cursor-pointer">
                         <div className="flex flex-wrap items-baseline">
-                          <span className="break-all line-clamp-2 height-15 padding-23 text-ellipsis font-10 font-semibold color-3 overflow-hidden line20" style={{ paddingLeft: 0, paddingBlock: 0 }} title={author.followee.name}>
+                          <span className="break-words line-clamp-2 height-15 padding-23 text-ellipsis font-10 font-semibold color-3 overflow-hidden line20" style={{ paddingLeft: 0, paddingBlock: 0 }} title={author.followee.name}>
                             {author.followee.name}
                           </span>
                         </div>
@@ -146,7 +146,7 @@ function FollowingComp({ item, user, setUser }) {
                     {author.followee.bio && (
                       <div className="padding-33" style={{ paddingBottom: 0, paddingInline: 0 }}>
                         <p className="line-clamp-4 height76 text-ellipsis color-3 overflow-hidden font-4 line20 font-normal m-0">
-                          <span className="break-all" title={author.followee.bio}>
+                          <span className="break-words" title={author.followee.bio}>
                             {author.followee.bio}
                           </span>
                         </p>

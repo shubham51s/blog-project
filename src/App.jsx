@@ -25,7 +25,12 @@ import LibraryPage from "./pages/Library";
 import MyLists from "./pages/Library/Home";
 import SavedLists from "./pages/Library/SavedLists";
 import ReadingHistory from "./pages/Library/ReadingHistory";
-
+import MePageWrapper from "./pages/Me";
+import MePageDefaultComp from "./components/Me/DefaultComp";
+import MyFollowing from "./pages/Recommendation/Following";
+import MyReadingHistory from "./pages/Recommendation/ReadingHistory";
+import Muted from "./pages/Recommendation/Muted";
+import Suggestions from "./pages/Recommendation/Suggestions";
 function App() {
   const { isInitialLoading } = useContext(UserContext);
 
@@ -37,11 +42,22 @@ function App() {
         <Route path="/" element={<MainComp />}>
           // nested routes
           <Route index element={<HomePageProtected />} />
-          <Route path="me/stories" element={<StoriesPage />} />
-          <Route path="me/lists" element={<LibraryPage />}>
-            <Route index element={<MyLists />} />
-            <Route path="saved" element={<SavedLists />} />
-            <Route path="reading-history" element={<ReadingHistory />} />
+          <Route path="me" element={<MePageWrapper />}>
+            <Route index element={<MePageDefaultComp />} />
+            <Route path="lists" element={<LibraryPage />}>
+              <Route index element={<MyLists />} />
+              <Route path="saved" element={<SavedLists />} />
+              <Route path="reading-history" element={<ReadingHistory />} />
+            </Route>
+            <Route path="stories" element={<StoriesPage />} />
+            <Route path="following">
+              <Route index element={<MyFollowing />} />
+              <Route path="suggestions" element={<Suggestions />} />
+            </Route>
+            <Route path="settings">
+              <Route path="mute" element={<Muted />} />
+            </Route>
+            <Route path="readinghistory" element={<MyReadingHistory />} />
           </Route>
           <Route path="profile/:username" element={<ProfilePage />}>
             <Route index element={<Home />} />

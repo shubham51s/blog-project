@@ -62,7 +62,7 @@ function StoriesPage() {
           <div className="margin57">
             <div className="w-full flex items-center justify-between flex-wrap">
               <div className="grow shrink basis-auto flex flex-col">
-                <h1 className="letter-spacing-7 height-53 line-h-10 font-12 font-semibold color-3 overflow-hidden m-0 p-0 break-all text-ellipsis">Stories</h1>
+                <h1 className="letter-spacing-7 height-53 line-h-10 font-12 font-semibold color-3 overflow-hidden m-0 p-0 break-words text-ellipsis">Stories</h1>
               </div>
             </div>
           </div>

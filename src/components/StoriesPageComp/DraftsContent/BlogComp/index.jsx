@@ -29,7 +29,7 @@ function BlogComp({ item }) {
             </div>
             <div className="w-full flex items-stretch justify-between custom-gap-3">
               <div className="w-full flex flex-col items-start gap10">
-                <div className="w-full break-all min-w-0">
+                <div className="w-full break-words min-w-0">
                   <h2 className="font-bold font-10 color-3 custom-line-h-1 m-0 p-0">{item.previewTitle}</h2>
                 </div>
                 <div className="w-full flex flex-col gap10">

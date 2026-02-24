@@ -116,7 +116,7 @@ function ListItem({ item, list, setListItems }) {
                         </div>
                         <div>
                           <Link to="" className="no-underline relative cursor-pointer m-0 p-0 flex items-center hover:underline">
-                            <p className="break-all line-clamp-1 height-6 font-4 color-3 line20 font-normal m-0" title={listItem.blog.author.name}>
+                            <p className="break-words line-clamp-1 height-6 font-4 color-3 line20 font-normal m-0" title={listItem.blog.author.name}>
                               {userInfo._id === listItem.blog.author._id ? "You" : listItem.blog.author.name}
                             </p>
                           </Link>
@@ -125,7 +125,7 @@ function ListItem({ item, list, setListItems }) {
                     </div>
 
                     <div className="flex">
-                      <div className="break-all grow shrink basis-auto">
+                      <div className="break-words grow shrink basis-auto">
                         <div className="">
                           <Link to="" className="flex flex-col">
                             <h2 className="letter-spacing-6 line-clamp-3 height-19 line-h-9 font-11 font-bold overflow-hidden color-3 m-0">{listItem.blog.previewTitle}</h2>

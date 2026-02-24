@@ -14,7 +14,7 @@ function SkeletonComp() {
             </div>
             <div className="w-full flex items-stretch justify-between custom-gap-3">
               <div className="w-full flex flex-col items-start gap10">
-                <div className="w-[60%] break-all min-w-0 overflow-hidden">
+                <div className="w-[60%] break-words min-w-0 overflow-hidden">
                   <h2 className="font-bold font-10 color-3 custom-line-h-1 m-0 p-0">
                     <Skeleton height={30} width={34343} />
                   </h2>
