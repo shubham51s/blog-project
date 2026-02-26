@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DeleteReadingHistoryModal from "../../../components/Common/Modals/DeleteReadingHistory";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { showToast } from "../../../utils/toaster";
 import ReadingHistoryItem from "../../../components/LibraryComp/ReadingHistory/ReadingHistoryItem";
 import Loader from "../../../components/LibraryComp/ReadingHistory/Loader";
 import { defaultLoaderTime } from "../../../constants/constant";
-import { ListContext } from "../../../context/listContext";
 
 function ReadingHistory() {
   const { requestHandler } = useRequestHandler();

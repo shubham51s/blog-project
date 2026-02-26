@@ -1,9 +1,9 @@
 import React from "react";
 import RightSection from "../../../components/Recommendation/Common/RightSection";
 import NavSection from "../../../components/Recommendation/Common/NavSection";
-import UserListItem from "../../../components/Recommendation/MyFollowing/UserListItem";
-import PublicationListItem from "../../../components/Recommendation/MyFollowing/PublicationListItem";
-import TopicListItem from "../../../components/Recommendation/MyFollowing/TopicListItem";
+import UserListItem from "../../../components/Recommendation/Common/UserListItem";
+import PublicationListItem from "../../../components/Recommendation/Common/PublicationListItem";
+import TopicListItem from "../../../components/Recommendation/Common/TopicListItem";
 
 function MyFollowing() {
   return (
@@ -70,7 +70,9 @@ function MyFollowing() {
         </div>
       </main>
 
-      <RightSection />
+      <div className="width-22 width-21 padding-24 padding75 height-13 bdr-5 custom-bg-8" style={{ borderRight: 0, borderBlock: 0 }}>
+        <RightSection />
+      </div>
     </div>
   );
 }

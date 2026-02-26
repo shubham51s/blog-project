@@ -23,7 +23,7 @@ function ListItem() {
             </Link>
           </div>
         </div>
-        <div className="width-23">
+        <div className="">
           <div className="inline-block">
             {true && (
               <button className="bdr-7 padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease">

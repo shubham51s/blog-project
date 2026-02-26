@@ -29,7 +29,7 @@ function NavSection() {
 
   const isTabActive = (id) => {
     if (id === 0) return pathname.includes("following") && !pathname.includes("following/suggestions");
-    if (id === 1) return pathname.includes("readingHistory");
+    if (id === 1) return pathname.includes("readinghistory");
     if (id === 2) return pathname.includes("settings/mute");
     if (id === 3) return pathname.includes("following/suggestions");
   };
