@@ -13,7 +13,7 @@ function RightSection() {
               <div>
                 <div>
                   <div className="padding83">
-                    <h2 className="font-10 font-medium color-3 line20 m-0">Who to follow</h2>
+                    <h2 className="font-10 font-semibold color-3 line20 m-0">Who to follow</h2>
                   </div>
                 </div>
                 <div>
