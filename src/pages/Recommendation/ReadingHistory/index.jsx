@@ -3,21 +3,19 @@ import RightSection from "../../../components/Recommendation/Common/RightSection
 import NavSection from "../../../components/Recommendation/Common/NavSection";
 import DeleteReadingHistoryModal from "../../../components/Common/Modals/DeleteReadingHistory";
 import ReadingHistoryItem from "../../../components/LibraryComp/ReadingHistory/ReadingHistoryItem";
-import Loader from "../../../components/LibraryComp/ReadingHistory/Loader";
-import { defaultLoaderTime } from "../../../constants/constant";
 import { useRequestHandler } from "../../../hooks/requestHandler";
+import Spinner from "../../../components/Common/Spinner";
+import { defaultLoaderTime } from "../../../constants/constant";
 
 function MyReadingHistory() {
   const { requestHandler } = useRequestHandler();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const isMounted = useRef(null);
-  const loaderTimeout = useRef(null);
   const [blogs, setBlogs] = useState([]);
   const [deletedCount, setDeletedCount] = useState(0);
-  const [loaders, setLoaders] = useState({
-    default: true,
-    fetchHistory: true,
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [defautlLoader, setDefaultLoader] = useState(true);
+  const defaultLoaderTimeout = useRef(null);
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModal(false);
@@ -58,7 +56,7 @@ function MyReadingHistory() {
     } catch (err) {
       console.error(err);
     } finally {
-      if (loaders.fetchHistory) setLoaders((prev) => ({ ...prev, fetchHistory: false }));
+      if (isLoading) setIsLoading(false);
     }
   };
 
@@ -85,10 +83,10 @@ function MyReadingHistory() {
       fetchMyBlogHistory(0);
     }
 
-    if (loaderTimeout.current) clearTimeout(loaderTimeout.current);
-
-    loaderTimeout.current = setTimeout(() => {
-      setLoaders((prev) => ({ ...prev, default: false }));
+    if (defaultLoaderTimeout.current) clearTimeout(defaultLoaderTimeout.current);
+    defaultLoaderTimeout.current = setTimeout(() => {
+      setDefaultLoader(false);
+      defaultLoaderTimeout.current = null;
     }, defaultLoaderTime);
   }, []);
 
@@ -104,10 +102,14 @@ function MyReadingHistory() {
                 {/* reading history section */}
                 <div>
                   {/* loader */}
-                  {(loaders.default || loaders.fetchHistory) && Array.from({ length: 4 }).map((_, index) => <Loader key={index} />)}
+                  {(defautlLoader || isLoading) && (
+                    <div className="w-full overflow-hidden flex justify-center items-end height85">
+                      <Spinner />
+                    </div>
+                  )}
 
                   {/* clear all history */}
-                  {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && (
+                  {!defautlLoader && !isLoading && blogs.length > 0 && (
                     <div className="flex justify-between items-center bg-10 padding-3 margin57">
                       <p className="color-3 custom-fs-1 line20 font-normal m-0">You can clear your reading history for a fresh start.</p>
                       <div className="margin-18" style={{ marginRight: 0 }}>
@@ -121,7 +123,7 @@ function MyReadingHistory() {
                   )}
 
                   {/* no data */}
-                  {!loaders.default && !loaders.fetchHistory && blogs.length === 0 && (
+                  {!defautlLoader && !isLoading && blogs.length === 0 && (
                     <div className="text-center padding-42">
                       <div className="padding-42 padding89">
                         <h2 className="font-10 font-medium color-3 line20 m-0">You haven't read any stories yet</h2>
@@ -131,7 +133,7 @@ function MyReadingHistory() {
                   )}
 
                   {/* list */}
-                  {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && blogs.map((item) => <ReadingHistoryItem removeBlogFromHistory={removeBlogFromHistory} key={item._id} item={item} />)}
+                  {!defautlLoader && !isLoading && blogs.length > 0 && blogs.map((item) => <ReadingHistoryItem removeBlogFromHistory={removeBlogFromHistory} key={item._id} item={item} />)}
                 </div>
               </div>
             </div>

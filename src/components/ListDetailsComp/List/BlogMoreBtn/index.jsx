@@ -27,38 +27,26 @@ function BlogMoreBtn({ listItem, setListItems }) {
 
   const handleFollowUser = async () => {
     setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
-    try {
-      const isSuccess = await followUser(listItem.blog.author._id);
 
-      if (isSuccess) {
-        showToast(`Success! You're now following ${listItem.blog.author.name}`);
-      } else {
-        showToast("Some error occured");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-    } finally {
-      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
-    }
+    const params = {
+      _id: listItem.blog.author._id,
+      name: listItem.blog.author.name,
+    };
+    await followUser(params);
+
+    setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
   };
 
   const handleUnfollowUser = async () => {
     setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
-    try {
-      const isSuccess = await unfollowUser(listItem.blog.author._id);
 
-      if (isSuccess) {
-        showToast(`You unfollowed ${listItem.blog.author.name}`);
-      } else {
-        showToast("Some error occured");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-    } finally {
-      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
-    }
+    const params = {
+      _id: listItem.blog.author._id,
+      name: listItem.blog.author.name,
+    };
+    await unfollowUser(params);
+
+    setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
   };
 
   const handleCloseHideResponseModal = () => {

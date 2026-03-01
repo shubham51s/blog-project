@@ -35,36 +35,26 @@ function MoreButton({ blog, setBlog, removeBlogFromHistory }) {
 
   const handleFollowUser = async () => {
     setLoaders((prev) => ({ ...prev, follow: true }));
-    try {
-      const isSuccess = await followUser(blog.author._id);
 
-      if (isSuccess) {
-        showToast(`Success! You're now following ${blog.author.name}.`);
-      } else {
-        showToast("Some error occured.");
-      }
-    } catch (err) {
-      showToast("Some error occured.");
-    } finally {
-      setLoaders((prev) => ({ ...prev, follow: false }));
-    }
+    const params = {
+      _id: blog.author._id,
+      name: blog.author.name,
+    };
+    await followUser(params);
+
+    setLoaders((prev) => ({ ...prev, follow: false }));
   };
 
   const handleUnfollowUser = async () => {
     setLoaders((prev) => ({ ...prev, follow: true }));
-    try {
-      const isSuccess = await unfollowUser(blog.author._id);
 
-      if (isSuccess) {
-        showToast(`You unfollowed ${blog.author.name}.`);
-      } else {
-        showToast("Some error occured.");
-      }
-    } catch (err) {
-      showToast("Some error occured.");
-    } finally {
-      setLoaders((prev) => ({ ...prev, follow: false }));
-    }
+    const params = {
+      _id: blog.author._id,
+      name: blog.author.name,
+    };
+    await unfollowUser(params);
+
+    setLoaders((prev) => ({ ...prev, follow: false }));
   };
 
   const handleMuteUser = () => {

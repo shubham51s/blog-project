@@ -1,109 +1,167 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import RightSection from "../../../components/Recommendation/Common/RightSection";
 import NavSection from "../../../components/Recommendation/Common/NavSection";
 import UserListItem from "../../../components/Recommendation/Common/UserListItem";
 import PublicationListItem from "../../../components/Recommendation/Common/PublicationListItem";
 import TopicListItem from "../../../components/Recommendation/Common/TopicListItem";
 import { useRequestHandler } from "../../../hooks/requestHandler";
+import Spinner from "../../../components/Common/Spinner";
+import ViewAllFollowingUsers from "../../../components/Recommendation/Following/ViewAllFollowingModal";
+import ViewAllFollowingTopics from "../../../components/Recommendation/Following/ViewFollowingTopicsModal";
+import { defaultLoaderTime } from "../../../constants/constant";
 
 function MyFollowing() {
   const { requestHandler } = useRequestHandler();
   const [usersCount, setUsersCount] = useState(0);
   const [followingUsers, setFollowingUsers] = useState([]);
+  const [topicsCount, setTopicsCount] = useState(0);
+  const [followingTopics, setFollowingTopics] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isShowTopicModal, setIsShowTopicModal] = useState(false);
+  const [isShowUserModal, setIsShowUserModal] = useState(false);
+  const [defautlLoader, setDefaultLoader] = useState(true);
+  const defaultLoaderTimeout = useRef(null);
 
   const getMyFollowings = async () => {
+    setIsLoading(true);
     try {
       const response = await requestHandler("/follow/top-followings");
       const result = await response.json();
-
-      console.log("my followings result: ", result);
 
       if (response?.status === 200 && result?.data) {
         if (result.data.user) {
           setUsersCount(result.data.user.count);
           setFollowingUsers(result.data.user.following);
         }
+        if (result.data.topics) {
+          setTopicsCount(result.data.topics.count);
+          setFollowingTopics(result.data.topics.topics);
+        }
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const onFollowStatusChange = (isFollow) => {
+    if (isFollow) setUsersCount((prev) => prev + 1);
+    if (!isFollow) setUsersCount((prev) => prev - 1);
+  };
+
+  const onToggleInterest = (isAdd) => {
+    if (isAdd) setTopicsCount((prev) => prev + 1);
+    if (!isAdd) setTopicsCount((prev) => prev - 1);
+  };
+
+  const handleCloseTopicModal = () => {
+    setIsShowTopicModal(false);
+  };
+
+  const handleCloseUserModal = () => {
+    setIsShowUserModal(false);
   };
 
   useEffect(() => {
     getMyFollowings();
+
+    if (defaultLoaderTimeout.current) clearTimeout(defaultLoaderTimeout.current);
+    defaultLoaderTimeout.current = setTimeout(() => {
+      setDefaultLoader(false);
+      defaultLoaderTimeout.current = null;
+    }, defaultLoaderTime);
   }, []);
 
   return (
-    <div className="flex m-auto justify-evenly width-18">
-      <main className="grow shrink basis-auto width-20">
-        <div className="flex justify-center">
-          <div className="min-w-0 w-full max-width-2 margin-12">
-            <div className="padding61">
-              <NavSection />
+    <>
+      <div className="flex m-auto justify-evenly width-18">
+        <main className="grow shrink basis-auto width-20">
+          <div className="flex justify-center">
+            <div className="min-w-0 w-full max-width-2 margin-12">
+              <div className="padding61">
+                <NavSection />
 
-              <div>
-                {/* writer */}
-                <div>
-                  <h2 className="font-10 font-semibold color-3 line20 m-0">{usersCount} writers</h2>
-                  <div className="margin60 custom-margin-b-1">
-                    {followingUsers.map((item) => (
-                      <UserListItem key={item._id} user={item.followee} />
-                    ))}
-
-                    {usersCount > 5 && (
-                      <div className="margin60">
-                        <p className="custom-fs-1 color-4 line20 font-normal m-0">
-                          <button className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">See all {`(${usersCount})`}</button>
-                        </p>
-                      </div>
-                    )}
-                    <hr className="margin51 bg-11 height86 border-0" />
-                  </div>
-                </div>
-
-                {/* publication */}
-                {false && (
-                  <div>
-                    <h2 className="font-10 font-semibold color-3 line20 m-0">4 publications</h2>
-                    <div className="margin60 custom-margin-b-1">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <PublicationListItem key={index} />
-                      ))}
-                      <div className="margin60">
-                        <p className="custom-fs-1 color-4 line20 font-normal m-0">
-                          <button className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">See all (33)</button>
-                        </p>
-                      </div>
-                      <hr className="margin51 bg-11 height86 border-0" />
-                    </div>
+                {(defautlLoader || isLoading) && (
+                  <div className="w-full overflow-hidden flex justify-center items-end height85">
+                    <Spinner />
                   </div>
                 )}
 
-                {/* topics */}
-                <div>
-                  <h2 className="font-10 font-semibold color-3 line20 m-0">33 topics</h2>
-                  <div className="margin60 custom-margin-b-1">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <TopicListItem key={index} />
-                    ))}
-                    <div className="margin60">
-                      <p className="custom-fs-1 color-4 line20 font-normal m-0">
-                        <button className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">See all (9)</button>
-                      </p>
+                {!defautlLoader && !isLoading && (
+                  <div>
+                    {/* writer */}
+                    <div>
+                      <h2 className="font-10 font-semibold color-3 line20 m-0">{usersCount} writers</h2>
+                      <div className="margin60 custom-margin-b-1">
+                        {followingUsers.map((item) => (
+                          <UserListItem key={item._id} user={item.followee} onFollowStatusChange={onFollowStatusChange} />
+                        ))}
+
+                        {usersCount > 5 && (
+                          <div className="margin60">
+                            <p className="custom-fs-1 color-4 line20 font-normal m-0">
+                              <button onClick={() => setIsShowUserModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">
+                                See all {`(${usersCount})`}
+                              </button>
+                            </p>
+                          </div>
+                        )}
+                        <hr className="margin51 bg-11 height86 border-0" />
+                      </div>
                     </div>
-                    <hr className="margin51 bg-11 height86 border-0" />
+
+                    {/* publication */}
+                    {false && (
+                      <div>
+                        <h2 className="font-10 font-semibold color-3 line20 m-0">4 publications</h2>
+                        <div className="margin60 custom-margin-b-1">
+                          {Array.from({ length: 5 }).map((_, index) => (
+                            <PublicationListItem key={index} />
+                          ))}
+                          <div className="margin60">
+                            <p className="custom-fs-1 color-4 line20 font-normal m-0">
+                              <button className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">See all (33)</button>
+                            </p>
+                          </div>
+                          <hr className="margin51 bg-11 height86 border-0" />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* topics */}
+                    <div>
+                      <h2 className="font-10 font-semibold color-3 line20 m-0">{topicsCount} topics</h2>
+                      <div className="margin60 custom-margin-b-1">
+                        {followingTopics.map((item) => (
+                          <TopicListItem key={item._id} item={item} onToggleInterest={onToggleInterest} />
+                        ))}
+                        {topicsCount > 5 && (
+                          <div className="margin60">
+                            <p className="custom-fs-1 color-4 line20 font-normal m-0">
+                              <button onClick={() => setIsShowTopicModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">
+                                See all {`(${topicsCount})`}
+                              </button>
+                            </p>
+                          </div>
+                        )}
+                        <hr className="margin51 bg-11 height86 border-0" />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      <div className="width-22 width-21 padding-24 padding75 height-13 bdr-5 custom-bg-8" style={{ borderRight: 0, borderBlock: 0 }}>
-        <RightSection />
+        <div className="width-22 width-21 padding-24 padding75 height-13 bdr-5 custom-bg-8" style={{ borderRight: 0, borderBlock: 0 }}>
+          <RightSection />
+        </div>
       </div>
-    </div>
+      {isShowTopicModal && <ViewAllFollowingTopics handleCloseTopicModal={handleCloseTopicModal} topicsCount={topicsCount} onToggleInterest={onToggleInterest} />}
+      {isShowUserModal && <ViewAllFollowingUsers usersCount={usersCount} handleCloseUserModal={handleCloseUserModal} onFollowStatusChange={onFollowStatusChange} />}
+    </>
   );
 }
 

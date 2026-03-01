@@ -7,40 +7,50 @@ export function useToggleUserFollow() {
   const { requestHandler } = useRequestHandler();
   const { addUserFollowing, removeFollowingUser } = useContext(FollowingContext);
 
-  const followUser = async (userId) => {
+  const followUser = async (user) => {
     try {
       const params = {
-        userToFollow: userId,
+        userToFollow: user._id,
       };
 
       const response = await requestHandler("/follow/follow-user", "POST", params);
+      const result = await response.json();
 
       if (response?.status === 200) {
-        addUserFollowing(userId);
+        addUserFollowing(user._id);
+        showToast(`Success! You're now following ${user.name}.`);
+      } else {
+        showToast(result?.message || "Some error occured");
       }
 
       return response?.status === 200;
     } catch (err) {
       console.error(err);
+      showToast("Some error occured");
       return false;
     }
   };
 
-  const unfollowUser = async (userId) => {
+  const unfollowUser = async (user) => {
     try {
       const params = {
-        userToUnfollow: userId,
+        userToUnfollow: user._id,
       };
 
       const response = await requestHandler("/follow/unfollow-user", "POST", params);
+      const result = await response.json();
 
       if (response?.status === 200) {
-        removeFollowingUser(userId);
+        removeFollowingUser(user._id);
+        showToast(`You unfollowed ${user.name}..`);
+      } else {
+        showToast(result?.message || "Some error occured");
       }
 
       return response?.status === 200;
     } catch (err) {
       console.error(err);
+      showToast("Some error occured");
       return false;
     }
   };

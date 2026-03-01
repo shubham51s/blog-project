@@ -14,38 +14,26 @@ function ClappedUser({ item }) {
 
   const handleFollowUser = async () => {
     setIsLoading(true);
-    try {
-      const isSuccess = await followUser(item.user._id);
 
-      if (isSuccess) {
-        showToast(`Success! You're now following ${item.user.name}.`);
-      } else {
-        showToast("Some error occured");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-    } finally {
-      setIsLoading(false);
-    }
+    const params = {
+      _id: item.user._id,
+      name: item.user.name,
+    };
+    await followUser(params);
+
+    setIsLoading(false);
   };
 
   const handleUnfollowUser = async () => {
     setIsLoading(true);
-    try {
-      const isSuccess = await unfollowUser(item.user._id);
 
-      if (isSuccess) {
-        showToast(`You unfollowed ${item.user.name}..`);
-      } else {
-        showToast("Some error occured");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-    } finally {
-      setIsLoading(false);
-    }
+    const params = {
+      _id: item.user._id,
+      name: item.user.name,
+    };
+    await unfollowUser(params);
+
+    setIsLoading(false);
   };
 
   return (

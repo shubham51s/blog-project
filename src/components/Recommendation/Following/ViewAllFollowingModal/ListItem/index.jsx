@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
-import { FollowingContext } from "../../../../context/followingContext";
-import { UserContext } from "../../../../context/userContext";
-import { useToggleUserFollow } from "../../../../hooks/toggleUserFollow";
+import { FollowingContext } from "../../../../../context/followingContext";
+import { useToggleUserFollow } from "../../../../../hooks/toggleUserFollow";
+import { UserContext } from "../../../../../context/userContext";
 
-function UserListItem({ user, onFollowStatusChange = () => {} }) {
+function ListItem({ user, onFollowStatusChange }) {
   const { isFetchUserLoader, followingUsers } = useContext(FollowingContext);
   const { followUser, unfollowUser } = useToggleUserFollow();
   const { userInfo } = useContext(UserContext);
@@ -80,4 +79,4 @@ function UserListItem({ user, onFollowStatusChange = () => {} }) {
   );
 }
 
-export default UserListItem;
+export default ListItem;

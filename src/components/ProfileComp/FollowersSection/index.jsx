@@ -15,44 +15,38 @@ function FollowersList({ item, user, setUser }) {
 
   const handleFollowUser = async () => {
     setIsLoading(true);
-    try {
-      const isSuccess = await followUser(author.follower._id);
 
-      if (isSuccess) {
-        showToast(`Success! You're now following ${author.follower.name}.`);
-        if (userInfo._id === user._id) {
-          setUser((prev) => ({ ...prev, followingCount: prev.followingCount + 1 }));
-        }
-      } else {
-        showToast("Some error occcured.");
+    const params = {
+      _id: author.follower._id,
+      name: author.follower.name,
+    };
+    const isSuccess = await followUser(params);
+
+    if (isSuccess) {
+      if (userInfo._id === user._id) {
+        setUser((prev) => ({ ...prev, followingCount: prev.followingCount + 1 }));
       }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured.");
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   };
 
   const handleUnfollowUser = async () => {
     setIsLoading(true);
-    try {
-      const isSuccess = await unfollowUser(author.follower._id);
 
-      if (isSuccess) {
-        showToast(`You unfollowed ${author.follower.name}.`);
-        if (userInfo._id === user._id) {
-          setUser((prev) => ({ ...prev, followingCount: prev.followingCount > 0 ? prev.followingCount - 1 : 0 }));
-        }
-      } else {
-        showToast("Some error occcured.");
+    const params = {
+      _id: author.follower._id,
+      name: author.follower.name,
+    };
+    const isSuccess = await unfollowUser(params);
+
+    if (isSuccess) {
+      if (userInfo._id === user._id) {
+        setUser((prev) => ({ ...prev, followingCount: prev.followingCount > 0 ? prev.followingCount - 1 : 0 }));
       }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occcured.");
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   };
 
   return (

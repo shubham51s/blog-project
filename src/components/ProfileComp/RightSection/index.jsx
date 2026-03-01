@@ -26,41 +26,34 @@ function RightSectionComp({ user, setUser }) {
 
   const handleFollowUser = async () => {
     setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
-    try {
-      const isSuccess = await followUser(user._id);
 
-      if (isSuccess) {
-        setUser((prev) => ({ ...prev, followersCount: prev.followersCount + 1 }));
-        showToast(`Success! You're now following ${user.name}.`);
-      } else {
-        showToast("Some error occcured.");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured.");
-    } finally {
-      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
+    const params = {
+      _id: user._id,
+      name: user.name,
+    };
+    const isSuccess = await followUser(params);
+
+    if (isSuccess) {
+      setUser((prev) => ({ ...prev, followersCount: prev.followersCount + 1 }));
     }
+
+    setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
   };
 
   const handleUnfollowUser = async () => {
     setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
-    try {
-      const isSuccess = await unfollowUser(user._id);
 
-      if (isSuccess) {
-        setUser((prev) => ({ ...prev, followersCount: prev.followersCount > 0 ? prev.followersCount - 1 : 0 }));
+    const params = {
+      _id: user._id,
+      name: user.name,
+    };
+    const isSuccess = await unfollowUser(params);
 
-        showToast(`You unfollowed ${user.name}.`);
-      } else {
-        showToast("Some error occcured.");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occcured.");
-    } finally {
-      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
+    if (isSuccess) {
+      setUser((prev) => ({ ...prev, followersCount: prev.followersCount > 0 ? prev.followersCount - 1 : 0 }));
     }
+
+    setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
   };
 
   const fetchFollowingList = async () => {

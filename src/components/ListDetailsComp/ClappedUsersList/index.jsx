@@ -4,7 +4,6 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { UserContext } from "../../../context/userContext";
-import { useToggleUserFollow } from "../../../hooks/toggleUserFollow";
 import { FollowingContext } from "../../../context/followingContext";
 import ClappedUser from "./ClappedUser";
 

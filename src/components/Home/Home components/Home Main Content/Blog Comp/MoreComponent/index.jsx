@@ -18,38 +18,26 @@ function MoreComp({ blog }) {
 
   const handleFollowAuthor = async () => {
     setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
-    try {
-      const isSuccess = await followUser(blog.author._id);
 
-      if (isSuccess) {
-        showToast(`Success! You're now following ${blog.author.name}.`);
-      } else {
-        showToast("Some error occured");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Something went wrong");
-    } finally {
-      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-    }
+    const params = {
+      _id: blog.author._id,
+      name: blog.author.name,
+    };
+    await followUser(params);
+
+    setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
   };
 
   const handleUnfollowAuthor = async () => {
     setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
-    try {
-      const isSuccess = await unfollowUser(blog.author._id);
 
-      if (isSuccess) {
-        showToast(`You unfollowed ${blog.author.name}..`);
-      } else {
-        showToast("Some error occured");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Something went wrong");
-    } finally {
-      setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
-    }
+    const params = {
+      _id: blog.author._id,
+      name: blog.author.name,
+    };
+    await unfollowUser(params);
+
+    setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
   };
 
   return (
