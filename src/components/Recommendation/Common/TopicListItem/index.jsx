@@ -67,7 +67,7 @@ function TopicListItem({ item, onToggleInterest = () => {} }) {
         <div className="w-full flex flex-col">
           <div className="flex items-center">
             <Link className="cursor-pointer m-0 no-underline p-0">
-              <h2 className="height-15 font-10 font-semibold color-3 line20 m-0 line-clamp-2 capitalize">{topic.name}</h2>
+              <h2 className="height-15 font-10 font-medium color-3 line20 m-0 line-clamp-2 capitalize">{topic.name}</h2>
             </Link>
           </div>
           <Link className="cursor-pointer m-0 no-underline p-0">

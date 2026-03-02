@@ -7,6 +7,8 @@ import TopicListItem from "../../../components/Recommendation/Common/TopicListIt
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import Spinner from "../../../components/Common/Spinner";
 import { defaultLoaderTime } from "../../../constants/constant";
+import ViewAllUserSuggestion from "../../../components/Recommendation/Suggestion/ViewAllUserSuggestionModal";
+import ViewTopicSuggestion from "../../../components/Recommendation/Suggestion/ViewAllTopicsSuggestionModal";
 
 function Suggestions() {
   const { requestHandler } = useRequestHandler();
@@ -15,6 +17,8 @@ function Suggestions() {
   const [isLoading, setIsLoading] = useState(true);
   const [defautlLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
+  const [isShowUserModal, setIsShowUserModal] = useState(false);
+  const [isShowTopicModal, setIsShowTopicModal] = useState(false);
 
   const getTopRecommendation = async () => {
     setIsLoading(true);
@@ -37,6 +41,14 @@ function Suggestions() {
     }
   };
 
+  const handleCloseUserModal = () => {
+    setIsShowUserModal(false);
+  };
+
+  const handleCloseTopicModal = () => {
+    setIsShowTopicModal(false);
+  };
+
   useEffect(() => {
     getTopRecommendation();
 
@@ -49,79 +61,87 @@ function Suggestions() {
   }, []);
 
   return (
-    <div className="flex m-auto justify-evenly width-18">
-      <main className="grow shrink basis-auto width-20">
-        <div className="flex justify-center">
-          <div className="min-w-0 w-full max-width-2 margin-12">
-            <div className="padding61">
-              <NavSection />
+    <>
+      <div className="flex m-auto justify-evenly width-18">
+        <main className="grow shrink basis-auto width-20">
+          <div className="flex justify-center">
+            <div className="min-w-0 w-full max-width-2 margin-12">
+              <div className="padding61">
+                <NavSection />
 
-              {(defautlLoader || isLoading) && (
-                <div className="w-full overflow-hidden flex justify-center items-end height85">
-                  <Spinner />
-                </div>
-              )}
-
-              {!defautlLoader && !isLoading && (
-                <div>
-                  {/* writer */}
-                  <div>
-                    <h2 className="font-10 font-semibold color-3 line20 m-0">Writers to follow</h2>
-                    <div className="margin60 custom-margin-b-1">
-                      {users.map((item) => (
-                        <UserListItem key={item._id} user={item} />
-                      ))}
-                      <div className="margin60">
-                        <p className="custom-fs-1 color-4 line20 font-normal m-0">
-                          <button className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">See more suggestions</button>
-                        </p>
-                      </div>
-                      <hr className="margin51 bg-11 height86 border-0" />
-                    </div>
+                {(defautlLoader || isLoading) && (
+                  <div className="w-full overflow-hidden flex justify-center items-end height85">
+                    <Spinner />
                   </div>
+                )}
 
-                  {/* publication */}
-                  {false && (
+                {!defautlLoader && !isLoading && (
+                  <div>
+                    {/* writer */}
                     <div>
-                      <h2 className="font-10 font-semibold color-3 line20 m-0">Publications to follow</h2>
+                      <h2 className="font-10 font-medium color-3 line20 m-0">Writers to follow</h2>
                       <div className="margin60 custom-margin-b-1">
-                        {Array.from({ length: 5 }).map((_, index) => (
-                          <PublicationListItem key={index} />
+                        {users.map((item) => (
+                          <UserListItem key={item._id} user={item} />
                         ))}
                         <div className="margin60">
                           <p className="custom-fs-1 color-4 line20 font-normal m-0">
-                            <button className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">See more suggestions</button>
+                            <button onClick={() => setIsShowUserModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">
+                              See more suggestions
+                            </button>
                           </p>
                         </div>
                         <hr className="margin51 bg-11 height86 border-0" />
                       </div>
                     </div>
-                  )}
 
-                  {/* topics */}
-                  <div>
-                    <h2 className="font-10 font-semibold color-3 line20 m-0">Topics to follow</h2>
-                    <div className="margin60 custom-margin-b-1">
-                      {topics.map((item) => (
-                        <TopicListItem key={item._id} item={item} />
-                      ))}
-                      <div className="margin60">
-                        <p className="custom-fs-1 color-4 line20 font-normal m-0">
-                          <button className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">See more suggestions</button>
-                        </p>
+                    {/* publication */}
+                    {false && (
+                      <div>
+                        <h2 className="font-10 font-medium color-3 line20 m-0">Publications to follow</h2>
+                        <div className="margin60 custom-margin-b-1">
+                          {Array.from({ length: 5 }).map((_, index) => (
+                            <PublicationListItem key={index} />
+                          ))}
+                          <div className="margin60">
+                            <p className="custom-fs-1 color-4 line20 font-normal m-0">
+                              <button className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">See more suggestions</button>
+                            </p>
+                          </div>
+                          <hr className="margin51 bg-11 height86 border-0" />
+                        </div>
                       </div>
-                      <hr className="margin51 bg-11 height86 border-0" />
+                    )}
+
+                    {/* topics */}
+                    <div>
+                      <h2 className="font-10 font-medium color-3 line20 m-0">Topics to follow</h2>
+                      <div className="margin60 custom-margin-b-1">
+                        {topics.map((item) => (
+                          <TopicListItem key={item._id} item={item} />
+                        ))}
+                        <div className="margin60">
+                          <p className="custom-fs-1 color-4 line20 font-normal m-0">
+                            <button onClick={() => setIsShowTopicModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">
+                              See more suggestions
+                            </button>
+                          </p>
+                        </div>
+                        <hr className="margin51 bg-11 height86 border-0" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      <div className="width-22 width-21 padding-24 padding75 height-13 bdr-5 custom-bg-8" style={{ borderRight: 0, borderBlock: 0 }}></div>
-    </div>
+        <div className="width-22 width-21 padding-24 padding75 height-13 bdr-5 custom-bg-8" style={{ borderRight: 0, borderBlock: 0 }}></div>
+      </div>
+      {isShowTopicModal && <ViewTopicSuggestion handleCloseTopicModal={handleCloseTopicModal} />}
+      {isShowUserModal && <ViewAllUserSuggestion handleCloseUserModal={handleCloseUserModal} />}
+    </>
   );
 }
 

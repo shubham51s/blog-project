@@ -45,7 +45,7 @@ function ViewAllFollowingTopics({ handleCloseTopicModal, topicsCount, onToggleIn
         <div className="flex justify-center">
           <div className="margin-27 w-full min-w-0 max-width-2 padding90" style={{ marginBlock: 0 }}>
             <div className="padding-42 text-center">
-              <h1 className="font-3 line-h-8 font-semibold color-3 m-0">Following {topicsCount} Topics</h1>
+              <h1 className="font-3 line-h-8 font-medium color-3 m-0">Following {topicsCount} Topics</h1>
             </div>
             <div>
               {!isLoading && !defaultLoader && topics.map((item) => <ListItemNew key={item._id} item={item} onToggleInterest={onToggleInterest} />)}

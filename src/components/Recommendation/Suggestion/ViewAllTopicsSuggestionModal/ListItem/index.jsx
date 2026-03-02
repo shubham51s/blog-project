@@ -5,7 +5,7 @@ import { useRequestHandler } from "../../../../../hooks/requestHandler";
 import { showToast } from "../../../../../utils/toaster";
 import { formatNumberCompact } from "../../../../../utils/common";
 
-function ListItemNew({ item, onToggleInterest = () => {} }) {
+function ListItem({ item }) {
   const { requestHandler } = useRequestHandler();
   const [topic, setTopic] = useState({ ...item });
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +21,6 @@ function ListItemNew({ item, onToggleInterest = () => {} }) {
 
       if (response?.status === 200) {
         setTopic((prev) => ({ ...prev, isFollowing: true }));
-        onToggleInterest(true);
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -43,7 +42,6 @@ function ListItemNew({ item, onToggleInterest = () => {} }) {
 
       if (response?.status === 200) {
         setTopic((prev) => ({ ...prev, isFollowing: false }));
-        onToggleInterest(false);
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -98,4 +96,4 @@ function ListItemNew({ item, onToggleInterest = () => {} }) {
   );
 }
 
-export default ListItemNew;
+export default ListItem;

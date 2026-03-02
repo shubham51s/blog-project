@@ -92,7 +92,7 @@ function MyFollowing() {
                   <div>
                     {/* writer */}
                     <div>
-                      <h2 className="font-10 font-semibold color-3 line20 m-0">{usersCount} writers</h2>
+                      <h2 className="font-10 font-medium color-3 line20 m-0">{usersCount} writers</h2>
                       <div className="margin60 custom-margin-b-1">
                         {followingUsers.map((item) => (
                           <UserListItem key={item._id} user={item.followee} onFollowStatusChange={onFollowStatusChange} />
@@ -114,7 +114,7 @@ function MyFollowing() {
                     {/* publication */}
                     {false && (
                       <div>
-                        <h2 className="font-10 font-semibold color-3 line20 m-0">4 publications</h2>
+                        <h2 className="font-10 font-medium color-3 line20 m-0">4 publications</h2>
                         <div className="margin60 custom-margin-b-1">
                           {Array.from({ length: 5 }).map((_, index) => (
                             <PublicationListItem key={index} />
@@ -131,7 +131,7 @@ function MyFollowing() {
 
                     {/* topics */}
                     <div>
-                      <h2 className="font-10 font-semibold color-3 line20 m-0">{topicsCount} topics</h2>
+                      <h2 className="font-10 font-medium color-3 line20 m-0">{topicsCount} topics</h2>
                       <div className="margin60 custom-margin-b-1">
                         {followingTopics.map((item) => (
                           <TopicListItem key={item._id} item={item} onToggleInterest={onToggleInterest} />

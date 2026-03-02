@@ -4,7 +4,7 @@ import { FollowingContext } from "../../../../../context/followingContext";
 import { useToggleUserFollow } from "../../../../../hooks/toggleUserFollow";
 import { UserContext } from "../../../../../context/userContext";
 
-function ListItem({ user, onFollowStatusChange }) {
+function ListItem({ user }) {
   const { isFetchUserLoader, followingUsers } = useContext(FollowingContext);
   const { followUser, unfollowUser } = useToggleUserFollow();
   const { userInfo } = useContext(UserContext);
@@ -18,7 +18,6 @@ function ListItem({ user, onFollowStatusChange }) {
       name: user.name,
     };
     const isSuccess = await followUser(params);
-    if (isSuccess) onFollowStatusChange(true);
 
     setIsLoading(false);
   };
@@ -31,7 +30,6 @@ function ListItem({ user, onFollowStatusChange }) {
       name: user.name,
     };
     const isSuccess = await unfollowUser(params);
-    if (isSuccess) onFollowStatusChange(false);
 
     setIsLoading(false);
   };

@@ -5,7 +5,7 @@ import { defaultLoaderTime } from "../../../../constants/constant";
 import Loader from "./ListItem/skeleton";
 import ListItem from "./ListItem";
 
-function ViewAllFollowingUsers({ handleCloseUserModal, usersCount, onFollowStatusChange }) {
+function ViewAllUserSuggestion({ handleCloseUserModal }) {
   const { requestHandler } = useRequestHandler();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -13,18 +13,17 @@ function ViewAllFollowingUsers({ handleCloseUserModal, usersCount, onFollowStatu
   const loaderTimeout = useRef(null);
 
   const fetchMyFollowingTopics = async (skip) => {
-    setIsLoading(true);
     try {
-      const response = await requestHandler(`/follow/following?skip=${skip}`);
+      const response = await requestHandler(`/users/suggestions?skip=${skip}`);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.following) {
-        setUsers(result.data.following);
+      if (response?.status === 200 && result?.data?.users) {
+        setUsers(result.data.users);
       }
     } catch (err) {
       console.error(err);
     } finally {
-      setIsLoading(false);
+      if (isLoading) setIsLoading(false);
     }
   };
 
@@ -45,9 +44,9 @@ function ViewAllFollowingUsers({ handleCloseUserModal, usersCount, onFollowStatu
         <div className="flex justify-center">
           <div className="margin-27 w-full min-w-0 max-width-2 padding90" style={{ marginBlock: 0 }}>
             <div className="padding-42 text-center">
-              <h1 className="font-3 line-h-8 font-medium color-3 m-0">Following {usersCount} Topics</h1>
+              <h1 className="font-3 line-h-8 font-medium color-3 m-0">Writers to follow</h1>
             </div>
-            <div>{!isLoading && !defaultLoader && users.map((item) => <ListItem key={item._id} user={item.followee} onFollowStatusChange={onFollowStatusChange} />)}</div>
+            <div>{!isLoading && !defaultLoader && users.map((item) => <ListItem key={item._id} user={item} />)}</div>
             {(isLoading || defaultLoader) && Array.from({ length: 5 }).map((_, i) => <Loader key={i} />)}
           </div>
         </div>
@@ -64,4 +63,4 @@ function ViewAllFollowingUsers({ handleCloseUserModal, usersCount, onFollowStatu
   );
 }
 
-export default ViewAllFollowingUsers;
+export default ViewAllUserSuggestion;
