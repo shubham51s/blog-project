@@ -31,6 +31,7 @@ import MyFollowing from "./pages/Recommendation/Following";
 import MyReadingHistory from "./pages/Recommendation/ReadingHistory";
 import Muted from "./pages/Recommendation/Muted";
 import Suggestions from "./pages/Recommendation/Suggestions";
+import Settings from "./pages/Settings";
 function App() {
   const { isInitialLoading } = useContext(UserContext);
 
@@ -55,6 +56,7 @@ function App() {
               <Route path="suggestions" element={<Suggestions />} />
             </Route>
             <Route path="settings">
+              <Route index element={<Settings />} />
               <Route path="mute" element={<Muted />} />
             </Route>
             <Route path="readinghistory" element={<MyReadingHistory />} />
