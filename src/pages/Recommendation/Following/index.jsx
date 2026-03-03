@@ -50,9 +50,17 @@ function MyFollowing() {
     if (!isFollow) setUsersCount((prev) => prev - 1);
   };
 
-  const onToggleInterest = (isAdd) => {
-    if (isAdd) setTopicsCount((prev) => prev + 1);
-    if (!isAdd) setTopicsCount((prev) => prev - 1);
+  const onToggleInterest = (isAdd, topicId) => {
+    if (isAdd) {
+      setTopicsCount((prev) => prev + 1);
+      const updatedTopics = followingTopics.map((item) => (item._id === topicId ? { ...item, isFollowing: true } : { ...item }));
+      setFollowingTopics(updatedTopics);
+    }
+    if (!isAdd) {
+      setTopicsCount((prev) => prev - 1);
+      const updatedTopics = followingTopics.map((item) => (item._id === topicId ? { ...item, isFollowing: false } : { ...item }));
+      setFollowingTopics(updatedTopics);
+    }
   };
 
   const handleCloseTopicModal = () => {
@@ -88,7 +96,19 @@ function MyFollowing() {
                   </div>
                 )}
 
-                {!defautlLoader && !isLoading && (
+                {!defautlLoader && !isLoading && followingTopics.length === 0 && followingUsers.length === 0 && (
+                  <div>
+                    {/* no data */}
+                    <div className="text-center padding-42">
+                      <div className="padding-42 padding89">
+                        <h2 className="font-10 font-medium color-3 line20 m-0">You haven't followed anything</h2>
+                      </div>
+                      <p className="color-4 custom-fs-1 line20 font-normal m-0">Writers, publications and topics you've followed will appear here.</p>
+                    </div>
+                  </div>
+                )}
+
+                {!defautlLoader && !isLoading && (followingTopics.length > 0 || followingUsers.length > 0) && (
                   <div>
                     {/* writer */}
                     <div>

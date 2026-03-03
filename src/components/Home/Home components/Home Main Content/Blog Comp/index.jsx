@@ -11,7 +11,7 @@ import noPreviewImg from "../../../../../assets/images/noPreviewImage.png";
 import SaveBlog from "../../../../Common/Buttons/ToggleBlogSave";
 import { ListContext } from "../../../../../context/listContext";
 
-function BlogComp({ item }) {
+function BlogComp({ item, handleRemoveBlogItemFromParent = () => {} }) {
   const { userInfo } = useContext(UserContext);
   const navigate = useNavigate();
   const isMyBlog = userInfo._id === item.author._id;
@@ -27,120 +27,129 @@ function BlogComp({ item }) {
     navigate(`/${blog.slug}/${blog._id}`);
   };
 
+  const handleRemoveUser = () => {
+    handleRemoveBlogItemFromParent();
+    setBlog(null);
+  };
+
   return (
-    <div className={`overflow-hidden transition-all duration-500 ease-out ${isHideBlog ? "height71" : "height-18"}`}>
-      <div className="flex justify-center">
-        <div className="w-full max-width-2 margin-2 min-w-0">
-          <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
-            <article>
-              <div className="box-content">
-                <div className="w-full h-full">
-                  <div onClick={handleShowDetailedBlog} className={`flex relative cursor-pointer`}>
-                    <div className="w-full">
-                      {/* writer section */}
-                      <div className="flex w-full">
-                        <div className="margin-21 flex items-center w-full" style={{ marginTop: 0, marginInline: 0 }}>
-                          <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
-                            <div onClick={(e) => handleUserProfileClick(e)} className="relative z-[2] no-underline cursor-pointer">
-                              <div className="relative">
-                                <img className="height-12 aspect-square box-border rounded-full align-middle capitalize" src={blog.author.profileImg} alt={blog.author.name} />
-                                <div className="height-12 aspect-square absolute top-0 rounded-full"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div onClick={(e) => handleUserProfileClick(e)} className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
-                            <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
-                              {blog.communityName && <span className="font-light">In </span>}
-                              {blog.communityName && <span className="font-normal no-underline hover:underline">{blog.communityName}</span>}
-                              {blog.communityName && <span className="font-light"> by </span>}
-                              <span className="font-normal no-underline hover:underline">{blog.isMyBlog ? "You" : blog.author.name}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* blog section */}
-                      <div className="flex">
-                        {/* left section */}
-                        <div className="grow shrink basis-auto" style={{ wordBreak: "break-word" }}>
-                          <div>
-                            <div className="flex flex-col static">
-                              <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.previewTitle}</h2>
-                              <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
-                                {blog.previewSubtitle && <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.previewSubtitle}</h3>}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div>
-                            <div className="w-full padding-25" style={{ paddingBottom: 0, paddingInline: 0 }}>
-                              <span className="font-4 color-4 custom-line-h-1 font-normal">
-                                <div className="height-50 flex justify-between items-center">
-                                  <div className="flex items-center custom-gap-2 align-middle text-center">
-                                    <div className="box-content flex">
-                                      <div className="inline-block">
-                                        <button className="z-[2] relative border-none p-0 m-0 bg-transparent" title="Member-only story">
-                                          <div className="inline-block width-19 aspect-square">
-                                            <PiStarFourLight className="w-full h-full align-middle text-yellow-600" />
-                                          </div>
-                                        </button>
-                                      </div>
-                                    </div>
-                                    {formatMonthAndDayShort(blog.updatedAt)}
-                                    <div className="width-28 height-51 relative flex items-center">
-                                      <div className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
-                                        {blog.clapsCount > 0 && (
-                                          <div className="flex" title={`${blog.clapsCount} claps`}>
-                                            <div className="custom-gap-1 flex items-center">
-                                              <div className="inline-block width-19 aspect-square">
-                                                <PiHandsClappingDuotone className="w-full h-full" />
-                                              </div>
-                                              <span>{blog.clapsCount}</span>
-                                            </div>
-                                          </div>
-                                        )}
-                                        {blog.commentCount > 0 && (
-                                          <div className="flex" title={`${blog.commentCount} responses`}>
-                                            <div className="custom-gap-1 flex items-center">
-                                              <div className="inline-block width-19 aspect-square">
-                                                <FaRegComment className="w-full h-full" />
-                                              </div>
-                                              <span>{blog.commentCount}</span>
-                                            </div>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
-                                    {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
-                                    <div>
-                                      <SaveBlog item={blog} />
-                                    </div>
-                                    <MoreComp blog={blog} />
+    <>
+      {blog && (
+        <div className={`overflow-hidden transition-all duration-500 ease-out ${isHideBlog ? "height71" : "height-18"}`}>
+          <div className="flex justify-center">
+            <div className="w-full max-width-2 margin-2 min-w-0">
+              <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
+                <article>
+                  <div className="box-content">
+                    <div className="w-full h-full">
+                      <div onClick={handleShowDetailedBlog} className={`flex relative cursor-pointer`}>
+                        <div className="w-full">
+                          {/* writer section */}
+                          <div className="flex w-full">
+                            <div className="margin-21 flex items-center w-full" style={{ marginTop: 0, marginInline: 0 }}>
+                              <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
+                                <div onClick={(e) => handleUserProfileClick(e)} className="relative z-[2] no-underline cursor-pointer">
+                                  <div className="relative">
+                                    <img className="height-12 aspect-square box-border rounded-full align-middle capitalize" src={blog.author.profileImg} alt={blog.author.name} />
+                                    <div className="height-12 aspect-square absolute top-0 rounded-full"></div>
                                   </div>
                                 </div>
-                              </span>
+                              </div>
+                              <div onClick={(e) => handleUserProfileClick(e)} className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
+                                <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
+                                  {blog.communityName && <span className="font-light">In </span>}
+                                  {blog.communityName && <span className="font-normal no-underline hover:underline">{blog.communityName}</span>}
+                                  {blog.communityName && <span className="font-light"> by </span>}
+                                  <span className="font-normal no-underline hover:underline">{blog.isMyBlog ? "You" : blog.author.name}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* blog section */}
+                          <div className="flex">
+                            {/* left section */}
+                            <div className="grow shrink basis-auto" style={{ wordBreak: "break-word" }}>
+                              <div>
+                                <div className="flex flex-col static">
+                                  <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.previewTitle}</h2>
+                                  <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
+                                    {blog.previewSubtitle && <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.previewSubtitle}</h3>}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div>
+                                <div className="w-full padding-25" style={{ paddingBottom: 0, paddingInline: 0 }}>
+                                  <span className="font-4 color-4 custom-line-h-1 font-normal">
+                                    <div className="height-50 flex justify-between items-center">
+                                      <div className="flex items-center custom-gap-2 align-middle text-center">
+                                        <div className="box-content flex">
+                                          <div className="inline-block">
+                                            <button className="z-[2] relative border-none p-0 m-0 bg-transparent" title="Member-only story">
+                                              <div className="inline-block width-19 aspect-square">
+                                                <PiStarFourLight className="w-full h-full align-middle text-yellow-600" />
+                                              </div>
+                                            </button>
+                                          </div>
+                                        </div>
+                                        {formatMonthAndDayShort(blog.updatedAt)}
+                                        <div className="width-28 height-51 relative flex items-center">
+                                          <div className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
+                                            {blog.clapsCount > 0 && (
+                                              <div className="flex" title={`${blog.clapsCount} claps`}>
+                                                <div className="custom-gap-1 flex items-center">
+                                                  <div className="inline-block width-19 aspect-square">
+                                                    <PiHandsClappingDuotone className="w-full h-full" />
+                                                  </div>
+                                                  <span>{blog.clapsCount}</span>
+                                                </div>
+                                              </div>
+                                            )}
+                                            {blog.commentCount > 0 && (
+                                              <div className="flex" title={`${blog.commentCount} responses`}>
+                                                <div className="custom-gap-1 flex items-center">
+                                                  <div className="inline-block width-19 aspect-square">
+                                                    <FaRegComment className="w-full h-full" />
+                                                  </div>
+                                                  <span>{blog.commentCount}</span>
+                                                </div>
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
+                                        {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
+                                        <div>
+                                          <SaveBlog item={blog} />
+                                        </div>
+                                        <MoreComp blog={blog} handleRemoveUser={handleRemoveUser} />
+                                      </div>
+                                    </div>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
+                              {blog.previewImg && <img src={blog.previewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
+                              {!blog.previewImg && <img src={noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
                             </div>
                           </div>
                         </div>
-
-                        <div className="margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
-                          {blog.previewImg && <img src={blog.previewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
-                          {!blog.previewImg && <img src={noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
-                        </div>
                       </div>
+                      <div className="margin-11 h-0 bdr-5 w-full" style={{ marginBottom: 0, borderTop: 0, borderInline: 0 }}></div>
                     </div>
                   </div>
-                  <div className="margin-11 h-0 bdr-5 w-full" style={{ marginBottom: 0, borderTop: 0, borderInline: 0 }}></div>
-                </div>
+                </article>
               </div>
-            </article>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

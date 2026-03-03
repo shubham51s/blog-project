@@ -5,16 +5,17 @@ import { defaultLoaderTime } from "../../../../constants/constant";
 import Loader from "./ListItem/skeleton";
 import ListItem from "./ListItem";
 
-function ViewAllUserSuggestion({ handleCloseUserModal }) {
+function ViewAllMutedUsers({ handleCloseUserModal, usersCount, onMuteStatusChange }) {
   const { requestHandler } = useRequestHandler();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const loaderTimeout = useRef(null);
 
-  const fetchSuggestedUsers = async (skip) => {
+  const fetchMutedUsers = async (skip) => {
+    setIsLoading(true);
     try {
-      const response = await requestHandler(`/users/suggestions?skip=${skip}`);
+      const response = await requestHandler(`/mute/users?skip=${skip}`);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.users) {
@@ -23,12 +24,12 @@ function ViewAllUserSuggestion({ handleCloseUserModal }) {
     } catch (err) {
       console.error(err);
     } finally {
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchSuggestedUsers(0);
+    fetchMutedUsers(0);
 
     if (!loaderTimeout.current) {
       loaderTimeout.current = setTimeout(() => {
@@ -44,9 +45,9 @@ function ViewAllUserSuggestion({ handleCloseUserModal }) {
         <div className="flex justify-center">
           <div className="margin-27 w-full min-w-0 max-width-2 padding90" style={{ marginBlock: 0 }}>
             <div className="padding-42 text-center">
-              <h1 className="font-3 line-h-8 font-medium color-3 m-0">Writers to follow</h1>
+              <h1 className="font-3 line-h-8 font-medium color-3 m-0">Muted {usersCount} writers</h1>
             </div>
-            <div>{!isLoading && !defaultLoader && users.map((item) => <ListItem key={item._id} user={item} />)}</div>
+            <div>{!isLoading && !defaultLoader && users.map((item) => <ListItem key={item._id} item={item.target} onMuteStatusChange={onMuteStatusChange} />)}</div>
             {(isLoading || defaultLoader) && Array.from({ length: 5 }).map((_, i) => <Loader key={i} />)}
           </div>
         </div>
@@ -63,4 +64,4 @@ function ViewAllUserSuggestion({ handleCloseUserModal }) {
   );
 }
 
-export default ViewAllUserSuggestion;
+export default ViewAllMutedUsers;

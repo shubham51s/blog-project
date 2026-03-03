@@ -38,45 +38,49 @@ function UserListItem({ user, onFollowStatusChange = () => {} }) {
   };
 
   return (
-    <div className="margin60 flex">
-      <Link to={`/profile/${user.username}`} className="cursor-pointer list-none">
-        <div className="relative">
-          <img src={user.profileImg} alt={user.name} className="width-15 aspect-square rounded-full" />
-          <div className="absolute top-0 boxShadow7 width-15 aspect-square rounded-full"></div>
-        </div>
-      </Link>
-      <div className="padding82 w-full flex justify-between">
-        <div className="w-full flex flex-col justify-center">
-          <div className="flex items-center">
-            <Link to={`/profile/${user.username}`} className="cursor-pointer m-0 no-underline p-0">
-              <h2 className="height-15 font-10 font-medium color-3 line20 m-0 line-clamp-2">{user.name}</h2>
-            </Link>
-          </div>
-          {user.bio && (
-            <Link to={`/profile/${user.username}`} className="cursor-pointer m-0 no-underline p-0">
-              <div className="w-full max-w-full whitespace-pre-wrap margin44 break-words">
-                <p className="custom-fs-1 color-4 line20 font-normal m-0">{user.bio}</p>
+    <>
+      {user && (
+        <div className="margin60 flex">
+          <Link to={`/profile/${user.username}`} className="cursor-pointer list-none">
+            <div className="relative">
+              <img src={user.profileImg} alt={user.name} className="width-15 aspect-square rounded-full" />
+              <div className="absolute top-0 boxShadow7 width-15 aspect-square rounded-full"></div>
+            </div>
+          </Link>
+          <div className="padding82 w-full flex justify-between">
+            <div className="w-full flex flex-col justify-center">
+              <div className="flex items-center">
+                <Link to={`/profile/${user.username}`} className="cursor-pointer m-0 no-underline p-0">
+                  <h2 className="height-15 font-10 font-medium color-3 line20 m-0 line-clamp-2">{user.name}</h2>
+                </Link>
               </div>
-            </Link>
-          )}
-        </div>
+              {user.bio && (
+                <Link to={`/profile/${user.username}`} className="cursor-pointer m-0 no-underline p-0">
+                  <div className="w-full max-w-full whitespace-pre-wrap margin44 break-words">
+                    <p className="custom-fs-1 color-4 line20 font-normal m-0">{user.bio}</p>
+                  </div>
+                </Link>
+              )}
+            </div>
 
-        {!isFetchUserLoader && userInfo._id !== user._id && (
-          <div className="margin-14 flex items-start justify-end width-23" style={{ marginRight: 0, marginBlock: 0 }}>
-            {followingUsers[user._id] && (
-              <button onClick={handleUnfollowBtnClick} disabled={isLoading} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease ${isLoading ? "opacity-75" : "opacity-100"}`}>
-                <div className="color-3 custom-fs-1 line20 font-normal flex items-center">Following</div>
-              </button>
-            )}
-            {!followingUsers[user._id] && (
-              <button onClick={handleFollowBtnClick} disabled={isLoading} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease  ${isLoading ? "opacity-75" : "opacity-100"}`}>
-                <div className="color-3 custom-fs-1 line20 font-normal">Follow</div>
-              </button>
+            {!isFetchUserLoader && userInfo._id !== user._id && (
+              <div className="margin-14 flex items-start justify-end width-23" style={{ marginRight: 0, marginBlock: 0 }}>
+                {followingUsers[user._id] && (
+                  <button onClick={handleUnfollowBtnClick} disabled={isLoading} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease ${isLoading ? "opacity-75" : "opacity-100"}`}>
+                    <div className="color-3 custom-fs-1 line20 font-normal flex items-center">Following</div>
+                  </button>
+                )}
+                {!followingUsers[user._id] && (
+                  <button onClick={handleFollowBtnClick} disabled={isLoading} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease  ${isLoading ? "opacity-75" : "opacity-100"}`}>
+                    <div className="color-3 custom-fs-1 line20 font-normal">Follow</div>
+                  </button>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 

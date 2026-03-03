@@ -7,13 +7,16 @@ import { MdDeleteOutline } from "react-icons/md";
 import { showToast } from "../../../../../../utils/toaster";
 import { FollowingContext } from "../../../../../../context/followingContext";
 import { useToggleUserFollow } from "../../../../../../hooks/toggleUserFollow";
+import { useToggleMute } from "../../../../../../hooks/toggleMute";
 
-function MoreComp({ blog }) {
+function MoreComp({ blog, handleRemoveUser }) {
   const { followUser, unfollowUser } = useToggleUserFollow();
+  const { muteUser } = useToggleMute();
   const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
 
   const [loaders, setLoaders] = useState({
     isFollowLoader: false,
+    mute: false,
   });
 
   const handleFollowAuthor = async () => {
@@ -38,6 +41,21 @@ function MoreComp({ blog }) {
     await unfollowUser(params);
 
     setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+  };
+
+  const handleMuteUser = async () => {
+    setLoaders((prev) => ({ ...prev, mute: true }));
+    const params = {
+      target: blog.author._id,
+      name: blog.author.name,
+    };
+
+    const isMuted = muteUser(params);
+    setLoaders((prev) => ({ ...prev, mute: false }));
+
+    if (isMuted) {
+      handleRemoveUser();
+    }
   };
 
   return (
@@ -88,7 +106,9 @@ function MoreComp({ blog }) {
                   )}
                   <li className="custom-px-2 bdr-5" style={{ borderInline: 0, borderBottom: 0 }}></li>
                   <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
-                    <button className="cursor-pointer m-0 p-0">Mute author</button>
+                    <button className="cursor-pointer m-0 p-0" onClick={handleMuteUser} disabled={loaders.mute}>
+                      Mute author
+                    </button>
                   </li>
                   {blog.community && (
                     <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">

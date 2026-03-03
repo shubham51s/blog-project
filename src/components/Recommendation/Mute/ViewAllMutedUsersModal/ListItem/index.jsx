@@ -1,37 +1,42 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { FollowingContext } from "../../../../../context/followingContext";
-import { useToggleUserFollow } from "../../../../../hooks/toggleUserFollow";
 import { UserContext } from "../../../../../context/userContext";
+import { useToggleMute } from "../../../../../hooks/toggleMute";
 
-function ListItem({ user, onFollowStatusChange }) {
-  const { isFetchUserLoader, followingUsers } = useContext(FollowingContext);
-  const { followUser, unfollowUser } = useToggleUserFollow();
+function ListItem({ item, onMuteStatusChange }) {
+  const { muteUser, unmuteUser } = useToggleMute();
   const { userInfo } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState(item);
 
-  const handleFollowBtnClick = async () => {
+  const handleMuteBtnClick = async () => {
     setIsLoading(true);
 
     const params = {
-      _id: user._id,
+      target: user._id,
       name: user.name,
     };
-    const isSuccess = await followUser(params);
-    if (isSuccess) onFollowStatusChange(true);
+    const isSuccess = await muteUser(params);
+    if (isSuccess) {
+      setUser((prev) => ({ ...prev, isMuted: true }));
+      onMuteStatusChange(true, user._id);
+    }
 
     setIsLoading(false);
   };
 
-  const handleUnfollowBtnClick = async () => {
+  const handleUnmuteBtnClick = async () => {
     setIsLoading(true);
 
     const params = {
-      _id: user._id,
+      target: user._id,
       name: user.name,
     };
-    const isSuccess = await unfollowUser(params);
-    if (isSuccess) onFollowStatusChange(false);
+    const isSuccess = await unmuteUser(params);
+    if (isSuccess) {
+      setUser((prev) => ({ ...prev, isMuted: false }));
+      onMuteStatusChange(false, user._id);
+    }
 
     setIsLoading(false);
   };
@@ -62,16 +67,16 @@ function ListItem({ user, onFollowStatusChange }) {
               )}
             </div>
 
-            {!isFetchUserLoader && userInfo._id !== user._id && (
+            {userInfo._id !== user._id && (
               <div className="margin-14 flex items-start justify-end width-23" style={{ marginRight: 0, marginBlock: 0 }}>
-                {followingUsers[user._id] && (
-                  <button onClick={handleUnfollowBtnClick} disabled={isLoading} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease ${isLoading ? "opacity-75" : "opacity-100"}`}>
-                    <div className="color-3 custom-fs-1 line20 font-normal flex items-center">Following</div>
+                {user.isMuted && (
+                  <button onClick={handleUnmuteBtnClick} disabled={isLoading} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease ${isLoading ? "opacity-75" : "opacity-100"}`}>
+                    <div className="color-3 custom-fs-1 line20 font-normal flex items-center">Muted</div>
                   </button>
                 )}
-                {!followingUsers[user._id] && (
-                  <button onClick={handleFollowBtnClick} disabled={isLoading} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease  ${isLoading ? "opacity-75" : "opacity-100"}`}>
-                    <div className="color-3 custom-fs-1 line20 font-normal">Follow</div>
+                {!user.isMuted && (
+                  <button onClick={handleMuteBtnClick} disabled={isLoading} className={`bdr-6 bg-[#191919] padding-20 padding-28 border-radius-7 cursor-pointer opacity-[0.95] transition-all duration-75 ease  ${isLoading ? "" : "hover:opacity-100"}`}>
+                    <div className="text-white custom-fs-1 line20 font-normal">Mute</div>
                   </button>
                 )}
               </div>
