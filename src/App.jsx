@@ -31,7 +31,10 @@ import MyFollowing from "./pages/Recommendation/Following";
 import MyReadingHistory from "./pages/Recommendation/ReadingHistory";
 import Muted from "./pages/Recommendation/Muted";
 import Suggestions from "./pages/Recommendation/Suggestions";
-import Settings from "./pages/Settings";
+import CommonLayout from "./pages/Settings/CommonLayout";
+import Account from "./pages/Settings/Account";
+import Publishing from "./pages/Settings/Publishing";
+import Security from "./pages/Settings/Security";
 function App() {
   const { isInitialLoading } = useContext(UserContext);
 
@@ -55,9 +58,11 @@ function App() {
               <Route index element={<MyFollowing />} />
               <Route path="suggestions" element={<Suggestions />} />
             </Route>
-            <Route path="settings">
-              <Route index element={<Settings />} />
-              <Route path="mute" element={<Muted />} />
+            <Route path="settings/mute" element={<Muted />} />
+            <Route path="settings" element={<CommonLayout />}>
+              <Route index element={<Account />} />
+              <Route path="publishing" element={<Publishing />} />
+              <Route path="security" element={<Security />} />
             </Route>
             <Route path="readinghistory" element={<MyReadingHistory />} />
           </Route>
