@@ -3,6 +3,7 @@ import { urlBasePath } from "../constants/constant";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FollowingContext } from "./followingContext";
 import { ListContext } from "./listContext";
+import { showToast } from "../utils/toaster";
 
 const UserContext = createContext();
 
@@ -47,6 +48,31 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const fetchUpdatedUserDetails = async () => {
+    try {
+      const response = await fetch(`${urlBasePath}/users/me`, {
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        method: "GET",
+      });
+
+      const result = await response.json();
+
+      if (response.status === 200 && result?.data?.user) {
+        setUserInfo(result.data.user);
+        return true;
+      }
+
+      showToast(result?.message || "Some error occured.");
+
+      return false;
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+      return false;
+    }
+  };
+
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
@@ -54,7 +80,7 @@ const UserProvider = ({ children }) => {
     }
   }, []);
 
-  return <UserContext.Provider value={{ userInfo, isUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu, verifyAuthentication }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ userInfo, isUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu, verifyAuthentication, fetchUpdatedUserDetails }}>{children}</UserContext.Provider>;
 };
 
 export { UserContext };

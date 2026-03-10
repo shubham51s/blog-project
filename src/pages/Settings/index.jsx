@@ -1,6 +1,12 @@
 import React from "react";
 import HeaderSection from "../../components/Settings/HeaderSection";
 import EmailSection from "../../components/Settings/EmailSection";
+import UsernameSection from "../../components/Settings/UsernameSection";
+import ProfileInfoSection from "../../components/Settings/ProfileInfoSection";
+import RecommendationSection from "../../components/Settings/RecommendationSection";
+import MutedSection from "../../components/Settings/MutedSection";
+import BlockedUserSection from "../../components/Settings/BlockedUserSection";
+import DeleteAccountSection from "../../components/Settings/DeleteAccountSection";
 
 function Settings() {
   return (
@@ -9,9 +15,16 @@ function Settings() {
         <div className="flex justify-center">
           <div className="w-full min-w-0 max-width-2 margin-12">
             <div className="padding61">
-              {/* sections here */}
               <HeaderSection />
               <EmailSection />
+              <UsernameSection />
+              <ProfileInfoSection />
+              <div className="w-full h-0 bdr-5" style={{ borderTop: 0, borderInline: 0 }}></div>
+              <RecommendationSection />
+              <MutedSection />
+              <BlockedUserSection />
+              <div className="w-full h-0 bdr-5" style={{ borderTop: 0, borderInline: 0 }}></div>
+              <DeleteAccountSection />
             </div>
           </div>
         </div>

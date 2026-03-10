@@ -38,7 +38,7 @@ function DeleteReadingHistoryModal({ isDeleteModal, handleCloseDeleteModal, clea
                   Cancel
                 </button>
                 <div className="padding50" style={{ paddingRight: 0 }}>
-                  <button onClick={handleConfirmDeleteBtnClick} disabled={isLoading} className={`flex items-center custom-gap-3 bdr-3 border-[#c94a4a] bg-[#c94a4a] border-radius-9 text-center color-2 custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 transition-all duration-75 linear ${isLoading ? "cursor-default opacity-[0.5]" : "cursor-pointer opacity-[0.9] hover:opacity-100"}`}>
+                  <button onClick={handleConfirmDeleteBtnClick} disabled={isLoading} className={`flex items-center custom-gap-3 bdr-3 border-[#c94a4a] bg-[#c94a4a] border-radius-9 text-center color-2 custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 transition-all duration-75 linear ${isLoading ? "cursor-default opacity-[0.5]" : "cursor-pointer opacity-[0.95] hover:opacity-100"}`}>
                     {isLoading && <div className="width83 aspect-square rounded-full border-2 border-white border-t-0 border-r-0 animate-spin"></div>}Confirm and clear
                   </button>
                 </div>

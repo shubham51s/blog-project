@@ -1,8 +1,8 @@
-@import "@fontsource/roboto-flex";
 @import "tailwindcss";
 
 body {
-  font-family: "Roboto Flex", sans-serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 0;
   margin: 0;
   color: rgba(0, 0, 0, 0.8);
@@ -1127,6 +1127,10 @@ img {
     border: 3px solid
   }
 
+  .bdr22 {
+    border-width: 1px;
+  }
+
   .bdr .translateY-1 {
     transform: translateY(149.8px);
   }
@@ -2079,5 +2083,9 @@ img {
 
   .margin67 {
     margin-block: 22px;
+  }
+
+  .margin68 {
+    margin-block: 8px;
   }
 }
