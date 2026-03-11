@@ -18,7 +18,7 @@ function DeleteAccountSection() {
         <div className="flex w-full items-baseline justify-between">
           <div className="flex items-center">
             <div className="grow shrink basis-0">
-              <span className="text-[#C94A4A] custom-fs-1 line20 font-medium">Delete account</span>
+              <span className="text-[#C94A4A] custom-fs-1 line20 font-normal">Delete account</span>
               <div className="whitespace-pre-line margin44">
                 <span className="font-4 color-4 line20 font-normal">Permanently delete your account and all of your content.</span>
               </div>

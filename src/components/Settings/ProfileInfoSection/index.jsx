@@ -18,7 +18,7 @@ function ProfileInfoSection() {
         <div className="flex w-full items-baseline justify-between">
           <div className="flex items-center">
             <div className="grow shrink basis-0">
-              <span className="color-3 custom-fs-1 line20 font-medium">Profile information</span>
+              <span className="color-3 custom-fs-1 line20 font-normal">Profile information</span>
               <div className="whitespace-pre-line margin44">
                 <span className="font-4 color-4 line20 font-normal">Edit your photo, name, pronouns, short bio, etc.</span>
               </div>

@@ -16,7 +16,7 @@ function EmailSection() {
         <div className="flex w-full items-baseline justify-between">
           <div className="flex items-baseline">
             <div className="grow shrink basis-0 my-auto">
-              <span className="color-3 custom-fs-1 line20 font-medium">Email address</span>
+              <span className="color-3 custom-fs-1 line20 font-normal">Email address</span>
             </div>
           </div>
 

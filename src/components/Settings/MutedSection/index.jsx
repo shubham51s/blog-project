@@ -9,7 +9,7 @@ function MutedSection() {
         <div className="flex w-full items-baseline justify-between">
           <div className="flex items-center">
             <div className="grow shrink basis-0">
-              <span className="color-3 custom-fs-1 line20 font-medium">Muted writers and publications</span>
+              <span className="color-3 custom-fs-1 line20 font-normal">Muted writers and publications</span>
             </div>
           </div>
 

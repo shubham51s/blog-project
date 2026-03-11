@@ -9,7 +9,7 @@ function RecommendationSection() {
         <div className="flex w-full items-baseline justify-between">
           <div className="flex items-center">
             <div className="grow shrink basis-0">
-              <span className="color-3 custom-fs-1 line20 font-medium">Refine recommendations</span>
+              <span className="color-3 custom-fs-1 line20 font-normal">Refine recommendations</span>
               <div className="whitespace-pre-line margin44">
                 <span className="font-4 color-4 line20 font-normal">Adjust recommendations by updating what you’re following and more.</span>
               </div>
