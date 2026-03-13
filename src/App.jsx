@@ -1,10 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Homepage from "./pages/Home";
-import LoginPage from "./pages/Authentication/login";
-import SignupPage from "./pages/Authentication/signup";
 import CreatePostPage from "./pages/Create post";
-import EditPostPage from "./pages/Edit post";
-import MyBlogsPage from "./pages/My blogs";
 import NotFoundPage from "./pages/Not found";
 import AboutPage from "./pages/About";
 import GlobalLoaderComp from "./components/Common/globalLoader";
@@ -35,6 +31,7 @@ import CommonLayout from "./pages/Settings/CommonLayout";
 import Account from "./pages/Settings/Account";
 import Publishing from "./pages/Settings/Publishing";
 import Security from "./pages/Settings/Security";
+import NewPublication from "./pages/NewPublication";
 function App() {
   const { isInitialLoading } = useContext(UserContext);
 
@@ -43,9 +40,12 @@ function App() {
     <>
       {isInitialLoading && <GlobalLoaderComp />}
       <Routes>
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/new-story" element={<CreatePostPage />} />
         <Route path="/" element={<MainComp />}>
           // nested routes
           <Route index element={<HomePageProtected />} />
+          <Route path="new-publication" element={<NewPublication />} />
           <Route path="me" element={<MePageWrapper />}>
             <Route index element={<MePageDefaultComp />} />
             <Route path="lists" element={<LibraryPage />}>
@@ -76,12 +76,6 @@ function App() {
           <Route path="profile/:username/list/:slug/:listId" element={<ListDetailsPage />} />
           <Route path=":slug/:id" element={<PostDetailsPageWrapper />} />
         </Route>
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<SignupPage />} />
-        <Route path="/new-story" element={<CreatePostPage />} />
-        <Route path="/edit/:id" element={<EditPostPage />} />
-        <Route path="/my-blogs/:id" element={<MyBlogsPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </>
