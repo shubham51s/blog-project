@@ -12,9 +12,10 @@ function MainComp() {
   const [isMenu, setIsMenu] = useState(true);
 
   useEffect(() => {
-    if (pathname.includes("new-publication") && isMenu) {
+    const path = pathname.split("/").join("");
+    if (path === "new-publication" && isMenu) {
       setIsMenu(false);
-    } else if (!pathname.includes("new-publication") && !isMenu) {
+    } else if (path !== "new-publication" && !isMenu) {
       setIsMenu(true);
     }
   }, [pathname]);
@@ -40,11 +41,7 @@ function MainComp() {
             </div>
           )}
 
-          {!isMenu && (
-            <div className="flex height-11">
-              <Outlet />
-            </div>
-          )}
+          {!isMenu && <Outlet />}
         </div>
       )}
     </>

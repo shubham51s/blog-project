@@ -26,7 +26,7 @@ function ManagePublication({ isShowModal, handleCloseModal }) {
         </div>
 
         <div className="margin51">
-          <Link to="" className="cursor-pointer m-0 p-0">
+          <Link to="/new-publication" className="cursor-pointer m-0 p-0">
             <div className="text-[#1A8917] custom-fs-1 line20 font-normal m-0 flex items-center">
               <div className="width84 aspect-square margin-3">
                 <GoPlus className="w-full h-full" />

@@ -63,7 +63,7 @@ img {
   --bg-color-17: rgb(237, 230, 230);
 
   /* for text colors */
-  --txt-color-1: rgba(0, 0, 0, .9);
+  --txt-color-1: rgba(0, 0, 0, 0.9);
   --txt-color-2: rgb(255, 255, 255);
   --txt-color-3: rgb(36, 36, 36);
   --txt-color-4: rgb(107, 107, 107);
@@ -72,11 +72,11 @@ img {
   --text-color-7: rgba(255, 255, 255, 1);
   --text-color-8: rgba(255, 255, 255, 0.6);
   --text-color-9: rgba(239, 68, 68, 1);
-  --text-color-10: rgba(0, 0, 0, .54);
-  --text-color-11: rgba(0, 0, 0, .84);
+  --text-color-10: rgba(0, 0, 0, 0.54);
+  --text-color-11: rgba(0, 0, 0, 0.84);
   --text-color-12: rgb(148, 194, 134);
-  --text-color-13: rgba(0, 0, 0, .68);
-  --text-color-14: rgba(0, 0, 0, .76);
+  --text-color-13: rgba(0, 0, 0, 0.68);
+  --text-color-14: rgba(0, 0, 0, 0.76);
   --text-color-15: rgb(117, 117, 117);
   --text-color-16: rgb(25, 25, 25);
 }
@@ -893,6 +893,10 @@ img {
     height: 1px;
   }
 
+  .height87 {
+    min-height: 28px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -983,6 +987,14 @@ img {
 
   .font16 {
     font-size: 12px;
+  }
+
+  .font17 {
+    font-size: 46px;
+  }
+
+  .font18 {
+    font-size: 26px;
   }
 
   .padding-1 {
@@ -1462,6 +1474,10 @@ img {
 
   .width86 {
     width: 20px;
+  }
+
+  .width87 {
+    max-width: 1072px !important;
   }
 
   .margin-2 {
@@ -2091,5 +2107,17 @@ img {
 
   .margin68 {
     margin-block: 8px;
+  }
+
+  .margin69 {
+    margin-block: 80px;
+  }
+
+  .margin70 {
+    margin-block: 60px;
+  }
+
+  .margin71 {
+    margin-block: 30px;
   }
 }
