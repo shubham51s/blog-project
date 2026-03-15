@@ -27,6 +27,7 @@ img {
   /* box shadow */
   --box-shadow-1: rgba(0, 0, 0, 0.15);
   --box-shadow-2: rgb(242, 242, 242);
+
   /* for border colors */
   --border-1: rgba(25, 25, 25, 1);
   --border-2: rgba(25, 25, 25, 1);
@@ -37,11 +38,13 @@ img {
   --border-7: rgba(255, 255, 255, 0.9);
   --border-8: black;
   --border-9: rgb(229, 229, 229);
-  --border-10: rgba(0, 0, 0, .05);
-  --border-11: rgba(0, 0, 0, .25);
+  --border-10: rgba(0, 0, 0, 0.05);
+  --border-11: rgba(0, 0, 0, 0.25);
   --border-12: rgba(255, 0, 0, 0.6);
   --border-13: rgba(36, 36, 36, 0.4);
   --border-14: rgb(249, 249, 249);
+  --border-15: rgba(0, 0, 0, 0.15);
+  --border-16: rgba(0, 0, 0, 0.35);
 
   /* for background color */
   --bg-color-1: rgb(25, 25, 25);
@@ -1147,6 +1150,18 @@ img {
     border-width: 1px;
   }
 
+  .bdr23 {
+    border: 1px solid var(--border-15);
+  }
+
+  .bdr24 {
+    border: 1px solid var(--border-16);
+  }
+
+  .bdr25 {
+    border: 2px solid var(--border-15);
+  }
+
   .bdr .translateY-1 {
     transform: translateY(149.8px);
   }
@@ -1478,6 +1493,10 @@ img {
 
   .width87 {
     max-width: 1072px !important;
+  }
+
+  .width88 {
+    width: 100px;
   }
 
   .margin-2 {
@@ -2119,5 +2138,9 @@ img {
 
   .margin71 {
     margin-block: 30px;
+  }
+
+  .margin72 {
+    margin-block: 100px;
   }
 }

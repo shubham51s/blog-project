@@ -1,11 +1,87 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../components/NewPublication/Header";
 import NameInput from "../../components/NewPublication/Inputs/Name";
+import DescriptionInput from "../../components/NewPublication/Inputs/Description";
+import ImageInput from "../../components/NewPublication/Inputs/Image";
+import TopicInput from "../../components/NewPublication/Inputs/Topic";
+import WriterInput from "../../components/NewPublication/Inputs/Writer";
+import EditorInput from "../../components/NewPublication/Inputs/Editor";
+import { showToast } from "../../utils/toaster";
+import { useRequestHandler } from "../../hooks/requestHandler";
 
 function NewPublication() {
+  const { requestHandler } = useRequestHandler();
+  const [isLoading, setIsLoading] = useState(false);
+  const [publication, setPublication] = useState({
+    name: "",
+    description: "",
+    profileImg: "",
+    writers: [],
+    editors: [],
+    topics: [],
+  });
+
+  const createPublication = async () => {
+    try {
+      const params = {
+        name: publication.name,
+        description: publication.description,
+      };
+
+      const response = await requestHandler("/publication/create-new", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 201) {
+        showToast("Publication created successfully.");
+        return;
+      }
+
+      showToast(result?.message || "Some error occured.");
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const isNameAvailable = async () => {
+    setIsLoading(true);
+    try {
+      const response = await requestHandler(`/publication/check-name-availability/${publication.name}`);
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        createPublication();
+        return;
+      }
+      showToast(result?.message || "Some error occured.");
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+      setIsLoading(false);
+    }
+  };
+
+  const handleCreateNewPublicationBtnClick = () => {
+    if (isLoading) return;
+
+    if (!publication.name && !publication.description) {
+      showToast("Please add a name, description, and avatar for your publication.");
+    } else if (publication.name.trim().length === 0) {
+      showToast("Please add publication name.");
+    } else if (publication.description.trim().length === 0) {
+      showToast("Please add publication description.");
+    } else {
+      isNameAvailable();
+    }
+  };
+
   return (
     <>
-      <Header />
+      <Header handleCreateNewPublicationBtnClick={handleCreateNewPublicationBtnClick} isLoading={isLoading} />
+
       <div className="mx-auto padding59 width87">
         {/* general info info */}
         <header className="block margin69 bdr9 color11 font-9 relative" style={{ marginBottom: 0, borderTop: 0, borderInline: 0 }}>
@@ -15,7 +91,15 @@ function NewPublication() {
         </header>
 
         <div className="text-left mx-auto margin70" style={{ marginBottom: 0 }}>
-          <NameInput />
+          <NameInput publication={publication} setPublication={setPublication} />
+          <DescriptionInput publication={publication} setPublication={setPublication} />
+          <ImageInput publication={publication} setPublication={setPublication} />
+          <div className="margin71">
+            <div className="color10 custom-fs-1 w-full">
+              <div>Items marked with * are required.</div>
+              <div></div>
+            </div>
+          </div>
         </div>
 
         {/* social & topics*/}
@@ -25,7 +109,11 @@ function NewPublication() {
           </div>
         </header>
 
-        <div className=""></div>
+        <div className="mx-auto">
+          <div className="margin71">
+            <TopicInput publication={publication} setPublication={setPublication} />
+          </div>
+        </div>
 
         {/* people */}
         <header className="block margin69 bdr9 color11 font-9 relative" style={{ marginBottom: 0, borderTop: 0, borderInline: 0 }}>
@@ -34,7 +122,23 @@ function NewPublication() {
           </div>
         </header>
 
-        <div className=""></div>
+        <div className="mx-auto">
+          <div className="margin71">
+            <EditorInput publication={publication} setPublication={setPublication} />
+            <WriterInput publication={publication} setPublication={setPublication} />
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto padding59 width87 margin72">
+        <div className="text-right bdr9 w-full padding55" style={{ borderBottom: 0, borderInline: 0, paddingInline: 0 }}>
+          <span className="custom-fs-1 color10 align-middle text-right margin-34" style={{ marginLeft: 0, marginBlock: 0 }}>
+            Step 1 of 2
+          </span>
+          <button onClick={handleCreateNewPublicationBtnClick} disabled={isLoading} className="inline-block align-middle height68 line-h11 padding-7 bdr23 border-radius-9 bdr17-hover transition-all duration-300 ease color-3 custom-fs-1 text-center cursor-pointer whitespace-nowrap font-normal opacity-[0.75] hover:opacity-100">
+            Next
+          </button>
+        </div>
       </div>
     </>
   );
