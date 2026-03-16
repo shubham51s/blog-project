@@ -33,7 +33,7 @@ function NameInput({ publication, setPublication }) {
         <div className="color10 custom-fs-1">
           Link:{" "}
           <span>
-            {rootUrl?.split("//")?.[1]}/{namePreview ? namePreview : "..."}
+            {rootUrl?.split("//")?.[1]}/publication/{namePreview ? namePreview : "..."}
           </span>
         </div>
       </div>

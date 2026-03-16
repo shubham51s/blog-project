@@ -564,6 +564,10 @@ img {
     gap: 10px;
   }
 
+  .gap11 {
+    gap: 32px;
+  }
+
   .custom-margin-1 {
     margin: 20px 64px 0;
   }
