@@ -32,7 +32,9 @@ import Account from "./pages/Settings/Account";
 import Publishing from "./pages/Settings/Publishing";
 import Security from "./pages/Settings/Security";
 import NewPublication from "./pages/NewPublication";
-import PublicationDetails from "./pages/PublicationDetails";
+import PublicationDetails from "./pages/Publication/PublicationDetails";
+import PublicationFollowers from "./pages/Publication/Followers";
+
 function App() {
   const { isInitialLoading } = useContext(UserContext);
 
@@ -76,6 +78,7 @@ function App() {
           </Route>
           <Route path="profile/:username/list/:slug/:listId" element={<ListDetailsPage />} />
           <Route path="publication/:slug" element={<PublicationDetails />} />
+          <Route path="publication/:slug/followers" element={<PublicationFollowers />} />
           <Route path=":slug/:id" element={<PostDetailsPageWrapper />} />
         </Route>
         <Route path="/*" element={<NotFoundPage />} />

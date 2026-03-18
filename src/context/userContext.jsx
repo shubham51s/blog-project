@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FollowingContext } from "./followingContext";
 import { ListContext } from "./listContext";
 import { showToast } from "../utils/toaster";
+import { PublicationContext } from "./publication";
 
 const UserContext = createContext();
 
@@ -12,6 +13,7 @@ const UserProvider = ({ children }) => {
   const location = useLocation();
   const isMounted = useRef(null);
   const { fetchFollowingAuthorIds } = useContext(FollowingContext);
+  const { fetchFollowingPublicationIds } = useContext(PublicationContext);
   const { fetchMyLists } = useContext(ListContext);
   const [userInfo, setUserInfo] = useState({});
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
@@ -35,6 +37,7 @@ const UserProvider = ({ children }) => {
         setUserInfo({ ...result.data.user });
         setIsUserLoggedIn(true);
         fetchFollowingAuthorIds();
+        fetchFollowingPublicationIds();
         fetchMyLists();
       } else {
         // need to check later

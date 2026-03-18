@@ -568,6 +568,10 @@ img {
     gap: 32px;
   }
 
+  .gap12 {
+    gap: 56px;
+  }
+
   .custom-margin-1 {
     margin: 20px 64px 0;
   }
@@ -1503,6 +1507,10 @@ img {
     width: 100px;
   }
 
+  .width89 {
+    max-width: 440px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -1866,6 +1874,10 @@ img {
 
   .padding90 {
     padding-top: 112px;
+  }
+
+  .padding91 {
+    padding-inline: 64px;
   }
 
   .margin-3 {

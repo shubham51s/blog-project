@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { IoIosArrowDown } from "react-icons/io";
-import { Link } from "react-router-dom";
-import HeaderSection from "../../components/PublicationDetails/Header";
-import NoData from "../../components/PublicationDetails/NoData";
-import { useRequestHandler } from "../../hooks/requestHandler";
+import HeaderSection from "../../../components/PublicationDetails/Header";
+import NoData from "../../../components/PublicationDetails/NoData";
+import { useRequestHandler } from "../../../hooks/requestHandler";
 
 function PublicationDetails() {
   const { requestHandler } = useRequestHandler();
@@ -17,7 +15,6 @@ function PublicationDetails() {
       const response = await requestHandler(`/publication/${slug}`);
       const result = await response.json();
 
-      console.log("result: ", result);
       if (response?.status === 200 && result?.data?.publication) {
         setPublication(result.data.publication);
       }
