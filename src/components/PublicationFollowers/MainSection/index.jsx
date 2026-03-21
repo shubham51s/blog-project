@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ListItem from "./ListItem";
 import Spinner from "../../Common/Spinner";
 import { useRequestHandler } from "../../../hooks/requestHandler";
@@ -7,13 +7,12 @@ function MainSection({ publication }) {
   const { requestHandler } = useRequestHandler();
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const isMounted = useRef(null);
 
   const getFollowingUsers = async () => {
     try {
-      const response = await requestHandler(`/publication/follow/users/${publication._id}`);
+      const response = await requestHandler(`/publication/follow/users/${publication._id}?skip=${0}`);
       const result = await response.json();
-
-      console.log("users: ", result);
       if (response?.status === 200 && result?.data?.users) {
         setUsers(result.data.users);
       }
@@ -25,7 +24,8 @@ function MainSection({ publication }) {
   };
 
   useEffect(() => {
-    if (publication && isLoading) {
+    if (publication && !isMounted.current) {
+      isMounted.current = true;
       getFollowingUsers();
     }
   }, [publication]);

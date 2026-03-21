@@ -2,11 +2,38 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { FollowingContext } from "../../../../context/followingContext";
 import { UserContext } from "../../../../context/userContext";
+import { useToggleUserFollow } from "../../../../hooks/toggleUserFollow";
 
 function ListItem({ item }) {
   const { isFetchUserLoader, followingUsers } = useContext(FollowingContext);
   const { userInfo } = useContext(UserContext);
+  const { followUser, unfollowUser } = useToggleUserFollow();
   const [user, setUser] = useState(item);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleFollowUser = async () => {
+    setIsLoading(true);
+
+    const params = {
+      _id: user.follower._id,
+      name: user.follower.name,
+    };
+    await followUser(params);
+
+    setIsLoading(false);
+  };
+
+  const handleUnfollowUser = async () => {
+    setIsLoading(true);
+
+    const params = {
+      _id: user.follower._id,
+      name: user.follower.name,
+    };
+    await unfollowUser(params);
+
+    setIsLoading(false);
+  };
 
   return (
     <>
@@ -39,14 +66,14 @@ function ListItem({ item }) {
               {!isFetchUserLoader && userInfo._id !== user.follower._id && (
                 <div className="inline-block">
                   {!followingUsers[user.follower._id] && (
-                    <button className="bdr17-hover padding-28 padding-27 border-radius-7 cursor-pointer m-0 transition-all duration-300 ease">
+                    <button onClick={handleFollowUser} disabled={isLoading} className="bdr17-hover padding-28 padding-27 border-radius-7 cursor-pointer m-0 transition-all duration-300 ease">
                       <span className="color-3 custom-fs-1 line20 font-normal">
                         <span className="">Follow</span>
                       </span>
                     </button>
                   )}
                   {followingUsers[user.follower._id] && (
-                    <button className="bdr17-hover padding-28 padding-27 border-radius-7 cursor-pointer m-0 transition-all duration-300 ease">
+                    <button onClick={handleUnfollowUser} disabled={isLoading} className="bdr17-hover padding-28 padding-27 border-radius-7 cursor-pointer m-0 transition-all duration-300 ease">
                       <span className="color-3 custom-fs-1 line20 font-normal">
                         <span className="">Following</span>
                       </span>

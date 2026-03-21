@@ -48,7 +48,7 @@ const FollowingProvider = ({ children }) => {
       });
   };
 
-  return <FollowingContext.Provider value={{ isFetchUserLoader, fetchFollowingAuthorIds, addUserFollowing, removeFollowingUser, followingUsers }}>{children}</FollowingContext.Provider>;
+  return <FollowingContext.Provider value={{ isFetchUserLoader, followingUsers, fetchFollowingAuthorIds, addUserFollowing, removeFollowingUser }}>{children}</FollowingContext.Provider>;
 };
 
 export { FollowingContext };

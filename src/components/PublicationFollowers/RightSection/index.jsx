@@ -1,21 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ListItem from "./ListItem";
 import { PublicationContext } from "../../../context/publication";
 import { useTogglePublicationFollow } from "../../../hooks/togglePublicationFollow";
+import { useRequestHandler } from "../../../hooks/requestHandler";
 
 function RightSection({ publication }) {
+  const { requestHandler } = useRequestHandler();
   const { followingPublication, isPublicationLoader } = useContext(PublicationContext);
   const { followPublication, unfollowPublication } = useTogglePublicationFollow();
-  const [editorsLoader, setEditorsLoader] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [editors, setEditors] = useState([]);
+  const hasFetched = useRef(null);
 
   const handlePublicationFollow = async () => {
     setIsLoading(true);
+
     const params = {
       _id: publication._id,
       name: publication.name,
     };
-
     await followPublication(params);
 
     setIsLoading(false);
@@ -23,15 +26,35 @@ function RightSection({ publication }) {
 
   const handlePublicationUnfollow = async () => {
     setIsLoading(true);
+
     const params = {
       _id: publication._id,
       name: publication.name,
     };
-
     await unfollowPublication(params);
 
     setIsLoading(false);
   };
+
+  const getPublicationEditors = async () => {
+    try {
+      const response = await requestHandler(`/publication/member/editors/${publication._id}?skip=${0}`);
+      const result = await response.json();
+
+      if (response?.status === 200 && result?.data?.editors) {
+        setEditors(result.data.editors);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (publication && !hasFetched.current) {
+      getPublicationEditors();
+      hasFetched.current = true;
+    }
+  }, [publication]);
 
   return (
     <>
@@ -71,12 +94,12 @@ function RightSection({ publication }) {
                   <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                     <div>
                       <div className="padding-42">
-                        <h2 className="font-10 color-3 line20 m-0 font-medium"></h2>
+                        <h2 className="font-10 color-3 line20 m-0 font-medium">Editors</h2>
                       </div>
                     </div>
                     <div>
-                      {Array.from({ length: 4 }).map((_, index) => (
-                        <ListItem key={index} />
+                      {editors.map((item) => (
+                        <ListItem item={item} key={item._id} />
                       ))}
                     </div>
                   </div>
