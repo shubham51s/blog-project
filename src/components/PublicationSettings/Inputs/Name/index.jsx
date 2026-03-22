@@ -4,7 +4,7 @@ import { createSlug } from "../../../../utils/common";
 function NameInput({ publication, setPublication }) {
   const rootUrl = window.location.origin;
   const [isfocus, setIsFocus] = useState(false);
-  const [namePreview, setNamePreview] = useState("");
+  const [namePreview, setNamePreview] = useState(publication.slug);
   const previewTimeout = useRef(null);
 
   const handleValueChange = (e) => {

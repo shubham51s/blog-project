@@ -11,7 +11,7 @@ function Header({ publication }) {
           <div className="flex items-center height-3 gap12">
             <div className="width-32">
               <Link to={publication?.slug ? `/publication/${publication.slug}` : ""} className="cursor-pointer m-0 p-0">
-                <h2 className="line-h-8 font-3 font-semibold color-3 m-0">
+                <h2 className="line-h-8 font-3 font-semibold color-3 m-0" title={publication?.name || ""}>
                   <div className="max-w-full truncate">{publication?.name}</div>
                 </h2>
               </Link>

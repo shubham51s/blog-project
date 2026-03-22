@@ -1,9 +1,10 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState } from "react";
+import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 
-function EditorInput({ publication, setPublication }) {
+function WriterInput({ publication, setPublication }) {
   const { requestHandler } = useRequestHandler();
   const [isfocus, setIsFocus] = useState(false);
   const [options, setOptions] = useState([]);
@@ -23,37 +24,32 @@ function EditorInput({ publication, setPublication }) {
   };
 
   const handleInputChange = (val) => {
+    setOptions([]);
+
     if (!val || val.length < 2) return;
 
     if (searchtimeout.current) clearTimeout(searchtimeout.current);
-
     searchtimeout.current = setTimeout(() => {
       fetchUsers(val);
     }, 600);
   };
 
-  const mergedOptions = useMemo(() => {
-    return [...options, ...(publication.editors || [])].filter((v, i, arr) => arr.findIndex((x) => String(x._id) === String(v._id)) === i);
-  }, [options, publication.editors]);
-
   return (
     <div className="margin71 flex items-start">
-      <div className="font-semibold relative padding81 w-[25%]">Editors</div>
-
+      <div className="font-semibold relative padding81 w-[25%]">Approved writers</div>
       <div className="padding59 w-[75%]">
         <div className={`${isfocus ? "bdr24" : "bdr23"}`} style={{ borderInline: 0, borderTop: 0 }}>
           <Autocomplete
             multiple
-            options={mergedOptions}
-            value={publication.editors || []}
+            options={options}
             filterSelectedOptions
             noOptionsText=""
-            getOptionLabel={(option) => option?.name || ""}
-            filterOptions={(x) => x}
+            getOptionLabel={(option) => option.name}
+            filterOptions={(x) => x} // disable local filtering
             onInputChange={(event, value) => {
               handleInputChange(value);
             }}
-            isOptionEqualToValue={(option, value) => String(option._id) === String(value._id)}
+            isOptionEqualToValue={(option, value) => option._id === value._id}
             renderOption={(props, option) => {
               const { key, ...rest } = props;
 
@@ -66,10 +62,8 @@ function EditorInput({ publication, setPublication }) {
               );
             }}
             onChange={(event, value) => {
-              setPublication((prev) => ({
-                ...prev,
-                editors: value,
-              }));
+              const selectedIds = value.map((item) => item._id);
+              setPublication((prev) => ({ ...prev, writers: selectedIds }));
             }}
             renderInput={(params) => (
               <TextField
@@ -90,13 +84,12 @@ function EditorInput({ publication, setPublication }) {
             )}
           />
         </div>
-
         <div className="color10 custom-fs-1 padding-27" style={{ paddingBottom: 0 }}>
-          Editors can add or remove stories. They can also review, edit and publish submissions.
+          Approved writers can submit or remove their stories from this publication.
         </div>
       </div>
     </div>
   );
 }
 
-export default EditorInput;
+export default WriterInput;

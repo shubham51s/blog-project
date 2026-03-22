@@ -64,8 +64,8 @@ function HeaderSection({ publication, setPublication }) {
                   <h2 className="letter-spacing10 line21 font15 font-semibold color-3 m-0">{publication.name}</h2>
                 </div>
                 <div className="flex items-center custom-fs-1">
-                  <Link to="" className="cursor-pointer m-0 p-0 color-3 line20 font-medium opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
-                    {publication.stats.followers} follower
+                  <Link to="followers" className="cursor-pointer m-0 p-0 color-3 line20 font-medium opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                    {publication.stats.followers} {publication.stats.followers > 1 ? "followers" : "follower"}
                   </Link>
                   <span className="margin-9 color-4 line20 font-medium" style={{ marginBlock: 0 }}>
                     ·
@@ -95,13 +95,13 @@ function HeaderSection({ publication, setPublication }) {
             <div className="relative">
               <div className="min-w-0 flex justify-between custom-gap-2">
                 <div className="grow shrink basis-auto"></div>
-                <ManagePublicationBtn />
+                <ManagePublicationBtn publication={publication} />
               </div>
             </div>
           </div>
         </div>
       </div>
-      {isShowModal && <EditorsListModal handleCloseModal={handleCloseModal} />}
+      {isShowModal && <EditorsListModal publication={publication} handleCloseModal={handleCloseModal} />}
     </>
   );
 }

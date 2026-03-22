@@ -8,15 +8,16 @@ import WriterInput from "../../components/NewPublication/Inputs/Writer";
 import EditorInput from "../../components/NewPublication/Inputs/Editor";
 import { showToast } from "../../utils/toaster";
 import { useRequestHandler } from "../../hooks/requestHandler";
+import { useNavigate } from "react-router-dom";
 
 function NewPublication() {
   const { requestHandler } = useRequestHandler();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [publication, setPublication] = useState({
     name: "",
     description: "",
     profileImg: "",
-    writers: [],
     editors: [],
     topics: [],
   });
@@ -26,13 +27,15 @@ function NewPublication() {
       const params = {
         name: publication.name,
         description: publication.description,
+        topics: publication.topics.map((item) => item._id),
+        editors: publication.editors.map((item) => item._id),
       };
 
       const response = await requestHandler("/publication/create-new", "POST", params);
       const result = await response.json();
 
-      if (response?.status === 201) {
-        showToast("Publication created successfully.");
+      if (response?.status === 200 && result?.data?.slug) {
+        navigate(`/publication/${result.data.slug}`);
         return;
       }
 
@@ -125,7 +128,7 @@ function NewPublication() {
         <div className="mx-auto">
           <div className="margin71">
             <EditorInput publication={publication} setPublication={setPublication} />
-            <WriterInput publication={publication} setPublication={setPublication} />
+            {/* <WriterInput publication={publication} setPublication={setPublication} /> */}
           </div>
         </div>
       </div>
@@ -133,10 +136,10 @@ function NewPublication() {
       <div className="mx-auto padding59 width87 margin72">
         <div className="text-right bdr9 w-full padding55" style={{ borderBottom: 0, borderInline: 0, paddingInline: 0 }}>
           <span className="custom-fs-1 color10 align-middle text-right margin-34" style={{ marginLeft: 0, marginBlock: 0 }}>
-            Step 1 of 2
+            Step 1 of 1
           </span>
-          <button onClick={handleCreateNewPublicationBtnClick} disabled={isLoading} className="inline-block align-middle height68 line-h11 padding-7 bdr23 border-radius-9 bdr17-hover transition-all duration-300 ease color-3 custom-fs-1 text-center cursor-pointer whitespace-nowrap font-normal opacity-[0.75] hover:opacity-100">
-            Next
+          <button onClick={handleCreateNewPublicationBtnClick} disabled={isLoading} className="inline-block align-middle height68 line-h11 padding-7 border-radius-9 bdr22 border-[#0F730C] transition-all duration-300 ease text-[#0F730C] custom-fs-1 text-center cursor-pointer whitespace-nowrap font-normal margin-9 opacity-[0.85] hover:opacity-100" style={{ marginLeft: 0, marginBlock: 0 }}>
+            Save
           </button>
         </div>
       </div>
