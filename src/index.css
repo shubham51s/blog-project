@@ -1511,6 +1511,10 @@ img {
     max-width: 440px;
   }
 
+  .width90 {
+    max-width: 580px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -2158,5 +2162,9 @@ img {
 
   .margin72 {
     margin-block: 100px;
+  }
+
+  .margin73 {
+    margin-inline: 8px
   }
 }
