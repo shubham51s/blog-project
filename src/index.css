@@ -572,6 +572,10 @@ img {
     gap: 56px;
   }
 
+  .gap13 {
+    gap: 6px;
+  }
+
   .custom-margin-1 {
     margin: 20px 64px 0;
   }
@@ -666,6 +670,10 @@ img {
 
   .top7 {
     top: 100px;
+  }
+
+  .top8 {
+    top: 64px;
   }
 
   .bottom-1 {
@@ -1515,6 +1523,10 @@ img {
     max-width: 580px;
   }
 
+  .width91 {
+    max-width: 694px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -1884,6 +1896,14 @@ img {
     padding-inline: 64px;
   }
 
+  .padding92 {
+    padding-top: 64px;
+  }
+
+  .padding93 {
+    padding-bottom: 20px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -2166,5 +2186,9 @@ img {
 
   .margin73 {
     margin-inline: 8px
+  }
+
+  .margin74 {
+    margin-inline: 100px;
   }
 }

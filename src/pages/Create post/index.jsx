@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import WriteBlogHeader from "../../components/CreateNewBlogComp/Header";
 import WriteBlogComp from "../../components/CreateNewBlogComp/WriteBlogComp";
+import SubmitToPublicationModal from "../../components/Common/Modals/SubmitToPublication";
 
 function CreatePostPage() {
   const [heading, setHeading] = useState("");
@@ -18,13 +19,18 @@ function CreatePostPage() {
   });
 
   return (
-    <div className="min-h-full custom-bg-8 font-normal font-3">
-      <WriteBlogHeader blog={blog} setBlog={setBlog} heading={heading} description={description} />
+    <>
+      {false && (
+        <div className="min-h-full custom-bg-8 font-normal font-3">
+          <WriteBlogHeader blog={blog} setBlog={setBlog} heading={heading} description={description} />
 
-      <div className="relative top-0 z-[100] w-full height-63"></div>
+          <div className="relative top-0 z-[100] w-full height-63"></div>
 
-      <WriteBlogComp blog={blog} setBlog={setBlog} setHeading={setHeading} heading={heading} setContent={setContent} setDescription={setDescription} />
-    </div>
+          <WriteBlogComp blog={blog} setBlog={setBlog} setHeading={setHeading} heading={heading} setContent={setContent} setDescription={setDescription} />
+        </div>
+      )}
+      <SubmitToPublicationModal />
+    </>
   );
 }
 
