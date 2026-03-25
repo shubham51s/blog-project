@@ -9,13 +9,11 @@ import { showToast } from "../../../../utils/toaster";
 
 function PreviewBlogComp({ blog, setBlog, pendingImages }) {
   const { fetchRequest } = useApi();
-  const { userInfo, isUserLoggedIn } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
   const [isChangePreviewImg, setIsChangePreviewImg] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
   const [selectedTopic, setSelectedTopic] = useState([]);
   const [topics, setTopics] = useState([]);
-  const [blobUrl, setBlobUrl] = useState([]);
-  const [files, setFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -201,7 +199,7 @@ function PreviewBlogComp({ blog, setBlog, pendingImages }) {
               )}
 
               <p className="font-10 font-normal custom-line-h-1 color10 margin-11 margin47 p-0" style={{ marginInline: 0 }}>
-                <b>Note:</b> Changes here will affect how your story appears in public places like Medium’s homepage and in subscribers’ inboxes — not the contents of the story itself.
+                <b>Note:</b> Changes here will affect how your story appears in public places like Medium's homepage and in subscribers' inboxes — not the contents of the story itself.
               </p>
             </div>
 

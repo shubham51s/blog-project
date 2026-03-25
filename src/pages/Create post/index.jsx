@@ -1,35 +1,36 @@
 import React, { useState } from "react";
 import WriteBlogHeader from "../../components/CreateNewBlogComp/Header";
 import WriteBlogComp from "../../components/CreateNewBlogComp/WriteBlogComp";
-import SubmitToPublicationModal from "../../components/Common/Modals/SubmitToPublication";
+import SubmitBlogModal from "../../components/Common/Modals/SubmitBlog";
 
 function CreatePostPage() {
-  const [heading, setHeading] = useState("");
-  const [content, setContent] = useState("");
-  const [description, setDescription] = useState("");
-
   const [blog, setBlog] = useState({
     heading: "",
     description: "",
-    previewTitle: "",
-    previewSubtitle: "",
-    previewImg: "",
     content: "",
     isShowPreview: false,
+    isSync: false,
+    // previewTitle: "",
+    // previewSubtitle: "",
+    // previewImg: "",
   });
+
+  const handlePublishBlogBtnClick = () => {
+    if (!blog.isShowPreview) setBlog((prev) => ({ ...prev, isShowPreview: true }));
+  };
 
   return (
     <>
-      {false && (
+      {true && (
         <div className="min-h-full custom-bg-8 font-normal font-3">
-          <WriteBlogHeader blog={blog} setBlog={setBlog} heading={heading} description={description} />
+          <WriteBlogHeader blog={blog} handlePublishBlogBtnClick={handlePublishBlogBtnClick} />
 
           <div className="relative top-0 z-[100] w-full height-63"></div>
 
-          <WriteBlogComp blog={blog} setBlog={setBlog} setHeading={setHeading} heading={heading} setContent={setContent} setDescription={setDescription} />
+          <WriteBlogComp blog={blog} setBlog={setBlog} />
         </div>
       )}
-      <SubmitToPublicationModal />
+      {/* <SubmitBlogModal /> */}
     </>
   );
 }

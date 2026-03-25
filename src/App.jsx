@@ -46,6 +46,7 @@ function App() {
       <Routes>
         <Route path="/about" element={<AboutPage />} />
         <Route path="/new-story" element={<CreatePostPage />} />
+        <Route path="p/:blogId/edit" element={<CreatePostPage />} />
         <Route path="/" element={<MainComp />}>
           // nested routes
           <Route index element={<HomePageProtected />} />
