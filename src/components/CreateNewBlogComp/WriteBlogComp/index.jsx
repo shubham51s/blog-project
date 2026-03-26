@@ -6,7 +6,6 @@ import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import PreviewBlogComp from "./preview-blog-comp";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../Common/Spinner";
@@ -19,7 +18,6 @@ function WriteBlogComp({ blog, setBlog }) {
   const editorWrapperRef = useRef(null);
   const addImgBtnRef = useRef(null);
   const editorRef = useRef(null);
-  const draftId = useRef(null);
   const draftTimeout = useRef(null);
   const headingRef = useRef(null);
   const isSettingContent = useRef(false);
@@ -31,22 +29,21 @@ function WriteBlogComp({ blog, setBlog }) {
   const [isDraft, setIsDraft] = useState(false);
 
   const saveDraft = async (heading, description, content) => {
-    setDraftLoader(true);
+    setBlog((prev) => ({ ...prev, isLoading: true }));
     try {
       const params = {
         heading,
         description,
         content,
-        blog: draftId.current,
+        blog: blog.blogId,
       };
 
       const response = await requestHandler("/blogs/draft", "POST", params);
       const result = await response.json();
 
       if (response?.status === 200 || response?.status === 201) {
-        setBlog((prev) => ({ ...prev, isSync: true }));
         if (response?.status === 201 && result?.data?.blogId) {
-          draftId.current = result.data.blogId;
+          setBlog((prev) => ({ ...prev, blogId: result.data.blogId }));
           setIsDraft(true);
           navigate(`/p/${result.data.blogId}/edit`, { replace: true });
         }
@@ -54,14 +51,12 @@ function WriteBlogComp({ blog, setBlog }) {
     } catch (err) {
       console.error(err);
     } finally {
-      setDraftLoader(false);
+      setBlog((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
   const handleAutoSaveDraft = (heading, description, content) => {
-    setBlog((prev) => ({ ...prev, isSync: false }));
-
-    if (draftLoader) return;
+    if (blog.isLoading) return;
 
     if (draftTimeout.current) clearTimeout(draftTimeout.current);
     draftTimeout.current = setTimeout(() => {
@@ -191,7 +186,7 @@ function WriteBlogComp({ blog, setBlog }) {
   };
 
   const getDraftDetails = async () => {
-    draftId.current = blogId;
+    setBlog((prev) => ({ ...prev, blogId }));
     try {
       const response = await requestHandler(`/blogs/draft/${blogId}`);
       const result = await response.json();
@@ -225,7 +220,7 @@ function WriteBlogComp({ blog, setBlog }) {
 
   return (
     <>
-      {!initialLoader && (!blogId || isDraft) && (
+      {!initialLoader && (!blogId || (blogId && isDraft)) && (
         <main className="block">
           <article className="relative height65 overflow-hidden block">
             <div className="margin40 margin41 break-words relative">
