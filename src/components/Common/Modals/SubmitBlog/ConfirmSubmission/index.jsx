@@ -1,18 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../../../context/userContext";
 import Select from "react-select";
-import { useApi } from "../../../../../hooks/useApi";
 import { urlBasePath } from "../../../../../constants/constant";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../../../../utils/toaster";
+import { useRequestHandler } from "../../../../../hooks/requestHandler";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import * as Popover from "@radix-ui/react-popover";
 
-function ConfirmBlogSubmission({ blog, setBlog, pendingImages = [] }) {
-  const { fetchRequest } = useApi();
+function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages = [] }) {
+  const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const [isChangePreviewImg, setIsChangePreviewImg] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
   const [selectedTopic, setSelectedTopic] = useState([]);
-  const [topics, setTopics] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -36,70 +38,35 @@ function ConfirmBlogSubmission({ blog, setBlog, pendingImages = [] }) {
   };
 
   const handleChange = (selected) => {
+    if (!selected) return setSelectedTopic([]);
     if (selected.length <= 5) setSelectedTopic(selected);
-    else showToast("Select upto 5 topics!");
-  };
-
-  const getAllTopics = async () => {
-    try {
-      const response = await fetchRequest("/topic", "GET");
-      if (!response?.status === 200) return;
-
-      const result = await response.json();
-      const sortedResult = result?.data?.topics.map((item) => ({ label: item.name.charAt(0).toUpperCase() + item.name.slice(1), value: item._id }));
-      setTopics(sortedResult || []);
-    } catch (err) {
-      console.error(err);
-    }
+    else showToast("You can select upto 5 topics");
   };
 
   const publishBlog = async () => {
     setIsLoading(true);
     try {
-      const blobUrls = pendingImages.map((item) => {
-        return item.blobUrl;
-      });
+      const params = {
+        previewTitle: blog.previewTitle,
+        previewSubtitle: blog.previewSubtitle,
+        previewImg: blog.previewImg,
+        topics: selectedTopic.map((item) => item._id),
+        blogId: blog._id,
+      };
 
-      const images = pendingImages.map((item) => {
-        return item.file;
-      });
-
-      const formData = new FormData();
-
-      images.map((img) => {
-        formData.append("images", img);
-      });
-
-      blobUrls.map((url) => {
-        formData.append("blobUrls[]", url);
-      });
-
-      selectedTopic.forEach((item) => {
-        formData.append("categories[]", item.value);
-      });
-
-      for (const key in blog) {
-        formData.append(key, blog[key]);
-      }
-
-      const response = await fetch(`${urlBasePath}/blogs`, {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
-
-      setIsLoading(false);
-
+      const response = await requestHandler("/blogs/publish", "POST", params);
       const result = await response.json();
 
-      if (response.status === 201) {
-        navigate("/");
+      if (response.status === 200 && result?.data?.blog) {
+        const blog = result.data.blog;
+        navigate(`/${blog.slug}/${blog._id}`);
       } else {
-        const msg = result.message || "Something went wrong!";
-        showToast(msg);
+        showToast(result?.message || "Some error occured");
       }
     } catch (err) {
       console.error(err);
+      showToast("Some error occured");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -116,11 +83,6 @@ function ConfirmBlogSubmission({ blog, setBlog, pendingImages = [] }) {
 
     publishBlog();
   };
-
-  useEffect(() => {
-    getAllTopics();
-    if (pendingImages.length > 0) setBlog((prev) => ({ ...prev, previewImg: pendingImages[imgIndex]?.blobUrl }));
-  }, []);
 
   return (
     <div className="m-auto overflow-hidden padding54 padding53 width57 relative">
@@ -183,40 +145,82 @@ function ConfirmBlogSubmission({ blog, setBlog, pendingImages = [] }) {
             </p>
           </div>
 
-          <div className="custom-line-h-1 font-10 text-left w-[50%] padding55 grow shrink basis-auto">
-            <p className="font-normal font14 line-h-8 color14 margin-10 text-left" style={{ marginTop: 0, marginInline: 0 }}>
-              Publishing to: <span className="font-bold">{userInfo.username}</span>
-            </p>
+          <div className="grow shrink basis-auto custom-line-h-1 font-10 text-left w-[50%] padding55">
+            <div className="w-full width89 flex flex-col custom-gap-5">
+              <h2 className="font-10 font-medium color-3 line20 m-0">Topics</h2>
 
-            <div className="w-full margin-17" style={{ marginTop: 0, marginInline: 0 }}>
-              <p className="font-normal font-10 custom-line-h-1 color10 margin-10" style={{ marginTop: 0, marginInline: 0 }}>
-                <span className="color1 font-normal font-10 custom-line-h-1">Add or change topics (up to 5) so readers know what your story is about</span>
-              </p>
-              <div className="bg15">
-                <div className="height70">
-                  <div className="font13 font-normal">
-                    <Select value={selectedTopic} onChange={handleChange} isMulti name="colors" options={topics} className="basic-multi-select custom-select box-border" classNamePrefix="select" placeholder="Add a topic..." />
+              <div className="w-full margin-17" style={{ marginTop: 0, marginInline: 0 }}>
+                <p className="font-normal font-10 custom-line-h-1 color10 margin-10" style={{ marginTop: 0, marginInline: 0 }}>
+                  <span className="color1 font-normal font-10 custom-line-h-1">Add up to five topics to help readers find your story.</span>
+                </p>
+                <div className="bg15">
+                  <div className="height70">
+                    <div className="font13 font-normal">
+                      <Select value={selectedTopic} onChange={handleChange} isMulti name="topics" options={allTopics} getOptionLabel={(option) => option.name} getOptionValue={(option) => option._id} placeholder="Add a topic..." />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="margin-17" style={{ marginBottom: 0 }}>
-              <a href="#" className="underline">
-                Learn more
-              </a>{" "}
-              about what happens to your story when you publish.
+            <div className="margin68 bdr-5 h-0 w-full" style={{ borderTop: 0, borderInline: 0 }}></div>
+
+            <div className="flex justify-center">
+              <div className="w-full flex flex-col width89 custom-gap-5">
+                <h2 className="font-10 font-medium color-3 line20 m-0">Publication</h2>
+                {blog.publication && (
+                  <div className="flex items-center gap10">
+                    <img src={blog.publication.profileImg} className="margin-23 border-radius-5 width-19 aspect-square" style={{ marginLeft: 0, marginBlock: 0 }} />
+                    <p className="line-clamp-1 height-6 color-3 custom-fs-1 font-normal m-0">{blog.publication.name}</p>
+                    <div className="inline-block">
+                      <Popover.Root>
+                        <Popover.Trigger className="cursor-pointer m-0 p-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                          <div className="width84 aspect-square">
+                            <MdOutlineKeyboardArrowDown className="w-full h-full" />
+                          </div>
+                        </Popover.Trigger>
+                        <Popover.Portal>
+                          <Popover.Content side="bottom" align="middle" sideOffset={10} className="box-shadow-4 border-radius-3 border-radius-3 custom-bg-8 z-[99999]">
+                            <ul className="custom-px-2 flex flex-col items-stretch list-none m-0">
+                              <li className="padding-20 custom-py-2 custom-fs-1 color-3 font-normal opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                                <button onClick={() => setBlog((prev) => ({ ...prev, publication: null }))} className="cursor-pointer m-0 p-0">
+                                  Remove publication
+                                </button>
+                              </li>
+                              <li className="padding-20 custom-py-2 custom-fs-1 color-3 font-normal opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                                <button onClick={() => setTab(0)} className="cursor-pointer m-0 p-0">
+                                  Change publication
+                                </button>
+                              </li>
+                            </ul>
+                          </Popover.Content>
+                        </Popover.Portal>
+                      </Popover.Root>
+                    </div>
+                  </div>
+                )}
+                {!blog.publication && (
+                  <p className="font-4 line20 color-4 font-normal m-0">
+                    <button onClick={() => setTab(0)} className="cursor-pointer underline m-0 p-0">
+                      Submit
+                    </button>{" "}
+                    your story to connect with community.
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="margin-14 flex items-center" style={{ marginBottom: 0, marginInline: 0 }}>
               <div className="shrink-0 grow-0 basis-auto">
-                <button onClick={handlePublishBtnClick} className={`flex items-center justify-center bg14 transition-all duration-300 ease-in-out color-7 height68 line-h11 custom-py-2 border-radius-9  font-10 text-center cursor-pointer align-bottom whitespace-nowrap select-none box-border font-normal m-0 hover:opacity-100 ${isLoading ? "opacity-[0.8] pointer-events-none" : " opacity-[0.9] pointer-events-auto"}`}>
+                <button onClick={handlePublishBtnClick} disabled={isLoading} className={`flex items-center justify-center bg-[#191919] bdr22 border-[#191919] text-white transition-all duration-300 ease line-20 padding-28 padding-27 border-radius-9 font-4 text-center cursor-pointer align-bottom whitespace-nowrap select-none box-border font-normal m-0 hover:opacity-100 ${isLoading ? "opacity-[0.8]" : " opacity-[0.95]"}`}>
                   {isLoading && (
-                    <div className="h-full aspect-square flex items-center justify-start">
-                      <div className="animate-spin h-[50%] aspect-square border-r-2 border-white rounded-full bg-transparent opacity-100"></div>
+                    <div className="width86 aspect-square flex items-center justify-start">
+                      <div className="animate-spin h-[50%] aspect-square border-r-1 border-white rounded-full bg-transparent opacity-100"></div>
                     </div>
                   )}
-                  {!isLoading && <span>Publish and send now</span>}
+                  {!isLoading && !blog.publication && <span>Publish</span>}
+                  {!isLoading && blog.publication && blog.publication.isMember && <span>Approve and publish</span>}
+                  {!isLoading && blog.publication && !blog.publication.isMember && <span>Send for review</span>}
                   {isLoading && <span>Please wait...</span>}
                 </button>
               </div>

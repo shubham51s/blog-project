@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { formatNumberCompact } from "../../../../../../utils/common";
 
-function PublicationListItem({ publication, handlePublicationSelection }) {
+function PublicationListItem({ publication, isMember, handlePublicationSelection }) {
   return (
-    <button onClick={() => handlePublicationSelection(publication._id)} className="flex flex-col m-0 p-0 cursor-pointer border-radius-3 bdr-8">
+    <button onClick={() => handlePublicationSelection({ ...publication, isMember })} className="flex flex-col m-0 p-0 cursor-pointer border-radius-3 bdr-8">
       <div className="grow-0 shrink-0 basis-auto height-2 w-full flex flex-col overflow-hidden bg-10">{publication.coverImg && <img src={publication.coverImg} className="w-full h-full object-cover object-center" />}</div>
 
       <div className="grow shrink-0 basis-auto flex flex-col custom-gap-5 padding-18 padding-19">

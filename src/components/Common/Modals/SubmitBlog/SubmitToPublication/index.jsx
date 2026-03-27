@@ -122,8 +122,8 @@ function SubmitToPublication({ handlePublicationSelection }) {
                     <div className="w-full grid grid-cols-4 custom-gap-4">
                       {(isLoading || defaultLoader) && Array.from({ length: 4 }).map((_, index) => <PublicationListSkeleton key={index} />)}
 
-                      {activeTab === 0 && !isLoading && !defaultLoader && contributions.arr.length > 0 && contributions.arr.map((item) => <PublicationListItem handlePublicationSelection={handlePublicationSelection} publication={item.publication} key={item._id} />)}
-                      {activeTab === 1 && !isLoading && !defaultLoader && followings.arr.length > 0 && followings.arr.map((item) => <PublicationListItem handlePublicationSelection={handlePublicationSelection} publication={item.followee} key={item._id} />)}
+                      {activeTab === 0 && !isLoading && !defaultLoader && contributions.arr.length > 0 && contributions.arr.map((item) => <PublicationListItem isMember={true} handlePublicationSelection={handlePublicationSelection} publication={item.publication} key={item._id} />)}
+                      {activeTab === 1 && !isLoading && !defaultLoader && followings.arr.length > 0 && followings.arr.map((item) => <PublicationListItem isMember={false} handlePublicationSelection={handlePublicationSelection} publication={item.followee} key={item._id} />)}
                     </div>
                   </div>
                 </div>

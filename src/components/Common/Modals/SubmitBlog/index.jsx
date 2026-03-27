@@ -5,15 +5,12 @@ import ConfirmBlogSubmission from "./ConfirmSubmission";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { IoCloseOutline } from "react-icons/io5";
 
-function SubmitBlogModal({ blogId, setIsShowSubmitModal, tabNo = 1 }) {
+function SubmitBlogModal({ blogId, setIsShowSubmitModal, tabNo }) {
   const [tab, setTab] = useState(tabNo);
   const { requestHandler } = useRequestHandler();
   const [blog, setBlog] = useState(null);
   const [blogLoader, setBlogLoader] = useState(true);
-
-  const handlePublicationSelection = (publication) => {
-    console.log("publication: ", publication);
-  };
+  const [allTopics, setAllTopics] = useState([]);
 
   const getBlogDetails = async () => {
     setBlogLoader(true);
@@ -31,8 +28,27 @@ function SubmitBlogModal({ blogId, setIsShowSubmitModal, tabNo = 1 }) {
     }
   };
 
+  const getAllTopics = async () => {
+    try {
+      const response = await requestHandler("/topic");
+      const result = await response.json();
+
+      if (response?.status === 200 && result?.data?.topics) {
+        setAllTopics(result.data.topics);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handlePublicationSelection = (publication) => {
+    setBlog((prev) => ({ ...prev, publication: { ...publication } }));
+    setTab(1);
+  };
+
   useEffect(() => {
     getBlogDetails();
+    getAllTopics();
   }, []);
 
   return (
@@ -40,7 +56,7 @@ function SubmitBlogModal({ blogId, setIsShowSubmitModal, tabNo = 1 }) {
       {/* select publication */}
       {((blogLoader && !blog) || (!blogLoader && blog)) && tab === 0 && <SubmitToPublication handlePublicationSelection={handlePublicationSelection} />}
       {/* confirm submit */}
-      {!blogLoader && blog && tab === 1 && <ConfirmBlogSubmission blog={blog} setBlog={setBlog} />}
+      {!blogLoader && blog && tab === 1 && <ConfirmBlogSubmission allTopics={allTopics} blog={blog} setBlog={setBlog} setTab={setTab} />}
 
       {/* laoder */}
       {blogLoader && tab === 1 && (

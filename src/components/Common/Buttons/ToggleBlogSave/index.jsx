@@ -92,7 +92,7 @@ function SaveBlog({ item, handleToggleBlogSaveInParent = () => {} }) {
                 {blog.lists.length > 0 && <IoBookmark className="w-full h-full align-middle" />}
               </div>
             </Popover.Trigger>
-            <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" className="z-[700] box-shadow-4 border-radius-3 box-border" align="middle" sideOffset={1}>
+            <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" align="middle" sideOffset={1} className="z-[700] box-shadow-4 border-radius-3 box-border">
               <div className="border-radius-3 custom-bg-8 overflow-hidden">
                 {!isBookmarkLoader && (
                   <div className="width82">

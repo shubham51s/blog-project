@@ -33,7 +33,7 @@ function CreatePostPage() {
         <WriteBlogComp blog={blog} setBlog={setBlog} />
       </div>
 
-      {isSubmitModal && <SubmitBlogModal blogId={blog.blogId} setIsShowSubmitModal={setIsShowSubmitModal} tabNo={0} />}
+      {isSubmitModal && <SubmitBlogModal blogId={blog.blogId} setIsShowSubmitModal={setIsShowSubmitModal} tabNo={1} />}
     </>
   );
 }
