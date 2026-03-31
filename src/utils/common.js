@@ -21,3 +21,7 @@ export const createSlug = (val) => {
     .replace(/\s+/g, "-") // spaces → -
     .replace(/-+/g, "-");
 };
+
+export const getImageUrl = (publicId, options = "q_auto,f_auto") => {
+  return `https://res.cloudinary.com/${"drfuaxa6d"}/image/upload/${options}/${publicId}`;
+};

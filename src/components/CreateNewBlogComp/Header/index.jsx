@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import ProfileSection from "./ProfileSection";
 
-function WriteBlogHeader({ blog, handlePublishBlogBtnClick }) {
+function WriteBlogHeader({ blog, handlePublishBlogBtnClick, images }) {
   const { pathname } = useLocation();
 
   return (
@@ -18,7 +18,7 @@ function WriteBlogHeader({ blog, handlePublishBlogBtnClick }) {
           {!pathname.includes("new-story") && (
             <div className="height-63 margin-34 flex items-center font-10" style={{ marginRight: 0, marginBlock: 0 }}>
               <span className="whitespace-nowrap truncate color11">
-                Draft{" "}
+                {blog.type === "new" ? "Draft " : ""}
                 <span className="color10 margin65" style={{ marginRight: 0, marginBlock: 0 }}>
                   {blog.isLoading ? "Saving" : "Saved"}
                 </span>
@@ -29,12 +29,12 @@ function WriteBlogHeader({ blog, handlePublishBlogBtnClick }) {
 
         <div className="relative z-[500] grow-0 shrink-0 basis-auto flex items-center">
           <div className="height-63 padding-6 flex items-center" style={{ paddingBlock: 0 }}>
-            <button onClick={() => handlePublishBlogBtnClick(0)} disabled={(blog.heading.trim().length < 2 && blog.description.trim().length < 2) || pathname.includes("new-story")} className={`color-2 bg14 font13 custom-h-2 padding-25 m-0 box-border cursor-pointer bdr9 rounded-full ${(blog.heading.trim().length < 2 && blog.description.trim().length < 2) || pathname.includes("new-story") ? "opacity-50" : "opacity-100"}`} style={{ paddingBlock: 0 }}>
+            <button onClick={() => handlePublishBlogBtnClick(1)} disabled={(blog.heading.trim().length < 2 && blog.description.trim().length < 2) || pathname.includes("new-story") || images.pending.length || images.failed.length} className={`color-2 bg14 font13 custom-h-2 padding-25 m-0 box-border cursor-pointer bdr9 rounded-full ${(blog.heading.trim().length < 2 && blog.description.trim().length < 2) || pathname.includes("new-story") || images.pending.length || images.failed.length ? "opacity-50" : "opacity-100"}`} style={{ paddingBlock: 0 }}>
               <span>Publish</span>
             </button>
           </div>
           <div className="height-63 padding-6 flex items-center" style={{ paddingBlock: 0 }}>
-            <button onClick={() => handlePublishBlogBtnClick(1)} disabled={(blog.heading.trim().length < 2 && blog.description.trim().length < 2) || pathname.includes("new-story")} className={`color-2 bg14 font13 custom-h-2 padding-25 m-0 box-border cursor-pointer bdr9 rounded-full ${(blog.heading.trim().length < 2 && blog.description.trim().length < 2) || pathname.includes("new-story") ? "opacity-50" : "opacity-100"}`} style={{ paddingBlock: 0 }}>
+            <button onClick={() => handlePublishBlogBtnClick(0)} disabled={(blog.heading.trim().length < 2 && blog.description.trim().length < 2) || pathname.includes("new-story") || images.pending.length || images.failed.length} className={`color-2 bg14 font13 custom-h-2 padding-25 m-0 box-border cursor-pointer bdr9 rounded-full ${(blog.heading.trim().length < 2 && blog.description.trim().length < 2) || pathname.includes("new-story") || images.pending.length || images.failed.length ? "opacity-50" : "opacity-100"}`} style={{ paddingBlock: 0 }}>
               <span>Submit to publication</span>
             </button>
           </div>

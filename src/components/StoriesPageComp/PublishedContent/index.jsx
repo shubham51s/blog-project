@@ -2,45 +2,42 @@ import React, { useEffect, useRef, useState } from "react";
 import BlogComp from "./BlogComp";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import SkeletonComp from "../skeleton";
+import { defaultLoaderTime } from "../../../constants/constant";
 
-function PublishContainer({ isInitialLoading, publishedCount, setPublishedCount }) {
+function PublishContainer({ isInitialLoading, publishedCount }) {
   const { requestHandler } = useRequestHandler();
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
-  const minLoadingTimeout = useRef(null);
+  const loaderTimeout = useRef(null);
 
-  const getPublishedBlogs = async (skip) => {
-    if (skip === 0) setIsLoading(true);
+  const getPublishedBlogs = async () => {
     try {
-      const response = await requestHandler(`/blogs/published?skip=${blogs.length}&limit=${50}`);
+      const response = await requestHandler(`/blogs/published?skip=${0}&limit=${50}`);
 
       const result = await response.json();
 
-      if (response?.status === 200) {
-        if (skip === 0) {
-          setBlogs(result?.data?.blogs || []);
-        }
+      if (response?.status === 200 && result?.data?.blogs) {
+        setBlogs(result.data.blogs);
       }
-      if (skip === 0) setIsLoading(false);
     } catch (err) {
       console.error(err);
-      if (skip === 0) setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!isInitialLoading && publishedCount > 0) getPublishedBlogs(0);
+    if (!isInitialLoading && publishedCount > 0) {
+      setIsLoading(true);
+      getPublishedBlogs(0);
+    }
 
-    if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
-
-    minLoadingTimeout.current = setTimeout(() => {
-      setDefaultLoader(false);
-    }, 600);
-
-    return () => {
-      if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
-    };
+    if (!loaderTimeout.current) {
+      loaderTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+      }, defaultLoaderTime);
+    }
   }, [isInitialLoading]);
 
   return (

@@ -10,6 +10,7 @@ import errImg from "../../../assets/images/noPreviewImage.png";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { showToast } from "../../../utils/toaster";
 import { UserContext } from "../../../context/userContext";
+import { CiCircleInfo } from "react-icons/ci";
 
 function ListItem({ item, list, setListItems }) {
   const { userInfo } = useContext(UserContext);
@@ -100,7 +101,6 @@ function ListItem({ item, list, setListItems }) {
             </div>
           )}
 
-          {/* blog */}
           <article className="">
             <div className="box-content">
               <div className="h-full w-full">
@@ -182,6 +182,21 @@ function ListItem({ item, list, setListItems }) {
               </div>
             </div>
           </article>
+
+          {/* deleted blog */}
+          {/* <div>
+            <div className="padding-3 bg-10 border-radius-3">
+              <div className="line-h-8 font-10 color-4 font-normal m-0 flex items-center custom-gap-3">
+                <div className="width-8 aspect-square">
+                  <CiCircleInfo className="w-full h-full" />
+                </div>
+                This story is no longer available
+              </div>
+            </div>
+            <div className="padding80 flex justify-end">
+              <button className="border-radius-9 bdr-7 custom-px-2 padding-28 custom-fs-1 line20 font-normal m-0 cursor-pointer">Remove from list</button>
+            </div>
+          </div> */}
         </div>
       </div>
     </div>

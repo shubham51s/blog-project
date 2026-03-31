@@ -7,14 +7,12 @@ import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useRequestHandler } from "../../../hooks/requestHandler";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import Spinner from "../../Common/Spinner";
-import NotFoundComp from "../../Common/NotFound";
+import { useImageUpload } from "../../../hooks/upload";
+import { showToast } from "../../../utils/toaster";
 
-function WriteBlogComp({ blog, setBlog }) {
-  const { blogId } = useParams();
+function WriteBlogComp({ blog, setBlog, saveDraft, images, setImages }) {
   const { requestHandler } = useRequestHandler();
-  const navigate = useNavigate();
+  const { uploadImage } = useImageUpload();
   const editorWrapperRef = useRef(null);
   const addImgBtnRef = useRef(null);
   const editorRef = useRef(null);
@@ -23,44 +21,20 @@ function WriteBlogComp({ blog, setBlog }) {
   const isSettingContent = useRef(false);
   const [showAddBtn, setShowAddBtn] = useState(false);
   const [btnPos, setBtnPos] = useState({ top: 0, left: 0 });
-  const [pendingImages, setPendingImages] = useState([]);
-  const [draftLoader, setDraftLoader] = useState(false);
-  const [initialLoader, setInitialLoader] = useState(true);
-  const [isDraft, setIsDraft] = useState(false);
+  let editor = null;
 
-  const saveDraft = async (heading, description, content) => {
-    setBlog((prev) => ({ ...prev, isLoading: true }));
-    try {
-      const params = {
-        heading,
-        description,
-        content,
-        blog: blog.blogId,
-      };
-
-      const response = await requestHandler("/blogs/draft", "POST", params);
-      const result = await response.json();
-
-      if (response?.status === 200 || response?.status === 201) {
-        if (response?.status === 201 && result?.data?.blogId) {
-          setBlog((prev) => ({ ...prev, blogId: result.data.blogId }));
-          setIsDraft(true);
-          navigate(`/p/${result.data.blogId}/edit`, { replace: true });
-        }
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setBlog((prev) => ({ ...prev, isLoading: false }));
-    }
-  };
-
-  const handleAutoSaveDraft = (heading, description, content) => {
-    if (blog.isLoading) return;
+  const handleAutoSaveDraft = () => {
+    if (blog.isLoading || images.pending.length || images.failed.length) return;
 
     if (draftTimeout.current) clearTimeout(draftTimeout.current);
     draftTimeout.current = setTimeout(() => {
-      saveDraft(heading, description, content);
+      const html = editor.getHTML();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const firstParagraph = doc.querySelector("p");
+      const description = firstParagraph ? firstParagraph.textContent : "";
+
+      saveDraft(headingRef.current.value, description, html);
       draftTimeout.current = null;
     }, 2000);
   };
@@ -85,7 +59,7 @@ function WriteBlogComp({ blog, setBlog }) {
     }
   };
 
-  const editor = useEditor({
+  editor = useEditor({
     extensions: [
       StarterKit.configure({
         heading: false,
@@ -114,14 +88,19 @@ function WriteBlogComp({ blog, setBlog }) {
       const doc = parser.parseFromString(html, "text/html");
       const firstParagraph = doc.querySelector("p");
       const description = firstParagraph ? firstParagraph.textContent : "";
-      // Extract all <img src="..."> URLs
-      const existingSrcs = Array.from(html.matchAll(/<img[^>]+src="([^"]+)"/g), (m) => m[1]);
-      setPendingImages((prev) => prev.filter((img) => existingSrcs.includes(img.blobUrl)));
+
+      setImages((prev) => {
+        return {
+          ...prev,
+          pending: prev.pending.filter((img) => html.includes(img)),
+          failed: prev.failed.filter((img) => html.includes(img)),
+        };
+      });
 
       setBlog((prev) => ({ ...prev, description, content: html }));
 
       handlePlusButtonVisibility(editor);
-      handleAutoSaveDraft(blog.heading, description, html);
+      handleAutoSaveDraft();
     },
     onFocus: ({ editor }) => {
       if (isSettingContent.current) return;
@@ -135,6 +114,32 @@ function WriteBlogComp({ blog, setBlog }) {
 
   if (!editor) return null;
 
+  const handleImageUpload = async (file, blobUrl) => {
+    const result = await uploadImage(file, blobUrl);
+
+    if (result?.status !== 200) {
+      showToast("Failed to upload image", "error");
+    }
+
+    setImages((prev) => {
+      const pending = prev.pending.filter((item) => item !== blobUrl);
+
+      if (result.status === 200) {
+        return {
+          ...prev,
+          pending,
+          uploaded: [...prev.uploaded, { public_id: result.data.public_id, url: result.data.url, blobUrl }],
+        };
+      }
+
+      return {
+        ...prev,
+        pending,
+        failed: [...prev.failed, blobUrl],
+      };
+    });
+  };
+
   const handleAddImage = (e) => {
     e.stopPropagation();
     const input = document.createElement("input");
@@ -143,15 +148,17 @@ function WriteBlogComp({ blog, setBlog }) {
     input.onchange = async () => {
       const file = input.files?.[0];
       if (!file) return;
-
+      isSettingContent.current = true;
       const id = Math.random().toString(36).substring(2, 10);
       // Create a temporary local preview URL
-      const localUrl = URL.createObjectURL(file);
+      const blobUrl = URL.createObjectURL(file);
+      setImages((prev) => ({ ...prev, pending: [...prev.pending, blobUrl] }));
+      handleImageUpload(file, blobUrl);
 
       // Insert image at current cursor position
-      editor.chain().focus().setImage({ src: localUrl, "data-id": id }).run();
+      editor.chain().focus().setImage({ src: blobUrl, "data-id": id }).run();
 
-      setPendingImages((prev) => [...prev, { file, id, blobUrl: localUrl }]);
+      isSettingContent.current = false;
     };
     input.click();
   };
@@ -175,7 +182,7 @@ function WriteBlogComp({ blog, setBlog }) {
 
     adjustHeaderHeight();
 
-    handleAutoSaveDraft(heading, blog.description, blog.content);
+    handleAutoSaveDraft();
   };
 
   const handleKeyDown = (e) => {
@@ -185,33 +192,19 @@ function WriteBlogComp({ blog, setBlog }) {
     }
   };
 
-  const getDraftDetails = async () => {
-    setBlog((prev) => ({ ...prev, blogId }));
-    try {
-      const response = await requestHandler(`/blogs/draft/${blogId}`);
-      const result = await response.json();
-
-      if (response?.status === 200 && result?.data?.blog) {
-        isSettingContent.current = true;
-        const blog = result.data.blog;
-        setBlog((prev) => ({ ...prev, ...blog }));
-        adjustHeaderHeight();
-        if (editor) editor.commands.setContent(blog.content);
-        isSettingContent.current = false;
-        setIsDraft(true);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setInitialLoader(false);
+  useEffect(() => {
+    if (images.uploaded.length && !images.pending.length && !images.failed.length) {
+      handleAutoSaveDraft();
     }
-  };
+  }, [images]);
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
 
-    if (blogId) getDraftDetails();
-    else setInitialLoader(false);
+    isSettingContent.current = true;
+    adjustHeaderHeight();
+    if (editor) editor.commands.setContent(blog.content);
+    isSettingContent.current = false;
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
@@ -219,103 +212,89 @@ function WriteBlogComp({ blog, setBlog }) {
   }, []);
 
   return (
-    <>
-      {!initialLoader && (!blogId || (blogId && isDraft)) && (
-        <main className="block">
-          <article className="relative height65 overflow-hidden block">
-            <div className="margin40 margin41 break-words relative">
-              <section className="block margin-11 relative clear-both padding-27" style={{ marginBottom: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
-                <div ref={editorWrapperRef} className="w-full width55 padding-14 my-0 mx-auto box-border relative editor-wrapper" style={{ paddingBlock: 0 }}>
-                  <textarea
-                    ref={headingRef}
-                    value={blog.heading}
-                    onKeyDown={(e) => handleKeyDown(e)}
-                    onChange={(e) => handleHeadingChange(e)}
-                    maxLength={500}
-                    className="padding-18 m-0 font-normal font-12 color11 outline-none resize-none overflow-hidden w-full"
-                    placeholder="Title"
-                    style={{
-                      paddingBottom: 0,
-                    }}
-                    rows={1}
-                  />
+    <main className="block">
+      <article className="relative height65 overflow-hidden block">
+        <div className="margin40 margin41 break-words relative">
+          <section className="block margin-11 relative clear-both padding-27" style={{ marginBottom: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
+            <div ref={editorWrapperRef} className="w-full width55 padding-14 my-0 mx-auto box-border relative editor-wrapper" style={{ paddingBlock: 0 }}>
+              <textarea
+                ref={headingRef}
+                value={blog.heading}
+                onKeyDown={(e) => handleKeyDown(e)}
+                onChange={(e) => handleHeadingChange(e)}
+                maxLength={500}
+                className="padding-18 m-0 font-normal font-12 color11 outline-none resize-none overflow-hidden w-full"
+                placeholder="Title"
+                style={{
+                  paddingBottom: 0,
+                }}
+                rows={1}
+              />
 
-                  {editor && (
-                    <BubbleMenu editor={editor} options={{ placement: "top", offset: 8 }}>
-                      <div className="flex bg-9 color-2 border-radius-1 shadow-lg padding-30 gap9 backdrop-blur-sm">
-                        <button
-                          onMouseDown={(e) => {
-                            e.preventDefault(); // prevent editor losing focus
-                            editor.chain().focus().toggleBold().run();
-                          }}
-                          className={`padding50 padding51 rounded hover:cursor-pointer transition-colors ${editor.isActive("bold") ? "color12" : ""}`}
-                        >
-                          B
-                        </button>
-
-                        <button
-                          onMouseDown={(e) => {
-                            e.preventDefault(); // prevent editor losing focus
-                            editor.chain().focus().toggleItalic().run();
-                          }}
-                          className={`padding50 padding51 rounded italic hover:cursor-pointer transition-colors ${editor.isActive("italic") ? "color12" : ""}`}
-                        >
-                          i
-                        </button>
-                      </div>
-                    </BubbleMenu>
-                  )}
-
-                  {showAddBtn && (
+              {editor && (
+                <BubbleMenu editor={editor} options={{ placement: "top", offset: 8 }}>
+                  <div className="flex bg-9 color-2 border-radius-1 shadow-lg padding-30 gap9 backdrop-blur-sm">
                     <button
-                      onClick={(e) => handleAddImage(e)}
-                      ref={addImgBtnRef}
-                      className="flex items-center justify-center width-11 aspect-square line-h-9 p-0 font13 color-6 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100 text-center rounded-full cursor-pointer bg-transparent"
-                      style={{
-                        position: "absolute",
-                        top: btnPos.top,
-                        left: btnPos.left,
-                        transform: "translate(-100%, -50%)",
-                        zIndex: 9999,
+                      onMouseDown={(e) => {
+                        e.preventDefault(); // prevent editor losing focus
+                        editor.chain().focus().toggleBold().run();
                       }}
+                      className={`padding50 padding51 rounded hover:cursor-pointer transition-colors ${editor.isActive("bold") ? "color12" : ""}`}
                     >
-                      <IoIosAddCircleOutline className="w-full h-full" />
+                      B
                     </button>
-                  )}
 
-                  <EditorContent ref={editorRef} editor={editor} className="margin-10 font-normal font-6 p-0 border-0 outline-none focus:outline-none" />
-                </div>
-              </section>
+                    <button
+                      onMouseDown={(e) => {
+                        e.preventDefault(); // prevent editor losing focus
+                        editor.chain().focus().toggleItalic().run();
+                      }}
+                      className={`padding50 padding51 rounded italic hover:cursor-pointer transition-colors ${editor.isActive("italic") ? "color12" : ""}`}
+                    >
+                      i
+                    </button>
+                  </div>
+                </BubbleMenu>
+              )}
+
+              {showAddBtn && (
+                <button
+                  onClick={(e) => handleAddImage(e)}
+                  ref={addImgBtnRef}
+                  className="flex items-center justify-center width-11 aspect-square line-h-9 p-0 font13 color-6 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100 text-center rounded-full cursor-pointer bg-transparent"
+                  style={{
+                    position: "absolute",
+                    top: btnPos.top,
+                    left: btnPos.left,
+                    transform: "translate(-100%, -50%)",
+                    zIndex: 9999,
+                  }}
+                >
+                  <IoIosAddCircleOutline className="w-full h-full" />
+                </button>
+              )}
+
+              <EditorContent ref={editorRef} editor={editor} className="margin-10 font-normal font-6 p-0 border-0 outline-none focus:outline-none" />
             </div>
-
-            {blog.heading.length > 0 && (
-              <div className="absolute top4 right4 height66 text-right font-10 color10 margin42" style={{ marginLeft: 0, marginBlock: 0 }}>
-                <div className="h-full absolute width56 left3 top-0 overflow-hidden custom-bg-3 opacity-50">
-                  <div className="bdr10 absolute h-full top-[-100%]" style={{ borderLeft: 0, borderBlock: 0 }}></div>
-                </div>
-                <div className="absolute right-0 top-0 padding52" style={{ paddingInline: 0, paddingBottom: 0 }}>
-                  Title
-                </div>
-              </div>
-            )}
-
-            <div className="absolute top5 left2 margin43 margin44 height-2 aspect-square p-0 z-[400]"></div>
-
-            <footer className="padding-25"></footer>
-          </article>
-        </main>
-      )}
-      {initialLoader && (
-        <div className="w-screen h-screen flex items-center justify-center">
-          <Spinner />
+          </section>
         </div>
-      )}
-      {!initialLoader && blogId && !isDraft && (
-        <div className="min-w-screen min-h-screen flex items-center">
-          <NotFoundComp />
-        </div>
-      )}
-    </>
+
+        {blog.heading.length > 0 && (
+          <div className="absolute top4 right4 height66 text-right font-10 color10 margin42" style={{ marginLeft: 0, marginBlock: 0 }}>
+            <div className="h-full absolute width56 left3 top-0 overflow-hidden custom-bg-3 opacity-50">
+              <div className="bdr10 absolute h-full top-[-100%]" style={{ borderLeft: 0, borderBlock: 0 }}></div>
+            </div>
+            <div className="absolute right-0 top-0 padding52" style={{ paddingInline: 0, paddingBottom: 0 }}>
+              Title
+            </div>
+          </div>
+        )}
+
+        <div className="absolute top5 left2 margin43 margin44 height-2 aspect-square p-0 z-[400]"></div>
+
+        <footer className="padding-25"></footer>
+      </article>
+    </main>
   );
 }
 

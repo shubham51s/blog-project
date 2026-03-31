@@ -3,45 +3,41 @@ import { useRequestHandler } from "../../../hooks/requestHandler";
 import BlogComp from "./BlogComp";
 import SkeletonComp from "../skeleton";
 import { Link } from "react-router-dom";
+import { defaultLoaderTime } from "../../../constants/constant";
 
-function DraftContainer({ isInitialLoading, draftsCount, setDraftsCount }) {
+function DraftContainer({ isInitialLoading, draftsCount }) {
   const { requestHandler } = useRequestHandler();
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
-  const minLoadingTimeout = useRef(null);
+  const loaderTimeout = useRef(null);
 
-  const getDraftBlogsList = async (skip) => {
-    if (skip === 0) setIsLoading(true);
+  const getDraftBlogsList = async () => {
     try {
-      const response = await requestHandler(`/blogs/drafts?skip=${blogs.length}&limit=${50}`);
-
+      const response = await requestHandler(`/draft/all?skip=${0}&limit=${50}`);
       const result = await response.json();
 
-      if (response?.status === 200) {
-        if (skip === 0) {
-          setBlogs(result?.data?.blogs || []);
-        }
+      if (response?.status === 200 && result?.data?.drafts) {
+        setBlogs(result.data.drafts);
       }
-      if (skip === 0) setIsLoading(false);
     } catch (err) {
       console.error(err);
-      if (skip === 0) setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!isInitialLoading && draftsCount > 0) getDraftBlogsList(0);
+    if (!isInitialLoading && draftsCount > 0) {
+      setIsLoading(true);
+      getDraftBlogsList();
+    }
 
-    if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
-
-    minLoadingTimeout.current = setTimeout(() => {
-      setDefaultLoader(false);
-    }, 600);
-
-    return () => {
-      if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
-    };
+    if (!loaderTimeout.current) {
+      loaderTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+      }, defaultLoaderTime);
+    }
   }, [isInitialLoading]);
 
   return (
@@ -67,7 +63,7 @@ function DraftContainer({ isInitialLoading, draftsCount, setDraftsCount }) {
           </table>
         </div>
       )}
-      {!defaultLoader && !isLoading && !isInitialLoading && blogs.length === 0 && (
+      {!defaultLoader && !isLoading && !isInitialLoading && !blogs.length && (
         <div className="flex flex-col justify-center items-center custom-gap-3 padding-19 padding71">
           <p className="line-h-8 font-10 color-3 font-medium m-0 p-0">No stories in draft.</p>
           <p className="line-h-8 font-10 color-3 font-medium m-0 p-0">

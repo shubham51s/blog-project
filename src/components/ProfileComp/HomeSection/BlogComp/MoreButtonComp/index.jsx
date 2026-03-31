@@ -7,13 +7,18 @@ import { MdDeleteOutline } from "react-icons/md";
 import { showToast } from "../../../../../utils/toaster";
 import { FollowingContext } from "../../../../../context/followingContext";
 import { useToggleUserFollow } from "../../../../../hooks/toggleUserFollow";
+import { useRequestHandler } from "../../../../../hooks/requestHandler";
+import { useNavigate } from "react-router-dom";
 
 function MoreButton({ blog }) {
+  const { requestHandler } = useRequestHandler();
+  const navigate = useNavigate();
   const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
   const { followUser, unfollowUser } = useToggleUserFollow();
 
   const [loaders, setLoaders] = useState({
     isFollowLoader: false,
+    edit: false,
   });
 
   const handleFollowAuthor = async () => {
@@ -38,6 +43,29 @@ function MoreButton({ blog }) {
     await unfollowUser(params);
 
     setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+  };
+
+  const handleEditStoryBtnClick = async () => {
+    setLoaders((prev) => ({ ...prev, edit: true }));
+    try {
+      const params = {
+        blogId: blog._id,
+      };
+
+      const response = await requestHandler("/draft/create-from-blog", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200 && result?.data?.draftId) {
+        navigate(`/p/${result.data.draftId}/edit`);
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured");
+    } finally {
+      setLoaders((prev) => ({ ...prev, edit: false }));
+    }
   };
 
   return (
@@ -104,7 +132,7 @@ function MoreButton({ blog }) {
               {blog.isMyBlog && (
                 <ul className="width62 padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
                   <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
-                    <button className="cursor-pointer m-0 p-0 flex items-center">
+                    <button onClick={handleEditStoryBtnClick} disabled={loaders.edit} className="cursor-pointer m-0 p-0 flex items-center">
                       <div className="flex items-start text-left">Edit story</div>
                     </button>
                   </li>

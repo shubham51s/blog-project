@@ -1,26 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../../../context/userContext";
 import Select from "react-select";
-import { urlBasePath } from "../../../../../constants/constant";
-import { useNavigate } from "react-router-dom";
 import { showToast } from "../../../../../utils/toaster";
-import { useRequestHandler } from "../../../../../hooks/requestHandler";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
+import { getImageUrl } from "../../../../../utils/common";
 
-function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages = [] }) {
-  const { requestHandler } = useRequestHandler();
-  const { userInfo } = useContext(UserContext);
+function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publishBlog, pendingImages = [] }) {
   const [isChangePreviewImg, setIsChangePreviewImg] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
-  const [selectedTopic, setSelectedTopic] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handlePreviewImgChange = (index) => {
     setImgIndex(index);
-    setBlog((prev) => ({ ...prev, previewImg: pendingImages[index].blobUrl }));
+    setBlog((prev) => ({ ...prev, previewImg: prev.images[index].public_id }));
   };
 
   const handlePreviewTitleChange = (e) => {
@@ -38,40 +30,12 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages
   };
 
   const handleChange = (selected) => {
-    if (!selected) return setSelectedTopic([]);
-    if (selected.length <= 5) setSelectedTopic(selected);
+    setBlog((prev) => ({ ...prev, selectedTopic: [] }));
+    if (selected.length <= 5) setBlog((prev) => ({ ...prev, selectedTopic: selected }));
     else showToast("You can select upto 5 topics");
   };
 
-  const publishBlog = async () => {
-    setIsLoading(true);
-    try {
-      const params = {
-        previewTitle: blog.previewTitle,
-        previewSubtitle: blog.previewSubtitle,
-        previewImg: blog.previewImg,
-        topics: selectedTopic.map((item) => item._id),
-        blogId: blog._id,
-      };
-
-      const response = await requestHandler("/blogs/publish", "POST", params);
-      const result = await response.json();
-
-      if (response.status === 200 && result?.data?.blog) {
-        const blog = result.data.blog;
-        navigate(`/${blog.slug}/${blog._id}`);
-      } else {
-        showToast(result?.message || "Some error occured");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePublishBtnClick = () => {
+  const handlePublishBtnClick = async () => {
     if (isLoading) return;
 
     if (blog.previewTitle.length <= 0) {
@@ -81,7 +45,9 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages
       return;
     }
 
-    publishBlog();
+    setIsLoading(true);
+    await publishBlog();
+    setIsLoading(false);
   };
 
   return (
@@ -93,14 +59,16 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages
               Story Preview
             </p>
 
-            {pendingImages.length > 0 && (
+            {blog.previewImg && (
               <div className="bg15 w-full">
                 {!isChangePreviewImg && (
                   <div className="height67 relative">
                     <button onClick={() => setIsChangePreviewImg(true)} className="inline-block height68 absolute positionCenter line-h11 padding-38 bdr12 border-radius-9 whitespace-nowrap font-10 text-center align-bottom cursor-pointer select-none box-border font-normal bg16 color-2">
                       Change preview image
                     </button>
-                    <div>{pendingImages.length > 0 && <img src={pendingImages[imgIndex].blobUrl} className="w-full height67" />}</div>
+                    <div>
+                      <img src={getImageUrl(blog.previewImg)} className="w-full height67" />
+                    </div>
                   </div>
                 )}
 
@@ -110,9 +78,9 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages
                       Done
                     </button>
                     <div className="height69 padding-27 padding56 padding57 overflow-scroll">
-                      {pendingImages.map((item, index) => (
+                      {blog.images.map((item, index) => (
                         <div className="w-[30%] padding57 padding-27 inline-block" key={index} style={{ paddingTop: 0, paddingLeft: 0 }}>
-                          <img onClick={() => handlePreviewImgChange(index)} src={item.blobUrl} className={`w-full transition-all duration-200 ease-in-out ${imgIndex === index ? "bdr13" : "bdr14"}`} />
+                          <img onClick={() => handlePreviewImgChange(index)} src={getImageUrl(item.public_id)} className={`w-full transition-all duration-200 ease-in-out ${imgIndex === index ? "bdr13" : "bdr14"}`} />
                         </div>
                       ))}
                     </div>
@@ -121,7 +89,7 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages
               </div>
             )}
 
-            {pendingImages.length === 0 && (
+            {!blog.previewImg && (
               <div className="bg15 w-full">
                 <div className="custom-line-h-1 font-10 height67 flex justify-center items-center text-left">
                   <span className="font-normal font-10 color10 text-center margin50">Include a high-quality image in your story to make it more inviting to readers.</span>
@@ -156,7 +124,7 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages
                 <div className="bg15">
                   <div className="height70">
                     <div className="font13 font-normal">
-                      <Select value={selectedTopic} onChange={handleChange} isMulti name="topics" options={allTopics} getOptionLabel={(option) => option.name} getOptionValue={(option) => option._id} placeholder="Add a topic..." />
+                      <Select value={blog.selectedTopic} onChange={handleChange} isMulti name="topics" options={allTopics} getOptionLabel={(option) => option.name} getOptionValue={(option) => option._id} placeholder="Add a topic..." />
                     </div>
                   </div>
                 </div>
@@ -187,11 +155,13 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages
                                   Remove publication
                                 </button>
                               </li>
-                              <li className="padding-20 custom-py-2 custom-fs-1 color-3 font-normal opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
-                                <button onClick={() => setTab(0)} className="cursor-pointer m-0 p-0">
-                                  Change publication
-                                </button>
-                              </li>
+                              {edited && (
+                                <li className="padding-20 custom-py-2 custom-fs-1 color-3 font-normal opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                                  <button onClick={() => handleTabChange(0)} className="cursor-pointer m-0 p-0">
+                                    Change publication
+                                  </button>
+                                </li>
+                              )}
                             </ul>
                           </Popover.Content>
                         </Popover.Portal>
@@ -201,7 +171,7 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, setTab, pendingImages
                 )}
                 {!blog.publication && (
                   <p className="font-4 line20 color-4 font-normal m-0">
-                    <button onClick={() => setTab(0)} className="cursor-pointer underline m-0 p-0">
+                    <button onClick={() => handleTabChange(0)} className="cursor-pointer underline m-0 p-0">
                       Submit
                     </button>{" "}
                     your story to connect with community.

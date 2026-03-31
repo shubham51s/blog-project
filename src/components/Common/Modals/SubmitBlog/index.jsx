@@ -4,22 +4,44 @@ import Spinner from "../../Spinner";
 import ConfirmBlogSubmission from "./ConfirmSubmission";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { IoCloseOutline } from "react-icons/io5";
+import { showToast } from "../../../../utils/toaster";
+import { useNavigate } from "react-router-dom";
 
-function SubmitBlogModal({ blogId, setIsShowSubmitModal, tabNo }) {
-  const [tab, setTab] = useState(tabNo);
+function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true }) {
+  const navigate = useNavigate();
   const { requestHandler } = useRequestHandler();
+  const [tab, setTab] = useState(tabNo);
   const [blog, setBlog] = useState(null);
   const [blogLoader, setBlogLoader] = useState(true);
   const [allTopics, setAllTopics] = useState([]);
 
-  const getBlogDetails = async () => {
+  const handleTabChange = (tab) => {
+    setTab(tab);
+  };
+
+  const getDraftDetails = async () => {
     setBlogLoader(true);
     try {
-      const response = await requestHandler(`/blogs/before-publish/${blogId}`);
+      const response = await requestHandler(`/draft/before-publish/${id}`);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.blog) {
-        setBlog({ ...result.data.blog });
+      if (response?.status === 200 && result?.data?.draft) {
+        const draft = result.data.draft;
+        const blog = {
+          previewTitle: draft.previewTitle,
+          previewSubtitle: draft.previewSubtitle,
+          previewImg: draft.previewImg,
+          images: draft.images,
+          selectedTopic: draft.blog?.categories || [],
+          type: draft.type,
+          edited,
+        };
+
+        if (draft.blog?.publication) {
+          blog.publication = draft.blog.publication;
+        }
+
+        setBlog(blog);
       }
     } catch (err) {
       console.error(err);
@@ -43,11 +65,82 @@ function SubmitBlogModal({ blogId, setIsShowSubmitModal, tabNo }) {
 
   const handlePublicationSelection = (publication) => {
     setBlog((prev) => ({ ...prev, publication: { ...publication } }));
-    setTab(1);
+    handleTabChange(1);
+  };
+
+  const editOldBlog = async () => {
+    try {
+      const params = {
+        previewTitle: blog.previewTitle,
+        previewSubtitle: blog.previewSubtitle,
+        previewImg: blog.previewImg,
+        topics: blog.selectedTopic.map((item) => item._id),
+        draftId: id,
+      };
+
+      if (blog.publication) params.publicationId = blog.publication._id;
+
+      const response = await requestHandler("/blogs/edit", "POST", params);
+      const result = await response.json();
+
+      if (response.status === 200 && result?.data?.blog) {
+        const blog = result.data.blog;
+        navigate(`/${blog.slug}/${blog._id}`, { replace: true });
+      } else {
+        showToast(result?.message || "Some error occured");
+      }
+
+      return true;
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured");
+      return false;
+    }
+  };
+
+  const publishNew = async () => {
+    try {
+      const params = {
+        previewTitle: blog.previewTitle,
+        previewSubtitle: blog.previewSubtitle,
+        previewImg: blog.previewImg,
+        topics: blog.selectedTopic.map((item) => item._id),
+        draftId: id,
+      };
+
+      if (blog.publication) params.publicationId = blog.publication._id;
+
+      const response = await requestHandler("/blogs/publish", "POST", params);
+      const result = await response.json();
+
+      if (response.status === 200 && result?.data?.blog) {
+        const blog = result.data.blog;
+        navigate(`/${blog.slug}/${blog._id}`, { replace: true });
+      } else {
+        showToast(result?.message || "Some error occured");
+      }
+
+      return true;
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured");
+      return false;
+    }
+  };
+
+  const publishBlog = () => {
+    if (edited) {
+      if (blog.type === "new") publishNew();
+      else if (blog.type === "edit") editOldBlog();
+    }
   };
 
   useEffect(() => {
-    getBlogDetails();
+    if (edited) {
+      getDraftDetails();
+    } else {
+    }
+
     getAllTopics();
   }, []);
 
@@ -56,7 +149,7 @@ function SubmitBlogModal({ blogId, setIsShowSubmitModal, tabNo }) {
       {/* select publication */}
       {((blogLoader && !blog) || (!blogLoader && blog)) && tab === 0 && <SubmitToPublication handlePublicationSelection={handlePublicationSelection} />}
       {/* confirm submit */}
-      {!blogLoader && blog && tab === 1 && <ConfirmBlogSubmission allTopics={allTopics} blog={blog} setBlog={setBlog} setTab={setTab} />}
+      {!blogLoader && blog && tab === 1 && <ConfirmBlogSubmission allTopics={allTopics} blog={blog} setBlog={setBlog} handleTabChange={handleTabChange} publishBlog={publishBlog} />}
 
       {/* laoder */}
       {blogLoader && tab === 1 && (
@@ -66,7 +159,7 @@ function SubmitBlogModal({ blogId, setIsShowSubmitModal, tabNo }) {
       )}
 
       {/* error  */}
-      {!blogLoader && !blog && <div className="w-full flex items-center justify-center margin69 font-9 color-4 font-medium">Something went wrong !</div>}
+      {!blogLoader && !blog && <div className="w-full flex items-center justify-center margin69 font-9 color-4 font-medium">Blog not found.</div>}
 
       <div className="absolute right-0 top-0 padding-13">
         <button onClick={() => setIsShowSubmitModal(false)} className="cursor-pointer m-0 p-0">

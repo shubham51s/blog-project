@@ -5,6 +5,7 @@ import SkeletonComp from "../skeleton";
 import { IoIosArrowUp } from "react-icons/io";
 import * as Popover from "@radix-ui/react-popover";
 import Checkbox from "@mui/material/Checkbox";
+import { defaultLoaderTime } from "../../../constants/constant";
 
 function SubmissionContainer({ isInitialLoading, submissionsCount, setSubmissionsCount }) {
   const { requestHandler } = useRequestHandler();
@@ -12,7 +13,7 @@ function SubmissionContainer({ isInitialLoading, submissionsCount, setSubmission
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
-  const minLoadingTimeout = useRef(null);
+  const loaderTimeout = useRef(null);
   const [isStatusOpen, setIsStatusOpen] = useState(false);
   const [activeStatusCount, setActiveStatusCount] = useState(0);
   const [statusList, setStatusList] = useState([
@@ -69,44 +70,39 @@ function SubmissionContainer({ isInitialLoading, submissionsCount, setSubmission
           if (!item.isChecked) checkedCount++;
         } else if (item.isChecked) checkedCount++;
         return item.id === id ? { ...item, isChecked: !item.isChecked } : item;
-      })
+      }),
     );
 
     setActiveStatusCount(checkedCount);
   };
 
-  const getSubmitBlogsList = async (skip) => {
-    if (skip === 0) setIsLoading(true);
+  const getSubmitBlogsList = async () => {
     try {
-      const response = await requestHandler(`/blogs/submissions?skip=${blogs.length}&limit=${50}`);
+      const response = await requestHandler(`/blogs/submissions?skip=${0}&limit=${50}`);
 
       const result = await response.json();
 
-      if (response?.status === 200) {
-        if (skip === 0) {
-          setBlogs(result?.data?.blogs || []);
-        }
+      if (response?.status === 200 && result?.data?.blogs) {
+        setBlogs(result.data.blogs);
       }
-
-      if (skip === 0) setIsLoading(false);
     } catch (err) {
       console.error(err);
-      if (skip === 0) setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!isInitialLoading && submissionsCount > 0) getSubmitBlogsList(0);
+    if (!isInitialLoading && submissionsCount > 0) {
+      setIsLoading(true);
+      getSubmitBlogsList(0);
+    }
 
-    if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
-
-    minLoadingTimeout.current = setTimeout(() => {
-      setDefaultLoader(false);
-    }, 600);
-
-    return () => {
-      if (minLoadingTimeout.current) clearTimeout(minLoadingTimeout.current);
-    };
+    if (!loaderTimeout.current) {
+      loaderTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+      }, defaultLoaderTime);
+    }
   }, [isInitialLoading]);
 
   return (

@@ -1,7 +1,4 @@
-import { useContext } from "react";
 import { urlBasePath } from "../constants/constant";
-import { UserContext } from "../context/userContext";
-import { useNavigate } from "react-router-dom";
 
 // same as useApi custom hook but created later for better names
 export function useRequestHandler() {

@@ -7,21 +7,17 @@ import { Outlet, useLocation, useNavigate, useSearchParams } from "react-router-
 import { showToast } from "../../utils/toaster";
 
 function StoriesPage() {
-  const location = useLocation();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { requestHandler } = useRequestHandler();
-  const [activeTabIndex, setActiveTabIndex] = useState(1);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [draftsCount, setDraftsCount] = useState(0);
   const [publishedCount, setPublishedCount] = useState(0);
   const [submissionsCount, setSubmissionsCount] = useState(0);
+  const tab = searchParams.get("tab");
 
   const handleActiveTabChange = (tab) => {
     tab ? setSearchParams({ tab }) : setSearchParams({});
   };
-
-  const tab = searchParams.get("tab");
 
   const getAllStoriesCount = async () => {
     try {
@@ -29,8 +25,8 @@ function StoriesPage() {
 
       const result = await response.json();
 
-      if (response.status === 200) {
-        const { drafts, published, submissions } = result?.data;
+      if (response.status === 200 && result?.data) {
+        const { drafts, published, submissions } = result.data;
         setDraftsCount(drafts);
         setPublishedCount(published);
         setSubmissionsCount(submissions);
@@ -41,13 +37,19 @@ function StoriesPage() {
           showToast(result?.message || "Some error occured", "error");
         }
       }
-
-      setIsInitialLoading(false);
     } catch (err) {
-      setIsInitialLoading(false);
       console.error(err);
       showToast("Some error occured", "error");
+    } finally {
+      setIsInitialLoading(false);
     }
+  };
+
+  const isTabActive = (id) => {
+    if (id === 0) return tab !== "posts-published" && tab !== "submissions-outbox" && tab !== "posts-unlisted";
+    if (id === 1) return tab === "posts-published";
+    if (id === 2) return tab === "posts-unlisted";
+    if (id === 3) return tab === "submissions-outbox";
   };
 
   useEffect(() => {
@@ -70,25 +72,36 @@ function StoriesPage() {
           <div className="boxShadow10 overflow-hidden relative">
             <div className="overflow-y-hidden overflow-x-scroll flex items-center scrollbar-none">
               <div className="w-full flex justify-start select-none">
-                <div className={`min-w-max margin52 padding-42  ${tab !== "posts-scheduled" && tab !== "submissions-outbox" ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0, marginLeft: 0 }}>
+                <div className={`min-w-max margin52 padding-42  ${isTabActive(0) ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0, marginLeft: 0 }}>
                   <button onClick={() => handleActiveTabChange()} className="p-0 cursor-pointer" disabled={isInitialLoading}>
-                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${tab !== "posts-scheduled" && tab !== "submissions-outbox" ? "opacity-100" : "opacity-[0.9]"}`}>
-                      <span>Published</span>
-                      {!isInitialLoading && publishedCount > 0 && <span>{publishedCount}</span>}
-                    </div>
-                  </button>
-                </div>
-                <div className={`min-w-max margin52 padding-42  ${tab === "posts-scheduled" ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0 }}>
-                  <button onClick={() => handleActiveTabChange("posts-scheduled")} className="p-0 cursor-pointer" disabled={isInitialLoading}>
-                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${tab === "posts-scheduled" ? "opacity-100" : "opacity-[0.9]"}`}>
+                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${isTabActive(0) ? "opacity-100" : "opacity-[0.9]"}`}>
                       <span>Drafts</span>
                       {!isInitialLoading && draftsCount > 0 && <span>{draftsCount}</span>}
                     </div>
                   </button>
                 </div>
-                <div className={`min-w-max margin52 padding-42  ${tab === "submissions-outbox" ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0 }}>
+
+                <div className={`min-w-max margin52 padding-42  ${isTabActive(1) ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0 }}>
+                  <button onClick={() => handleActiveTabChange("posts-published")} className="p-0 cursor-pointer" disabled={isInitialLoading}>
+                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${isTabActive(1) ? "opacity-100" : "opacity-[0.9]"}`}>
+                      <span>Published</span>
+                      {!isInitialLoading && publishedCount > 0 && <span>{publishedCount}</span>}
+                    </div>
+                  </button>
+                </div>
+
+                <div className={`min-w-max margin52 padding-42  ${isTabActive(2) ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0 }}>
+                  <button onClick={() => handleActiveTabChange("posts-unlisted")} className="p-0 cursor-pointer" disabled={isInitialLoading}>
+                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${isTabActive(2) ? "opacity-100" : "opacity-[0.9]"}`}>
+                      <span>Unlisted</span>
+                      {!isInitialLoading && publishedCount > 0 && <span>{publishedCount}</span>}
+                    </div>
+                  </button>
+                </div>
+
+                <div className={`min-w-max margin52 padding-42  ${isTabActive(3) ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0 }}>
                   <button onClick={() => handleActiveTabChange("submissions-outbox")} className="p-0 cursor-pointer" disabled={isInitialLoading}>
-                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${tab === "submissions-outbox" ? "opacity-100" : "opacity-[0.9]"}`}>
+                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${isTabActive(3) ? "opacity-100" : "opacity-[0.9]"}`}>
                       <span>Submissions</span>
                       {!isInitialLoading && submissionsCount > 0 && <span>{submissionsCount}</span>}
                     </div>
@@ -99,15 +112,14 @@ function StoriesPage() {
           </div>
         </div>
 
-        {/* below bottom section */}
         {/* 1. Drafts section */}
-        {tab === "posts-scheduled" && <DraftContainer isInitialLoading={isInitialLoading} draftsCount={draftsCount} setDraftsCount={setDraftsCount} />}
+        {isTabActive(0) && <DraftContainer isInitialLoading={isInitialLoading} draftsCount={draftsCount} />}
 
         {/* 2. Published section */}
-        {tab !== "posts-scheduled" && tab !== "submissions-outbox" && <PublishContainer isInitialLoading={isInitialLoading} publishedCount={publishedCount} setPublishedCount={setPublishedCount} />}
+        {isTabActive(1) && <PublishContainer isInitialLoading={isInitialLoading} publishedCount={publishedCount} setPublishedCount={setPublishedCount} />}
 
         {/* 3. Submission section */}
-        {tab === "submissions-outbox" && <SubmissionContainer isInitialLoading={isInitialLoading} submissionsCount={submissionsCount} setSubmissionsCount={setSubmissionsCount} />}
+        {isTabActive(3) && <SubmissionContainer isInitialLoading={isInitialLoading} submissionsCount={submissionsCount} setSubmissionsCount={setSubmissionsCount} />}
       </div>
     </div>
   );
