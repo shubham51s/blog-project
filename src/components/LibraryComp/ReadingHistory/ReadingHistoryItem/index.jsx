@@ -7,6 +7,7 @@ import MoreButton from "./MoreButton";
 import { formatDateInMonthDayYear } from "../../../../utils/dates";
 import noImage from "../../../../assets/images/noPreviewImage.png";
 import SaveBlog from "../../../Common/Buttons/ToggleBlogSave";
+import { getImageUrl } from "../../../../utils/common";
 
 function ReadingHistoryItem({ item, removeBlogFromHistory }) {
   const navigate = useNavigate();
@@ -28,43 +29,62 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                 <div className="w-full h-full">
                   <div className="flex relative">
                     <div className="w-full">
-                      <div className="flex items-center justify-between margin-21 custom-gap-2" style={{ marginTop: 0, marginInline: 0 }}>
-                        <div className="flex items-center">
-                          <div className="margin-9" style={{ marginLeft: 0, marginBlock: 0 }}>
-                            <Link to={`/profile/${blog.author.username}`} className="no-underline cursor-pointer">
-                              <div className="relative">
-                                <img src={blog.author.profileImg} className="width86 aspect-square rounded-full" />
-                                <div className="absolute top-0 width86 aspect-square rounded-full boxShadow7"></div>
-                              </div>
-                            </Link>
+                      <div className="flex items-center justify-between margin-21 custom-gap-2 max-w-full overflow-hidden" style={{ marginTop: 0, marginInline: 0 }}>
+                        {!blog.publication && (
+                          <div className="flex items-center">
+                            <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
+                              <Link to={`/profile/${blog.author.username}`} className="no-underline cursor-pointer">
+                                <div className="relative">
+                                  <img src={blog.author.profileImg} className="width86 aspect-square rounded-full" />
+                                  <div className="absolute top-0 width86 aspect-square rounded-full boxShadow7"></div>
+                                </div>
+                              </Link>
+                            </div>
+                            <div>
+                              <Link to={`/profile/${blog.author.username}`} className="no-underline cursor-pointer m-0 p-0 flex items-center">
+                                <p className="truncate height-6 color-3 font-4 line20 font-normal m-0" title={blog.author.name}>
+                                  {blog.author.name}
+                                </p>
+                              </Link>
+                            </div>
                           </div>
-                          {blog.publication && (
+                        )}
+                        {blog.publication && (
+                          <div className="flex items-center">
+                            <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
+                              <Link to={`/${blog.publication.slug}`} className="no-underline cursor-pointer">
+                                <div className="relative">
+                                  <img src={blog.publication.profileImg} className="width86 aspect-square br13" />
+                                  <div className="absolute top-0 width86 aspect-square br13 boxShadow7"></div>
+                                </div>
+                              </Link>
+                            </div>
+
                             <div className="padding-23 whitespace-nowrap" style={{ paddingLeft: 0, paddingBlock: 0 }}>
                               <p className="font-4 color-4 line20 font-normal m-0">In</p>
                             </div>
-                          )}
-                          {blog.publication && (
+
                             <div>
-                              <Link to="" className="no-underline cursor-pointer m-0 p-0 flex items-center">
+                              <Link to={`/${blog.publication.slug}`} className="no-underline cursor-pointer m-0 p-0 flex items-center">
                                 <p className="truncate height-6 color-3 font-4 line20 font-normal m-0" title={blog.publication.name}>
                                   {blog.publication.name}
                                 </p>
                               </Link>
                             </div>
-                          )}
-                          {blog.publication && (
+
                             <div className="padding-23" style={{ paddingBlock: 0 }}>
                               <p className="font-4 color-4 line20 font-normal m-0">by</p>
                             </div>
-                          )}
-                          <div>
-                            <Link to={`/profile/${blog.author.username}`} className="no-underline cursor-pointer m-0 p-0 flex items-center">
-                              <p className="truncate height-6 color-3 font-4 line20 font-normal m-0" title={blog.author.name}>
-                                {blog.author.name}
-                              </p>
-                            </Link>
+
+                            <div>
+                              <Link to={`/profile/${blog.author.username}`} className="no-underline cursor-pointer m-0 p-0 flex items-center">
+                                <p className="truncate height-6 color-3 font-4 line20 font-normal m-0" title={blog.author.name}>
+                                  {blog.author.name}
+                                </p>
+                              </Link>
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </div>
 
                       <div className="flex">
@@ -120,7 +140,7 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                         </div>
 
                         <Link to={`/${blog.slug}/${blog._id}`} className="block margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
-                          <img src={blog.previewImg ? blog.previewImg : noImage} className="border-radius-5 align-middle width-29 height-52" />
+                          <img src={blog.previewImg ? getImageUrl(blog.previewImg) : noImage} className="border-radius-5 align-middle width-29 height-52" />
                         </Link>
                       </div>
                     </div>

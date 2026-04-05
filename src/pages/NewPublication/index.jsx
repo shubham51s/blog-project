@@ -17,6 +17,7 @@ function NewPublication() {
     name: "",
     description: "",
     profileImg: "",
+    public_id: "",
     editors: [],
     topics: [],
   });
@@ -28,6 +29,8 @@ function NewPublication() {
         description: publication.description,
         topics: publication.topics.map((item) => item._id),
         editors: publication.editors.map((item) => item._id),
+        profileImg: publication.profileImg,
+        public_id: publication.public_id,
       };
 
       const response = await requestHandler("/publication/create-new", "POST", params);
@@ -50,7 +53,10 @@ function NewPublication() {
   const isNameAvailable = async () => {
     setIsLoading(true);
     try {
-      const response = await requestHandler(`/publication/check-name-availability/${publication.name}`);
+      const params = {
+        name: publication.name,
+      };
+      const response = await requestHandler("/publication/check-name-availability", "POST", params);
       const result = await response.json();
 
       if (response?.status === 200) {
@@ -69,12 +75,14 @@ function NewPublication() {
   const handleCreateNewPublicationBtnClick = () => {
     if (isLoading) return;
 
-    if (!publication.name && !publication.description) {
+    if (!publication.name && !publication.description && !publication.profileImg) {
       showToast("Please add a name, description, and avatar for your publication.");
     } else if (publication.name.trim().length === 0) {
       showToast("Please add publication name.");
     } else if (publication.description.trim().length === 0) {
       showToast("Please add publication description.");
+    } else if (!publication.profileImg) {
+      showToast("Please select avatar.");
     } else {
       isNameAvailable();
     }

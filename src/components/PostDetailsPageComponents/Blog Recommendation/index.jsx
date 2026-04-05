@@ -57,8 +57,7 @@ function BlogRecommendComp({ blog }) {
     },
   ];
 
-  const { requestHandler } = useRequestHandler;
-
+  const { requestHandler } = useRequestHandler();
   const [moreBlogsFromAuthorAndCommunity, setMoreBlogsFromAuthorAndCommunity] = useState([]);
   const [authorBlogs, setAuthorBlogs] = useState([]);
   const [communityBlogs, setCommunityBlogs] = useState([]);

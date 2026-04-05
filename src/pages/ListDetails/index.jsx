@@ -42,7 +42,7 @@ function ListDetailsPage() {
   const [loaders, setLoaders] = useState({
     clapLoader: false,
   });
-  const limit = 20;
+  const limit = 15;
   const [scroll, setScroll] = useState({
     loading: false,
     hasMore: true,

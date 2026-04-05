@@ -45,8 +45,6 @@ function SaveList({ list }) {
       const response = await requestHandler("/list/toggle-save/unsave", "POST", params);
       const result = await response.json();
 
-      console.error(result);
-
       if (response?.status === 200) {
         setIsSaved(false);
         showToast("List removed from Your Library");

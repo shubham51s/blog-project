@@ -1016,6 +1016,10 @@ img {
     font-size: 26px;
   }
 
+  .font19 {
+    font-size: 8px;
+  }
+
   .padding-1 {
     padding: 8px 20px;
   }
@@ -1076,6 +1080,10 @@ img {
 
   .border-radius12 {
     border-radius: 5px;
+  }
+
+  .br13 {
+    border-radius: 2px;
   }
 
   .bdr-3 {
@@ -1525,6 +1533,10 @@ img {
 
   .width91 {
     max-width: 694px;
+  }
+
+  .width92 {
+    max-width: 168px;
   }
 
   .margin-2 {

@@ -1,20 +1,21 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosStats } from "react-icons/io";
+import { RiUserCommunityLine } from "react-icons/ri";
 import { LuCircleHelp } from "react-icons/lu";
 import { PiStarFourDuotone } from "react-icons/pi";
 import { UserContext } from "../../../../context/userContext";
-import { useApi } from "../../../../hooks/useApi";
 import { showToast } from "../../../../utils/toaster";
+import { RiHistoryFill } from "react-icons/ri";
+import { MdOutlineExplore } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import { Link } from "react-router-dom";
+import { useRequestHandler } from "../../../../hooks/requestHandler";
 
 function ProfileHeaderComp() {
+  const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
-  const { fetchRequest } = useApi();
-  const profileBtnRef = useRef();
-  const profileOptionsRef = useRef();
-  const [isShowProfileMenu, setIsShowProfileMenu] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const profileNavOptions = [
     {
@@ -54,13 +55,9 @@ function ProfileHeaderComp() {
     },
   ];
 
-  const handleUserProfileBtnClick = () => {
-    setIsShowProfileMenu(!isShowProfileMenu);
-  };
-
   const handleUserLogout = async () => {
     try {
-      const response = await fetchRequest("/users/logout", "GET");
+      const response = await requestHandler("/users/logout");
       if (response.status === 200) {
         window.location.reload();
       } else {
@@ -73,19 +70,9 @@ function ProfileHeaderComp() {
     }
   };
 
-  const handleClickOutside = (e) => {
-    if (profileBtnRef.current && !profileBtnRef.current.contains(e.target) && profileOptionsRef.current && !profileOptionsRef.current.contains(e.target)) {
-      setIsShowProfileMenu(false);
-    }
+  const closePopup = () => {
+    setIsOpen(false);
   };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   return (
     <>
@@ -93,7 +80,7 @@ function ProfileHeaderComp() {
         <div>
           <div className="bg-transparent relative border-0 p-0 m-0 flex items-center opacity-90 transition-all duration-300 ease-in-out hover:opacity-100">
             <div className="relative">
-              <Popover.Root>
+              <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
                 <Popover.Trigger className="relative cursor-pointer">
                   <img className="width-11 aspect-square rounded-full align-middle" src={userInfo.profileImg} />
                 </Popover.Trigger>
@@ -105,7 +92,7 @@ function ProfileHeaderComp() {
                         <div className="width-9">
                           <div className="height-8"></div>
 
-                          <Link to={`/profile/${userInfo.username}`} className="text-left cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-[0.80] hover:opacity-100">
+                          <Link to={`/profile/${userInfo.username}`} onClick={closePopup} className="text-left cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-[0.80] hover:opacity-100">
                             <div className="padding-6 custom-fs-1 color-4 padding-19 custom-line-h-1 font-normal">
                               <div className="flex items-center custom-gap-2 max-w-full overflow-hidden">
                                 <div className="relative shrink-0">
@@ -121,7 +108,7 @@ function ProfileHeaderComp() {
                           </Link>
 
                           <div className="padding-6 padding-16 bdr-5" style={{ paddingInline: 0, borderTop: 0, borderInline: 0 }}>
-                            <Link to="/me/settings" className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
+                            <Link to="/me/settings" onClick={closePopup} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
                               <div className="padding-6 padding-19 custom-fs-1 color-6 custom-line-h-1 font-medium">
                                 <div className="flex items-center custom-gap-2">
                                   <IoSettingsOutline className="width-13 height-10 align-middle overflow-hidden color-6" />
@@ -131,43 +118,37 @@ function ProfileHeaderComp() {
                                 </div>
                               </div>
                             </Link>
-                            <a href="#" className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
+                            <Link to="/new-publication" onClick={closePopup} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
                               <div className="padding-6 padding-19 custom-fs-1 color-6 custom-line-h-1 font-medium">
                                 <div className="flex items-center custom-gap-2">
-                                  <IoIosStats className="width-13 height-10 align-middle overflow-hidden color-6" />
+                                  <RiUserCommunityLine className="width-13 height-10 align-middle overflow-hidden color-6" />
                                   <div className="flex flex-col custom-gap-1">
-                                    <p className="break-words text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">Stats</p>
+                                    <p className="break-words text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">New publication</p>
                                   </div>
                                 </div>
                               </div>
-                            </a>
-                            <a href="#" className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
+                            </Link>
+                            <Link to="/me/following/suggestions" onClick={closePopup} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
                               <div className="padding-6 padding-19 custom-fs-1 color-6 custom-line-h-1 font-medium">
                                 <div className="flex items-center custom-gap-2">
-                                  <LuCircleHelp className="width-13 height-10 align-middle overflow-hidden color-6" />
+                                  <MdOutlineExplore className="width-13 height-10 align-middle overflow-hidden color-6" />
                                   <div className="flex flex-col custom-gap-1">
-                                    <p className="break-words text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">Help</p>
+                                    <p className="break-words text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">Suggestions</p>
                                   </div>
                                 </div>
                               </div>
-                            </a>
+                            </Link>
+                            <Link to="/me/lists/reading-history" onClick={closePopup} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
+                              <div className="padding-6 padding-19 custom-fs-1 color-6 custom-line-h-1 font-medium">
+                                <div className="flex items-center custom-gap-2">
+                                  <RiHistoryFill className="width-13 height-10 align-middle overflow-hidden color-6" />
+                                  <div className="flex flex-col custom-gap-1">
+                                    <p className="break-words text-ellipsis height-6 overflow-hidden custom-fs-1 color-6 custom-line-h-1 font-medium m-0 p-0">History</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </Link>
                           </div>
-
-                          {/* <div className="padding-17 bdr-5" style={{ paddingInline: 0, borderTop: 0, borderInline: 0 }}>
-                      <a href="#" className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
-                        <div className="padding-20 padding-19 custom-fs-1 color-6 custom-line-h-1 font-medium">
-                          <div className="flex items-center justify-between text-center custom-fs-1">
-                            Become a Medium member
-                            <PiStarFourDuotone className="aspect-square width-19 align-middle text-yellow-900" />
-                          </div>
-                        </div>
-                      </a>
-                      <a href="#" className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">
-                        <div className="padding-20 padding-19 custom-fs-1 color-6 custom-line-h-1 font-medium">
-                          <div className="flex items-center justify-between">Apply to the Partner Program</div>
-                        </div>
-                      </a>
-                    </div> */}
 
                           <div className="padding-17 bdr-5" style={{ paddingInline: 0, borderTop: 0, borderInline: 0 }}>
                             <button onClick={handleUserLogout} className="text-left border-0 cursor-pointer m-0 p-0 w-full bg-transparent transition-all duration-300 ease-in-out opacity-75 hover:opacity-100">

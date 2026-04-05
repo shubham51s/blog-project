@@ -4,10 +4,12 @@ import { FiMessageCircle } from "react-icons/fi";
 import { IoIosMore } from "react-icons/io";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { formatMonthAndDayShort } from "../../../utils/monthDateFormatter";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import noPreviewImg from "../../../assets/images/noPreviewImage.png";
+import { getImageUrl } from "../../../utils/common";
 
 function BlogComp({ blogDetails }) {
+  // console.log("blogDetails: ", blogDetails);
   const [isCommunity, setIsCommunity] = useState(blogDetails.hasOwnProperty("community"));
   const navigate = useNavigate();
 
@@ -26,43 +28,50 @@ function BlogComp({ blogDetails }) {
               <div className="grid relative h-full custom-gap-8 grid-rows-[auto_1fr] grid-cols-12 grid-area-1">
                 <div className="[grid-area:image]">
                   <div>
-                    {blogDetails.previewImg && <img src={blogDetails.previewImg} className="object-cover object-center aspect-[2/1] w-full align-middle" />}
-                    {!blogDetails.previewImg && <img src={noPreviewImg} className="object-cover object-center aspect-[2/1] w-full align-middle" />}
+                    <img src={blogDetails.previewImg ? getImageUrl(blogDetails.previewImg) : noPreviewImg} className="object-cover object-center aspect-[2/1] w-full align-middle" />
                   </div>
                 </div>
                 <div className="[grid-area:content] flex flex-col justify-center">
                   <div className="grow flex flex-col w-full">
-                    <div className="margin-21 flex items-center" style={{ marginTop: 0, marginInline: 0 }}>
-                      <div className="margin-16" style={{ marginLeft: 0, marginBlock: 0 }}>
-                        {isCommunity && <img src={blogDetails.community.profileImg} className="height-12 aspect-square border-radius-5" />}
-                        {!isCommunity && <img src={blogDetails.author.profileImg} className="height-12 aspect-square rounded-full" />}
+                    {!blogDetails.publication && (
+                      <div className="margin-21 flex items-center" style={{ marginTop: 0, marginInline: 0 }}>
+                        <Link to={`/profile/${blogDetails.author.username}`} className="margin-16 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
+                          <img src={blogDetails.author.profileImg} className="height-12 aspect-square rounded-full" />
+                        </Link>
+                        <div>
+                          <Link to={`/profile/${blogDetails.author.username}`} title={blogDetails.author.name} className="break-words text-ellipsis height-6 color-3 overflow-hidden font-4 capitalize custom-line-h-1 font-normal m-0 p-0">
+                            {blogDetails.author.name}
+                          </Link>
+                        </div>
                       </div>
-                      {isCommunity && (
+                    )}
+                    {blogDetails.publication && (
+                      <div className="margin-21 flex items-center overflow-hidden truncate" style={{ marginTop: 0, marginInline: 0 }}>
+                        <Link to={`/publication/${blogDetails.publication.slug}`} className="margin-16 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
+                          <img src={blogDetails.publication.profileImg} className="height-12 aspect-square br13" />
+                        </Link>
                         <div className="padding-23 whitespace-nowrap" style={{ paddingLeft: 0, paddingBlock: 0 }}>
                           <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">In</p>
                         </div>
-                      )}
-                      {isCommunity && (
-                        <div className="">
-                          <p className="break-words text-ellipsis height-6 color-3 overflow-hidden capitalize font-4 custom-line-h-1 font-normal m-0 p-0" title={blogDetails.community.name}>
-                            {blogDetails.community.name}
-                          </p>
+                        <div>
+                          <Link to={`/publication/${blogDetails.publication.slug}`} title={blogDetails.publication.name} className="break-words truncate height-6 color-3 overflow-hidden capitalize font-4 custom-line-h-1 font-normal m-0 p-0">
+                            {blogDetails.publication.name}
+                          </Link>
                         </div>
-                      )}
-                      {isCommunity && (
                         <div className="padding-23" style={{ paddingBlock: 0 }}>
                           <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">by</p>
                         </div>
-                      )}
-                      <div className="">
-                        <p className="break-words text-ellipsis height-6 color-3 overflow-hidden font-4 capitalize custom-line-h-1 font-normal m-0 p-0" title={blogDetails.author.name}>
-                          {blogDetails.author.name}
-                        </p>
+
+                        <div>
+                          <Link to={`/profile/${blogDetails.author.username}`} title={blogDetails.author.name} className="break-words text-ellipsis height-6 color-3 overflow-hidden font-4 capitalize custom-line-h-1 font-normal m-0 p-0">
+                            {blogDetails.author.name}
+                          </Link>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     <div className="grow shrink-0 basis-auto padding-33 break-words" style={{ paddingTop: 0, paddingInline: 0 }}>
-                      <div className="">
+                      <div>
                         <h2 className="height-61 line-h-8 font-3 font-bold text-ellipsis color-3 overflow-hidden m-0">{blogDetails.previewTitle}</h2>
                       </div>
                       <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
@@ -73,7 +82,7 @@ function BlogComp({ blogDetails }) {
                     <span className="font-4 color-4 custom-line-h-1 font-normal">
                       <div className="height-50 flex justify-between">
                         <div className="flex custom-gap-2 items-center">
-                          <span className="">{formatMonthAndDayShort(blogDetails.updatedAt)}</span>
+                          <span>{formatMonthAndDayShort(blogDetails.updatedAt)}</span>
                           <div className="width-28 height-51 relative flex items-center">
                             {/* pending from here claps and comments icon with value */}
                             <a href="#" className="relative flex items-center custom-gap-2 no-underline m-0 p-0 transition-all duration-300 ease-out">
@@ -81,13 +90,13 @@ function BlogComp({ blogDetails }) {
                                 <div className="width-19 aspect-square">
                                   <PiHandsClapping className="w-full h-full" />
                                 </div>
-                                <span className="">{blogDetails.clapsCount}</span>
+                                <span>{blogDetails.clapsCount}</span>
                               </div>
                               <div className="flex items-center custom-gap-1" title={`${blogDetails.commentCount} responses`}>
                                 <div className="width-19 aspect-square">
                                   <FiMessageCircle className="w-full h-full" />
                                 </div>
-                                <span className="">{blogDetails.commentCount}</span>
+                                <span>{blogDetails.commentCount}</span>
                               </div>
                             </a>
                           </div>

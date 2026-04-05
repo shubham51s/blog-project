@@ -9,13 +9,13 @@ import { FollowingContext } from "../../../../../../context/followingContext";
 import { useToggleUserFollow } from "../../../../../../hooks/toggleUserFollow";
 import { useToggleMute } from "../../../../../../hooks/toggleMute";
 import DeleteBlogModal from "../../../../../Common/Modals/ConfirmDeleteBlog";
+import DeleteBlogBtn from "../../../../../Common/BlogActions/Delete";
+import Edit from "../../../../../Common/BlogActions/Edit";
 
 function MoreComp({ blog, removeBlogFromList }) {
   const { followUser, unfollowUser } = useToggleUserFollow();
   const { muteUser } = useToggleMute();
   const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
-  const [isDeleteModal, setIsDeleteModal] = useState(false);
-
   const [loaders, setLoaders] = useState({
     isFollowLoader: false,
     mute: false,
@@ -60,15 +60,7 @@ function MoreComp({ blog, removeBlogFromList }) {
     }
   };
 
-  const handleCloseDeleteModal = () => {
-    setIsDeleteModal(false);
-  };
-
-  const handleShowDeleteModal = () => {
-    setIsDeleteModal(true);
-  };
-
-  const handleAfterBlogDelet = () => {
+  const handleAfterBlogDelete = () => {
     removeBlogFromList();
   };
 
@@ -135,13 +127,10 @@ function MoreComp({ blog, removeBlogFromList }) {
                     </li>
                   </ul>
                 )}
-                {/* below options for users own blog */}
                 {blog.isMyBlog && (
                   <ul className="width62 padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
                     <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
-                      <button className="cursor-pointer m-0 p-0 flex items-center">
-                        <div className="flex items-start text-left">Edit story</div>
-                      </button>
+                      <Edit blog={blog} />
                     </li>
                     <li className="custom-px-2 bdr-5" style={{ borderInline: 0, borderBottom: 0 }}></li>
                     <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
@@ -155,9 +144,7 @@ function MoreComp({ blog, removeBlogFromList }) {
                       </button>
                     </li>
                     <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
-                      <button onClick={handleShowDeleteModal} className="cursor-pointer m-0 p-0 flex items-center color-9">
-                        <div className="flex items-start text-left  color-9">Delete story</div>
-                      </button>
+                      <DeleteBlogBtn blog={blog} handleAfterBlogDelete={handleAfterBlogDelete} />
                     </li>
                   </ul>
                 )}
@@ -166,7 +153,6 @@ function MoreComp({ blog, removeBlogFromList }) {
           </Popover.Root>
         </div>
       </div>
-      {isDeleteModal && <DeleteBlogModal isDeleteModal={isDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal} blog={blog} handleAfterBlogDelet={handleAfterBlogDelet} />}
     </>
   );
 }

@@ -23,6 +23,7 @@ function PublicationSettings() {
     name: "",
     description: "",
     profileImg: "",
+    public_id: "",
     editors: [],
     topics: [],
     _id: "",
@@ -38,7 +39,7 @@ function PublicationSettings() {
       if (response?.status === 200 && result?.data?.publication) {
         const data = result.data.publication;
 
-        setPublication((prev) => ({ ...prev, _id: data._id, name: data.name, description: data.description, profileImg: data.profileImg, topics: data.topics, editors: data.editors, slug: data.slug }));
+        setPublication((prev) => ({ ...prev, _id: data._id, name: data.name, description: data.description, profileImg: data.profileImg, public_id: data.public_id, topics: data.topics, editors: data.editors, slug: data.slug }));
       } else {
         setIsError(true);
       }
@@ -56,6 +57,7 @@ function PublicationSettings() {
         name: publication.name,
         description: publication.description,
         profileImg: publication.profileImg,
+        public_id: publication.public_id,
         editors: publication.editors.map((item) => item._id),
         topics: publication.topics.map((item) => item._id),
         _id: publication._id,
@@ -80,7 +82,11 @@ function PublicationSettings() {
   const isNameAvailable = async () => {
     setIsSaveLoader(true);
     try {
-      const response = await requestHandler(`/publication/check-name-availability/${publication.name}`);
+      const params = {
+        name: publication.name,
+        id: publication._id,
+      };
+      const response = await requestHandler("/publication/check-name-availability", "POST", params);
       const result = await response.json();
 
       if (response?.status === 200) {
@@ -99,12 +105,14 @@ function PublicationSettings() {
   const handleSavePublicationBtnClick = () => {
     if (isSaveLoader) return;
 
-    if (!publication.name && !publication.description) {
+    if (!publication.name && !publication.description && !publication.profileImg) {
       showToast("Please add a name, description, and avatar for your publication.");
     } else if (publication.name.trim().length === 0) {
       showToast("Please add publication name.");
     } else if (publication.description.trim().length === 0) {
       showToast("Please add publication description.");
+    } else if (!publication.profileImg) {
+      showToast("Please select avatar.");
     } else {
       isNameAvailable();
     }

@@ -1,20 +1,37 @@
 import React, { useRef, useState } from "react";
 import { BsCamera } from "react-icons/bs";
+import { useImageUpload } from "../../../../hooks/upload";
 
 function ImageInput({ publication, setPublication }) {
+  const { uploadImage } = useImageUpload();
   const fileInputRef = useRef(null);
-  const [preview, setPreview] = useState(publication.profileImg);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUploadImgBtnClick = () => {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
 
     if (file) {
-      const blogUrl = URL.createObjectURL(file);
-      setPreview(blogUrl);
+      setIsLoading(true);
+      try {
+        // if (user.public_id) deleteImages([user.public_id]);
+        const result = await uploadImage(file);
+
+        if (result?.status === 200) {
+          setPublication((prev) => ({ ...prev, profileImg: result.data.url, public_id: result.data.public_id }));
+        } else {
+          showToast("Failed to upload image.");
+          setPublication((prev) => ({ ...prev, profileImg: "", public_id: "" }));
+        }
+      } catch (err) {
+        showToast("Failed to upload image.");
+        setPublication((prev) => ({ ...prev, profileImg: "", public_id: "" }));
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -26,14 +43,14 @@ function ImageInput({ publication, setPublication }) {
       </div>
 
       <div className="padding59 w-[41.66666667%]">
-        {!preview && (
-          <button onClick={handleUploadImgBtnClick} className="font-normal font-9 p-0 cursor-pointer color11 transition-all duration-75 ease opacity-100 hover:opacity-[0.95]">
+        {!publication.profileImg && (
+          <button onClick={handleUploadImgBtnClick} disabled={isLoading} className="font-normal font-9 p-0 cursor-pointer color11 transition-all duration-75 ease opacity-100 hover:opacity-[0.95]">
             Add avatar
           </button>
         )}
 
-        {preview && (
-          <button onClick={handleUploadImgBtnClick} className="font-normal font-9 p-0 cursor-pointer color11 transition-all duration-75 ease opacity-100 hover:opacity-[0.95]">
+        {publication.profileImg && (
+          <button onClick={handleUploadImgBtnClick} disabled={isLoading} className="font-normal font-9 p-0 cursor-pointer color11 transition-all duration-75 ease opacity-100 hover:opacity-[0.95]">
             Change avatar
           </button>
         )}
@@ -48,8 +65,8 @@ function ImageInput({ publication, setPublication }) {
 
       <div className="padding59 w-[33.33333333%]">
         <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} accept="image/*" />
-        {!preview && (
-          <button onClick={handleUploadImgBtnClick} className="p-0 text-left align-baseline cursor-pointer group">
+        {!publication.profileImg && (
+          <button onClick={handleUploadImgBtnClick} disabled={isLoading} className="p-0 text-left align-baseline cursor-pointer group">
             <div className="bdr25 padding44 border-radius11">
               <div className="width-4 aspect-square color-4 opacity-[0.65] transition-all duration-75 ease group-hover:opacity-100">
                 <BsCamera className="w-full h-full" />
@@ -58,9 +75,9 @@ function ImageInput({ publication, setPublication }) {
           </button>
         )}
 
-        {preview && (
+        {publication.profileImg && (
           <div>
-            <img src={preview} className="width88 aspect-square object-cover" />
+            <img src={publication.profileImg} className="width88 aspect-square object-cover" />
           </div>
         )}
       </div>

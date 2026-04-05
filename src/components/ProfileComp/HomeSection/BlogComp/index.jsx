@@ -11,6 +11,7 @@ import { UserContext } from "../../../../context/userContext";
 import MoreButton from "./MoreButtonComp";
 import noPreviewImg from "../../../../assets/images/noPreviewImage.png";
 import { showToast } from "../../../../utils/toaster";
+import { getImageUrl } from "../../../../utils/common";
 
 function BlogComp({ item }) {
   const { requestHandler } = useRequestHandler();
@@ -103,20 +104,54 @@ function BlogComp({ item }) {
                   <div className="flex relative">
                     <div className="w-full">
                       {/* writer section */}
-                      {blog.communityName && (
+                      {!blog.publication && (
                         <div className="flex w-full">
+                          <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
+                            <Link to={`/profile/${blog.author.username}`} className="relative z-[2] no-underline cursor-pointer">
+                              <div className="relative">
+                                <img className="height-12 aspect-square box-border rounded-full align-middle" src={blog.author.profileImg} />
+                                <div className="height-12 aspect-square absolute top-0 rounded-full"></div>
+                              </div>
+                            </Link>
+                          </div>
                           <div className="margin-21 flex items-center w-full" style={{ marginTop: 0, marginInline: 0 }}>
                             <div className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
                               <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
-                                {blog.communityName && <span className="font-light">In </span>}
-                                {blog.communityName && <span className="font-normal no-underline hover:underline">{blog.communityName}</span>}
-                                {/* {blog.communityName && <span className="font-light"> by </span>} */}
-                                {/* <span className="font-normal no-underline hover:underline">{blog.isMyBlog ? "You" : blog.author.name}</span> */}
+                                <Link to={`/profile/${blog.author.username}`} title={blog.author.name} className="font-normal no-underline hover:underline">
+                                  {blog.isMyBlog ? "You" : blog.author.name}
+                                </Link>
                               </div>
                             </div>
                           </div>
                         </div>
                       )}
+                      {blog.publication && (
+                        <div className="flex w-full">
+                          <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
+                            <Link to={`/publication/${blog.publication.slug}`} className="relative z-[2] no-underline cursor-pointer">
+                              <div className="relative">
+                                <img className="height-12 aspect-square box-border br13 align-middle" src={blog.publication.profileImg} />
+                                <div className="height-12 aspect-square absolute top-0 br13"></div>
+                              </div>
+                            </Link>
+                          </div>
+                          <div className="margin-21 flex items-center w-full" style={{ marginTop: 0, marginInline: 0 }}>
+                            <div className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
+                              <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
+                                <span className="font-light">In </span>
+                                <Link to={`/publication/${blog.publication.slug}`} title={blog.publication.name} className="font-normal no-underline hover:underline">
+                                  {blog.publication.name}
+                                </Link>
+                                <span className="font-light"> by </span>
+                                <Link to={`/profile/${blog.author.username}`} title={blog.author.name} className="font-normal no-underline hover:underline">
+                                  {blog.isMyBlog ? "You" : blog.author.name}
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       {/* blog section */}
                       <div className="flex">
                         {/* left section */}
@@ -190,8 +225,7 @@ function BlogComp({ item }) {
                           </div>
                         </div>
                         <div className="margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
-                          {blog.previewImg && <img src={blog.previewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
-                          {!blog.previewImg && <img src={noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />}
+                          <img src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />
                         </div>
                       </div>
                     </div>

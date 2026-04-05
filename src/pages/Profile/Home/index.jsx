@@ -12,6 +12,7 @@ function Home() {
   const { requestHandler } = useRequestHandler();
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const hasFetched = useRef(null);
   const limit = 10;
   const [scroll, setScroll] = useState({
     loading: false,
@@ -50,9 +51,10 @@ function Home() {
   });
 
   useEffect(() => {
-    if (user && !user.isNoBlogPublished) {
+    if (user && !user.isNoBlogPublished && !hasFetched.current) {
       setIsLoading(true);
       fetchBlogs();
+      hasFetched.current = true;
     }
   }, [user]);
 

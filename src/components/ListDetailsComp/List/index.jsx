@@ -4,7 +4,7 @@ import { FaHandsClapping } from "react-icons/fa6";
 import { FaComment } from "react-icons/fa";
 import BlogMoreBtn from "./BlogMoreBtn";
 import { formatUTCToLocalDate } from "../../../utils/dates";
-import { formatNumberCompact } from "../../../utils/common";
+import { formatNumberCompact, getImageUrl } from "../../../utils/common";
 import errImg from "../../../assets/images/noPreviewImage.png";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { showToast } from "../../../utils/toaster";
@@ -24,7 +24,6 @@ function ListItem({ item, list, updateRemovedListItem }) {
   const [loaders, setLoaders] = useState({
     deleteList: false,
   });
-
   const handleFocusToggle = (isFocus) => {
     setIsFocused(isFocus);
     if (isFocus && !isShowBtn) {
@@ -146,21 +145,53 @@ function ListItem({ item, list, updateRemovedListItem }) {
                       <div className="relative flex">
                         <div className="w-full">
                           <div className="flex">
-                            <div className="margin-21 flex items-center" style={{ marginInline: 0, marginTop: 0 }}>
-                              <div className="margin-9" style={{ marginLeft: 0 }}>
-                                <Link to={`/profile/${listItem.blog.author.username}`} className="relative no-underline cursor-pointer">
-                                  <img src={listItem.blog.author.profileImg} className="width86 aspect-square box-border rounded-full" />
-                                  <div className="absolute top-0 width86 aspect-square box-border rounded-full boxShadow7"></div>
-                                </Link>
+                            {!listItem.blog.publication && (
+                              <div className="margin-21 flex items-center" style={{ marginInline: 0, marginTop: 0 }}>
+                                <div className="margin-9 shrink-0" style={{ marginLeft: 0 }}>
+                                  <Link to={`/profile/${listItem.blog.author.username}`} className="relative no-underline cursor-pointer ">
+                                    <img src={listItem.blog.author.profileImg} className="width86 aspect-square box-border rounded-full" />
+                                    <div className="absolute top-0 width86 aspect-square box-border rounded-full boxShadow7"></div>
+                                  </Link>
+                                </div>
+                                <div>
+                                  <Link to={`/profile/${listItem.blog.author.username}`} className="no-underline relative cursor-pointer m-0 p-0 flex items-center hover:underline">
+                                    <p className="break-words line-clamp-1 height-6 font-4 color-3 line20 font-normal m-0" title={listItem.blog.author.name}>
+                                      {userInfo._id === listItem.blog.author._id ? "You" : listItem.blog.author.name}
+                                    </p>
+                                  </Link>
+                                </div>
                               </div>
-                              <div>
-                                <Link to={`/profile/${listItem.blog.author.username}`} className="no-underline relative cursor-pointer m-0 p-0 flex items-center hover:underline">
-                                  <p className="break-words line-clamp-1 height-6 font-4 color-3 line20 font-normal m-0" title={listItem.blog.author.name}>
-                                    {userInfo._id === listItem.blog.author._id ? "You" : listItem.blog.author.name}
-                                  </p>
-                                </Link>
+                            )}
+                            {listItem.blog.publication && (
+                              <div className="margin-21 flex items-center" style={{ marginInline: 0, marginTop: 0 }}>
+                                <div className="margin-9 shrink-0" style={{ marginLeft: 0 }}>
+                                  <Link to={`/publication/${listItem.blog.publication.slug}`} className="relative no-underline cursor-pointer">
+                                    <img src={listItem.blog.publication.profileImg} className="width86 aspect-square box-border br13" />
+                                    <div className="absolute top-0 width86 aspect-square box-border br13 boxShadow7"></div>
+                                  </Link>
+                                </div>
+                                <div className="padding-23 whitespace-nowrap" style={{ paddingLeft: 0, paddingBlock: 0 }}>
+                                  <p className="font-4 color-4 line20 font-normal m-0">In</p>
+                                </div>
+                                <div>
+                                  <Link to={`/publication/${listItem.blog.publication.slug}`} className="no-underline relative cursor-pointer m-0 p-0 flex items-center hover:underline">
+                                    <p className="break-words line-clamp-1 height-6 font-4 color-3 line20 font-normal m-0" title={listItem.blog.publication.name}>
+                                      {listItem.blog.publication.name}
+                                    </p>
+                                  </Link>
+                                </div>
+                                <div className="padding-23 whitespace-nowrap" style={{ paddingBlock: 0 }}>
+                                  <p className="font-4 color-4 line20 font-normal m-0">by</p>
+                                </div>
+                                <div>
+                                  <Link to={`/profile/${listItem.blog.author.username}`} className="no-underline relative cursor-pointer m-0 p-0 flex items-center hover:underline">
+                                    <p className="break-words line-clamp-1 height-6 font-4 color-3 line20 font-normal m-0" title={listItem.blog.author.name}>
+                                      {userInfo._id === listItem.blog.author._id ? "You" : listItem.blog.author.name}
+                                    </p>
+                                  </Link>
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </div>
 
                           <div className="flex">
@@ -210,8 +241,7 @@ function ListItem({ item, list, updateRemovedListItem }) {
 
                             <div className="margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
                               <Link to={`/${listItem.blog.slug}/${listItem.blog._id}`} className="block no-underline">
-                                {listItem.blog.previewImg && <img src={listItem.blog.previewImg} className="border-radius-5 width-29 height-52" />}
-                                {!listItem.blog.previewImg && <img src={errImg} className="border-radius-5 width-29 height-52" />}
+                                <img src={listItem.blog.previewImg ? getImageUrl(listItem.blog.previewImg) : errImg} className="border-radius-5 width-29 height-52" />
                               </Link>
                             </div>
                           </div>

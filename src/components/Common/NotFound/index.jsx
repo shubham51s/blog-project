@@ -13,7 +13,7 @@ function NotFoundComp() {
   const fetchBlogs = async () => {
     setIsLoading(true);
     try {
-      const response = await requestHandler("/blogs/recommended?limit=4");
+      const response = await requestHandler("/blogs/recommended/users?limit=4");
       const result = await response.json();
 
       if (response.status === 200 && result?.data?.blogs) {

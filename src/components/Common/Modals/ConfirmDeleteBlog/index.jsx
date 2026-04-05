@@ -4,7 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { showToast } from "../../../../utils/toaster";
 
-function DeleteBlogModal({ isDeleteModal, handleCloseDeleteModal, blog, handleAfterBlogDelet = () => {} }) {
+function DeleteBlogModal({ isDeleteModal, handleCloseDeleteModal, blog, handleAfterBlogDelete = () => {} }) {
   const { requestHandler } = useRequestHandler();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -16,7 +16,7 @@ function DeleteBlogModal({ isDeleteModal, handleCloseDeleteModal, blog, handleAf
 
       if (response?.status === 200) {
         showToast("Blog deleted successfully");
-        handleAfterBlogDelet();
+        handleAfterBlogDelete();
       } else {
         if (response?.status < 500) {
           showToast(result?.message || "Some error occured");

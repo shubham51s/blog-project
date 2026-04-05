@@ -8,9 +8,12 @@ import * as Popover from "@radix-ui/react-popover";
 import { showToast } from "../../../utils/toaster";
 import { FollowingContext } from "../../../context/followingContext";
 import NotFoundComp from "../../../components/Common/NotFound";
+import { getImageUrl } from "../../../utils/common";
+import { UserContext } from "../../../context/userContext";
 
 function ProfileCommonLayout() {
   const rootUrl = window.location.origin;
+  const { userInfo } = useContext(UserContext);
   const [isError, setIsError] = useState(false);
   const { username } = useParams();
   const { requestHandler } = useRequestHandler();
@@ -90,7 +93,8 @@ function ProfileCommonLayout() {
               {!pathname.includes("/followers") && !pathname.includes("/following") && (
                 <div>
                   {/* cover image */}
-                  {user?.coverImage && <div className="height75 flex flex-col bg-top bg-cover opacity-[0.70]" style={{ backgroundImage: `url(${user.coverImage})` }}></div>}
+                  {user && user._id !== userInfo._id && user?.coverImage && <div className="height75 flex flex-col bg-top bg-cover opacity-[0.70]" style={{ backgroundImage: `url(${getImageUrl(user.coverImage)})` }}></div>}
+                  {user && user._id === userInfo._id && userInfo?.coverImage && <div className="height75 flex flex-col bg-top bg-cover opacity-[0.70]" style={{ backgroundImage: `url(${getImageUrl(userInfo.coverImage)})` }}></div>}
                   <div className="flex justify-center">
                     <div className="min-w-0 w-full max-width-2 margin-12">
                       <div className="margin56 margin54 boxShadow10">
@@ -100,7 +104,7 @@ function ProfileCommonLayout() {
                               <div className="flex flex-nowrap">
                                 {user && (
                                   <span className="letter-spacing-7 height-53 line-h-10 font-12 color16 padding50 break-words line-clamp-1 text-ellipsis font-bold overflow-hidden" style={{ paddingLeft: 0 }}>
-                                    {user.name}
+                                    {user._id === userInfo._id ? userInfo.name : user.name}
                                   </span>
                                 )}
                                 {!user && (

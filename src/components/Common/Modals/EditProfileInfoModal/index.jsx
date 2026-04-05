@@ -9,6 +9,7 @@ import ButtonSpinner from "../../ButtonSpinner";
 import { showToast } from "../../../../utils/toaster";
 import { useImageUpload } from "../../../../hooks/upload";
 import Skeleton from "react-loading-skeleton";
+import { getImageUrl } from "../../../../utils/common";
 
 function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
   const { userInfo, fetchUpdatedUserDetails } = useContext(UserContext);
@@ -40,7 +41,7 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
     coverImg: userInfo.coverImage,
   });
 
-  const [user, setUser] = useState({ firstName: userInfo.firstName, lastName: userInfo.lastName, bio: userInfo.bio || "", profile: userInfo.profileImg, public_id: userInfo.public_id, coverImg: userInfo.coverImage, coverPublicId: userInfo.cover_public_id });
+  const [user, setUser] = useState({ firstName: userInfo.firstName, lastName: userInfo.lastName, bio: userInfo.bio || "", profile: userInfo.profileImg, public_id: userInfo.public_id, coverImg: userInfo.coverImage });
 
   const handleUpdateUserInfo = async () => {
     setIsLoading(true);
@@ -50,7 +51,6 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
         lastName: user.lastName,
         bio: user.bio,
         coverImage: user.coverImg,
-        cover_public_id: user.coverPublicId,
         profileImg: user.profile,
         public_id: user.public_id,
       };
@@ -198,14 +198,14 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
         const result = await uploadImage(file);
 
         if (result?.status === 200) {
-          setUser((prev) => ({ ...prev, coverImg: result.data.url, coverPublicId: result.data.public_id }));
+          setUser((prev) => ({ ...prev, coverImg: result.data.public_id }));
         } else {
           showToast("Failed to upload image.");
-          setUser((prev) => ({ ...prev, coverImg: "", coverPublicId: "" }));
+          setUser((prev) => ({ ...prev, coverImg: "" }));
         }
       } catch (err) {
         showToast("Failed to upload image.");
-        setUser((prev) => ({ ...prev, coverImg: "", coverPublicId: "" }));
+        setUser((prev) => ({ ...prev, coverImg: "" }));
         console.error(err);
       } finally {
         setLoaders((prev) => ({ ...prev, cover: false }));
@@ -333,7 +333,7 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
               <div className="flex">
                 <button className="cursor-pointer p-0 m-0">
                   <div className="relative" onClick={handleCoverImgBtnClick}>
-                    <img src={user.coverImg || null} className="height-63 aspect-[3/1]" />
+                    <img src={user.coverImg ? getImageUrl(user.coverImg) : null} className="height-63 aspect-[3/1]" />
                     <div className="absolute top-0 boxShadow7 height-63 aspect-[3/1]"></div>
                   </div>
                 </button>
