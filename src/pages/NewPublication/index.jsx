@@ -4,7 +4,6 @@ import NameInput from "../../components/NewPublication/Inputs/Name";
 import DescriptionInput from "../../components/NewPublication/Inputs/Description";
 import ImageInput from "../../components/NewPublication/Inputs/Image";
 import TopicInput from "../../components/NewPublication/Inputs/Topic";
-import WriterInput from "../../components/NewPublication/Inputs/Writer";
 import EditorInput from "../../components/NewPublication/Inputs/Editor";
 import { showToast } from "../../utils/toaster";
 import { useRequestHandler } from "../../hooks/requestHandler";

@@ -10,17 +10,24 @@ import { EditorContent, h, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
-import { useApi } from "../../../hooks/useApi";
 import { formatMonthAndDayLong } from "../../../utils/monthDateLongFormatter";
 import { showToast } from "../../../utils/toaster";
+import { useRequestHandler } from "../../../hooks/requestHandler";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function CommentsComp({ blog, setBlog }) {
-  const { fetchRequest } = useApi();
+  const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
+  const limit = 20;
   const allCommentsBtnRef = useRef(null);
   const allCommentsContentRef = useRef(null);
   const [comments, setComments] = useState([]);
   const [isCommentLoader, setIsCommentLoader] = useState(false);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
   const [commentsDrawer, setCommentsDrawer] = useState({
     isShow: false,
     input: "",
@@ -31,7 +38,6 @@ function CommentsComp({ blog, setBlog }) {
     input: "",
     isAddComment: false,
   });
-  const [skip, setSkip] = useState(0);
 
   const editor = useEditor({
     extensions: [
@@ -145,7 +151,7 @@ function CommentsComp({ blog, setBlog }) {
         content: type === 1 ? commentsMain.input : commentsDrawer.input,
       };
 
-      const response = await fetchRequest("/comment", "POST", params);
+      const response = await requestHandler("/comment", "POST", params);
       const result = await response.json();
       setIsCommentLoader(false);
 
@@ -160,7 +166,6 @@ function CommentsComp({ blog, setBlog }) {
         setComments((prev) => [newComment, ...prev]);
 
         const commentCount = blog.commentCount + 1;
-        if (skip >= 0) setSkip((prev) => prev + 1);
         setBlog((prev) => ({ ...prev, commentCount }));
 
         // fetchComments();
@@ -176,13 +181,12 @@ function CommentsComp({ blog, setBlog }) {
 
   const handleDeleteCommentBtnClick = async (commentId) => {
     try {
-      const response = await fetchRequest(`/comment/${commentId}`, "DELETE");
+      const response = await requestHandler(`/comment/${commentId}`, "DELETE");
 
       if (response.status === 200) {
         setComments((prev) => prev.filter((item) => item._id !== commentId));
         const commentCount = blog.commentCount > 0 ? blog.commentCount - 1 : 0;
         setBlog((prev) => ({ ...prev, commentCount }));
-        if (skip >= 0) setSkip((prev) => (prev > 0 ? prev - 1 : prev));
         // fetchComments();
         showToast("Comment deleted successfully");
       } else {
@@ -196,22 +200,33 @@ function CommentsComp({ blog, setBlog }) {
   };
 
   const fetchComments = async () => {
-    if (skip < 0) return;
+    if (!scroll.hasMore) return;
+
+    setScroll((prev) => ({ ...prev, loading: true }));
     try {
-      const response = await fetchRequest(`/comment/${blog._id}?skip=${skip}`, "GET");
+      const url = scroll.cursor ? `/comment/${blog._id}?cursor=${scroll.cursor}&limit=${limit}` : `/comment/${blog._id}?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
-      if (response.status === 200) {
-        setComments(result?.data?.comments);
-        setSkip(result?.data?.comments?.length || -1);
+      if (response.status === 200 && result?.data?.comments) {
+        setComments((prev) => [...prev, ...result.data.comments]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
       } else {
-        setSkip(-1);
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
-      setSkip(-1);
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
+    } finally {
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchComments,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
@@ -506,6 +521,7 @@ function CommentsComp({ blog, setBlog }) {
                 </div>
               </div>
             ))}
+            {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
           </div>
         </div>
       </div>

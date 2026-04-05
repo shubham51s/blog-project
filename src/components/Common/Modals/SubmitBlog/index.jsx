@@ -149,7 +149,7 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true })
       {/* select publication */}
       {((blogLoader && !blog) || (!blogLoader && blog)) && tab === 0 && <SubmitToPublication handlePublicationSelection={handlePublicationSelection} />}
       {/* confirm submit */}
-      {!blogLoader && blog && tab === 1 && <ConfirmBlogSubmission allTopics={allTopics} blog={blog} setBlog={setBlog} handleTabChange={handleTabChange} publishBlog={publishBlog} />}
+      {!blogLoader && blog && tab === 1 && <ConfirmBlogSubmission allTopics={allTopics} blog={blog} setBlog={setBlog} handleTabChange={handleTabChange} publishBlog={publishBlog} edited={edited} />}
 
       {/* laoder */}
       {blogLoader && tab === 1 && (

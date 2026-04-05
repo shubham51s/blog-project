@@ -5,32 +5,45 @@ import ListLoader from "../../../components/ProfileComp/ListSection/ListComp/ske
 import { UserContext } from "../../../context/userContext";
 import ListComp from "../../../components/ProfileComp/ListSection/ListComp";
 import { defaultLoaderTime } from "../../../constants/constant";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function MyLists() {
   const { userInfo } = useContext(UserContext);
   const [user, setUser] = useState({ ...userInfo, lists: [], publicLists: [] });
   const { requestHandler } = useRequestHandler();
-  const isMounted = useRef();
   const [isLoading, setIsLoading] = useState(true);
   const [lists, setLists] = useState([]);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef();
   const [isShowListBanner, setIsShowListBanner] = useState(sessionStorage.getItem("isHideListBanner") ? false : true);
+  const limit = 10;
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
-  const fetchMyLists = async (skip) => {
+  const fetchMyLists = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/list/my-lists?skip=${skip}`);
+      const url = scroll.cursor ? `/list/my-lists?cursor=${scroll.cursor}&limit=${limit}` : `/list/my-lists?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.lists) {
-        if (lists.length === 0) {
-          setLists(result.data.lists);
-        }
+        setLists((prev) => [...prev, ...result.data.lists]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
 
@@ -39,11 +52,13 @@ function MyLists() {
     setLists(updatedList);
   };
 
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchMyLists,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      fetchMyLists(0);
-    }
+    fetchMyLists();
 
     if (!defaultLoaderTimeout.current) {
       defaultLoaderTimeout.current = setTimeout(() => {
@@ -60,6 +75,7 @@ function MyLists() {
       <div>{(defaultLoader || isLoading) && Array.from({ length: 4 }).map((_, i) => <ListLoader key={i} />)}</div>
 
       <div>{!defaultLoader && !isLoading && lists.map((item) => <ListComp key={item._id} user={user} setUser={setUser} item={item} filterOutDeletedList={filterOutDeletedList} />)}</div>
+      <div>{!defaultLoader && !isLoading && lists.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}</div>
     </>
   );
 }

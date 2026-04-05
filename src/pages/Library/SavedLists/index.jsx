@@ -13,7 +13,7 @@ function SavedLists() {
   const [defaultLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
 
-  const fetchSavedLists = async (skip) => {
+  const fetchSavedLists = async () => {
     try {
       const response = await requestHandler(`/list/toggle-save/get-saved-lists`);
       const result = await response.json();

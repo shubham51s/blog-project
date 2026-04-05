@@ -3,14 +3,15 @@ import { Link } from "react-router-dom";
 import { footerOptions } from "../../../../constants/constant";
 import ListItem from "./ListItem";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
+import { useInfiniteScroll } from "../../../../hooks/useInfiniteScroll";
 
 function RightSection() {
   const { requestHandler } = useRequestHandler();
   const [users, setUsers] = useState([]);
 
-  const fetchSuggestedUsers = async (skip) => {
+  const fetchSuggestedUsers = async () => {
     try {
-      const response = await requestHandler(`/users/suggestions?skip=${skip}&limit=3`);
+      const response = await requestHandler(`/users/suggestions?limit=3`);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.users) {
@@ -22,7 +23,7 @@ function RightSection() {
   };
 
   useEffect(() => {
-    fetchSuggestedUsers(0);
+    fetchSuggestedUsers();
   }, []);
 
   return (

@@ -10,7 +10,7 @@ import { Tooltip } from "@mui/material";
 import { FollowingContext } from "../../../../context/followingContext";
 import { useToggleUserFollow } from "../../../../hooks/toggleUserFollow";
 
-function BlogMoreBtn({ listItem, setListItems }) {
+function BlogMoreBtn({ listItem, deleteListItem, list }) {
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
@@ -113,55 +113,17 @@ function BlogMoreBtn({ listItem, setListItems }) {
     }
   };
 
-  const deleteBlog = async (setIsLoading) => {
-    setIsLoading(true);
-    try {
-      // const response = await requestHandler(`/list/delete/${list._id}`, "DELETE");
-      // if (response?.status === 200) {
-      //   filterOutDeletedList(list._id);
-      //   showToast("List deleted and removed from Your library");
-      // } else {
-      //   showToast("Some error occured");
-      // }
-      setIsLoading(false);
-      handleCloseDeleteModal();
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-      setIsLoading(false);
-    }
-  };
-
   const removeListItem = async () => {
     setLoaders((prev) => ({ ...prev, removeListItemLoader: true }));
-    try {
-      const params = {
-        list: listItem.list,
-        blog: listItem.blog._id,
-      };
-
-      const response = await requestHandler("/list/items/delete", "POST", params);
-
-      if (response?.status === 204) {
-        showToast("Successfully deleted");
-        setListItems((prev) => [...prev.filter((item) => item._id !== listItem._id)]);
-      } else {
-        showToast("Some error occured");
-      }
-
-      setLoaders((prev) => ({ ...prev, removeListItemLoader: false }));
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-      setLoaders((prev) => ({ ...prev, removeListItemLoader: false }));
-    }
+    await deleteListItem();
+    setLoaders((prev) => ({ ...prev, removeListItemLoader: false }));
   };
 
   return (
     <>
       <div className="margin-26">
         <Popover.Root open={isPopupOpen} onOpenChange={setIsPopupOpen}>
-          <Popover.Trigger className="relative padding-33 cursor-pointer m-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+          <Popover.Trigger onClick={(e) => e.stopPropagation()} className="relative padding-33 cursor-pointer m-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
             <div className="width-13 aspect-square">
               <Tooltip placement="top" arrow title="More">
                 <MdOutlineMoreHoriz className="w-full h-full" />
@@ -172,11 +134,13 @@ function BlogMoreBtn({ listItem, setListItems }) {
             <div className="custom-bg-8 border-radius-3 overflow-hidden">
               {userInfo._id !== listItem.blog.author._id && (
                 <ul className="flex flex-col items-stretch m-0 custom-px-2 width59 list-none">
-                  <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
-                    <button onClick={removeListItem} disabled={loaders.removeListItemLoader} className={`cursor-pointer m-0 p-0 opacity-[0.85] transition-all duration-75 ease ${loaders.removeListItemLoader ? "" : "hover:opacity-100"}`}>
-                      Remove item
-                    </button>
-                  </li>
+                  {list.user._id === userInfo._id && (
+                    <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
+                      <button onClick={removeListItem} disabled={loaders.removeListItemLoader} className={`cursor-pointer m-0 p-0 opacity-[0.85] transition-all duration-75 ease ${loaders.removeListItemLoader ? "" : "hover:opacity-100"}`}>
+                        Remove item
+                      </button>
+                    </li>
+                  )}
                   {!isFetchUserLoader && (
                     <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
                       {followingUsers[listItem.blog.author._id] && (
@@ -195,11 +159,13 @@ function BlogMoreBtn({ listItem, setListItems }) {
               )}
               {userInfo._id === listItem.blog.author._id && (
                 <ul className="flex flex-col items-stretch m-0 custom-px-2 width59 list-none">
-                  <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
-                    <button onClick={removeListItem} disabled={loaders.removeListItemLoader} className="cursor-pointer m-0 p-0 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
-                      Remove item
-                    </button>
-                  </li>
+                  {list.user._id === userInfo._id && (
+                    <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
+                      <button onClick={removeListItem} disabled={loaders.removeListItemLoader} className="cursor-pointer m-0 p-0 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                        Remove item
+                      </button>
+                    </li>
+                  )}
                   <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
                     <button className="cursor-pointer m-0 p-0 transition-all opacity-[0.85] duration-75 ease hover:opacity-100">Edit story</button>
                   </li>
@@ -229,7 +195,7 @@ function BlogMoreBtn({ listItem, setListItems }) {
         </Popover.Root>
       </div>
       <DisableBlogCommentsModal isHideResponseModal={isHideResponseModal} handleCloseHideResponseModal={handleCloseHideResponseModal} hideResponses={hideResponses} />
-      <DeleteBlogModal isDeleteModal={isDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal} deleteBlog={deleteBlog} />
+      <DeleteBlogModal isDeleteModal={isDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal} blog={listItem.blog} />
     </>
   );
 }

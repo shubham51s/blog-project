@@ -7,12 +7,21 @@ import { Link } from "react-router-dom";
 import { GoArrowUpRight } from "react-icons/go";
 import ButtonSpinner from "../../ButtonSpinner";
 import { showToast } from "../../../../utils/toaster";
+import { useImageUpload } from "../../../../hooks/upload";
+import Skeleton from "react-loading-skeleton";
 
 function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
   const { userInfo, fetchUpdatedUserDetails } = useContext(UserContext);
+  const { uploadImage, deleteImages } = useImageUpload();
+  const profileImgRef = useRef(null);
+  const coverImgRef = useRef(null);
   const nameRegex = /^[A-Za-z\s]+$/;
   const { requestHandler } = useRequestHandler();
   const [isLoading, setIsLoading] = useState(false);
+  const [loaders, setLoaders] = useState({
+    profile: false,
+    cover: false,
+  });
   const [isFocus, setIsFocus] = useState({
     firstName: false,
     lastName: false,
@@ -27,9 +36,11 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
     bio: userInfo.bio || "",
+    profile: userInfo.profileImg,
+    coverImg: userInfo.coverImage,
   });
 
-  const [user, setUser] = useState({ firstName: userInfo.firstName, lastName: userInfo.lastName, bio: userInfo.bio || "" });
+  const [user, setUser] = useState({ firstName: userInfo.firstName, lastName: userInfo.lastName, bio: userInfo.bio || "", profile: userInfo.profileImg, public_id: userInfo.public_id, coverImg: userInfo.coverImage, coverPublicId: userInfo.cover_public_id });
 
   const handleUpdateUserInfo = async () => {
     setIsLoading(true);
@@ -38,6 +49,10 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
         firstName: user.firstName,
         lastName: user.lastName,
         bio: user.bio,
+        coverImage: user.coverImg,
+        cover_public_id: user.coverPublicId,
+        profileImg: user.profile,
+        public_id: user.public_id,
       };
       const response = await requestHandler("/users/update/basic-info", "POST", params);
       const result = await response.json();
@@ -142,8 +157,69 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
     el.style.height = el.scrollHeight + "px"; // grow based on content
   };
 
+  const handleProfileImgChange = async (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      setLoaders((prev) => ({ ...prev, profile: true }));
+      setIsLoading(true);
+      try {
+        // if (user.public_id) deleteImages([user.public_id]);
+        const result = await uploadImage(file);
+
+        if (result?.status === 200) {
+          setUser((prev) => ({ ...prev, profile: result.data.url, public_id: result.data.public_id }));
+        } else {
+          showToast("Failed to upload image.");
+          setUser((prev) => ({ ...prev, profile: "", public_id: "" }));
+        }
+      } catch (err) {
+        showToast("Failed to upload image.");
+        setUser((prev) => ({ ...prev, profile: "", public_id: "" }));
+      } finally {
+        setLoaders((prev) => ({ ...prev, profile: false }));
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const handleUploadImgBtnClick = () => {
+    profileImgRef.current.click();
+  };
+
+  const handleCoverImgChange = async (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      setLoaders((prev) => ({ ...prev, cover: true }));
+      setIsLoading(true);
+      try {
+        // if (user.coverPublicId) deleteImages([user.coverPublicId]);
+        const result = await uploadImage(file);
+
+        if (result?.status === 200) {
+          setUser((prev) => ({ ...prev, coverImg: result.data.url, coverPublicId: result.data.public_id }));
+        } else {
+          showToast("Failed to upload image.");
+          setUser((prev) => ({ ...prev, coverImg: "", coverPublicId: "" }));
+        }
+      } catch (err) {
+        showToast("Failed to upload image.");
+        setUser((prev) => ({ ...prev, coverImg: "", coverPublicId: "" }));
+        console.error(err);
+      } finally {
+        setLoaders((prev) => ({ ...prev, cover: false }));
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const handleCoverImgBtnClick = () => {
+    coverImgRef.current.click();
+  };
+
   const isValid = () => {
-    return !error.firstName && !error.lastName && !error.bio && (oldDetails.firstName !== user.firstName.trim() || oldDetails.lastName !== user.lastName.trim() || oldDetails.bio !== user.bio.trim());
+    return !error.firstName && !error.lastName && !error.bio && (oldDetails.firstName !== user.firstName.trim() || oldDetails.lastName !== user.lastName.trim() || oldDetails.bio !== user.bio.trim() || oldDetails.profile !== user.profile || oldDetails.coverImg !== user.coverImg);
   };
 
   return (
@@ -170,8 +246,6 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
           {/* profile photo */}
           <div className="margin54">
             <div className="w-full flex flex-col">
-              <input type="text" className="hidden" />
-
               <div className="margin-10" style={{ marginTop: 0 }}>
                 <label className="color-4 custom-fs-1 line20 font-normal">Photo</label>
               </div>
@@ -179,7 +253,7 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
               <div className="flex">
                 <button className="cursor-pointer p-0 m-0">
                   <div className="relative">
-                    <img src={userInfo.profileImg} className="height76 aspect-square rounded-full" />
+                    <img onClick={handleUploadImgBtnClick} src={user.profile} className="height76 aspect-square rounded-full" />
                     <div className="absolute top-0 boxShadow7 height76 aspect-square rounded-full"></div>
                   </div>
                 </button>
@@ -187,13 +261,11 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
                 <div className="margin-12" style={{ marginRight: 0 }}>
                   <div className="margin-21 flex items-center" style={{ marginTop: 0, marginInline: 0 }}>
                     <button className="cursor-pointer m-0 p-0">
-                      <p className="text-[#1A8917] custom-fs-1 line20 font-normal m-0">Update</p>
+                      <p onClick={handleUploadImgBtnClick} disabled={loaders.profile} className="text-[#1A8917] custom-fs-1 line20 font-normal m-0">
+                        Update
+                      </p>
+                      <input type="file" ref={profileImgRef} className="hidden" onChange={handleProfileImgChange} accept="image/*" />
                     </button>
-                    <div className="margin-21" style={{ marginRight: 0, marginBlock: 0 }}>
-                      <button className="cursor-pointer m-0 p-0">
-                        <p className="text-[#C94A4A] custom-fs-1 line20 font-normal m-0">Remove</p>
-                      </button>
-                    </div>
                   </div>
                   <p className="color-4 custom-fs-1 line20 font-normal m-0">Recommended: Square JPG, PNG, or GIF, at least 1,000 pixels per side.</p>
                 </div>
@@ -250,6 +322,37 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
           </div>
 
           {/* break line */}
+          <div className="h-0 w-full bdr-5" style={{ marginInline: 0, borderTop: 0, borderInline: 0 }}></div>
+
+          <div className="margin54">
+            <div className="w-full flex flex-col">
+              <div className="margin-10" style={{ marginTop: 0 }}>
+                <label className="color-4 custom-fs-1 line20 font-normal">Add background image</label>
+              </div>
+
+              <div className="flex">
+                <button className="cursor-pointer p-0 m-0">
+                  <div className="relative" onClick={handleCoverImgBtnClick}>
+                    <img src={user.coverImg || null} className="height-63 aspect-[3/1]" />
+                    <div className="absolute top-0 boxShadow7 height-63 aspect-[3/1]"></div>
+                  </div>
+                </button>
+
+                <div className="margin-12" style={{ marginRight: 0 }}>
+                  <div className="margin-24 flex items-center custom-gap-3" style={{ marginTop: 0, marginInline: 0 }}>
+                    <button className="cursor-pointer m-0 p-0">
+                      <p onClick={handleCoverImgBtnClick} disabled={loaders.cover} className="text-[#1A8917] custom-fs-1 line20 font-normal m-0">
+                        Update
+                      </p>
+                      <input type="file" ref={coverImgRef} className="hidden" onChange={handleCoverImgChange} accept="image/*" />
+                    </button>
+                  </div>
+                  <p className="color-4 custom-fs-1 line20 font-normal m-0">We recommend the background image be at least 1500 pixels wide. We support JPG, PNG, and GIF files.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="h-0 w-full bdr-5 margin-14" style={{ marginInline: 0, borderTop: 0, borderInline: 0 }}></div>
 
           {/* about */}

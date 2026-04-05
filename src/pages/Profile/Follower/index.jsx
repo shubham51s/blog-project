@@ -5,6 +5,8 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { formatNumberCompact } from "../../../utils/common";
 import FollowersList from "../../../components/ProfileComp/FollowersSection";
 import Spinner from "../../../components/Common/Spinner";
+import { defaultLoaderTime } from "../../../constants/constant";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function Follower() {
   const { user, setUser } = useOutletContext();
@@ -13,35 +15,53 @@ function Follower() {
   const [defaultLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const limit = 20;
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
-  const fetchFollowersList = async (skip) => {
+  const fetchFollowersList = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/follow/followers/${user._id}?skip=${skip}`);
+      const url = scroll.cursor ? `/follow/followers/${user._id}?cursor=${scroll.cursor}&limit=${limit}` : `/follow/followers/${user._id}?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.follower) {
-        if (skip === 0) setFollowersArr(result.data.follower);
+        setFollowersArr((prev) => [...prev, ...result.data.follower]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
 
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchFollowersList,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
+
   useEffect(() => {
-    if (user && isLoading) fetchFollowersList(0);
+    if (user && isLoading) fetchFollowersList();
   }, [user]);
 
   useEffect(() => {
-    if (defaultLoaderTimeout.current) clearTimeout(defaultLoaderTimeout.current);
-    defaultLoaderTimeout.current = setTimeout(() => {
-      setDefaultLoader(false);
-    }, 300);
-
-    return () => {
-      if (defaultLoaderTimeout.current) clearTimeout(defaultLoaderTimeout.current);
-    };
+    if (!defaultLoaderTimeout.current) {
+      defaultLoaderTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+      }, defaultLoaderTime);
+    }
   }, []);
 
   return (
@@ -77,6 +97,7 @@ function Follower() {
                 {followersArr.map((item) => (
                   <FollowersList item={item} user={user} setUser={setUser} key={item._id} />
                 ))}
+                {followersArr.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
               </div>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { showToast } from "../../../utils/toaster";
 import ReadingHistoryItem from "../../../components/LibraryComp/ReadingHistory/ReadingHistoryItem";
 import Loader from "../../../components/LibraryComp/ReadingHistory/Loader";
 import { defaultLoaderTime } from "../../../constants/constant";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function ReadingHistory() {
   const { requestHandler } = useRequestHandler();
@@ -16,6 +17,12 @@ function ReadingHistory() {
   const [loaders, setLoaders] = useState({
     default: true,
     fetchHistory: true,
+  });
+  const limit = 20;
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
   });
 
   const handleCloseDeleteModal = () => {
@@ -46,18 +53,26 @@ function ReadingHistory() {
     }
   };
 
-  const fetchMyBlogHistory = async (skip) => {
+  const fetchMyBlogHistory = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
     try {
-      const response = await requestHandler(`/blog/read/user/all-history?skip=${skip}`);
+      const url = scroll.cursor ? `/blog/read/user/all-history?cursor=${scroll.cursor}&limit=${limit}` : `/blog/read/user/all-history?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.blogs) {
-        setBlogs(result.data.blogs);
+        setBlogs((prev) => [...prev, ...result.data.blogs]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
-      if (loaders.fetchHistory) setLoaders((prev) => ({ ...prev, fetchHistory: false }));
+      setLoaders((prev) => ({ ...prev, fetchHistory: false }));
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
 
@@ -78,17 +93,20 @@ function ReadingHistory() {
     }
   };
 
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchMyBlogHistory,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
+
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      fetchMyBlogHistory(0);
+    fetchMyBlogHistory();
+
+    if (!loaderTimeout.current) {
+      loaderTimeout.current = setTimeout(() => {
+        setLoaders((prev) => ({ ...prev, default: false }));
+      }, defaultLoaderTime);
     }
-
-    if (loaderTimeout.current) clearTimeout(loaderTimeout.current);
-
-    loaderTimeout.current = setTimeout(() => {
-      setLoaders((prev) => ({ ...prev, default: false }));
-    }, defaultLoaderTime);
   }, []);
 
   return (
@@ -124,6 +142,7 @@ function ReadingHistory() {
 
           {/* list */}
           {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && blogs.map((item) => <ReadingHistoryItem removeBlogFromHistory={removeBlogFromHistory} key={item._id} item={item} />)}
+          {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
         </div>
       </div>
 

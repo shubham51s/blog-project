@@ -2,26 +2,49 @@ import React, { useEffect, useRef, useState } from "react";
 import ListItem from "./ListItem";
 import Spinner from "../../Common/Spinner";
 import { useRequestHandler } from "../../../hooks/requestHandler";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function MainSection({ publication }) {
   const { requestHandler } = useRequestHandler();
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const isMounted = useRef(null);
+  const limit = 20;
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const getFollowingUsers = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/publication/follow/users/${publication._id}?skip=${0}`);
+      const url = scroll.cursor ? `/publication/follow/users/${publication._id}?cursor=${scroll.cursor}&limit=${limit}` : `/publication/follow/users/${publication._id}?limit=${limit}`;
+
+      const response = await requestHandler(url);
       const result = await response.json();
       if (response?.status === 200 && result?.data?.users) {
-        setUsers(result.data.users);
+        setUsers((prev) => [...prev, ...result.data.users]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getFollowingUsers,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     if (publication && !isMounted.current) {
@@ -49,6 +72,7 @@ function MainSection({ publication }) {
                   {users.map((item) => (
                     <ListItem item={item} key={item._id} />
                   ))}
+                  {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
                 </ul>
               </div>
 

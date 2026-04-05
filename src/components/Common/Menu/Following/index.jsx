@@ -8,34 +8,36 @@ import { Link } from "react-router-dom";
 
 function Following() {
   const { requestHandler } = useRequestHandler();
-  const hasMounted = useRef(null);
   const limit = 10;
   const [following, setFollowing] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [cursor, setCursor] = useState(null);
 
   const fetchFollowingUsersList = async () => {
-    setHasMore(false);
+    if (!hasMore) return;
     setIsLoading(true);
     try {
-      const response = await requestHandler(`/follow/following?skip=${following.length}&limit=${limit}`);
+      const url = cursor ? `/follow/following?cursor=${cursor}&limit=${limit}` : `/follow/following?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response.status === 200 && result?.data?.following) {
         setFollowing((prev) => [...prev, ...result.data.following]);
-        setHasMore(result.data.following.length === limit);
+        setHasMore(result.data.cursor ? true : false);
+        setCursor(result.data.cursor || null);
+      } else {
+        setHasMore(false);
       }
     } catch (err) {
       console.error(err);
+      setHasMore(false);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (hasMounted.current) return;
-    hasMounted.current = true;
-
     fetchFollowingUsersList();
   }, []);
 
@@ -54,7 +56,7 @@ function Following() {
         <ListItem key={item._id} item={item} />
       ))}
 
-      {hasMore > 0 && (
+      {hasMore && (
         <button onClick={fetchFollowingUsersList} className="margin-21 flex items-center custom-gap-2 padding-3 cursor-pointer transition-all duration-200 linear opacity-75 hover:opacity-100" style={{ marginBottom: 0, marginInline: 0, paddingBlock: 0 }} disabled={isLoading}>
           <div className="padding-23 flex-none color-6" style={{ paddingBlock: 0 }}>
             <div className="width-19 aspect-square">

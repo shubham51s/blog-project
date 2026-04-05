@@ -11,7 +11,6 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isMounted = useRef(null);
   const { fetchFollowingAuthorIds } = useContext(FollowingContext);
   const { fetchFollowingPublicationIds } = useContext(PublicationContext);
   const { fetchMyLists } = useContext(ListContext);
@@ -77,10 +76,7 @@ const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      verifyAuthentication();
-    }
+    verifyAuthentication();
   }, []);
 
   return <UserContext.Provider value={{ userInfo, isUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu, verifyAuthentication, fetchUpdatedUserDetails }}>{children}</UserContext.Provider>;

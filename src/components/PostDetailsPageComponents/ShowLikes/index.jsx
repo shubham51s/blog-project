@@ -1,18 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { PiHandsClappingThin } from "react-icons/pi";
-import { Link } from "react-router-dom";
-import { useApi } from "../../../hooks/useApi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ClappedUser from "../../ListDetailsComp/ClappedUsersList/ClappedUser";
+import { useRequestHandler } from "../../../hooks/requestHandler";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
+import { defaultLoaderTime } from "../../../constants/constant";
 
 function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
-  const { fetchRequest } = useApi();
+  const { requestHandler } = useRequestHandler();
+  const limit = 20;
   const [isClose, setIsClose] = useState(false);
   const closeTimeout = useRef(null);
   const [isInitialLoading, setIsInitialLoading] = useState(false);
   const initialTimeout = useRef(null);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const handleClose = () => {
     setIsClose(true);
@@ -24,44 +30,50 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
     }, 300);
   };
 
-  const getClappedUsersList = async (skip) => {
-    let updatedSkip = 0;
-    try {
-      const response = await fetchRequest(`/claps/users/${blog._id}?skip=${skip}`, "GET");
+  const getClappedUsersList = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
 
+    try {
+      const url = scroll.cursor ? `/claps/users/${blog._id}?cursor=${scroll.cursor}&limit=${limit}` : `/claps/users/${blog._id}?limit=${limit}`;
+
+      const response = await requestHandler(url);
       const result = await response.json();
 
-      if (response.status === 200) {
-        setClapDetails((prev) => ({ ...prev, clappedUsers: result?.data?.usersList || [], clappedUsersCount: result?.data?.totalCount || 0 }));
+      if (response.status === 200 && result?.data?.usersList) {
+        setClapDetails((prev) => ({ ...prev, clappedUsers: [...prev.clappedUsers, ...result.data.usersList], clappedUsersCount: result.data.totalCount || 0 }));
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
-
-      updatedSkip = result?.data?.usersList?.length > 0 ? skip + result.data.usersList.length : -1;
     } catch (err) {
       console.error(err);
-      updatedSkip = -1;
+      setScroll((prev) => ({ ...prev, hasMore: false }));
+    } finally {
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
-
-    setClapDetails((prev) => ({ ...prev, skip: updatedSkip }));
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getClappedUsersList,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
     if (clapDetails.clappedUsers.length === 0) {
       setIsInitialLoading(true);
-      getClappedUsersList(0);
-
-      if (initialTimeout.current) clearTimeout(initialTimeout.current);
+      getClappedUsersList();
 
       // minimum loading time
-      initialTimeout.current = setTimeout(() => {
-        setIsInitialLoading(false);
-      }, 800);
+      if (!initialTimeout.current) {
+        initialTimeout.current = setTimeout(() => {
+          setIsInitialLoading(false);
+        }, defaultLoaderTime);
+      }
     }
-
-    return () => {
-      if (initialTimeout.current) clearTimeout(initialTimeout.current);
-    };
   }, []);
 
   return (
@@ -76,6 +88,7 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
               {clapDetails.clappedUsers.map((item) => (
                 <ClappedUser item={item} key={item.user._id} />
               ))}
+              {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
             </div>
           </div>
         </div>

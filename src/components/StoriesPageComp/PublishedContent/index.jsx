@@ -3,34 +3,55 @@ import BlogComp from "./BlogComp";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import SkeletonComp from "../skeleton";
 import { defaultLoaderTime } from "../../../constants/constant";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function PublishContainer({ isInitialLoading, publishedCount }) {
   const { requestHandler } = useRequestHandler();
+  const limit = 20;
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
   const loaderTimeout = useRef(null);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const getPublishedBlogs = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
     try {
-      const response = await requestHandler(`/blogs/published?skip=${0}&limit=${50}`);
+      const url = scroll.cursor ? `/blogs/published?cursor=${scroll.cursor}&limit=${limit}` : `/blogs/published?limit=${limit}`;
+      const response = await requestHandler(url);
 
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.blogs) {
-        setBlogs(result.data.blogs);
+        setBlogs((prev) => [...prev, ...result.data.blogs]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getPublishedBlogs,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     if (!isInitialLoading && publishedCount > 0) {
       setIsLoading(true);
-      getPublishedBlogs(0);
+      getPublishedBlogs();
     }
 
     if (!loaderTimeout.current) {
@@ -59,6 +80,7 @@ function PublishContainer({ isInitialLoading, publishedCount }) {
             <tbody className="m-0 no-first-row-border">
               {/* blogs list */}
               {!defaultLoader && !isLoading && !isInitialLoading && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
+              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
               {/* loader */}
               {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
             </tbody>

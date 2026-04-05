@@ -5,7 +5,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import { getImageUrl } from "../../../../../utils/common";
 
-function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publishBlog, pendingImages = [] }) {
+function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publishBlog, edited, pendingImages = [] }) {
   const [isChangePreviewImg, setIsChangePreviewImg] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);

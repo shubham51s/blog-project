@@ -1,17 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import NoContentComp from "./No Content";
 import BlogComp from "./Blog Comp";
-import { UserContext } from "../../../../context/userContext";
 import BlogLoader from "./Blog Comp/skeleton";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { defaultLoaderTime } from "../../../../constants/constant";
 
 function HomeMainContentComp() {
-  const { userInfo } = useContext(UserContext);
   const { requestHandler } = useRequestHandler();
   const [initialLoader, setInitialLoader] = useState(true);
   const loaderTimeout = useRef(null);
-  const [skipCount, setSkipCount] = useState(0);
 
   const [recommendedTopics, setRecommendedTopics] = useState([
     {
@@ -47,10 +44,6 @@ function HomeMainContentComp() {
   const handleActiveTabChange = (index) => {
     if (index === activeTopicIndex) return;
     setActiveTopicIndex(index);
-  };
-
-  const handleRemoveBlogItemFromParent = () => {
-    setSkipCount((prev) => prev - 1);
   };
 
   const fetchBlogs = async () => {
@@ -125,7 +118,7 @@ function HomeMainContentComp() {
           <div>
             {(initialLoader || loaders.blogsLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
             {!initialLoader && !loaders.blogsLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-            {!initialLoader && !loaders.blogsLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} handleRemoveBlogItemFromParent={handleRemoveBlogItemFromParent} />)}
+            {!initialLoader && !loaders.blogsLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
           </div>
         </div>
       </main>

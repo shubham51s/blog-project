@@ -7,21 +7,25 @@ import CharacterCount from "@tiptap/extension-character-count";
 import { AiTwotoneSafetyCertificate } from "react-icons/ai";
 import { FaBold } from "react-icons/fa";
 import { FaItalic } from "react-icons/fa";
-import { UserContext } from "../../../context/userContext";
-import { formatMonthAndDayLong } from "../../../utils/monthDateLongFormatter";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { showToast } from "../../../utils/toaster";
 import CommentList from "./CommentList";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function ListCommentDrawer({ setIsCommentDrawerOpen, list, setList }) {
   const { requestHandler } = useRequestHandler();
-  const { userInfo } = useContext(UserContext);
+  const limit = 10;
   const commentsContainer = useRef(null);
   const [enableInp, setEnableInp] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [loaders, setLoaders] = useState({
     addCommentLoader: false,
     initialLoader: true,
+  });
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
   });
 
   const [comments, setComments] = useState([]);
@@ -97,20 +101,27 @@ function ListCommentDrawer({ setIsCommentDrawerOpen, list, setList }) {
     }
   };
 
-  const fetchComments = async (skip) => {
+  const fetchComments = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/list/comment/${list._id}?$skip=${skip}`);
+      const url = scroll.cursor ? `/list/comment/${list._id}?cursor=${scroll.cursor}&limit=${limit}` : `/list/comment/${list._id}?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.comments) {
-        if (skip === 0) {
-          setComments(result.data.comments);
-        }
+        setComments((prev) => [...prev, ...result.data.comments]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
-      if (loaders.initialLoader) setLoaders((prev) => ({ ...prev, initialLoader: false }));
+      setLoaders((prev) => ({ ...prev, initialLoader: false }));
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
 
@@ -122,9 +133,15 @@ function ListCommentDrawer({ setIsCommentDrawerOpen, list, setList }) {
     }
   };
 
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchComments,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
+
   useEffect(() => {
     setIsShow(true);
-    fetchComments(0);
+    fetchComments();
     document.addEventListener("click", handleClickOutside);
 
     return () => {
@@ -205,6 +222,7 @@ function ListCommentDrawer({ setIsCommentDrawerOpen, list, setList }) {
             </div>
           )}
           {!loaders.initialLoader && comments.length > 0 && comments.map((item) => <CommentList key={item._id} item={item} setList={setList} />)}
+          {!loaders.initialLoader && comments.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
           {!loaders.initialLoader && comments.length === 0 && (
             <div className="w-full h-full flex flex-col items-center justify-center margin-36" style={{ marginInline: 0 }}>
               <p className="line-h-8 font-10 color-4 font-normal m-0">There are currently no responses for this list.</p>

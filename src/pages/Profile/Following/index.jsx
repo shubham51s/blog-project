@@ -6,6 +6,8 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { formatNumberCompact } from "../../../utils/common";
 import FollowingList from "../../../components/ProfileComp/FollowingSection";
 import Spinner from "../../../components/Common/Spinner";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
+import { defaultLoaderTime } from "../../../constants/constant";
 
 function Following() {
   const { user, setUser } = useOutletContext();
@@ -14,20 +16,35 @@ function Following() {
   const [defaultLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const limit = 20;
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  const fetchPeopleFollowingList = async (skip) => {
+  const fetchPeopleFollowingList = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/follow/following/${user._id}?skip=${skip}`);
+      const url = scroll.cursor ? `/follow/following/${user._id}?cursor=${scroll.cursor}&limit=${limit}` : `/follow/following/${user._id}?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.following) {
-        if (skip === 0) setPeopleFollowing(result.data.following);
+        setPeopleFollowing((prev) => [...prev, ...result.data.following]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
 
@@ -35,19 +52,22 @@ function Following() {
     setActiveTabIndex(val);
   };
 
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchPeopleFollowingList,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
+
   useEffect(() => {
-    if (user && isLoading) fetchPeopleFollowingList(0);
+    if (user && isLoading) fetchPeopleFollowingList();
   }, [user]);
 
   useEffect(() => {
-    if (defaultLoaderTimeout.current) clearTimeout(defaultLoaderTimeout.current);
-    defaultLoaderTimeout.current = setTimeout(() => {
-      setDefaultLoader(false);
-    }, 300);
-
-    return () => {
-      if (defaultLoaderTimeout.current) clearTimeout(defaultLoaderTimeout.current);
-    };
+    if (!defaultLoaderTimeout.current) {
+      defaultLoaderTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+      }, defaultLoaderTime);
+    }
   }, []);
 
   return (
@@ -98,6 +118,7 @@ function Following() {
                 {peopleFollowing.map((item) => (
                   <FollowingList item={item} user={user} setUser={setUser} key={item._id} />
                 ))}
+                {peopleFollowing.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
               </div>
             </div>
           </div>

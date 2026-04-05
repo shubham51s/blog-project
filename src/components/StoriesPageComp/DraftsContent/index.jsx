@@ -4,28 +4,50 @@ import BlogComp from "./BlogComp";
 import SkeletonComp from "../skeleton";
 import { Link } from "react-router-dom";
 import { defaultLoaderTime } from "../../../constants/constant";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function DraftContainer({ isInitialLoading, draftsCount }) {
   const { requestHandler } = useRequestHandler();
+  const limit = 20;
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
   const loaderTimeout = useRef(null);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const getDraftBlogsList = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/draft/all?skip=${0}&limit=${50}`);
+      const url = scroll.cursor ? `/draft/all?cursor=${scroll.cursor}&limit=${limit}` : `/draft/all?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.drafts) {
-        setBlogs(result.data.drafts);
+        setBlogs((prev) => [...prev, ...result.data.drafts]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getDraftBlogsList,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     if (!isInitialLoading && draftsCount > 0) {
@@ -58,6 +80,7 @@ function DraftContainer({ isInitialLoading, draftsCount }) {
 
             <tbody className="m-0 no-first-row-border">
               {!defaultLoader && !isLoading && !isInitialLoading && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
+              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
               {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
             </tbody>
           </table>

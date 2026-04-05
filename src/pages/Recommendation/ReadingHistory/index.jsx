@@ -6,16 +6,20 @@ import ReadingHistoryItem from "../../../components/LibraryComp/ReadingHistory/R
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import Spinner from "../../../components/Common/Spinner";
 import { defaultLoaderTime } from "../../../constants/constant";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function MyReadingHistory() {
   const { requestHandler } = useRequestHandler();
+  const limit = 8;
   const [isDeleteModal, setIsDeleteModal] = useState(false);
-  const isMounted = useRef(null);
   const [blogs, setBlogs] = useState([]);
   const [deletedCount, setDeletedCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [defautlLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [scrollLoader, setScrollLoader] = useState(true);
+  const [cursor, setCursor] = useState(null);
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModal(false);
@@ -45,18 +49,28 @@ function MyReadingHistory() {
     }
   };
 
-  const fetchMyBlogHistory = async (skip) => {
+  const fetchMyBlogHistory = async () => {
+    if (!hasMore) return;
+
+    setScrollLoader(true);
     try {
-      const response = await requestHandler(`/blog/read/user/all-history?skip=${skip}`);
+      const url = cursor ? `/blog/read/user/all-history?cursor=${cursor}&limit=${limit}` : `/blog/read/user/all-history?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.blogs) {
-        setBlogs(result.data.blogs);
+        setBlogs((prev) => [...prev, ...result.data.blogs]);
+        setHasMore(result.data.cursor ? true : false);
+        setCursor(result.data.cursor || null);
+      } else {
+        setHasMore(false);
       }
     } catch (err) {
       console.error(err);
+      setHasMore(false);
     } finally {
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
+      setScrollLoader(false);
     }
   };
 
@@ -77,17 +91,20 @@ function MyReadingHistory() {
     }
   };
 
-  useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      fetchMyBlogHistory(0);
-    }
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchMyBlogHistory,
+    hasMore,
+    scrollLoader,
+  });
 
-    if (defaultLoaderTimeout.current) clearTimeout(defaultLoaderTimeout.current);
-    defaultLoaderTimeout.current = setTimeout(() => {
-      setDefaultLoader(false);
-      defaultLoaderTimeout.current = null;
-    }, defaultLoaderTime);
+  useEffect(() => {
+    fetchMyBlogHistory();
+
+    if (!defaultLoaderTimeout.current) {
+      defaultLoaderTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+      }, defaultLoaderTime);
+    }
   }, []);
 
   return (
@@ -134,6 +151,7 @@ function MyReadingHistory() {
 
                   {/* list */}
                   {!defautlLoader && !isLoading && blogs.length > 0 && blogs.map((item) => <ReadingHistoryItem removeBlogFromHistory={removeBlogFromHistory} key={item._id} item={item} />)}
+                  {!defautlLoader && !isLoading && hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
                 </div>
               </div>
             </div>

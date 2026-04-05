@@ -4,9 +4,12 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import ClappedUser from "./ClappedUser";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
+import { defaultLoaderTime } from "../../../constants/constant";
 
 function ClappedUsersList({ clapDetails, setClapDetails, list }) {
   const { requestHandler } = useRequestHandler();
+  const limit = 20;
   const [isClose, setIsClose] = useState(false);
   const closeTimeout = useRef(null);
   const isMounted = useRef(null);
@@ -15,6 +18,11 @@ function ClappedUsersList({ clapDetails, setClapDetails, list }) {
   const [isLoading, setIsLoading] = useState(true);
   const [clappedUsers, setClappedUsers] = useState([]);
   const [clappedUsersCount, setClappedUsersCount] = useState(0);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const handleClose = () => {
     setIsClose(true);
@@ -39,44 +47,48 @@ function ClappedUsersList({ clapDetails, setClapDetails, list }) {
     }
   };
 
-  const getClappedUsersList = async (skip) => {
+  const getClappedUsersList = async () => {
+    if (!scroll.hasMore) return;
+
+    setScroll((prev) => ({ ...prev, loading: true }));
     try {
-      const response = await requestHandler(`/list/claps/users/${list._id}?skip=${skip}`);
+      const url = scroll.cursor ? `/list/claps/users/${list._id}?cursor=${scroll.cursor}&limit=${limit}` : `/list/claps/users/${list._id}?limit=${limit}`;
+      const response = await requestHandler(url);
 
       const result = await response.json();
 
       if (response.status === 200 && result?.data?.usersList) {
-        // setClapDetails((prev) => ({ ...prev, clappedUsers: result.data.usersList }));
-        setClappedUsers(result.data.usersList);
+        setClappedUsers((prev) => [...prev, ...result.data.usersList]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getClappedUsersList,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    if (!isMounted.current) {
-      isMounted.current = true;
+    getClappedUsersList();
+    getClappedUsersCount();
 
-      getClappedUsersList(0);
-      getClappedUsersCount();
+    if (!initialTimeout.current) {
+      initialTimeout.current = setTimeout(() => {
+        setIsInitialLoading(false);
+      }, defaultLoaderTime);
     }
-
-    if (initialTimeout.current) clearTimeout(initialTimeout.current);
-
-    // minimum loading time
-    initialTimeout.current = setTimeout(() => {
-      setIsInitialLoading(false);
-      initialTimeout.current = null;
-    }, 300);
-
-    return () => {
-      if (initialTimeout.current) clearTimeout(initialTimeout.current);
-    };
   }, []);
 
   return (
@@ -91,6 +103,7 @@ function ClappedUsersList({ clapDetails, setClapDetails, list }) {
               {clappedUsers.map((item) => (
                 <ClappedUser item={item} key={item._id} />
               ))}
+              {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
             </div>
           </div>
         </div>

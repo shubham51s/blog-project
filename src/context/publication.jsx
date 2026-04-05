@@ -48,7 +48,7 @@ const PublicationProvider = ({ children }) => {
       });
   };
 
-  return <PublicationContext.Provider value={{ isPublicationLoader, fetchFollowingPublicationIds, addFollowingPublication, removeFollowingPublication, followingPublication }}>{children}</PublicationContext.Provider>;
+  return <PublicationContext.Provider value={{ isPublicationLoader, followingPublication, fetchFollowingPublicationIds, addFollowingPublication, removeFollowingPublication }}>{children}</PublicationContext.Provider>;
 };
 
 export { PublicationContext };

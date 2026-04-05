@@ -6,9 +6,11 @@ import { IoIosArrowUp } from "react-icons/io";
 import * as Popover from "@radix-ui/react-popover";
 import Checkbox from "@mui/material/Checkbox";
 import { defaultLoaderTime } from "../../../constants/constant";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function SubmissionContainer({ isInitialLoading, submissionsCount, setSubmissionsCount }) {
   const { requestHandler } = useRequestHandler();
+  const limit = 20;
   const label = { slotProps: { input: { "aria-label": "Checkbox demo" } } };
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +18,11 @@ function SubmissionContainer({ isInitialLoading, submissionsCount, setSubmission
   const loaderTimeout = useRef(null);
   const [isStatusOpen, setIsStatusOpen] = useState(false);
   const [activeStatusCount, setActiveStatusCount] = useState(0);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
   const [statusList, setStatusList] = useState([
     {
       id: 0,
@@ -77,25 +84,39 @@ function SubmissionContainer({ isInitialLoading, submissionsCount, setSubmission
   };
 
   const getSubmitBlogsList = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
     try {
-      const response = await requestHandler(`/blogs/submissions?skip=${0}&limit=${50}`);
+      const url = scroll.cursor ? `/blogs/submissions?cursor=${scroll.cursor}&limit=${limit}` : `/blogs/submissions?limit=${limit}`;
+      const response = await requestHandler(url);
 
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.blogs) {
-        setBlogs(result.data.blogs);
+        setBlogs((prev) => [...prev, ...result.data.blogs]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getSubmitBlogsList,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     if (!isInitialLoading && submissionsCount > 0) {
       setIsLoading(true);
-      getSubmitBlogsList(0);
+      getSubmitBlogsList();
     }
 
     if (!loaderTimeout.current) {
@@ -165,6 +186,7 @@ function SubmissionContainer({ isInitialLoading, submissionsCount, setSubmission
             <tbody className="m-0 no-first-row-border">
               {/* blogs list */}
               {!defaultLoader && !isLoading && !isInitialLoading && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
+              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
               {/* loader */}
               {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
             </tbody>

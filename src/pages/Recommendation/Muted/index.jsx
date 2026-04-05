@@ -61,11 +61,11 @@ function Muted() {
   useEffect(() => {
     getMutedData();
 
-    if (loaderTimeout.current) clearTimeout(loaderTimeout.current);
-    loaderTimeout.current = setTimeout(() => {
-      setDefaultLoader(false);
-      loaderTimeout.current = null;
-    }, defaultLoaderTime);
+    if (!loaderTimeout.current) {
+      loaderTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+      }, defaultLoaderTime);
+    }
   }, []);
   return (
     <>
@@ -106,8 +106,7 @@ function Muted() {
                             <UserListItem key={item._id} user={item.target} onMuteStatusChange={onMuteStatusChange} />
                           ))}
 
-                          {/* {usersCount > 5 && ( */}
-                          {true && (
+                          {users.length >= 5 && (
                             <div className="margin60">
                               <p className="custom-fs-1 color-4 line20 font-normal m-0">
                                 <button onClick={() => setIsShowUserModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">

@@ -11,30 +11,30 @@ import ListProvider from "./context/listContext.jsx";
 import PublicationProvider from "./context/publication.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <PublicationProvider>
-        <FollowingProvider>
-          <ListProvider>
-            <UserProvider>
-              <App />
-              <Toaster
-                position="top-center"
-                toastOptions={{
-                  duration: 2500,
-                  style: {
-                    background: "#111",
-                    color: "#fff",
-                    borderRadius: "4px",
-                    fontSize: "14px",
-                    padding: "12px 24px",
-                  },
-                }}
-              />
-            </UserProvider>
-          </ListProvider>
-        </FollowingProvider>
-      </PublicationProvider>
-    </BrowserRouter>
-  </StrictMode>,
+  // <StrictMode>
+  <BrowserRouter>
+    <PublicationProvider>
+      <FollowingProvider>
+        <ListProvider>
+          <UserProvider>
+            <App />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                duration: 2500,
+                style: {
+                  background: "#111",
+                  color: "#fff",
+                  borderRadius: "4px",
+                  fontSize: "14px",
+                  padding: "12px 24px",
+                },
+              }}
+            />
+          </UserProvider>
+        </ListProvider>
+      </FollowingProvider>
+    </PublicationProvider>
+  </BrowserRouter>,
+  // </StrictMode>,
 );

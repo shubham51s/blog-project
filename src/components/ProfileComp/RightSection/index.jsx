@@ -8,7 +8,6 @@ import { footerOptions } from "../../../constants/constant";
 import { UserContext } from "../../../context/userContext";
 import Skeleton from "react-loading-skeleton";
 import { useRequestHandler } from "../../../hooks/requestHandler";
-import { showToast } from "../../../utils/toaster";
 import { useToggleUserFollow } from "../../../hooks/toggleUserFollow";
 import { FollowingContext } from "../../../context/followingContext";
 
@@ -16,7 +15,6 @@ function RightSectionComp({ user, setUser }) {
   const { requestHandler } = useRequestHandler();
   const { followUser, unfollowUser } = useToggleUserFollow();
   const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
-  const { pathname } = useLocation();
   const { userInfo } = useContext(UserContext);
   const [followingArr, setFollowingArr] = useState([]);
   const [loaders, setLoaders] = useState({
@@ -59,7 +57,7 @@ function RightSectionComp({ user, setUser }) {
   const fetchFollowingList = async () => {
     setLoaders((prev) => ({ ...prev, followingListLoader: true }));
     try {
-      const response = await requestHandler(`/follow/following/${user._id}?skip=0&limit=5`);
+      const response = await requestHandler(`/follow/following/${user._id}?limit=5`);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.following) {

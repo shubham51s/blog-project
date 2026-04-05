@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BlogComp from "../Blog Comp";
 import { Link } from "react-router-dom";
-import { useApi } from "../../../hooks/useApi";
+import { useRequestHandler } from "../../../hooks/requestHandler";
 
 function BlogRecommendComp({ blog }) {
   const footerOptions = [
@@ -57,7 +57,7 @@ function BlogRecommendComp({ blog }) {
     },
   ];
 
-  const { fetchRequest } = useApi();
+  const { requestHandler } = useRequestHandler;
 
   const [moreBlogsFromAuthorAndCommunity, setMoreBlogsFromAuthorAndCommunity] = useState([]);
   const [authorBlogs, setAuthorBlogs] = useState([]);
@@ -67,15 +67,12 @@ function BlogRecommendComp({ blog }) {
 
   const getRecommendedBlogsByAuthor = async (author) => {
     try {
-      const response = await fetchRequest(`/blogs/user/${author}?skip=0&limit=6`, "GET");
+      const response = await requestHandler(`/blogs/user/${author}?limit=6`);
+      const result = await response.json();
 
-      if (response.status === 200) {
-        const result = await response.json();
-
-        if (result.data.blogs.length > 0) {
-          setMoreBlogsFromAuthorAndCommunity(result.data.blogs);
-          setAuthorBlogs(result.data.blogs);
-        }
+      if (response.status === 200 && result.data.blogs) {
+        setMoreBlogsFromAuthorAndCommunity(result.data.blogs);
+        setAuthorBlogs(result.data.blogs);
       }
     } catch (err) {
       console.error(err);
@@ -89,7 +86,7 @@ function BlogRecommendComp({ blog }) {
         categories,
       };
 
-      const response = await fetchRequest(`/blogs/categories?skip=0&limit=6`, "POST", params);
+      const response = await requestHandler(`/blogs/categories?limit=6`, "POST", params);
 
       if (response.status === 200) {
         const result = await response.json();

@@ -48,8 +48,7 @@ function StoriesPage() {
   const isTabActive = (id) => {
     if (id === 0) return tab !== "posts-published" && tab !== "submissions-outbox" && tab !== "posts-unlisted";
     if (id === 1) return tab === "posts-published";
-    if (id === 2) return tab === "posts-unlisted";
-    if (id === 3) return tab === "submissions-outbox";
+    if (id === 2) return tab === "submissions-outbox";
   };
 
   useEffect(() => {
@@ -91,17 +90,8 @@ function StoriesPage() {
                 </div>
 
                 <div className={`min-w-max margin52 padding-42  ${isTabActive(2) ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0 }}>
-                  <button onClick={() => handleActiveTabChange("posts-unlisted")} className="p-0 cursor-pointer" disabled={isInitialLoading}>
-                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${isTabActive(2) ? "opacity-100" : "opacity-[0.9]"}`}>
-                      <span>Unlisted</span>
-                      {!isInitialLoading && publishedCount > 0 && <span>{publishedCount}</span>}
-                    </div>
-                  </button>
-                </div>
-
-                <div className={`min-w-max margin52 padding-42  ${isTabActive(3) ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0 }}>
                   <button onClick={() => handleActiveTabChange("submissions-outbox")} className="p-0 cursor-pointer" disabled={isInitialLoading}>
-                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${isTabActive(3) ? "opacity-100" : "opacity-[0.9]"}`}>
+                    <div className={`custom-fs-1 custom-line-h-1 font-medium flex cursor-pointer custom-gap-3 color-3 transition-all duration-200 linear hover:opacity-100 ${isTabActive(2) ? "opacity-100" : "opacity-[0.9]"}`}>
                       <span>Submissions</span>
                       {!isInitialLoading && submissionsCount > 0 && <span>{submissionsCount}</span>}
                     </div>
@@ -119,7 +109,7 @@ function StoriesPage() {
         {isTabActive(1) && <PublishContainer isInitialLoading={isInitialLoading} publishedCount={publishedCount} setPublishedCount={setPublishedCount} />}
 
         {/* 3. Submission section */}
-        {isTabActive(3) && <SubmissionContainer isInitialLoading={isInitialLoading} submissionsCount={submissionsCount} setSubmissionsCount={setSubmissionsCount} />}
+        {isTabActive(2) && <SubmissionContainer isInitialLoading={isInitialLoading} submissionsCount={submissionsCount} setSubmissionsCount={setSubmissionsCount} />}
       </div>
     </div>
   );

@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react";
-import EditEmailModal from "../../Common/Modals/EditEmail";
 import { UserContext } from "../../../context/userContext";
-import EditUsernameModal from "../../Common/Modals/EditUsername";
 import EditProfileInfoModal from "../../Common/Modals/EditProfileInfoModal";
 
 function ProfileInfoSection() {

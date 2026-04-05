@@ -5,29 +5,50 @@ import ListItem from "./ListItem";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import ListItemSkeleton from "./ListItem/skeleton";
 import { defaultLoaderTime } from "../../../constants/constant";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function EditorsListModal({ handleCloseModal, publication }) {
   const { requestHandler } = useRequestHandler();
+  const limit = 20;
   const [editors, setEditors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const loaderTimeout = useRef(null);
   const [initialLoader, setInitialLoader] = useState(true);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const getPublicationEditors = async () => {
-    setIsLoading(true);
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/publication/member/editors/${publication._id}?skip=${0}`);
+      const url = scroll.cursor ? `/publication/member/editors/${publication._id}?cursor=${scroll.cursor}&limit=${limit}` : `/publication/member/editors/${publication._id}?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.editors) {
-        setEditors(result.data.editors);
+        setEditors((prev) => [...prev, ...result.data.editors]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getPublicationEditors,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     getPublicationEditors();
@@ -62,6 +83,7 @@ function EditorsListModal({ handleCloseModal, publication }) {
           <div>
             {/* list */}
             {!initialLoader && !isLoading && editors.map((item) => <ListItem key={item._id} item={item} />)}
+            {!initialLoader && !isLoading && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
 
             {/* list skeleton */}
             {(initialLoader || isLoading) && Array.from({ length: 3 }).map((_, index) => <ListItemSkeleton key={index} />)}

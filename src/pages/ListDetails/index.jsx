@@ -18,12 +18,14 @@ import { Tooltip } from "@mui/material";
 import NoData from "../../components/ListDetailsComp/NoData";
 import ClappedUsersList from "../../components/ListDetailsComp/ClappedUsersList";
 import NotFoundComp from "../../components/Common/NotFound";
+import { defaultLoaderTime } from "../../constants/constant";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 function ListDetailsPage() {
   const { username, slug, listId } = useParams();
   const { userInfo } = useContext(UserContext);
   const { requestHandler } = useRequestHandler();
-  const isCompMounted = useRef(null);
+  const loaderTimeout = useRef(null);
   const [isError, setIsError] = useState(false);
   const [list, setList] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +34,7 @@ function ListDetailsPage() {
   const clapsClickedCount = useRef(0);
   const [isCommentDrawerOpen, setIsCommentDrawerOpen] = useState(false);
   const [isDefaultLoader, setIsDefaultLoader] = useState(true);
+
   const [clapDetails, setClapDetails] = useState({
     total: 0,
     showClapedUsersList: false,
@@ -39,19 +42,34 @@ function ListDetailsPage() {
   const [loaders, setLoaders] = useState({
     clapLoader: false,
   });
+  const limit = 20;
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
-  const fetchListItems = async (listId, userId, skip) => {
+  const fetchListItems = async (listId) => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/list/items/get/${listId}/${userId}?skip=${skip}`);
+      const url = scroll.cursor ? `/list/items/get/${listId}?cursor=${scroll.cursor}&limit=${limit}` : `/list/items/get/${listId}?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.listItems) {
-        setListItems(result.data.listItems);
+        setListItems((prev) => [...prev, ...result.data.listItems]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
 
@@ -62,7 +80,7 @@ function ListDetailsPage() {
 
       if (response?.status === 200 && result?.data?.list && result?.data?.list?.user.username === username) {
         setList(result.data.list);
-        fetchListItems(result.data.list._id, result.data.list.user._id, 0);
+        if (!listItems.length) fetchListItems(result.data.list._id);
 
         if (result.data.list?.clapsCount) {
           setClapDetails((prev) => ({ ...prev, total: result.data.list.clapsCount }));
@@ -133,15 +151,25 @@ function ListDetailsPage() {
     setClapDetails((prev) => ({ ...prev, showClapedUsersList: true }));
   };
 
+  const updateRemovedListItem = () => {
+    setList((prev) => ({ ...prev, savedCount: prev.savedCount > 0 ? prev.savedCount - 1 : 0 }));
+  };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchListItems,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!isCompMounted.current) {
-      isCompMounted.current = true;
-      fetchListDetails();
 
-      setTimeout(() => {
+    fetchListDetails();
+
+    if (!loaderTimeout.current) {
+      loaderTimeout.current = setTimeout(() => {
         setIsDefaultLoader(false);
-      }, 400);
+      }, defaultLoaderTime);
     }
   }, []);
 
@@ -321,7 +349,8 @@ function ListDetailsPage() {
                 {!isLoading && !isDefaultLoader && listItems.length === 0 && <NoData />}
 
                 {/* list items */}
-                {!isLoading && !isDefaultLoader && listItems.length > 0 && listItems.map((item) => <ListItem item={item} list={list} key={item._id} setListItems={setListItems} />)}
+                {!isLoading && !isDefaultLoader && listItems.length > 0 && listItems.map((item) => <ListItem item={item} list={list} key={item._id} updateRemovedListItem={updateRemovedListItem} />)}
+                {!isLoading && !isDefaultLoader && listItems.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
               </div>
             </div>
           </div>

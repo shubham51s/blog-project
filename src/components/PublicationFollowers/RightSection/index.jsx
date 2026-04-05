@@ -3,14 +3,21 @@ import ListItem from "./ListItem";
 import { PublicationContext } from "../../../context/publication";
 import { useTogglePublicationFollow } from "../../../hooks/togglePublicationFollow";
 import { useRequestHandler } from "../../../hooks/requestHandler";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function RightSection({ publication }) {
   const { requestHandler } = useRequestHandler();
+  const limit = 20;
   const { followingPublication, isPublicationLoader } = useContext(PublicationContext);
   const { followPublication, unfollowPublication } = useTogglePublicationFollow();
   const [isLoading, setIsLoading] = useState(false);
   const [editors, setEditors] = useState([]);
   const hasFetched = useRef(null);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const handlePublicationFollow = async () => {
     setIsLoading(true);
@@ -37,17 +44,33 @@ function RightSection({ publication }) {
   };
 
   const getPublicationEditors = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/publication/member/editors/${publication._id}?skip=${0}`);
+      const url = scroll.cursor ? `/publication/member/editors/${publication._id}?cursor=${scroll.cursor}&limit=${limit}` : `/publication/member/editors/${publication._id}?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.editors) {
-        setEditors(result.data.editors);
+        setEditors((prev) => [...prev, ...result.data.editors]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
+    } finally {
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getPublicationEditors,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     if (publication && !hasFetched.current) {
@@ -101,6 +124,7 @@ function RightSection({ publication }) {
                       {editors.map((item) => (
                         <ListItem item={item} key={item._id} />
                       ))}
+                      {editors.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
                     </div>
                   </div>
                   <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}></div>

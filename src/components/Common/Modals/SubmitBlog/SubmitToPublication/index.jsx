@@ -5,55 +5,74 @@ import { useRequestHandler } from "../../../../../hooks/requestHandler";
 import PublicationListSkeleton from "./PublicationListItem/skeleton";
 import { defaultLoaderTime } from "../../../../../constants/constant";
 import NoPublicationData from "./NoData";
+import { useInfiniteScroll } from "../../../../../hooks/useInfiniteScroll";
 
 function SubmitToPublication({ handlePublicationSelection }) {
   const { requestHandler } = useRequestHandler();
+  const limit = 20;
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const loaderTimeout = useRef(null);
-  const [contributions, setContributions] = useState({
-    isFetched: false,
-    arr: [],
-  });
-  const [followings, setFollowings] = useState({
-    isFetched: false,
-    arr: [],
+  const [contributionArr, setContributionArr] = useState([]);
+  const [followingArr, setFollowingArr] = useState([]);
+
+  const [contribution, setContribution] = useState({
+    hasMore: true,
+    loading: true,
+    cursor: null,
   });
 
-  const getContributedPublications = async (skip) => {
+  const [following, setFollowing] = useState({
+    hasMore: true,
+    loading: true,
+    cursor: null,
+  });
+
+  const getContributedPublications = async () => {
+    if (!contribution.hasMore) return;
+    setContribution((prev) => ({ ...prev, loading: true }));
     try {
-      const response = await requestHandler(`/publication/my-contributions?skip=${skip}`);
+      const url = contribution.cursor ? `/publication/my-contributions?cursor=${contribution.cursor}&limit=${limit}` : `/publication/my-contributions?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.publications?.length > 0) {
-        setContributions((prev) => ({ ...prev, arr: result.data.publications }));
+      if (response?.status === 200 && result?.data?.publications) {
+        setContributionArr((prev) => [...prev, ...result.data.publications]);
+        setContribution((prev) => ({ ...prev, hasMore: result.data.cursor ? true : false, cursor: result.data.cursor || null }));
       } else {
-        setContributions((prev) => ({ ...prev, isFetched: true }));
+        setContribution((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
-      setContributions((prev) => ({ ...prev, isFetched: true }));
+      setContribution((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setContribution((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  const getFollowingPublications = async (skip) => {
+  const getFollowingPublications = async () => {
+    if (!following.hasMore) return;
+    setFollowing((prev) => ({ ...prev, loading: true }));
     try {
-      const response = await requestHandler(`/publication/my-followings?skip=${skip}`);
+      const url = following.cursor ? `/publication/my-followings?cursor=${following.cursor}&limit=${limit}` : `/publication/my-followings?limit=${limit}`;
+
+      const response = await requestHandler(url);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.publications?.length > 0) {
-        setFollowings((prev) => ({ ...prev, arr: result.data.publications }));
+      if (response?.status === 200 && result?.data?.publications) {
+        setFollowingArr((prev) => [...prev, ...result.data.publications]);
+        setFollowing((prev) => ({ ...prev, hasMore: result.data.cursor ? true : false, cursor: result.data.cursor || null }));
       } else {
-        setFollowings((prev) => ({ ...prev, isFetched: true }));
+        setFollowing((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
-      setFollowings((prev) => ({ ...prev, isFetched: true }));
+      setFollowing((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setFollowing((prev) => ({ ...prev, loading: false }));
     }
   };
 
@@ -62,20 +81,33 @@ function SubmitToPublication({ handlePublicationSelection }) {
 
     setActiveTab(tabId);
     setIsLoading(true);
-    setFollowings((prev) => ({ ...prev, isFetched: false, arr: [] }));
-    setContributions((prev) => ({ ...prev, isFetched: false, arr: [] }));
+    setFollowingArr([]);
+    setContributionArr([]);
+    setContribution({ hasMore: true, loading: false, cursor: null });
+    setFollowing({ hasMore: true, loading: false, cursor: null });
 
-    if (tabId === 1) getFollowingPublications(0);
-    if (tabId === 0) getContributedPublications(0);
+    if (tabId === 1) getFollowingPublications();
+    if (tabId === 0) getContributedPublications();
   };
 
+  const contributionSentinal = useInfiniteScroll({
+    loadMore: getContributedPublications,
+    hasMore: contribution.hasMore,
+    scrollLoader: contribution.loading,
+  });
+
+  const followingSentinal = useInfiniteScroll({
+    loadMore: getFollowingPublications,
+    hasMore: following.hasMore,
+    scrollLoader: following.loading,
+  });
+
   useEffect(() => {
-    getContributedPublications(0);
+    getContributedPublications();
 
     if (!loaderTimeout.current) {
       loaderTimeout.current = setTimeout(() => {
         setDefaultLoader(false);
-        loaderTimeout.current = null;
       }, defaultLoaderTime);
     }
   }, []);
@@ -116,22 +148,24 @@ function SubmitToPublication({ handlePublicationSelection }) {
             </div>
 
             <div className="margin51">
-              {(isLoading || defaultLoader || contributions.arr.length > 0 || followings.arr.length > 0) && (
+              {(isLoading || defaultLoader || contributionArr.length > 0 || followingArr.length > 0) && (
                 <div>
                   <div className="padding71 flex custom-gap-4" style={{ paddingTop: 0 }}>
                     <div className="w-full grid grid-cols-4 custom-gap-4">
                       {(isLoading || defaultLoader) && Array.from({ length: 4 }).map((_, index) => <PublicationListSkeleton key={index} />)}
 
-                      {activeTab === 0 && !isLoading && !defaultLoader && contributions.arr.length > 0 && contributions.arr.map((item) => <PublicationListItem isMember={true} handlePublicationSelection={handlePublicationSelection} publication={item.publication} key={item._id} />)}
-                      {activeTab === 1 && !isLoading && !defaultLoader && followings.arr.length > 0 && followings.arr.map((item) => <PublicationListItem isMember={false} handlePublicationSelection={handlePublicationSelection} publication={item.followee} key={item._id} />)}
+                      {activeTab === 0 && !isLoading && !defaultLoader && contributionArr.length > 0 && contributionArr.map((item) => <PublicationListItem isMember={true} handlePublicationSelection={handlePublicationSelection} publication={item.publication} key={item._id} />)}
+                      {activeTab === 0 && !isLoading && !defaultLoader && contribution.hasMore && <div ref={contributionSentinal} style={{ height: "1px" }}></div>}
+                      {activeTab === 1 && !isLoading && !defaultLoader && followingArr.length > 0 && followingArr.map((item) => <PublicationListItem isMember={false} handlePublicationSelection={handlePublicationSelection} publication={item.followee} key={item._id} />)}
+                      {activeTab === 1 && !isLoading && !defaultLoader && following.hasMore && <div ref={followingSentinal} style={{ height: "1px" }}></div>}
                     </div>
                   </div>
                 </div>
               )}
 
               <div>
-                {activeTab === 0 && !isLoading && !defaultLoader && contributions.arr.length === 0 && <NoPublicationData activeTab={activeTab} />}
-                {activeTab === 1 && !isLoading && !defaultLoader && followings.arr.length === 0 && <NoPublicationData activeTab={activeTab} />}
+                {activeTab === 0 && !isLoading && !defaultLoader && contributionArr.length === 0 && <NoPublicationData activeTab={activeTab} />}
+                {activeTab === 1 && !isLoading && !defaultLoader && followingArr.length === 0 && <NoPublicationData activeTab={activeTab} />}
               </div>
             </div>
           </div>

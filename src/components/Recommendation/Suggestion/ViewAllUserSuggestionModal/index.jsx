@@ -4,35 +4,56 @@ import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { defaultLoaderTime } from "../../../../constants/constant";
 import Loader from "./ListItem/skeleton";
 import ListItem from "./ListItem";
+import { useInfiniteScroll } from "../../../../hooks/useInfiniteScroll";
 
 function ViewAllUserSuggestion({ handleCloseUserModal }) {
   const { requestHandler } = useRequestHandler();
+  const limit = 20;
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [defaultLoader, setDefaultLoader] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const loaderTimeout = useRef(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [scrollLoader, setScrollLoader] = useState(true);
+  const [cursor, setCursor] = useState(null);
 
-  const fetchSuggestedUsers = async (skip) => {
+  const fetchSuggestedUsers = async () => {
+    if (!hasMore) return;
+
+    setScrollLoader(true);
     try {
-      const response = await requestHandler(`/users/suggestions?skip=${skip}`);
+      const url = cursor ? `/users/suggestions?cursor=${cursor}&limit=${limit}` : `/users/suggestions?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.users) {
-        setUsers(result.data.users);
+        setUsers((prev) => [...prev, ...result.data.users]);
+        setHasMore(result?.data?.cursor ? true : false);
+        setCursor(result.data.cursor);
+      } else {
+        setHasMore(false);
       }
     } catch (err) {
       console.error(err);
+      setHasMore(false);
     } finally {
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
+      setScrollLoader(false);
     }
   };
 
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchSuggestedUsers,
+    hasMore,
+    scrollLoader,
+  });
+
   useEffect(() => {
-    fetchSuggestedUsers(0);
+    fetchSuggestedUsers();
 
     if (!loaderTimeout.current) {
       loaderTimeout.current = setTimeout(() => {
-        setDefaultLoader(false);
+        setInitialLoading(false);
         loaderTimeout.current = null;
       }, defaultLoaderTime);
     }
@@ -46,8 +67,11 @@ function ViewAllUserSuggestion({ handleCloseUserModal }) {
             <div className="padding-42 text-center">
               <h1 className="font-3 line-h-8 font-medium color-3 m-0">Writers to follow</h1>
             </div>
-            <div>{!isLoading && !defaultLoader && users.map((item) => <ListItem key={item._id} user={item} />)}</div>
-            {(isLoading || defaultLoader) && Array.from({ length: 5 }).map((_, i) => <Loader key={i} />)}
+            <div>
+              {!isLoading && !initialLoading && users.map((item) => <ListItem key={item._id} user={item} />)}
+              {!isLoading && !initialLoading && hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+            </div>
+            {(isLoading || initialLoading) && Array.from({ length: 5 }).map((_, i) => <Loader key={i} />)}
           </div>
         </div>
       </div>
