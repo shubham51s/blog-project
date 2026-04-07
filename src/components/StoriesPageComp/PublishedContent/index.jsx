@@ -12,6 +12,8 @@ function PublishContainer({ isInitialLoading, publishedCount }) {
   const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
   const loaderTimeout = useRef(null);
+  const [isShowSubmitModal, setIsShowSubmitModal] = useState(false);
+  const [blogId, setBlogId] = useState("");
   const [scroll, setScroll] = useState({
     loading: false,
     hasMore: true,
@@ -26,6 +28,8 @@ function PublishContainer({ isInitialLoading, publishedCount }) {
       const response = await requestHandler(url);
 
       const result = await response.json();
+
+      console.log("result: ", result);
 
       if (response?.status === 200 && result?.data?.blogs) {
         setBlogs((prev) => [...prev, ...result.data.blogs]);

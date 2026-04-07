@@ -25,3 +25,11 @@ export const createSlug = (val) => {
 export const getImageUrl = (publicId, options = "q_auto,f_auto") => {
   return `https://res.cloudinary.com/${"drfuaxa6d"}/image/upload/${options}/${publicId}`;
 };
+
+export const getSubmissionStatus = (status) => {
+  if (status === "approved") return "Approved";
+  if (status === "pending_review") return "Pending review";
+  if (status === "declined") return "Declined";
+  if (status === "withdrawn") return "Withdrawn";
+  return status;
+};

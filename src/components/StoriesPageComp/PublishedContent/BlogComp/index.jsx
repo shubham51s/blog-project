@@ -4,12 +4,11 @@ import { FaHandsClapping } from "react-icons/fa6";
 import { formatMonthAndDayShort } from "../../../../utils/monthDateFormatter";
 import { Link, useNavigate } from "react-router-dom";
 import noPreviewImg from "../../../../assets/images/noPreviewImage.png";
-import { getImageUrl } from "../../../../utils/common";
+import { getImageUrl, getSubmissionStatus } from "../../../../utils/common";
 import ActionBtn from "./ActionBtn";
 
 function BlogComp({ item }) {
   const [blog, setBlog] = useState(item);
-  const navigate = useNavigate();
 
   return (
     <>
@@ -31,7 +30,7 @@ function BlogComp({ item }) {
                     <div className="w-full flex flex-col gap10">
                       <div className="flex items-center custom-gap-1">
                         <div className="flex items-center flex-wrap">
-                          <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">Published {formatMonthAndDayShort(blog.createdAt)}</p>
+                          <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">Published {formatMonthAndDayShort(blog.updatedAt)}</p>
                           <div className="padding-23 custom-fs-1 color-4 custom-line-h-1 font-normal" style={{ paddingBlock: 0 }}>
                             .
                           </div>
@@ -91,7 +90,7 @@ function BlogComp({ item }) {
               <div className="min-w-0 w-full overflow-hidden max-w-[80px]">
                 <div className="flex width92">
                   <button className="w-full overflow-hidden cursor-pointer m-0 p-0">
-                    <div className="text-[#1a8917] whitespace-nowrap custom-fs-1 line20 font-normal">Approved</div>
+                    <div className="text-[#1a8917] whitespace-nowrap custom-fs-1 line20 font-normal">{getSubmissionStatus(blog.publicationInfo.status)}</div>
                   </button>
                 </div>
               </div>

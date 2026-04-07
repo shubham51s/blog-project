@@ -5,7 +5,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import { getImageUrl } from "../../../../../utils/common";
 
-function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publishBlog, edited, pendingImages = [] }) {
+function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publishBlog, edited }) {
   const [isChangePreviewImg, setIsChangePreviewImg] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -150,18 +150,19 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publ
                         <Popover.Portal>
                           <Popover.Content side="bottom" align="middle" sideOffset={10} className="box-shadow-4 border-radius-3 border-radius-3 custom-bg-8 z-[99999]">
                             <ul className="custom-px-2 flex flex-col items-stretch list-none m-0">
-                              <li className="padding-20 custom-py-2 custom-fs-1 color-3 font-normal opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
-                                <button onClick={() => setBlog((prev) => ({ ...prev, publication: null }))} className="cursor-pointer m-0 p-0">
-                                  Remove publication
-                                </button>
-                              </li>
                               {edited && (
                                 <li className="padding-20 custom-py-2 custom-fs-1 color-3 font-normal opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
-                                  <button onClick={() => handleTabChange(0)} className="cursor-pointer m-0 p-0">
-                                    Change publication
+                                  <button onClick={() => setBlog((prev) => ({ ...prev, publication: null }))} className="cursor-pointer m-0 p-0">
+                                    Remove publication
                                   </button>
                                 </li>
                               )}
+
+                              <li className="padding-20 custom-py-2 custom-fs-1 color-3 font-normal opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                                <button onClick={() => handleTabChange(0)} className="cursor-pointer m-0 p-0">
+                                  Change publication
+                                </button>
+                              </li>
                             </ul>
                           </Popover.Content>
                         </Popover.Portal>

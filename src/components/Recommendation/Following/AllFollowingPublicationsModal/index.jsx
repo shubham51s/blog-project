@@ -26,8 +26,6 @@ function ViewAllFollowingPublications({ handleClosePublicationModal, count, onPu
       const response = await requestHandler(url);
       const result = await response.json();
 
-      console.log("result: ", result);
-
       if (response?.status === 200 && result?.data?.following) {
         setPublications((prev) => [...prev, ...result.data.following]);
         setCursor(result.data.cursor || null);

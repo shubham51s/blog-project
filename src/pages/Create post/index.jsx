@@ -7,6 +7,7 @@ import NotFoundComp from "../../components/Common/NotFound";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRequestHandler } from "../../hooks/requestHandler";
 import { useImageUpload } from "../../hooks/upload";
+import { showToast } from "../../utils/toaster";
 
 function CreatePostPage() {
   const { deleteImages } = useImageUpload();
@@ -28,7 +29,7 @@ function CreatePostPage() {
     content: "",
     isLoading: false,
     publishLoader: false,
-    type: "",
+    blog: null,
   });
 
   const getDraftDetails = async () => {
@@ -90,14 +91,49 @@ function CreatePostPage() {
           navigate(`/p/${result.data.draftId}/edit`, { replace: true });
         }
       }
+
+      return response?.status === 200;
     } catch (err) {
       console.error(err);
+      return false;
     } finally {
       setBlog((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
+  const saveAndPublishEditedDraft = async () => {
+    try {
+      const isDraftSaved = await saveDraft(blog.heading, blog.description, blog.content);
+      if (!isDraftSaved) {
+        showToast("Some error occured.");
+        return;
+      }
+      setBlog((prev) => ({ ...prev, isLoading: true }));
+
+      const params = {
+        draftId: blog.draftId,
+      };
+      const response = await requestHandler("/blogs/edit", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200 && result?.data?.blogId && result?.data?.slug) {
+        navigate(`/${result.data.slug}/${result.data.blogId}`, { replace: true });
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+    } finally {
+      setBlog((prev) => ({ ...prev, isLoading: true }));
+    }
+  };
+
   const handlePublishBlogBtnClick = (tab) => {
+    if (blog.blog) {
+      saveAndPublishEditedDraft();
+      return;
+    }
     setSelectedTab(tab);
     setIsShowSubmitModal(true);
   };
