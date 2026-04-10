@@ -114,7 +114,7 @@ function SubmissionContainer({ isInitialLoading, submissionsCount, setSubmission
   });
 
   useEffect(() => {
-    if (!isInitialLoading && submissionsCount > 0) {
+    if (!isInitialLoading) {
       setIsLoading(true);
       getSubmitBlogsList();
     }

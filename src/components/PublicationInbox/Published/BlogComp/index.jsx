@@ -2,30 +2,23 @@ import React, { useState } from "react";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import { FaHandsClapping } from "react-icons/fa6";
 import { MdMoreHoriz } from "react-icons/md";
-import * as Popover from "@radix-ui/react-popover";
-import { IoIosLink } from "react-icons/io";
 import { formatMonthAndDayShort } from "../../../../utils/monthDateFormatter";
 import { Link, useNavigate } from "react-router-dom";
 import noPreviewImg from "../../../../assets/images/noPreviewImage.png";
 import { getImageUrl, getSubmissionStatus } from "../../../../utils/common";
-import ActionBtn from "../../ActionBtn";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import ActionBtn from "./ActionBtn";
 
 function BlogComp({ item }) {
-  const navigate = useNavigate();
   const [blog, setBlog] = useState(item);
-
-  const handleBlogClick = () => {
-    const title = blog.previewTitle.split(" ").join("-");
-    navigate(`/${title}/${blog._id}`);
-  };
 
   return (
     <>
       {blog && (
         <tr className="bdr-5" style={{ borderInline: 0, borderBottom: 0 }}>
           <td className="table-cell padding70" style={{ paddingInline: 0 }}>
-            <div className="w-full min-w-0 overflow-hidden relative cursor-pointer">
-              <Link to={`/${blog.slug}/${blog._id}`} className="margin58 width69 flex items-start custom-gap-2" style={{ marginLeft: 0, marginBlock: 0 }}>
+            <Link to={`/${blog.slug}/${blog._id}`} className="block w-full min-w-0 overflow-hidden relative cursor-pointer">
+              <div className="margin58 width69 flex items-start custom-gap-2" style={{ marginLeft: 0, marginBlock: 0 }}>
                 <div>
                   <div className="relative z-[2] cursor-pointer m-0 p-0 height-54 width70">
                     <img src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreviewImg} className="w-full object-cover object-center aspect-[3/2] border-radius-5 align-middle" />
@@ -82,47 +75,48 @@ function BlogComp({ item }) {
                     </div>
                   </div>
                 </div>
-              </Link>
-            </div>
+              </div>
+            </Link>
           </td>
 
-          {/* publication */}
+          {/* writers */}
           <td className="table-cell padding70" style={{ paddingInline: 0 }}>
             <div className="min-w-0 w-full overflow-hidden">
               <div className="margin58 overflow-auto" style={{ marginLeft: 0, marginBlock: 0 }}>
-                {blog.publication && (
-                  <div className="w-full flex items-center custom-gap-3">
-                    <Link to={`/publication/${blog.publication.slug}`} className="cursor-pointer shrink-0">
-                      <div className="relative">
-                        <img src={blog.publication.profileImg} className="width86 aspect-square br13" />
-                        <div className="absolute top-0 boxShadow7 width86 aspect-square br13"></div>
-                      </div>
-                    </Link>
-                    <Link to={`/publication/${blog.publication.slug}`} title={blog.publication.name} className="cursor-pointer overflow-hidden m-0 p-0 transition-all duration-75 ease hover:underline">
-                      <div className="max-w-full color-3 custom-fs-1 line20 font-normal truncate">{blog.publication.name}</div>
-                    </Link>
-                  </div>
-                )}
+                <div className="w-full flex items-center custom-gap-3">
+                  <Link to={`/profile/${blog.author.username}`} className="cursor-pointer shrink-0">
+                    <div className="relative">
+                      <img src={blog.author.profileImg} className="width86 aspect-square rounded-full" />
+                      <div className="absolute top-0 boxShadow7 width86 aspect-square rounded-full"></div>
+                    </div>
+                  </Link>
+                  <Link to={`/profile/${blog.author.username}`} title={blog.author.name} className="cursor-pointer overflow-hidden m-0 p-0 transition-all duration-75 ease hover:underline">
+                    <div className="max-w-full color-3 custom-fs-1 line20 font-normal truncate">{blog.author.name}</div>
+                  </Link>
+                </div>
               </div>
             </div>
           </td>
 
           {/* status */}
           <td className="table-cell padding70" style={{ paddingInline: 0 }}>
-            {blog.publication && (
-              <div className="min-w-0 w-full overflow-hidden">
-                <div className="flex width92">
-                  <button className="w-full overflow-hidden cursor-pointer m-0 p-0">
-                    <div className="text-[#1a8917] whitespace-nowrap custom-fs-1 line20 font-normal text-left">{getSubmissionStatus(blog.publicationInfo.status)}</div>
-                  </button>
-                </div>
+            <div className="min-w-0 w-full overflow-hidden">
+              <div className="flex width92">
+                <button className="w-full overflow-hidden cursor-pointer m-0 p-0">
+                  <div className="bg-11 text-left padding-28 padding84 w-fit border-radius10 flex items-center gap9">
+                    <div className="custom-fs-1 whitespace-nowrap color-4 line20 font-normal">Pending review</div>
+                    <div className="width-19 aspect-square">
+                      <MdOutlineKeyboardArrowDown />
+                    </div>
+                  </div>
+                </button>
               </div>
-            )}
+            </div>
           </td>
 
           <td className="table-cell padding70" style={{ paddingInline: 0 }}>
             <div className="min-w-0 w-full overflow-hidden flex justify-end">
-              <ActionBtn blog={blog} setBlog={setBlog} />
+              <ActionBtn blog={blog} />
             </div>
           </td>
         </tr>

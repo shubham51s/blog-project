@@ -97,36 +97,6 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true })
     handleTabChange(1);
   };
 
-  const editOldBlog = async () => {
-    try {
-      const params = {
-        previewTitle: blog.previewTitle,
-        previewSubtitle: blog.previewSubtitle,
-        previewImg: blog.previewImg,
-        topics: blog.selectedTopic.map((item) => item._id),
-        draftId: id,
-      };
-
-      if (blog.publication) params.publicationId = blog.publication._id;
-
-      const response = await requestHandler("/blogs/edit", "POST", params);
-      const result = await response.json();
-
-      if (response.status === 200 && result?.data?.blog) {
-        const blog = result.data.blog;
-        navigate(`/${blog.slug}/${blog._id}`, { replace: true });
-      } else {
-        showToast(result?.message || "Some error occured");
-      }
-
-      return true;
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured");
-      return false;
-    }
-  };
-
   const publishNew = async () => {
     try {
       const params = {

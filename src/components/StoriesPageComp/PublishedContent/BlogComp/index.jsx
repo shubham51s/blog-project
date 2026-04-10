@@ -5,7 +5,7 @@ import { formatMonthAndDayShort } from "../../../../utils/monthDateFormatter";
 import { Link, useNavigate } from "react-router-dom";
 import noPreviewImg from "../../../../assets/images/noPreviewImage.png";
 import { getImageUrl, getSubmissionStatus } from "../../../../utils/common";
-import ActionBtn from "./ActionBtn";
+import ActionBtn from "../../ActionBtn";
 
 function BlogComp({ item }) {
   const [blog, setBlog] = useState(item);
@@ -87,10 +87,10 @@ function BlogComp({ item }) {
           {/* status */}
           <td className="table-cell padding70" style={{ paddingInline: 0 }}>
             {blog.publication && (
-              <div className="min-w-0 w-full overflow-hidden max-w-[80px]">
+              <div className="min-w-0 w-full overflow-hidden">
                 <div className="flex width92">
                   <button className="w-full overflow-hidden cursor-pointer m-0 p-0">
-                    <div className="text-[#1a8917] whitespace-nowrap custom-fs-1 line20 font-normal">{getSubmissionStatus(blog.publicationInfo.status)}</div>
+                    <div className="text-[#1a8917] whitespace-nowrap custom-fs-1 line20 font-normal text-left">{getSubmissionStatus(blog.publicationInfo.status)}</div>
                   </button>
                 </div>
               </div>

@@ -35,6 +35,7 @@ import NewPublication from "./pages/NewPublication";
 import PublicationDetails from "./pages/Publication/PublicationDetails";
 import PublicationFollowers from "./pages/Publication/Followers";
 import PublicationSettings from "./pages/Publication/Settings";
+import PublicationInbox from "./pages/Publication/Inbox";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -81,6 +82,7 @@ function App() {
           <Route path="profile/:username/list/:slug/:listId" element={<ListDetailsPage />} />
           <Route path="publication/:slug" element={<PublicationDetails />} />
           <Route path="publication/:slug/followers" element={<PublicationFollowers />} />
+          <Route path="publication/:slug/manage/inbox" element={<PublicationInbox />} />
           <Route path=":slug/settings" element={<PublicationSettings />} />
           <Route path=":slug/:id" element={<PostDetailsPageWrapper />} />
         </Route>

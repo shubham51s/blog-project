@@ -22,7 +22,6 @@ function StoriesPage() {
   const getAllStoriesCount = async () => {
     try {
       const response = await requestHandler("/stories/getAllStoriesCount");
-
       const result = await response.json();
 
       if (response.status === 200 && result?.data) {

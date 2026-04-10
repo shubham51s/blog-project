@@ -30,6 +30,7 @@ function Edit({ blog }) {
       setIsLoading(false);
     }
   };
+
   return (
     <button onClick={handleEditStoryBtnClick} disabled={isLoading} className="cursor-pointer m-0 p-0 flex items-center">
       <div className="flex items-start text-left">Edit story</div>
