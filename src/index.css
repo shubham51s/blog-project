@@ -64,6 +64,7 @@ img {
   --bg-color-15: rgba(0, 0, 0, .68);
   --bg-color-16: rgba(0, 0, 0, 0.25);
   --bg-color-17: rgb(237, 230, 230);
+  --bg-color-18: rgb(232, 243, 232);
 
   /* for text colors */
   --txt-color-1: rgba(0, 0, 0, 0.9);
@@ -233,6 +234,10 @@ img {
 
 .bg18 {
   background-color: var(--bg-color-17);
+}
+
+.bg19 {
+  background-color: var(--bg-color-18);
 }
 
 /* for text colors */

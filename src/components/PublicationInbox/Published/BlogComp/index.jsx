@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import noPreviewImg from "../../../../assets/images/noPreviewImage.png";
 import { getImageUrl, getSubmissionStatus } from "../../../../utils/common";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import ActionBtn from "./ActionBtn";
+import ActionBtn from "../../Common/ActionBtn";
 
 function BlogComp({ item }) {
   const [blog, setBlog] = useState(item);
@@ -104,10 +104,7 @@ function BlogComp({ item }) {
               <div className="flex width92">
                 <button className="w-full overflow-hidden cursor-pointer m-0 p-0">
                   <div className="bg-11 text-left padding-28 padding84 w-fit border-radius10 flex items-center gap9">
-                    <div className="custom-fs-1 whitespace-nowrap color-4 line20 font-normal">Pending review</div>
-                    <div className="width-19 aspect-square">
-                      <MdOutlineKeyboardArrowDown />
-                    </div>
+                    <div className="custom-fs-1 whitespace-nowrap text-[#1A8917] line20 font-normal">Approved</div>
                   </div>
                 </button>
               </div>
@@ -116,7 +113,7 @@ function BlogComp({ item }) {
 
           <td className="table-cell padding70" style={{ paddingInline: 0 }}>
             <div className="min-w-0 w-full overflow-hidden flex justify-end">
-              <ActionBtn blog={blog} />
+              <ActionBtn blog={blog} setBlog={setBlog} />
             </div>
           </td>
         </tr>

@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { MdMoreHoriz } from "react-icons/md";
-import RemoveFromPublication from "../../../../Common/BlogActions/RemoveFromPublication";
 import { IoIosLink } from "react-icons/io";
-import { showToast } from "../../../../../utils/toaster";
+import { useRequestHandler } from "../../../../hooks/requestHandler";
+import { showToast } from "../../../../utils/toaster";
 
-function ActionBtn({ blog }) {
+function ActionBtn({ blog, setBlog }) {
+  const { requestHandler } = useRequestHandler();
   const rootUrl = window.location.origin;
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCopyLink = async () => {
     try {
@@ -17,6 +19,26 @@ function ActionBtn({ blog }) {
       setIsOpen(false);
     } catch (err) {
       console.error("Failed to copy", err);
+    }
+  };
+
+  const removeFromPublication = async () => {
+    setIsLoading(true);
+    try {
+      const params = { blogId: blog._id };
+      const response = await requestHandler("/publication/requests/decline", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        setBlog(null);
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -45,7 +67,9 @@ function ActionBtn({ blog }) {
                 <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
               </li>
               <li className="custom-px-2 padding59 custom-fs-1 color-3 opacity-[0.85] transition-all duration-200 linear hover:opacity-100 font-normal">
-                <RemoveFromPublication blog={blog} />
+                <button onClick={removeFromPublication} disabled={isLoading} className="cursor-pointer m-0 p-0 flex items-center">
+                  <div className="flex items-start text-left">Remove from publication</div>
+                </button>
               </li>
             </ul>
           </div>

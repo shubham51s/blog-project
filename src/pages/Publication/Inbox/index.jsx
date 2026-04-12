@@ -69,7 +69,8 @@ function PublicationInbox() {
             </div>
           </div>
 
-          <div className="flex justify-center overflow-x-hidden overflow-y-auto max-h-full">
+          {/* <div className="flex justify-center overflow-x-hidden overflow-y-auto max-h-full"> */}
+          <div className="flex justify-center max-h-full">
             <div className="min-w-0 w-full custom-max-w-1 margin-27" style={{ marginBlock: 0 }}>
               {/* top section */}
               <div className="margin54 margin56">

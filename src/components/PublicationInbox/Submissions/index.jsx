@@ -7,7 +7,7 @@ import { defaultLoaderTime } from "../../../constants/constant";
 
 function Submissions({ isInitialLoading, publication }) {
   const { requestHandler } = useRequestHandler();
-  const limit = 20;
+  const limit = 10;
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
@@ -22,11 +22,9 @@ function Submissions({ isInitialLoading, publication }) {
     if (!scroll.hasMore) return;
     setScroll((prev) => ({ ...prev, loading: true }));
     try {
-      const url = !scroll.cursor ? `/publication/pending/${publication._id}?cursor=${scroll.cursor}&limit=${limit}` : `/publication/pending/${publication._id}?limit=${limit}`;
+      const url = scroll.cursor ? `/publication/pending/${publication._id}?cursor=${scroll.cursor}&limit=${limit}` : `/publication/pending/${publication._id}?limit=${limit}`;
       const response = await requestHandler(url);
       const result = await response.json();
-
-      console.log("result: ", result);
 
       if (response?.status === 200 && result?.data?.blogs) {
         setBlogs((prev) => [...prev, ...result.data.blogs]);
@@ -80,7 +78,7 @@ function Submissions({ isInitialLoading, publication }) {
             <tbody className="m-0 no-first-row-border">
               {/* blogs list */}
               {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
-              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <tr ref={sentinel} style={{ height: "1px" }}></tr>}
               {/* loader */}
               {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
             </tbody>

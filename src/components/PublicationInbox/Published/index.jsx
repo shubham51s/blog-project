@@ -7,7 +7,7 @@ import { defaultLoaderTime } from "../../../constants/constant";
 
 function Published({ isInitialLoading, publication }) {
   const { requestHandler } = useRequestHandler();
-  const limit = 20;
+  const limit = 10;
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
@@ -22,11 +22,9 @@ function Published({ isInitialLoading, publication }) {
     if (!scroll.hasMore) return;
     setScroll((prev) => ({ ...prev, loading: true }));
     try {
-      const url = !scroll.cursor ? `/publication/pending/${publication._id}?cursor=${scroll.cursor}&limit=${limit}` : `/publication/pending/${publication._id}?limit=${limit}`;
+      const url = scroll.cursor ? `/publication/approved/${publication._id}?cursor=${scroll.cursor}&limit=${limit}` : `/publication/approved/${publication._id}?limit=${limit}`;
       const response = await requestHandler(url);
       const result = await response.json();
-
-      console.log("result: ", result);
 
       if (response?.status === 200 && result?.data?.blogs) {
         setBlogs((prev) => [...prev, ...result.data.blogs]);
@@ -71,7 +69,7 @@ function Published({ isInitialLoading, publication }) {
                 <th className="custom-py-2 w-[60%] custom-fs-1 color-4 custom-line-h-1 font-normal" style={{ paddingLeft: 0 }}>
                   Latest
                 </th>
-                <th className="w-[18%] custom-fs-1 color-4 custom-line-h-1 font-medium">Writers</th>
+                <th className="w-[18%] custom-fs-1 color-4 custom-line-h-1 font-medium">All writers</th>
                 <th className="w-[18%] custom-fs-1 color-4 custom-line-h-1 font-medium">Status</th>
                 <th className="w-[3%] padding-23 custom-fs-1 color-4 custom-line-h-1 font-medium" style={{ paddingBlock: 0 }}></th>
               </tr>
@@ -80,7 +78,7 @@ function Published({ isInitialLoading, publication }) {
             <tbody className="m-0 no-first-row-border">
               {/* blogs list */}
               {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
-              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <tr ref={sentinel} style={{ height: "1px" }}></tr>}
               {/* loader */}
               {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
             </tbody>
