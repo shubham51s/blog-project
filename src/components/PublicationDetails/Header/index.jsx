@@ -4,6 +4,7 @@ import EditorsListModal from "../EditorsList";
 import { PublicationContext } from "../../../context/publication";
 import { useTogglePublicationFollow } from "../../../hooks/togglePublicationFollow";
 import ManagePublicationBtn from "../MangePublicationBtn";
+import InboxBtn from "../InboxBtn";
 
 function HeaderSection({ publication, setPublication }) {
   const { followingPublication, isPublicationLoader } = useContext(PublicationContext);
@@ -17,34 +18,38 @@ function HeaderSection({ publication, setPublication }) {
 
   const handlePublicationFollow = async () => {
     setIsLoading(true);
-    const params = {
-      _id: publication._id,
-      name: publication.name,
-    };
+    try {
+      const params = {
+        _id: publication._id,
+        name: publication.name,
+      };
 
-    const isSuccess = await followPublication(params);
+      const isSuccess = await followPublication(params);
 
-    if (isSuccess) {
-      setPublication((prev) => ({ ...prev, stats: { ...prev.stats, followers: prev.stats.followers + 1 } }));
+      if (isSuccess) {
+        setPublication((prev) => ({ ...prev, stats: { ...prev.stats, followers: prev.stats.followers + 1 } }));
+      }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handlePublicationUnfollow = async () => {
     setIsLoading(true);
-    const params = {
-      _id: publication._id,
-      name: publication.name,
-    };
+    try {
+      const params = {
+        _id: publication._id,
+        name: publication.name,
+      };
 
-    const isSuccess = await unfollowPublication(params);
+      const isSuccess = await unfollowPublication(params);
 
-    if (isSuccess) {
-      setPublication((prev) => ({ ...prev, stats: { ...prev.stats, followers: prev.stats.followers - 1 } }));
+      if (isSuccess) {
+        setPublication((prev) => ({ ...prev, stats: { ...prev.stats, followers: prev.stats.followers - 1 } }));
+      }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (
@@ -95,7 +100,8 @@ function HeaderSection({ publication, setPublication }) {
             <div className="relative">
               <div className="min-w-0 flex justify-between custom-gap-2">
                 <div className="grow shrink basis-auto"></div>
-                <ManagePublicationBtn publication={publication} />
+                {publication.isMember && <InboxBtn publication={publication} />}
+                {publication.isMember && <ManagePublicationBtn publication={publication} />}
               </div>
             </div>
           </div>

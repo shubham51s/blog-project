@@ -13,7 +13,7 @@ function ListItem({ item, onMuteStatusChange }) {
     setIsLoading(true);
 
     const params = {
-      target: user._id,
+      _id: user._id,
       name: user.name,
     };
     const isSuccess = await muteUser(params);
@@ -29,7 +29,7 @@ function ListItem({ item, onMuteStatusChange }) {
     setIsLoading(true);
 
     const params = {
-      target: user._id,
+      _id: user._id,
       name: user.name,
     };
     const isSuccess = await unmuteUser(params);

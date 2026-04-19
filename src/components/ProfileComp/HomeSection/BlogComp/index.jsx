@@ -16,10 +16,7 @@ import { getImageUrl } from "../../../../utils/common";
 function BlogComp({ item }) {
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
-
-  const navigate = useNavigate();
-  const isMyBlog = userInfo._id === item.author._id;
-  const [blog, setBlog] = useState({ ...item, isMyBlog });
+  const [blog, setBlog] = useState({ ...item, isMyBlog: userInfo._id === item.author._id });
   const [isHideBlog, setIsHideBlog] = useState(false);
   const [loaders, setLoaders] = useState({
     isBookmarkLoader: false,
@@ -89,16 +86,12 @@ function BlogComp({ item }) {
     }
   };
 
-  const handleShowDetailedBlog = () => {
-    navigate(`/${blog.slug}/${blog._id}`);
-  };
-
   return (
     <div className={`overflow-hidden transition-all duration-500 ease-out ${isHideBlog ? "height71" : "height-18"}`}>
       <div className="flex justify-center">
         <div className="w-full max-width-2 margin-2 min-w-0">
           <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
-            <article onClick={() => handleShowDetailedBlog()}>
+            <article>
               <div className="box-content">
                 <div className="w-full h-full">
                   <div className="flex relative">
@@ -156,32 +149,23 @@ function BlogComp({ item }) {
                       <div className="flex">
                         {/* left section */}
                         <div className="grow shrink basis-auto" style={{ wordBreak: "break-word" }}>
-                          <div>
+                          <Link to={`/${blog.slug}/${blog._id}`} className="block">
                             <div className="flex flex-col static cursor-pointer">
                               <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.previewTitle}</h2>
                               <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
                                 {blog.previewSubtitle && <h3 className="height-15 overflow-hidden text-ellipsis font-10 color-4 custom-line-h-1 font-normal m-0 p-0">{blog.previewSubtitle}</h3>}
                               </div>
                             </div>
-                          </div>
+                          </Link>
 
                           <div>
                             <div className="w-full padding-25 cursor-pointer" style={{ paddingBottom: 0, paddingInline: 0 }}>
                               <span className="font-4 color-4 custom-line-h-1 font-normal">
                                 <div className="height-50 flex justify-between items-center">
-                                  <div className="flex items-center custom-gap-2 align-middle text-center">
-                                    <div className="box-content flex">
-                                      <div className="inline-block">
-                                        <button className="z-[2] relative border-none cursor-pointer p-0 m-0 bg-transparent" title="Member-only story">
-                                          <div className="inline-block width-19 aspect-square">
-                                            <PiStarFourLight className="w-full h-full align-middle text-yellow-600" />
-                                          </div>
-                                        </button>
-                                      </div>
-                                    </div>
+                                  <Link to={`/${blog.slug}/${blog._id}`} className="flex items-center custom-gap-2 align-middle text-center">
                                     {formatMonthAndDayShort(blog.updatedAt)}
                                     <div className="width-28 height-51 relative flex items-center">
-                                      <Link className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0" to="/">
+                                      <div className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0">
                                         {blog.clapsCount > 0 && (
                                           <div className="flex" title={`${blog.clapsCount} claps`}>
                                             <div className="custom-gap-1 flex items-center">
@@ -202,9 +186,9 @@ function BlogComp({ item }) {
                                             </div>
                                           </div>
                                         )}
-                                      </Link>
+                                      </div>
                                     </div>
-                                  </div>
+                                  </Link>
 
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
                                     <div>
@@ -224,9 +208,9 @@ function BlogComp({ item }) {
                             </div>
                           </div>
                         </div>
-                        <div className="margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
+                        <Link to={`/${blog.slug}/${blog._id}`} className="block margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
                           <img src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />
-                        </div>
+                        </Link>
                       </div>
                     </div>
                   </div>

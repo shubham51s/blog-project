@@ -9,7 +9,6 @@ import noPreviewImg from "../../../assets/images/noPreviewImage.png";
 import { getImageUrl } from "../../../utils/common";
 
 function BlogComp({ blogDetails }) {
-  // console.log("blogDetails: ", blogDetails);
   const [isCommunity, setIsCommunity] = useState(blogDetails.hasOwnProperty("community"));
   const navigate = useNavigate();
 

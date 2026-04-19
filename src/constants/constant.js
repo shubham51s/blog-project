@@ -54,7 +54,7 @@ const footerOptions = [
   },
 ];
 
-const defaultLoaderTime = 300;
+const defaultLoaderTime = 333;
 const defaultLimit = 20;
 
 export { urlBasePath, footerOptions, defaultLoaderTime, defaultLimit };

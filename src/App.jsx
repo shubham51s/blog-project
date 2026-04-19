@@ -32,10 +32,11 @@ import Account from "./pages/Settings/Account";
 import Publishing from "./pages/Settings/Publishing";
 import Security from "./pages/Settings/Security";
 import NewPublication from "./pages/NewPublication";
-import PublicationDetails from "./pages/Publication/PublicationDetails";
 import PublicationFollowers from "./pages/Publication/Followers";
-import PublicationSettings from "./pages/Publication/Settings";
 import PublicationInbox from "./pages/Publication/Inbox";
+import PublicationDetailsWrapper from "./pages/Publication/PublicationDetails/wrapper";
+import PublicationSettingsWrapper from "./pages/Publication/Settings/wrapper";
+import TopicDetails from "./pages/TopicDetails";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -80,10 +81,11 @@ function App() {
             <Route path="following" element={<Following />} />
           </Route>
           <Route path="profile/:username/list/:slug/:listId" element={<ListDetailsPage />} />
-          <Route path="publication/:slug" element={<PublicationDetails />} />
+          <Route path="publication/:slug" element={<PublicationDetailsWrapper />} />
           <Route path="publication/:slug/followers" element={<PublicationFollowers />} />
           <Route path="publication/:slug/manage/inbox" element={<PublicationInbox />} />
-          <Route path=":slug/settings" element={<PublicationSettings />} />
+          <Route path="tag/:slug" element={<TopicDetails />} />
+          <Route path=":slug/settings" element={<PublicationSettingsWrapper />} />
           <Route path=":slug/:id" element={<PostDetailsPageWrapper />} />
         </Route>
         <Route path="/*" element={<NotFoundPage />} />

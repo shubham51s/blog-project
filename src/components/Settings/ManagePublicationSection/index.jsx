@@ -1,12 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ManagePublication from "../../Common/Modals/ManagePublication";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ManagePublicationSection() {
-  const [isShowModal, setIsShowModal] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isShowModal, setIsShowModal] = useState();
 
   const handleCloseModal = () => {
     setIsShowModal(false);
+    navigate("", { replace: true });
   };
+
+  useEffect(() => {
+    setIsShowModal(location.hash === "#managePublications");
+  }, [location]);
 
   return (
     <>

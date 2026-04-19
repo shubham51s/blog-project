@@ -30,11 +30,11 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
             </div>
           </div>
         </Link>
-        <div onClick={handleNavigateToLink} className="margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
+        <Link to={`/profile/${user.username}/list/${list.slug}/${list._id}`} className="block margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
           <h2 className="height-61 line-h-8 font-3 overflow-hidden line-clamp-2 font-bold text-ellipsis color-3 m-0">{list.name}</h2>
-        </div>
+        </Link>
         <div className="flex items-center justify-between">
-          <div className="flex margin-6 items-center">
+          <Link to={`/profile/${user.username}/list/${list.slug}/${list._id}`} className="flex margin-6 items-center">
             <p className="font-4 color-4 line20 font-normal m-0">{list.savedCount > 0 ? list.savedCount + " stories" : "No stories"}</p>
             {list.isPrivate && (
               <div className="padding50" style={{ paddingRight: 0 }}>
@@ -43,7 +43,7 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
                 </div>
               </div>
             )}
-          </div>
+          </Link>
           <div className="flex items-center">
             {userInfo._id !== user._id && <SaveList user={user} setUser={setUser} list={list} />}
             <MoreButton user={user} setUser={setUser} list={list} setList={setList} filterOutDeletedList={filterOutDeletedList} />
@@ -51,7 +51,7 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
         </div>
       </div>
 
-      <div onClick={handleNavigateToLink}>
+      <Link to={`/profile/${user.username}/list/${list.slug}/${list._id}`} className="block">
         <div className="relative h-full flex overflow-hidden justify-end">
           <div className="relative bg-10 z-[3] bdr18" style={{ borderLeft: 0, borderBlock: 0 }}>
             <div className="h-full">
@@ -69,7 +69,7 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     </div>
   );
 }

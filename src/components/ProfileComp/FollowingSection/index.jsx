@@ -80,11 +80,6 @@ function FollowingList({ item, user, setUser }) {
             {followingUsers[author.followee._id] && (
               <button onClick={handleUnfollowUser} disabled={isLoading} className={`bdr17-hover padding-28 padding-20 border-radius-7 flex items-center m-0 transition-all duration-500 ease ${isLoading ? "opacity-[0.7] cursor-default" : "opacity-100 cursor-pointer"}`}>
                 <div className="break-keep text-center inline-block custom-fs-1">Following</div>
-                <div className="text-right padding-23" style={{ paddingRight: 0, paddingBlock: 0 }}>
-                  <div className="width-19 aspect-square">
-                    <IoIosArrowDown className="w-full h-full" />
-                  </div>
-                </div>
               </button>
             )}
             {!followingUsers[author.followee._id] && (

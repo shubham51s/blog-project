@@ -16,7 +16,7 @@ function PublicationSettings() {
   const navigate = useNavigate();
   const { requestHandler } = useRequestHandler();
   const { slug } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaveLoader, setIsSaveLoader] = useState(false);
   const [isError, setIsError] = useState(false);
   const [publication, setPublication] = useState({
@@ -28,6 +28,7 @@ function PublicationSettings() {
     topics: [],
     _id: "",
     slug: "",
+    isOwner: false,
   });
 
   const getPublicationDetails = async () => {
@@ -39,7 +40,7 @@ function PublicationSettings() {
       if (response?.status === 200 && result?.data?.publication) {
         const data = result.data.publication;
 
-        setPublication((prev) => ({ ...prev, _id: data._id, name: data.name, description: data.description, profileImg: data.profileImg, public_id: data.public_id, topics: data.topics, editors: data.editors, slug: data.slug }));
+        setPublication((prev) => ({ ...prev, _id: data._id, name: data.name, description: data.description, profileImg: data.profileImg, public_id: data.public_id, topics: data.topics, editors: data.editors, slug: data.slug, isOwner: data.isOwner }));
       } else {
         setIsError(true);
       }
@@ -52,6 +53,7 @@ function PublicationSettings() {
   };
 
   const savePublication = async () => {
+    setIsSaveLoader(true);
     try {
       const params = {
         name: publication.name,
@@ -79,29 +81,6 @@ function PublicationSettings() {
     }
   };
 
-  const isNameAvailable = async () => {
-    setIsSaveLoader(true);
-    try {
-      const params = {
-        name: publication.name,
-        id: publication._id,
-      };
-      const response = await requestHandler("/publication/check-name-availability", "POST", params);
-      const result = await response.json();
-
-      if (response?.status === 200) {
-        savePublication();
-        return;
-      }
-      showToast(result?.message || "Some error occured.");
-      setIsSaveLoader(false);
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured.");
-      setIsSaveLoader(false);
-    }
-  };
-
   const handleSavePublicationBtnClick = () => {
     if (isSaveLoader) return;
 
@@ -114,7 +93,7 @@ function PublicationSettings() {
     } else if (!publication.profileImg) {
       showToast("Please select avatar.");
     } else {
-      isNameAvailable();
+      savePublication();
     }
   };
 

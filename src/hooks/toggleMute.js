@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRequestHandler } from "./requestHandler";
 import { showToast } from "../utils/toaster";
+import { MuteContext } from "../context/mute";
 
 export function useToggleMute() {
   const { requestHandler } = useRequestHandler();
+  const { addMutedUser, removeMutedUser, addMutedPublication, removeMutedPublication } = useContext(MuteContext);
 
   const muteUser = async (user) => {
     try {
       const params = {
-        target: user.target,
+        target: user._id,
       };
 
       const response = await requestHandler("/mute/user/add", "POST", params);
@@ -16,6 +18,7 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${user.name} has been muted. You will no longer see their stories on your homepage.`);
+        addMutedUser(user._id);
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -31,7 +34,7 @@ export function useToggleMute() {
   const unmuteUser = async (user) => {
     try {
       const params = {
-        target: user.target,
+        target: user._id,
       };
 
       const response = await requestHandler("/mute/user/remove", "POST", params);
@@ -39,6 +42,7 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${user.name} has been unmuted.`);
+        removeMutedUser(user._id);
       } else {
         showToast(result?.message || "Some error occured");
       }
@@ -51,5 +55,53 @@ export function useToggleMute() {
     }
   };
 
-  return { muteUser, unmuteUser };
+  const mutePublication = async (publication) => {
+    try {
+      const params = {
+        target: publication._id,
+      };
+
+      const response = await requestHandler("/mute/publication/add", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        showToast(`${publication.name} has been muted. You will no longer see their stories on your homepage.`);
+        addMutedPublication(publication._id);
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
+
+      return response?.status === 200;
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured");
+      return false;
+    }
+  };
+
+  const unmutePublication = async (publication) => {
+    try {
+      const params = {
+        target: publication._id,
+      };
+
+      const response = await requestHandler("/mute/publication/remove", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        showToast(`${publication.name} has been unmuted.`);
+        removeMutedPublication(publication._id);
+      } else {
+        showToast(result?.message || "Some error occured");
+      }
+
+      return response?.status === 200;
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured");
+      return false;
+    }
+  };
+
+  return { muteUser, unmuteUser, mutePublication, unmutePublication };
 }

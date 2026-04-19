@@ -14,7 +14,7 @@ function Follower() {
   const [followersArr, setFollowersArr] = useState([]);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const limit = 20;
   const [scroll, setScroll] = useState({
     loading: false,
@@ -53,7 +53,10 @@ function Follower() {
   });
 
   useEffect(() => {
-    if (user && isLoading) fetchFollowersList();
+    if (user && !isLoading) {
+      setIsLoading(true);
+      fetchFollowersList();
+    }
   }, [user]);
 
   useEffect(() => {

@@ -23,6 +23,7 @@ function NewPublication() {
   });
 
   const createPublication = async () => {
+    setIsLoading(true);
     try {
       const params = {
         name: publication.name,
@@ -50,28 +51,6 @@ function NewPublication() {
     }
   };
 
-  const isNameAvailable = async () => {
-    setIsLoading(true);
-    try {
-      const params = {
-        name: publication.name,
-      };
-      const response = await requestHandler("/publication/check-name-availability", "POST", params);
-      const result = await response.json();
-
-      if (response?.status === 200) {
-        createPublication();
-        return;
-      }
-      showToast(result?.message || "Some error occured.");
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured.");
-      setIsLoading(false);
-    }
-  };
-
   const handleCreateNewPublicationBtnClick = () => {
     if (isLoading) return;
 
@@ -84,7 +63,7 @@ function NewPublication() {
     } else if (!publication.profileImg) {
       showToast("Please select avatar.");
     } else {
-      isNameAvailable();
+      createPublication();
     }
   };
 

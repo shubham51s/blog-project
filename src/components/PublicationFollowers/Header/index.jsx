@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ManagePublicationBtn from "../../PublicationDetails/MangePublicationBtn";
+import InboxBtn from "../../PublicationDetails/InboxBtn";
 
 function Header({ publication }) {
   return (
@@ -19,7 +20,8 @@ function Header({ publication }) {
             <div className="grow shrink basis-auto min-w-0 h-full relative flex items-end">
               <div className="grow shrink basis-auto flex justify-between min-w-0 custom-gap-2">
                 <div className="min-w-0 grow shrink basis-auto"></div>
-                {publication && <ManagePublicationBtn publication={publication} />}
+                {publication.isMember && <InboxBtn publication={publication} />}
+                {publication.isMember && <ManagePublicationBtn publication={publication} />}
               </div>
             </div>
           </div>

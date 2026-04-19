@@ -510,8 +510,15 @@ img {
 
 .invisible-scrollbar {
   overflow-y: auto;
-  scrollbar-width: none;
+  scrollbar-width: thin;
   -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+.invisible-scrollbar::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
 }
 
 .invisible-scrollbar::-webkit-scrollbar {
@@ -579,6 +586,11 @@ img {
 
   .gap13 {
     gap: 6px;
+  }
+
+  .gap14 {
+    row-gap: 48px;
+    column-gap: 24px;
   }
 
   .custom-margin-1 {
@@ -1921,6 +1933,10 @@ img {
     padding-bottom: 20px;
   }
 
+  .padding94 {
+    padding-top: 4px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -2207,5 +2223,9 @@ img {
 
   .margin74 {
     margin-inline: 100px;
+  }
+
+  .margin75 {
+    margin-bottom: 24px;
   }
 }

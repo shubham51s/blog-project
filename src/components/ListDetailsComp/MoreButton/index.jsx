@@ -319,11 +319,13 @@ function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
                         <div className="inline-block">Copy link</div>
                       </button>
                     </li>
-                    <li className="custom-px-2 padding59 color-3 opacity-[0.85] custom-fs-1 font-normal transition-all duration-100 linear hover:opacity-100">
-                      <button onClick={undoMyClaps} disabled={loaders.clapLoader} className="cursor-pointer m-0 p-0">
-                        <div className="inline-block">Undo applause for this list</div>
-                      </button>
-                    </li>
+                    {list?.myClaps > 0 && (
+                      <li className="custom-px-2 padding59 color-3 opacity-[0.85] custom-fs-1 font-normal transition-all duration-100 linear hover:opacity-100">
+                        <button onClick={undoMyClaps} disabled={loaders.clapLoader} className="cursor-pointer m-0 p-0">
+                          <div className="inline-block">Undo applause for this list</div>
+                        </button>
+                      </li>
+                    )}
                   </ul>
                 )}
               </div>

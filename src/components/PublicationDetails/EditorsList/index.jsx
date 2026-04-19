@@ -55,14 +55,9 @@ function EditorsListModal({ handleCloseModal, publication }) {
 
     if (!loaderTimeout.current) {
       loaderTimeout.current = setTimeout(() => {
-        loaderTimeout.current = null;
         setInitialLoader(false);
       }, defaultLoaderTime);
     }
-
-    // return () => {
-    //   clearTimeout(loaderTimeout.current);
-    // };
   }, []);
 
   return (
@@ -81,9 +76,14 @@ function EditorsListModal({ handleCloseModal, publication }) {
           </div>
 
           <div>
-            {/* list */}
-            {!initialLoader && !isLoading && editors.map((item) => <ListItem key={item._id} item={item} />)}
-            {!initialLoader && !isLoading && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+            {!initialLoader && !isLoading && (
+              <>
+                {editors.map((item) => (
+                  <ListItem key={item._id} item={item} />
+                ))}
+                {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+              </>
+            )}
 
             {/* list skeleton */}
             {(initialLoader || isLoading) && Array.from({ length: 3 }).map((_, index) => <ListItemSkeleton key={index} />)}

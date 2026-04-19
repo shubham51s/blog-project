@@ -5,6 +5,7 @@ import { FollowingContext } from "./followingContext";
 import { ListContext } from "./listContext";
 import { showToast } from "../utils/toaster";
 import { PublicationContext } from "./publication";
+import { MuteContext } from "./mute";
 
 const UserContext = createContext();
 
@@ -12,6 +13,7 @@ const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { fetchFollowingAuthorIds } = useContext(FollowingContext);
+  const { fetchMutedUsersAndPublications } = useContext(MuteContext);
   const { fetchFollowingPublicationIds } = useContext(PublicationContext);
   const { fetchMyLists } = useContext(ListContext);
   const [userInfo, setUserInfo] = useState({});
@@ -38,6 +40,7 @@ const UserProvider = ({ children }) => {
         fetchFollowingAuthorIds();
         fetchFollowingPublicationIds();
         fetchMyLists();
+        fetchMutedUsersAndPublications();
       } else {
         // need to check later
         if (location.pathname !== "/") navigate("/");

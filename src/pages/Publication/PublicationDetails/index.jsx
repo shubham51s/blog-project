@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HeaderSection from "../../../components/PublicationDetails/Header";
 import NoData from "../../../components/PublicationDetails/NoData";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import NotFoundComp from "../../../components/Common/NotFound";
 import Spinner from "../../../components/Common/Spinner";
 import { useParams } from "react-router-dom";
+import HeaderLoader from "../../../components/PublicationDetails/Header/skeleton";
+import Blogs from "../../../components/PublicationDetails/BlogSection";
 
 function PublicationDetails() {
   const { requestHandler } = useRequestHandler();
+  const loaderTimeout = useRef(null);
   const [publication, setPublication] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [defaultLoader, setDefaultLoader] = useState(true);
   const { slug } = useParams();
 
   const fetchPublicationDetails = async () => {
@@ -30,30 +34,28 @@ function PublicationDetails() {
 
   useEffect(() => {
     fetchPublicationDetails();
+
+    if (!loaderTimeout.current) {
+      loaderTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+      }, 100);
+    }
   }, []);
 
   return (
     <>
-      {/* main section */}
-      {!isLoading && publication && (
+      {((!isLoading && !defaultLoader && publication) || isLoading || defaultLoader) && (
         <div className="flex flex-col justify-between height-14">
           <div>
-            <HeaderSection publication={publication} setPublication={setPublication} />
-
-            <NoData />
+            {(isLoading || defaultLoader) && <HeaderLoader />}
+            {!isLoading && !defaultLoader && <HeaderSection publication={publication} setPublication={setPublication} />}
+            <Blogs publication={publication} />
           </div>
         </div>
       )}
 
-      {/* loader */}
-      {isLoading && (
-        <div className="height-14 flex items-center justify-center">
-          <Spinner />
-        </div>
-      )}
-
       {/* error  */}
-      {!isLoading && !publication && <NotFoundComp />}
+      {!isLoading && !defaultLoader && !publication && <NotFoundComp />}
     </>
   );
 }

@@ -9,6 +9,7 @@ import DeleteBlogModal from "../../../Common/Modals/ConfirmDeleteBlog";
 import { Tooltip } from "@mui/material";
 import { FollowingContext } from "../../../../context/followingContext";
 import { useToggleUserFollow } from "../../../../hooks/toggleUserFollow";
+import FollowAuthorBtn from "../../../Common/BlogActions/FollowAuthor";
 
 function BlogMoreBtn({ listItem, deleteListItem, list }) {
   const { requestHandler } = useRequestHandler();
@@ -141,20 +142,7 @@ function BlogMoreBtn({ listItem, deleteListItem, list }) {
                       </button>
                     </li>
                   )}
-                  {!isFetchUserLoader && (
-                    <li className="custom-px-2 padding59 color-3 custom-fs-1 font-normal">
-                      {followingUsers[listItem.blog.author._id] && (
-                        <button onClick={handleUnfollowUser} disabled={loaders.toggleFollowLoader} className={`cursor-pointer m-0 p-0 transition-all opacity-[0.85] duration-75 ease ${loaders.toggleFollowLoader ? "" : " hover:opacity-100"}`}>
-                          Unfollow author
-                        </button>
-                      )}
-                      {!followingUsers[listItem.blog.author._id] && (
-                        <button onClick={handleFollowUser} disabled={loaders.toggleFollowLoader} className={`cursor-pointer m-0 p-0 opacity-[0.85] transition-all duration-75 ease ${loaders.toggleFollowLoader ? "" : "hover:opacity-100"}`}>
-                          Follow author
-                        </button>
-                      )}
-                    </li>
-                  )}
+                  <FollowAuthorBtn user={listItem.blog.author} />
                 </ul>
               )}
               {userInfo._id === listItem.blog.author._id && (

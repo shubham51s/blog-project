@@ -1,10 +1,6 @@
 import React, { useContext, useState } from "react";
-import { CiCircleMinus } from "react-icons/ci";
 import * as Popover from "@radix-ui/react-popover";
 import { RiMoreLine } from "react-icons/ri";
-import { MdModeEdit } from "react-icons/md";
-import { MdDeleteOutline } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
 import Edit from "../../../../Common/BlogActions/Edit";
 
 function MoreButton({ blog }) {
@@ -22,9 +18,7 @@ function MoreButton({ blog }) {
           <Popover.Content side="bottom" className="z-[999]" onClick={(e) => e.stopPropagation()} align="middle" sideOffset={1}>
             <div className="box-shadow-4 border-radius-3 box-border custom-bg-8 overflow-hidden">
               <ul className="width62 padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
-                <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
-                  <Edit blog={blog} />
-                </li>
+                <Edit blog={blog} />
                 <li className="custom-px-2 bdr-5" style={{ borderInline: 0, borderBottom: 0 }}></li>
                 <li className="custom-px-2 padding59 custom-fs-1 color1 font-normal opacity-75 transition-all duration-200 ease-in-out hover:opacity-100">
                   <button className="cursor-pointer m-0 p-0 flex items-center">

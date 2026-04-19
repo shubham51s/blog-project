@@ -76,11 +76,17 @@ function Submissions({ isInitialLoading, publication }) {
             </thead>
 
             <tbody className="m-0 no-first-row-border">
-              {/* blogs list */}
-              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
-              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <tr ref={sentinel} style={{ height: "1px" }}></tr>}
+              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && (
+                <>
+                  {blogs.map((item) => (
+                    <BlogComp key={item._id} item={item} />
+                  ))}
+                  {scroll.hasMore && <tr ref={sentinel} style={{ height: "1px" }}></tr>}
+                </>
+              )}
+
               {/* loader */}
-              {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
+              {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 2 }).map((_, i) => <SkeletonComp key={i} />)}
             </tbody>
           </table>
         </div>
