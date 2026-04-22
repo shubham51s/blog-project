@@ -72,7 +72,7 @@ function Blogs({ topic }) {
           <div className="flex justify-center">
             <div className="w-full min-w-0 custom-max-w-1 margin-27" style={{ marginBlock: 0 }}>
               <div className="padding83">
-                <h2 className="font-3 line-h-8 font-medium color-3 m-0">Trending</h2>
+                <h2 className="font-3 line-h-8 font-medium color-3 m-0">Latest</h2>
               </div>
 
               <div className="w-full margin-11 mx-auto flex flex-col justify-center" style={{ marginTop: 0 }}>

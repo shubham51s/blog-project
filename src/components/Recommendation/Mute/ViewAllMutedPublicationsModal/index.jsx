@@ -6,10 +6,10 @@ import Loader from "./ListItem/skeleton";
 import ListItem from "./ListItem";
 import { useInfiniteScroll } from "../../../../hooks/useInfiniteScroll";
 
-function ViewAllMutedUsers({ handleCloseUserModal, usersCount, onMuteStatusChange }) {
+function ViewAllMutedPublications({ closePublicationModal, publicationCount, onMuteStatusChange }) {
   const { requestHandler } = useRequestHandler();
-  const limit = 1;
-  const [users, setUsers] = useState([]);
+  const limit = 20;
+  const [publications, setPublications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const loaderTimeout = useRef(null);
@@ -25,14 +25,12 @@ function ViewAllMutedUsers({ handleCloseUserModal, usersCount, onMuteStatusChang
     setScroll((prev) => ({ ...prev, loader: true }));
 
     try {
-      const url = scroll.cursor ? `/mute/users?cursor=${scroll.cursor}&limit=${limit}` : `/mute/users?limit=${limit}`;
+      const url = scroll.cursor ? `/mute/publications?cursor=${scroll.cursor}&limit=${limit}` : `/mute/publications?limit=${limit}`;
       const response = await requestHandler(url);
       const result = await response.json();
 
-      console.log("result: ", result);
-
-      if (response?.status === 200 && result?.data?.users) {
-        setUsers((prev) => [...prev, ...result.data.users]);
+      if (response?.status === 200 && result?.data?.publications) {
+        setPublications((prev) => [...prev, ...result.data.publications]);
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
       } else {
         setScroll((prev) => ({ ...prev, hasMore: false }));
@@ -63,17 +61,17 @@ function ViewAllMutedUsers({ handleCloseUserModal, usersCount, onMuteStatusChang
   }, []);
 
   return (
-    <div onClick={handleCloseUserModal} className="fixed inset-0 z-[800] overflow-y-auto overflow-x-hidden scroll-smooth bg13 flex justify-center items-center">
+    <div onClick={closePublicationModal} className="fixed inset-0 z-[800] overflow-y-auto overflow-x-hidden scroll-smooth bg13 flex justify-center items-center">
       <div onClick={(e) => e.stopPropagation()} className="padding-3 my-auto">
         <div className="flex justify-center">
           <div className="margin-27 w-full min-w-0 max-width-2 padding90" style={{ marginBlock: 0 }}>
             <div className="padding-42 text-center">
-              <h1 className="font-3 line-h-8 font-semibold color-3 m-0">Muted {usersCount} writers</h1>
+              <h1 className="font-3 line-h-8 font-semibold color-3 m-0">Muted {publicationCount} publications</h1>
             </div>
             <div>
-              {!isLoading && !defaultLoader && users.length > 0 && (
+              {!isLoading && !defaultLoader && publications.length > 0 && (
                 <>
-                  {users.map((item) => (
+                  {publications.map((item) => (
                     <ListItem key={item._id} item={item.target} onMuteStatusChange={onMuteStatusChange} />
                   ))}
                   {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
@@ -96,4 +94,4 @@ function ViewAllMutedUsers({ handleCloseUserModal, usersCount, onMuteStatusChang
   );
 }
 
-export default ViewAllMutedUsers;
+export default ViewAllMutedPublications;

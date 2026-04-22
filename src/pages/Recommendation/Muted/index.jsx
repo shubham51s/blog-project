@@ -6,6 +6,8 @@ import Spinner from "../../../components/Common/Spinner";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import UserListItem from "../../../components/Recommendation/Mute/UserListItem";
 import ViewAllMutedUsers from "../../../components/Recommendation/Mute/ViewAllMutedUsersModal";
+import PublicationListItem from "../../../components/Recommendation/Mute/PublicationListItem";
+import ViewAllMutedPublications from "../../../components/Recommendation/Mute/ViewAllMutedPublicationsModal";
 
 function Muted() {
   const { requestHandler } = useRequestHandler();
@@ -17,6 +19,7 @@ function Muted() {
   const [publicationCount, setPublicationsCount] = useState(0);
   const [publications, setPublications] = useState([]);
   const [isShowUserModal, setIsShowUserModal] = useState(false);
+  const [isPublicationModal, setIsPublicationModal] = useState(false);
 
   const getMutedData = async () => {
     setIsLoading(true);
@@ -41,21 +44,30 @@ function Muted() {
     }
   };
 
-  const onMuteStatusChange = (isMuted, userId) => {
-    if (isMuted) {
-      setUsersCount((prev) => prev + 1);
-      const updatedUsers = users.map((item) => (item.target._id === userId ? { ...item, target: { ...item.target, isMuted: true } } : { ...item }));
-      setUsers(updatedUsers);
-    }
-    if (!isMuted) {
-      setUsersCount((prev) => prev - 1);
-      const updatedUsers = users.map((item) => (item.target._id === userId ? { ...item, target: { ...item.target, isMuted: false } } : { ...item }));
-      setUsers(updatedUsers);
+  const onMuteStatusChange = (type, isMuted, id) => {
+    if (type === "user") {
+      if (isMuted) {
+        setUsersCount((prev) => prev + 1);
+      }
+      if (!isMuted) {
+        setUsersCount((prev) => prev - 1);
+      }
+    } else if (type === "publication") {
+      if (isMuted) {
+        setPublicationsCount((prev) => prev + 1);
+      }
+      if (!isMuted) {
+        setPublicationsCount((prev) => prev - 1);
+      }
     }
   };
 
   const handleCloseUserModal = () => {
     setIsShowUserModal(false);
+  };
+
+  const closePublicationModal = () => {
+    setIsPublicationModal(false);
   };
 
   useEffect(() => {
@@ -106,7 +118,7 @@ function Muted() {
                             <UserListItem key={item._id} user={item.target} onMuteStatusChange={onMuteStatusChange} />
                           ))}
 
-                          {users.length >= 5 && (
+                          {users.length >= 0 && (
                             <div className="margin60">
                               <p className="custom-fs-1 color-4 line20 font-normal m-0">
                                 <button onClick={() => setIsShowUserModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">
@@ -125,14 +137,19 @@ function Muted() {
                       <div>
                         <h2 className="font-10 font-medium color-3 line20 m-0">{publicationCount} publications</h2>
                         <div className="margin60 custom-margin-b-1">
-                          {/* {Array.from({ length: 5 }).map((_, index) => (
-                          <PublicationListItem key={index} />
-                        ))} */}
-                          <div className="margin60">
-                            <p className="custom-fs-1 color-4 line20 font-normal m-0">
-                              <button className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">See all {`(${publicationCount})`}</button>
-                            </p>
-                          </div>
+                          {publications.map((item) => (
+                            <PublicationListItem publication={item.target} onMuteStatusChange={onMuteStatusChange} key={item._id} />
+                          ))}
+
+                          {publications.length >= 5 && (
+                            <div className="margin60">
+                              <p className="custom-fs-1 color-4 line20 font-normal m-0">
+                                <button onClick={() => setIsPublicationModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">
+                                  See all {`(${publicationCount})`}
+                                </button>
+                              </p>
+                            </div>
+                          )}
                           <hr className="margin51 bg-11 height86 border-0" />
                         </div>
                       </div>
@@ -149,6 +166,7 @@ function Muted() {
         </div>
       </div>
       {isShowUserModal && <ViewAllMutedUsers usersCount={usersCount} handleCloseUserModal={handleCloseUserModal} onMuteStatusChange={onMuteStatusChange} />}
+      {isPublicationModal && <ViewAllMutedPublications publicationCount={publicationCount} closePublicationModal={closePublicationModal} onMuteStatusChange={onMuteStatusChange} />}
     </>
   );
 }
