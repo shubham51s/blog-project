@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Homepage from "./pages/Home";
 import CreatePostPage from "./pages/Create post";
 import NotFoundPage from "./pages/Not found";
 import AboutPage from "./pages/About";
@@ -37,6 +36,7 @@ import PublicationInbox from "./pages/Publication/Inbox";
 import PublicationDetailsWrapper from "./pages/Publication/PublicationDetails/wrapper";
 import PublicationSettingsWrapper from "./pages/Publication/Settings/wrapper";
 import TopicDetails from "./pages/TopicDetails";
+import NotificationPage from "./pages/Notification";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -72,6 +72,7 @@ function App() {
               <Route path="security" element={<Security />} />
             </Route>
             <Route path="readinghistory" element={<MyReadingHistory />} />
+            <Route path="notifications" element={<NotificationPage />} />
           </Route>
           <Route path="profile/:username" element={<ProfilePage />}>
             <Route index element={<Home />} />
