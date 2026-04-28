@@ -18,6 +18,15 @@ function NotificationSection() {
     cursor: null,
   });
 
+  const markNotificationsAsRead = async () => {
+    try {
+      const response = await requestHandler("/notification/read-all");
+      await response.json();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const getNotifications = async () => {
     if (!scroll.hasMore) return;
     setScroll((prev) => ({ ...prev, loading: true }));
@@ -30,6 +39,7 @@ function NotificationSection() {
       if (response?.status === 200 && result?.data?.notifications) {
         setNotifications((prev) => [...prev, ...result.data.notifications]);
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+        markNotificationsAsRead();
       } else {
         setScroll((prev) => ({ ...prev, hasMore: false }));
       }

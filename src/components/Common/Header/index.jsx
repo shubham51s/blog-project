@@ -3,13 +3,11 @@ import { Link } from "react-router-dom";
 import SearchHomeComp from "./SearchComp";
 import { FiEdit } from "react-icons/fi";
 import ProfileHeaderComp from "./ProfileComp";
-import { IoNotificationsOutline } from "react-icons/io5";
 import { UserContext } from "../../../context/userContext";
-import { MdOutlineMenu } from "react-icons/md";
 import { FiMenu } from "react-icons/fi";
+import Notification from "./Notification";
 
 function HeaderComp() {
-  const [isMenuActive, setIsMenuActive] = useState(false);
   const { setIsShowMenu, isShowMenu } = useContext(UserContext);
 
   const toggleLeftMenu = () => {
@@ -50,13 +48,7 @@ function HeaderComp() {
           </div>
         </div>
         <div>
-          <div className="margin-14 flex" style={{ marginLeft: 0, marginBlock: 0 }}>
-            <Link className="border-0 cursor-pointer p-0 m-0 opacity-75 transition-all duration-300 ease-in-out hover:opacity-100">
-              <div className="relative custom-fs-1 color-6 custom-line-h-1 flex items-center font-normal">
-                <IoNotificationsOutline className="width-10 height-5 align-middle color-6" />
-              </div>
-            </Link>
-          </div>
+          <Notification />
         </div>
         <ProfileHeaderComp />
       </div>

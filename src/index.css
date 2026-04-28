@@ -697,6 +697,10 @@ img {
     top: 64px;
   }
 
+  .top9 {
+    top: -9px;
+  }
+
   .bottom-1 {
     bottom: 12px;
   }
@@ -937,6 +941,10 @@ img {
     min-height: 28px;
   }
 
+  .height88 {
+    min-height: 16px;
+  }
+
   .custom-max-w-1 {
     max-width: 1192px;
   }
@@ -1105,6 +1113,10 @@ img {
 
   .br13 {
     border-radius: 2px;
+  }
+
+  .br14 {
+    border-radius: 7px;
   }
 
   .bdr-3 {
@@ -1558,6 +1570,10 @@ img {
 
   .width92 {
     max-width: 168px;
+  }
+
+  .width93 {
+    min-width: 14px;
   }
 
   .margin-2 {
