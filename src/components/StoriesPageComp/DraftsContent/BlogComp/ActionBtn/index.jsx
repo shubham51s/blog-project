@@ -50,29 +50,31 @@ function ActionBtn({ blog, setBlog }) {
             <MdMoreHoriz className="w-full h-full" />
           </div>
         </Popover.Trigger>
-        <Popover.Content side="bottom" className="z-[999]" onClick={(e) => e.stopPropagation()} align="middle" sideOffset={1}>
-          <div className="border-radius-3 overflow-hidden boxShadow11 custom-bg-8 margin-35" style={{ marginLeft: 0, marginBlock: 0 }}>
-            <ul className="width71 custom-px-2 flex flex-col items-stretch list-none px-0 font-medium">
-              <li onClick={() => navigate(`/p/${blog._id}/edit`)} className="custom-px-2 padding59 custom-fs-1 color-3 opacity-[0.85] transition-all duration-200 linear hover:opacity-100 font-normal">
-                <span className="cursor-pointer m-0 p-0">Edit story</span>
-              </li>
-              <li onClick={() => handlePublishBlog(1)} className="custom-px-2 padding59 custom-fs-1 color-3 opacity-[0.85] transition-all duration-200 linear hover:opacity-100 font-normal">
-                <span className="cursor-pointer m-0 p-0">Publish story</span>
-              </li>
-              <li onClick={() => handlePublishBlog(0)} className="custom-px-2 padding59 custom-fs-1 color-3 opacity-[0.85] transition-all duration-200 linear hover:opacity-100 font-normal">
-                <span className="cursor-pointer m-0 p-0">Submit to publication</span>
-              </li>
-              <li className="custom-px-2">
-                <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
-              </li>
-              <li className="custom-px-2 padding59 custom-fs-1 text-[#c94a4a] transition-all duration-200 linear hover:text-[#b63636] font-normal">
-                <button onClick={deleteDraft} disabled={loaders.delete}>
-                  <span className="cursor-pointer m-0 p-0">Delete story</span>
-                </button>
-              </li>
-            </ul>
-          </div>
-        </Popover.Content>
+        <Popover.Portal>
+          <Popover.Content side="bottom" className="z-[999]" onClick={(e) => e.stopPropagation()} align="middle" sideOffset={1}>
+            <div className="border-radius-3 overflow-hidden boxShadow11 custom-bg-8 margin-35" style={{ marginLeft: 0, marginBlock: 0 }}>
+              <ul className="width71 custom-px-2 flex flex-col items-stretch list-none px-0 font-medium">
+                <li onClick={() => navigate(`/p/${blog._id}/edit`)} className="custom-px-2 padding59 custom-fs-1 color-3 opacity-[0.85] transition-all duration-200 linear hover:opacity-100 font-normal">
+                  <span className="cursor-pointer m-0 p-0">Edit story</span>
+                </li>
+                <li onClick={() => handlePublishBlog(1)} className="custom-px-2 padding59 custom-fs-1 color-3 opacity-[0.85] transition-all duration-200 linear hover:opacity-100 font-normal">
+                  <span className="cursor-pointer m-0 p-0">Publish story</span>
+                </li>
+                <li onClick={() => handlePublishBlog(0)} className="custom-px-2 padding59 custom-fs-1 color-3 opacity-[0.85] transition-all duration-200 linear hover:opacity-100 font-normal">
+                  <span className="cursor-pointer m-0 p-0">Submit to publication</span>
+                </li>
+                <li className="custom-px-2">
+                  <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
+                </li>
+                <li className="custom-px-2 padding59 custom-fs-1 text-[#c94a4a] transition-all duration-200 linear hover:text-[#b63636] font-normal">
+                  <button onClick={deleteDraft} disabled={loaders.delete}>
+                    <span className="cursor-pointer m-0 p-0">Delete story</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </Popover.Content>
+        </Popover.Portal>
       </Popover.Root>
       {isShowSubmitModal && <SubmitBlogModal id={blog._id} tabNo={tabNo} setIsShowSubmitModal={setIsShowSubmitModal} edited={true} />}
     </>

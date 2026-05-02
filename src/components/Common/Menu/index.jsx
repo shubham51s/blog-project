@@ -6,6 +6,8 @@ import { BsBookmarksFill } from "react-icons/bs";
 import { FaRegFile } from "react-icons/fa";
 import { FaRegFileAlt } from "react-icons/fa";
 import { GoPerson } from "react-icons/go";
+import { IoStatsChartOutline } from "react-icons/io5";
+import { IoStatsChartSharp } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/userContext";
 import { GoPersonFill } from "react-icons/go";
@@ -47,6 +49,13 @@ function MenuComp() {
       IconInactive: FaRegFile,
       IconActive: FaRegFileAlt,
     },
+    {
+      id: 4,
+      name: "Stats",
+      path: "/me/stats",
+      IconInactive: IoStatsChartOutline,
+      IconActive: IoStatsChartSharp,
+    },
   ];
 
   const handleMenuTabButtonClick = (item) => {
@@ -58,6 +67,7 @@ function MenuComp() {
     if (id === 1) return pathname.includes("/me/lists");
     if (id === 2) return pathname.includes(`/profile/${userInfo.username}`);
     if (id === 3) return pathname.includes("/me/stories");
+    if (id === 4) return pathname.includes("/me/stats");
   };
 
   return (
@@ -70,10 +80,10 @@ function MenuComp() {
 
               {menuOptions.map((item) => (
                 <div key={item.id}>
-                  <div onClick={() => handleMenuTabButtonClick(item)} className={`text-left line-h-8 select-none padding-21 py-0 flex items-center custom-gap-2 font-10 relative cursor-pointer m-0 color-6 font-normal no-underline transition-all duration-300 ease-in-out hover:opacity-100 ${isActiveTab(item.id) ? "opacity-100" : "opacity-[0.7]"}`}>
+                  <Link to={item.path} className={`text-left line-h-8 select-none padding-21 py-0 flex items-center custom-gap-2 font-10 relative cursor-pointer m-0 color-6 font-normal no-underline transition-all duration-300 ease-in-out hover:opacity-100 ${isActiveTab(item.id) ? "opacity-100" : "opacity-[0.7]"}`}>
                     {isActiveTab(item.id) ? <item.IconActive className="width-13 height-10 align-middle" /> : <item.IconInactive className="width-13 height-10 align-middle" />}
                     <span className="shrink grow text-ellipsis overflow-hidden whitespace-nowrap">{item.name}</span>
-                  </div>
+                  </Link>
                 </div>
               ))}
             </div>

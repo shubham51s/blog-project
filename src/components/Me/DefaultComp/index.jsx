@@ -10,7 +10,7 @@ function MePageDefaultComp() {
     navigate(`/profile/${userInfo.username}`);
   }, []);
 
-  return <div>MePageDefaultComp</div>;
+  return <div></div>;
 }
 
 export default MePageDefaultComp;

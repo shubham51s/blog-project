@@ -37,6 +37,9 @@ import PublicationDetailsWrapper from "./pages/Publication/PublicationDetails/wr
 import PublicationSettingsWrapper from "./pages/Publication/Settings/wrapper";
 import TopicDetails from "./pages/TopicDetails";
 import NotificationPage from "./pages/Notification";
+import StatsPageWrapper from "./pages/Stats";
+import AllStatsPage from "./pages/Stats/AllStats";
+import BlogStatsPage from "./pages/Stats/BlogStats";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -73,6 +76,10 @@ function App() {
             </Route>
             <Route path="readinghistory" element={<MyReadingHistory />} />
             <Route path="notifications" element={<NotificationPage />} />
+            <Route path="stats" element={<StatsPageWrapper />}>
+              <Route index element={<AllStatsPage />} />
+              <Route path="post/:postId" element={<BlogStatsPage />} />
+            </Route>
           </Route>
           <Route path="profile/:username" element={<ProfilePage />}>
             <Route index element={<Home />} />
