@@ -44,9 +44,9 @@ function ViewsGraph({ isLoading }) {
 
     return (
       <div
+        className="custom-py-2 custom-px-2 border-radius-1 flex flex-col custom-gap-1 boxShadow11"
         style={{
           background: "#fff",
-          padding: "8px 12px",
           borderRadius: "6px",
         }}
       >
@@ -54,7 +54,7 @@ function ViewsGraph({ isLoading }) {
           <span className="font-4 color-3 line20 font-normal">{label}</span>
         </p>
 
-        <div className="flex items-center custom-gap-6">
+        <div className="flex items-center justify-between custom-gap-6">
           <div className="flex items-center">
             <div className="width94 aspect-square bdr26 border-[#bbdbba] margin-9 rounded-full bg-[#d6e7d6]" style={{ marginLeft: 0, marginBlock: 0 }}></div>
             <span className="font-4 color-3 line20 font-normal">Views</span>
@@ -64,7 +64,7 @@ function ViewsGraph({ isLoading }) {
           </div>
         </div>
 
-        <div className="flex items-center custom-gap-6">
+        <div className="flex items-center justify-between custom-gap-6">
           <div className="flex items-center" style={{ marginRight: 0, marginBlock: 0 }}>
             <div className="width94 aspect-square bdr26 border-[#156d12] margin-9 rounded-full bg-[#84c082]" style={{ marginLeft: 0, marginBlock: 0 }}></div>
             <span className="font-4 color-3 line20 font-normal">Reads</span>
@@ -83,15 +83,12 @@ function ViewsGraph({ isLoading }) {
         <div className="w-full height89">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={stats}>
-              <CartesianGrid vertical={true} stroke="#e5e7eb" horizontal={false} strokeDasharray="0" />
+              <CartesianGrid vertical={true} stroke="#f1f1f2" horizontal={true} strokeDasharray="0" />
 
-              <XAxis dataKey="date" />
-              <YAxis />
+              <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+              <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
 
               <Tooltip content={<CustomTooltip />} />
-
-              {/* Top horizontal line */}
-              <ReferenceLine y={Math.max(...stats.map((d) => d.Views))} stroke="#e5e7eb" />
 
               <Area type="linear" dataKey="Views" stroke="#bbdbba" fill="#d6e7d6" fillOpacity={0.3} strokeWidth={2} dot={{ r: 3 }} />
 

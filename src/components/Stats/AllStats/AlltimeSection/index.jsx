@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ActionBtn from "./ActionBtn";
 import ListItem from "./ListItem";
 import ListItemLoader from "./ListItem/skeleton";
+import Skeleton from "react-loading-skeleton";
 
 function AllTimeSection() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,16 +12,30 @@ function AllTimeSection() {
       <div className="w-full min-w-0 custom-max-w-1">
         <div className="margin-27 flex items-start justify-between" style={{ marginTop: 0, marginInline: 0 }}>
           <div className="grow-0 shrink-0 basis-auto margin-18" style={{ marginLeft: 0 }}>
-            <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0">Lifetime</h2>
+            <h2 className="letter-spacing-6 line-h-9 font-11 font-semibold color-3 m-0">Lifetime</h2>
             <div className="margin68" style={{ marginBottom: 0 }}>
               <div className="font-4 color-4 line20 font-normal">
-                <div className="flex flex-wrap">
-                  April 1, 2026 - Today (UTC)
-                  <div className="margin73">
-                    <span className="color-4 font-4">•</span>
-                  </div>{" "}
-                  Updated daily
-                </div>
+                {isLoading && (
+                  <div className="flex flex-wrap relative">
+                    April 1, 2026 - Today (UTC)
+                    <div className="margin73">
+                      <span className="color-4 font-4">•</span>
+                    </div>{" "}
+                    Updated daily
+                    <div className="absolute inset-0 overflow-hidden">
+                      <Skeleton width={3434} height={23434} />
+                    </div>
+                  </div>
+                )}
+                {!isLoading && (
+                  <div className="flex flex-wrap">
+                    April 1, 2026 - Today (UTC)
+                    <div className="margin73">
+                      <span className="color-4 font-4">•</span>
+                    </div>{" "}
+                    Updated daily
+                  </div>
+                )}
               </div>
             </div>
           </div>

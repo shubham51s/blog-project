@@ -39,7 +39,8 @@ import TopicDetails from "./pages/TopicDetails";
 import NotificationPage from "./pages/Notification";
 import StatsPageWrapper from "./pages/Stats";
 import AllStatsPage from "./pages/Stats/AllStats";
-import BlogStatsPage from "./pages/Stats/BlogStats";
+import BlogStatsPage from "./pages/Stats/Blog";
+import AudienceStats from "./pages/Stats/Audience";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -80,6 +81,7 @@ function App() {
               <Route index element={<AllStatsPage />} />
               <Route path="post/:postId" element={<BlogStatsPage />} />
             </Route>
+            <Route path="audience" element={<AudienceStats />} />
           </Route>
           <Route path="profile/:username" element={<ProfilePage />}>
             <Route index element={<Home />} />

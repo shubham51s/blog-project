@@ -11,7 +11,7 @@ function MonthwiseSection() {
       <div className="w-full min-w-0 custom-max-w-1 m-0">
         <div className="flex items-start justify-between">
           <div className="grow-0 shrink-0 basis-auto margin-18" style={{ marginLeft: 0 }}>
-            <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0">Monthly</h2>
+            <h2 className="letter-spacing-6 line-h-9 font-11 font-semibold color-3 m-0">Monthly</h2>
             <div className="margin68" style={{ marginBottom: 0 }}>
               <div className="font-4 color-4 line20 font-normal">
                 <div className="flex flex-wrap">

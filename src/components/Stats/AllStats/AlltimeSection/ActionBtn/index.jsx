@@ -42,7 +42,7 @@ function ActionBtn({ isLoading }) {
   return (
     <div>
       <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-        <Popover.Trigger disabled={isLoading} className={`width95 flex items-center justify-between flex-wrap cursor-pointer padding-7 border-radius-7 transition-all duration-75 ease ${isOpen ? "bdr-7" : "bdr-8"}`}>
+        <Popover.Trigger disabled={isLoading} className={`width107 max-w-full flex items-center justify-between flex-wrap cursor-pointer padding-7 border-radius-7 transition-all duration-75 ease ${isOpen ? "bdr-7" : "bdr-8"}`}>
           <div className="padding50" style={{ paddingLeft: 0 }}>
             <span className="color-3 custom-fs-1 line20 font-medium">{optionsArr[selected].name}</span>
           </div>
@@ -56,7 +56,7 @@ function ActionBtn({ isLoading }) {
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" align="middle" sideOffset={8}>
-            <ul className="list-none border-radius-3 boxShadow6 bg-white width95 overflow-hidden">
+            <ul className="list-none border-radius-3 boxShadow6 bg-white width107 max-w-full overflow-hidden">
               <li onClick={() => handleSelection(0)} className={`flex items-center justify-between flex-wrap color-3 cursor-pointer padding-7 transition-all duration-75 ease opacity-[0.75] hover:opacity-100`}>
                 <div className="padding50" style={{ paddingLeft: 0 }}>
                   <span className="color-3 custom-fs-1 line20 font-medium">Latest</span>
