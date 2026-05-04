@@ -2,7 +2,7 @@ import React from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 
-function StatsSection() {
+function StatsSection({ blog }) {
   return (
     <div className="flex flex-col gap15 margin-22" style={{ marginInline: 0 }}>
       <div>
