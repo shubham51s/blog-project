@@ -57,7 +57,7 @@ function BlogStatsPage() {
                   </div>
                 </div>
                 <StatsSection blog={blog} />
-                <MonthwiseSection />
+                <MonthwiseSection blog={blog} />
               </div>
             </div>
           </div>

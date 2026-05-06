@@ -34,9 +34,10 @@ function PostDetailsPage() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isAnyErr, setIsAnyErr] = useState(false);
   const loadingTimeout = useRef(null);
+  const readingTimeout = useRef(null);
   const [loaders, setLoaders] = useState({
-    fetchBlogLoader: true,
-    isFollowLoader: false,
+    fetchBlog: true,
+    following: false,
   });
   const [clapDetails, setClapDetails] = useState({
     totalClaps: 0,
@@ -164,10 +165,31 @@ function PostDetailsPage() {
     });
 
     if (clapsTimeout.current) clearTimeout(clapsTimeout.current);
-
     clapsTimeout.current = setTimeout(() => {
       addClaps();
     }, 2000);
+  };
+
+  const updateBlogReadingTime = async (blogId) => {
+    try {
+      const params = {
+        blogId,
+      };
+      const response = await requestHandler("/blog/read/update-view-status", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200 && result?.data) {
+        if (!result.data.stop) {
+          if (readingTimeout.current) clearTimeout(readingTimeout.current);
+          readingTimeout.current = setTimeout(() => {
+            updateBlogReadingTime(blogId);
+            readingTimeout.current = null;
+          }, 5000);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const readBlog = async (blogId) => {
@@ -175,15 +197,25 @@ function PostDetailsPage() {
       const params = {
         blogId,
       };
+      const response = await requestHandler("/blog/read", "POST", params);
+      const result = await response.json();
 
-      await requestHandler("/blog/read", "POST", params);
+      if (response?.status === 200 && result?.data) {
+        if (!result.data.stop) {
+          if (readingTimeout.current) clearTimeout(readingTimeout.current);
+          readingTimeout.current = setTimeout(() => {
+            updateBlogReadingTime(blogId);
+            readingTimeout.current = null;
+          }, 5000);
+        }
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
   const fetchBlogDetails = async () => {
-    setLoaders((prev) => ({ ...prev, fetchBlogLoader: true }));
+    setLoaders((prev) => ({ ...prev, fetchBlog: true }));
     try {
       const response = await requestHandler(`/blogs/${slug}/${id}`);
 
@@ -203,7 +235,7 @@ function PostDetailsPage() {
       console.error(err);
       showToast("Something went wrong!");
     } finally {
-      setLoaders((prev) => ({ ...prev, fetchBlogLoader: false }));
+      setLoaders((prev) => ({ ...prev, fetchBlog: false }));
     }
   };
 
@@ -214,7 +246,7 @@ function PostDetailsPage() {
   };
 
   const followAuthor = async () => {
-    setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
+    setLoaders((prev) => ({ ...prev, following: true }));
 
     const params = {
       _id: blog.author._id,
@@ -222,11 +254,11 @@ function PostDetailsPage() {
     };
     await followUser(params);
 
-    setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+    setLoaders((prev) => ({ ...prev, following: false }));
   };
 
   const unfollowAuthor = async () => {
-    setLoaders((prev) => ({ ...prev, isFollowLoader: true }));
+    setLoaders((prev) => ({ ...prev, following: true }));
 
     const params = {
       _id: blog.author._id,
@@ -234,7 +266,7 @@ function PostDetailsPage() {
     };
     await unfollowUser(params);
 
-    setLoaders((prev) => ({ ...prev, isFollowLoader: false }));
+    setLoaders((prev) => ({ ...prev, following: false }));
   };
 
   // to update saved blogs in parent also (to sync, not required in every parent but for some cases like blog details page where there are 2 button for save blog so to sync both)
@@ -271,8 +303,8 @@ function PostDetailsPage() {
   return (
     <>
       {/* home content */}
-      {(isInitialLoading || loaders.fetchBlogLoader) && <BlogDetailsSkeletonComp />}
-      {!isInitialLoading && !loaders.fetchBlogLoader && !isAnyErr && (
+      {(isInitialLoading || loaders.fetchBlog) && <BlogDetailsSkeletonComp />}
+      {!isInitialLoading && !loaders.fetchBlog && !isAnyErr && (
         <div className="h-full overflow-y-auto">
           {blog.community && (
             <div className="bdr-5 w-full">
@@ -348,12 +380,12 @@ function PostDetailsPage() {
                                   {userInfo?._id !== blog.author._id && !isFetchUserLoader && (
                                     <div className="inline-block">
                                       {followingUsers[blog.author._id] && (
-                                        <button onClick={unfollowAuthor} disabled={loaders.isFollowLoader} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
+                                        <button onClick={unfollowAuthor} disabled={loaders.following} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
                                           <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Unfollow</span>
                                         </button>
                                       )}
                                       {!followingUsers[blog.author._id] && (
-                                        <button onClick={followAuthor} disabled={loaders.isFollowLoader} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
+                                        <button onClick={followAuthor} disabled={loaders.following} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
                                           <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Follow</span>
                                         </button>
                                       )}
@@ -621,12 +653,12 @@ function PostDetailsPage() {
                     {userInfo?._id !== blog.author._id && !isFetchUserLoader && (
                       <div className="flex">
                         {followingUsers[blog.author._id] && (
-                          <button onClick={unfollowAuthor} disabled={loaders.isFollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer">
+                          <button onClick={unfollowAuthor} disabled={loaders.following} className="bdr-7 padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer">
                             <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Unfollow</span>
                           </button>
                         )}
                         {!followingUsers[blog.author._id] && (
-                          <button onClick={followAuthor} disabled={loaders.isFollowLoader} className="bdr-7 padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer">
+                          <button onClick={followAuthor} disabled={loaders.following} className="bdr-7 padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer">
                             <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Follow</span>
                           </button>
                         )}
@@ -660,7 +692,7 @@ function PostDetailsPage() {
 
       {clapDetails.isShowClapsComp && <ShowClapsComp clapDetails={clapDetails} setClapDetails={setClapDetails} blog={blog} />}
 
-      {!isInitialLoading && !loaders.fetchBlogLoader && isAnyErr && <NotFoundComp />}
+      {!isInitialLoading && !loaders.fetchBlog && isAnyErr && <NotFoundComp />}
     </>
   );
 }

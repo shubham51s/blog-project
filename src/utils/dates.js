@@ -11,11 +11,11 @@ export function formatMonthYearFromUTC(utcDateString) {
   }
 }
 
-export function formatUTCToLocalDate(utcString) {
+export function formatUTCToLocalDate(dateInput) {
   try {
-    if (!utcString) return "-";
+    if (!dateInput) return "-";
 
-    const date = new Date(utcString);
+    const date = new Date(dateInput);
 
     // Invalid date check
     if (isNaN(date.getTime())) return "-";
@@ -47,5 +47,47 @@ export function formatDateInMonthDayYear(utcDateString) {
   } catch (err) {
     console.error(err);
     return "-";
+  }
+}
+
+export function getMonthsTillToday(utcDate) {
+  try {
+    if (!utcDate) return [];
+
+    const startDate = new Date(utcDate);
+
+    if (isNaN(startDate.getTime())) return [];
+
+    // Local date values
+    const startMonth = startDate.getMonth();
+    const startYear = startDate.getFullYear();
+
+    const today = new Date();
+    const endMonth = today.getMonth();
+    const endYear = today.getFullYear();
+
+    const result = [];
+
+    let currentMonth = startMonth;
+    let currentYear = startYear;
+
+    while (currentYear < endYear || (currentYear === endYear && currentMonth <= endMonth)) {
+      result.push({
+        month: currentMonth,
+        year: currentYear,
+      });
+
+      currentMonth++;
+
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+    }
+
+    return result.reverse();
+  } catch (err) {
+    console.error(err);
+    return [];
   }
 }

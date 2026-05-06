@@ -15,15 +15,15 @@ function StatsSection({ blog }) {
             <div className="padding80 padding61 padding-7">
               <div className="flex flex-col-reverse justify-between items-start custom-gap-3">
                 <div>
-                  <h2 className="letter-spacing-6 line-h-9 font-11 font-semibold color-3 m-0">7</h2>
+                  <h2 className="letter-spacing-6 line-h-9 font-11 font-semibold color-3 m-0">{blog.views}</h2>
                   <div className="inline-flex items-center custom-gap-1">
-                    <div className="font-10 line-h-8 color-3 font-normal">Reads</div>
+                    <div className="font-10 line-h-8 color-3 font-normal">Views</div>
                   </div>
                 </div>
                 <div className="flex items-center custom-gap-1 border-radius-3 bg-10 height94"></div>
               </div>
               <div className="custom-px-2" style={{ paddingBottom: 0 }}>
-                <div className="color-4 custom-fs-1 line20 font-normal">Read your story for at least 30 seconds.</div>
+                <div className="color-4 custom-fs-1 line20 font-normal">Landed on your full story through web.</div>
               </div>
             </div>
           </div>
@@ -32,13 +32,13 @@ function StatsSection({ blog }) {
             <div className="padding80 padding61 padding-7">
               <div className="flex flex-col-reverse justify-between items-start custom-gap-3">
                 <div>
-                  <h2 className="letter-spacing-6 line-h-9 font-11 font-semibold color-3 m-0">7</h2>
+                  <h2 className="letter-spacing-6 line-h-9 font-11 font-semibold color-3 m-0">{blog.reads}</h2>
                   <div className="inline-flex items-center custom-gap-1">
                     <div className="font-10 line-h-8 color-3 font-normal">Reads</div>
                   </div>
                 </div>
                 <div className="flex items-center custom-gap-1 border-radius-3 bg-10 height94 padding-6">
-                  <span className="font-4 color-3 line20 font-normal">29% Read ratio</span>
+                  <span className="font-4 color-3 line20 font-normal">{Math.round((blog.reads / blog.views) * 100)}% Read ratio</span>
                   <div className="inline">
                     <RadixTooltip.Provider delayDuration={50}>
                       <RadixTooltip.Root>
