@@ -1,9 +1,50 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ActionBtn from "./ActionBtn";
 import AudienceGraph from "./Graph";
+import { formatUTCToLocalDate } from "../../../../utils/dates";
+import { defaultLoaderTime } from "../../../../constants/constant";
 
 function YearwiseSection() {
   const [isLoading, setIsLoading] = useState(false);
+  const [defaultLoader, setDefaultLoader] = useState(true);
+  const loaderTimeout = useRef(null);
+  const [startDate, setStartDate] = useState(new Date(new Date().getFullYear(), 0, 1));
+  const [endDate, setEndDate] = useState(null);
+  const [stats, setStats] = useState([]);
+
+  const getEndDate = (year) => {
+    if (year === new Date().getFullYear()) {
+      setEndDate(null);
+    } else {
+      setEndDate(new Date(year + 1, 0, 0));
+    }
+  };
+
+  const handleYearChange = (year) => {
+    // setIsLoading(true);
+    setDefaultLoader(true);
+
+    setStartDate(new Date(year, 0, 1));
+    getEndDate(year);
+    // generateEmptyStatsDates(month, year);
+
+    console.log("year: ", year);
+
+    if (loaderTimeout.current) clearTimeout(loaderTimeout.current);
+    loaderTimeout.current = setTimeout(() => {
+      setDefaultLoader(false);
+      loaderTimeout.current = null;
+    }, 200);
+  };
+
+  useEffect(() => {
+    if (!loaderTimeout.current) {
+      loaderTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+        loaderTimeout.current = null;
+      }, defaultLoaderTime);
+    }
+  }, []);
 
   return (
     <div className="flex justify-center">
@@ -15,7 +56,7 @@ function YearwiseSection() {
               <div className="margin68" style={{ marginBottom: 0 }}>
                 <div className="font-4 color-4 line20 font-normal">
                   <div className="flex flex-wrap">
-                    January 1, 2026 - Today (UTC)
+                    {formatUTCToLocalDate(startDate)} - {endDate ? formatUTCToLocalDate(endDate) : "Today (UTC)"}
                     <div className="margin73">
                       <span className="color-4 custom-fs-1 line20 font-normal">•</span>
                     </div>{" "}
@@ -24,10 +65,10 @@ function YearwiseSection() {
                 </div>
               </div>
             </div>
-            <ActionBtn isLoading={isLoading} />
+            <ActionBtn isLoading={isLoading || defaultLoader} handleYearChange={handleYearChange} />
           </div>
 
-          <AudienceGraph isLoading={isLoading} />
+          <AudienceGraph isLoading={isLoading || defaultLoader} />
         </div>
       </div>
     </div>

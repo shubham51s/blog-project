@@ -35,7 +35,7 @@ const UserProvider = ({ children }) => {
       const result = await response.json();
 
       if (response.status === 200 && result?.data?.user) {
-        setUserInfo({ ...result.data.user });
+        setUserInfo(result.data.user);
         setIsUserLoggedIn(true);
         fetchFollowingAuthorIds();
         fetchFollowingPublicationIds();

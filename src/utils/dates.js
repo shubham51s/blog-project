@@ -91,3 +91,27 @@ export function getMonthsTillToday(utcDate) {
     return [];
   }
 }
+
+export function getYearsTillToday(utcDate) {
+  try {
+    if (!utcDate) return [];
+
+    const startDate = new Date(utcDate);
+
+    if (isNaN(startDate.getTime())) return [];
+
+    const startYear = startDate.getFullYear();
+    const currentYear = new Date().getFullYear();
+
+    const result = [];
+
+    for (let year = startYear; year <= currentYear; year++) {
+      result.push(year);
+    }
+
+    return result.reverse();
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}

@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
+import { UserContext } from "../../../../../context/userContext";
+import { getYearsTillToday } from "../../../../../utils/dates";
 
-function ActionBtn({ isLoading }) {
+function ActionBtn({ isLoading, handleYearChange }) {
+  const { userInfo } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(2026);
-  const [years, setYears] = useState([2020, 2021, 2022, 2023, 2024, 2025, 2026]);
+  const [years, setYears] = useState(getYearsTillToday(userInfo.createdAt));
 
   const handnleSelection = (year) => {
     setIsOpen(false);
-
     if (year === selected) return;
-
     setSelected(year);
+    handleYearChange(year);
   };
 
   return (

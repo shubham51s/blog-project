@@ -4,39 +4,6 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Responsi
 
 function AudienceGraph({ isLoading }) {
   const stats = [
-    { date: 1, Views: 5, Reads: 3 },
-    { date: 2, Views: 8, Reads: 5 },
-    { date: 3, Views: 6, Reads: 4 },
-    { date: 4, Views: 10, Reads: 7 },
-    { date: 5, Views: 12, Reads: 9 },
-    { date: 6, Views: 7, Reads: 5 },
-    { date: 7, Views: 15, Reads: 11 },
-    { date: 8, Views: 9, Reads: 6 },
-    { date: 9, Views: 11, Reads: 8 },
-    { date: 10, Views: 14, Reads: 10 },
-    { date: 11, Views: 13, Reads: 9 },
-    { date: 12, Views: 16, Reads: 12 },
-    { date: 13, Views: 18, Reads: 14 },
-    { date: 14, Views: 2, Reads: 1 },
-    { date: 15, Views: 17, Reads: 13 },
-    { date: 16, Views: 19, Reads: 14 },
-    { date: 17, Views: 3, Reads: 0 },
-    { date: 18, Views: 25, Reads: 19 },
-    { date: 19, Views: 21, Reads: 16 },
-    { date: 20, Views: 1, Reads: 1 },
-    { date: 21, Views: 26, Reads: 20 },
-    { date: 22, Views: 23, Reads: 17 },
-    { date: 23, Views: 0, Reads: 0 },
-    { date: 24, Views: 29, Reads: 23 },
-    { date: 25, Views: 28, Reads: 22 },
-    { date: 26, Views: 30, Reads: 24 },
-    { date: 27, Views: 32, Reads: 26 },
-    { date: 28, Views: 31, Reads: 25 },
-    { date: 29, Views: 34, Reads: 28 },
-    { date: 30, Views: 0, Reads: 0 },
-  ];
-
-  const statsNew = [
     {
       month: "Jan",
       Followers: 2,
@@ -170,7 +137,7 @@ function AudienceGraph({ isLoading }) {
         {!isLoading && (
           <div className="w-full height91">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={statsNew}>
+              <AreaChart data={stats}>
                 <CartesianGrid vertical={true} stroke="#f1f1f2" horizontal={true} strokeDasharray="0" />
 
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
