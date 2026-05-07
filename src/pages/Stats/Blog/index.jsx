@@ -21,7 +21,6 @@ function BlogStatsPage() {
 
       if (response?.status === 200 && result?.data?.blog) {
         setBlog(result.data.blog);
-        console.log("blog: ", result.data.blog);
       }
     } catch (err) {
       console.error(err);

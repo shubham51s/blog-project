@@ -3,14 +3,17 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import { getMonthsTillToday } from "../../../../../utils/dates";
 
-function ActionBtn({ isLoading, blog }) {
+function ActionBtn({ isLoading, blog, selected, setSelected, months, handleMonthChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const [months, setMonths] = useState(getMonthsTillToday(blog.createdAt));
-  const [selected, setSelected] = useState({
-    month: months[0].month,
-    year: months[0].year,
-  });
+
+  const handleMonthSelection = (month, year) => {
+    setIsOpen(false);
+    if (selected.month === month && selected.year === year) return;
+    setSelected((prev) => ({ ...prev, month, year }));
+
+    handleMonthChange(month, year);
+  };
 
   return (
     <div>
@@ -33,7 +36,7 @@ function ActionBtn({ isLoading, blog }) {
           <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" align="middle" sideOffset={8}>
             <ul className="list-none border-radius-3 boxShadow6 custom-bg-8 width107 max-w-full height82 overflow-x-hidden overflow-y-auto">
               {months.map((item) => (
-                <li key={`${item.month}${item.year}`} className={`flex items-center justify-between flex-wrap color-3 cursor-pointer padding-7 transition-all duration-75 ease opacity-[0.75] hover:opacity-100`}>
+                <li onClick={() => handleMonthSelection(item.month, item.year)} key={`${item.month}${item.year}`} className={`flex items-center justify-between flex-wrap color-3 cursor-pointer padding-7 select-none transition-all duration-75 ease opacity-[0.75] hover:opacity-100`}>
                   <div className="padding50" style={{ paddingLeft: 0 }}>
                     <span className="color-3 custom-fs-1 line20 font-medium">
                       {monthArr[item.month]} {item.year}

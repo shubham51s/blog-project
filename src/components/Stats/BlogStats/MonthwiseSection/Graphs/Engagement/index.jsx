@@ -4,12 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContaine
 import { CiCircleInfo } from "react-icons/ci";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 
-function EngagementGraph({ isLoading }) {
-  const stats = [
-    { name: "Clappers", value: 2 },
-    { name: "Responders", value: 3 },
-  ];
-
+function EngagementGraph({ isLoading, stats, totalResponders, totalClappers }) {
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || !payload.length) return null;
 
@@ -54,7 +49,7 @@ function EngagementGraph({ isLoading }) {
                     </div>
                   </span>
                 )}
-                {!isLoading && <h2 className="font-10 font-semibold color-3 line20 m-0">1</h2>}
+                {!isLoading && <h2 className="font-10 font-semibold color-3 line20 m-0">{totalClappers}</h2>}
                 <div className="margin44 flex items-baseline">
                   <div className="flex-nowrap line-h-8 font-10 color-4 font-normal">Total clappers</div>
                   <div className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
@@ -85,7 +80,7 @@ function EngagementGraph({ isLoading }) {
                     </div>
                   </span>
                 )}
-                {!isLoading && <h2 className="font-10 font-semibold color-3 line20 m-0">2</h2>}
+                {!isLoading && <h2 className="font-10 font-semibold color-3 line20 m-0">{totalResponders}</h2>}
                 <div className="margin44 flex items-baseline">
                   <div className="flex-nowrap line-h-8 font-10 color-4 font-normal">Total responders</div>
                   <div className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>

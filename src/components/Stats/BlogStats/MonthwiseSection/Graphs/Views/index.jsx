@@ -2,130 +2,7 @@ import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, Legend, ResponsiveContainer, ReferenceLine } from "recharts";
 
-function ViewsGraph({ isLoading }) {
-  const stats = [
-    {
-      name: 1,
-      value: 2,
-    },
-    {
-      name: 2,
-      value: 4,
-    },
-    {
-      name: 3,
-      value: 3,
-    },
-    {
-      name: 4,
-      value: 6,
-    },
-    {
-      name: 5,
-      value: 8,
-    },
-    {
-      name: 6,
-      value: 12,
-    },
-    {
-      name: 7,
-      value: 15,
-    },
-    {
-      name: 8,
-      value: 16,
-    },
-    {
-      name: 9,
-      value: 24,
-    },
-    {
-      name: 10,
-      value: 24,
-    },
-    {
-      name: 11,
-      value: 24,
-    },
-    {
-      name: 12,
-      value: 29,
-    },
-    {
-      name: 13,
-      value: 29,
-    },
-    {
-      name: 14,
-      value: 29,
-    },
-    {
-      name: 15,
-      value: 29,
-    },
-    {
-      name: 16,
-      value: 32,
-    },
-    {
-      name: 17,
-      value: 34,
-    },
-    {
-      name: 18,
-      value: 36,
-    },
-    {
-      name: 19,
-      value: 36,
-    },
-    {
-      name: 20,
-      value: 36,
-    },
-    {
-      name: 21,
-      value: 36,
-    },
-    {
-      name: 22,
-      value: 36,
-    },
-    {
-      name: 23,
-      value: 38,
-    },
-    {
-      name: 24,
-      value: 38,
-    },
-    {
-      name: 25,
-      value: 39,
-    },
-    {
-      name: 26,
-      value: 39,
-    },
-    {
-      name: 27,
-      value: 41,
-    },
-    {
-      name: 28,
-      value: 43,
-    },
-    {
-      name: 29,
-      value: 43,
-    },
-    {
-      name: 30,
-      value: 43,
-    },
-  ];
-
+function ViewsGraph({ isLoading, stats, totalViews }) {
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || !payload.length) return null;
 
@@ -175,7 +52,7 @@ function ViewsGraph({ isLoading }) {
                     </div>
                   </span>
                 )}
-                {!isLoading && <h2 className="font-10 font-semibold color-3 line20 m-0">23</h2>}
+                {!isLoading && <h2 className="font-10 font-semibold color-3 line20 m-0">{totalViews}</h2>}
                 <div className="margin44 flex items-baseline">
                   <div className="flex-nowrap line-h-8 font-10 color-4 font-normal">Total views</div>
                 </div>
