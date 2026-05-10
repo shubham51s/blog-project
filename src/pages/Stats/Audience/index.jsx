@@ -13,9 +13,6 @@ function AudienceStats() {
             <HeaderMenuSection />
             <div>
               <AllTimeSection />
-
-              {/* <div className="w-full h-0 bdr-5 margin-27" style={{ marginInline: 0, borderTop: 0, borderInline: 0 }}></div> */}
-
               <YearwiseSection />
             </div>
           </div>

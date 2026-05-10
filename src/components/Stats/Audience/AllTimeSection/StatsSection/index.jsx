@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { CiCircleInfo } from "react-icons/ci";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
+import { appName } from "../../../../../constants/constant";
 
 function StatsSection({ isLoading, stats }) {
   return (
@@ -13,7 +14,7 @@ function StatsSection({ isLoading, stats }) {
               <h2 className="letter-spacing-7 line-h-10 font-12 font-medium color-3 m-0">{stats?.allFollowers ? stats.allFollowers : 0}</h2>
               <div className="flex items-center justify-center padding94">
                 <span className="whitespace-nowrap line-h-8 font-10 color-3 font-normal">Followers</span>
-                <div className="grow-0 shrink-0 basis-auto text-left self-end margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
+                <div className="grow-0 shrink-0 basis-auto text-left margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
                   <RadixTooltip.Provider delayDuration={50}>
                     <RadixTooltip.Root>
                       <RadixTooltip.Trigger asChild>
@@ -23,7 +24,7 @@ function StatsSection({ isLoading, stats }) {
                       </RadixTooltip.Trigger>
                       <RadixTooltip.Portal>
                         <RadixTooltip.Content side="right" align="center" sideOffset={10} className="box-shadow-4 custom-bg-8 width-9 overflow-hidden padding-6">
-                          <span className="color-3 custom-fs-1">Readers who follow you on Medium. This excludes deactivated, deleted, or suspended users.</span>
+                          <span className="color-3 custom-fs-1">{`Readers who follow you on ${appName}. This excludes deactivated, deleted, or suspended users.`}</span>
                           <RadixTooltip.Arrow className="fill-white" />
                         </RadixTooltip.Content>
                       </RadixTooltip.Portal>

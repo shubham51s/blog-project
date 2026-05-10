@@ -2,61 +2,22 @@ import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, Legend, ResponsiveContainer, ReferenceLine } from "recharts";
 
-function AudienceGraph({ isLoading }) {
-  const stats = [
-    {
-      month: "Jan",
-      Followers: 2,
-    },
-    {
-      month: "Feb",
-      Followers: 4,
-    },
-    {
-      month: "Mar",
-      Followers: 3,
-    },
-    {
-      month: "Apr",
-      Followers: 6,
-    },
-    {
-      month: "May",
-      Followers: 8,
-    },
-    {
-      month: "Jun",
-      Followers: 12,
-    },
-    {
-      month: "Jul",
-      Followers: 15,
-    },
-    {
-      month: "Aug",
-      Followers: 16,
-    },
-    {
-      month: "Sep",
-      Followers: 24,
-    },
-    {
-      month: "Oct",
-      Followers: 24,
-    },
-    {
-      month: "Nov",
-      Followers: 24,
-    },
-    {
-      month: "Dec",
-      Followers: 29,
-    },
-  ];
+function AudienceGraph({ isLoading, stats, totalFollowers, selected, prevMonthFollowers }) {
+  const getPreviousFollowers = (prev, curr) => {
+    const count = curr - prev;
+
+    if (count > 0) return `+${count}`;
+    if (count < 0) return `-${count}`;
+    return 0;
+  };
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || !payload.length) return null;
 
+    const currentData = payload[0].payload;
+    const currentIndex = stats.findIndex((item) => item.month === currentData.month);
+    const previousData = currentIndex > 0 ? stats[currentIndex - 1] : { Followers: prevMonthFollowers };
+    const previousFollowers = previousData?.Followers || 0;
     const followers = payload.find((p) => p.dataKey === "Followers")?.value;
 
     return (
@@ -68,7 +29,9 @@ function AudienceGraph({ isLoading }) {
         }}
       >
         <p>
-          <span className="font-4 color-4 line20 font-normal">{label} 2025</span>
+          <span className="font-4 color-4 line20 font-normal">
+            {label} {selected}
+          </span>
         </p>
 
         <div className="flex items-center justify-between custom-gap-6">
@@ -85,7 +48,7 @@ function AudienceGraph({ isLoading }) {
             <span className="font-4 color-3 line20 font-normal">From previous month</span>
           </div>
           <div className="flex items-center">
-            <span className="font-4 color-3 line20 font-normal">{followers}</span>
+            <span className="font-4 color-3 line20 font-normal">{getPreviousFollowers(previousFollowers, followers)}</span>
           </div>
         </div>
       </div>
@@ -111,12 +74,12 @@ function AudienceGraph({ isLoading }) {
                     </div>
                   </span>
                 )}
-                {!isLoading && <h2 className="font-10 font-semibold color-3 line20 m-0">0</h2>}
+                {!isLoading && <h2 className="font-10 font-semibold color-3 line20 m-0">{totalFollowers}</h2>}
                 <div className="margin44 flex items-baseline">
                   <div className="flex-nowrap line-h-8 font-10 color-4 font-normal">Followers</div>
                 </div>
               </div>
-              <div>
+              {/* <div>
                 {isLoading && (
                   <span className="font-10 font-semibold color-3 line20 m-0 relative">
                     000
@@ -129,7 +92,7 @@ function AudienceGraph({ isLoading }) {
                 <div className="margin44 flex items-baseline">
                   <div className="flex-nowrap line-h-8 font-10 color-4 font-normal">From previous month</div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

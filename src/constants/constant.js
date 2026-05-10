@@ -56,5 +56,6 @@ const footerOptions = [
 
 const defaultLoaderTime = 333;
 const defaultLimit = 20;
+const appName = "Medium";
 
-export { urlBasePath, footerOptions, defaultLoaderTime, defaultLimit };
+export { urlBasePath, footerOptions, defaultLoaderTime, defaultLimit, appName };

@@ -4,16 +4,14 @@ import * as Popover from "@radix-ui/react-popover";
 import { UserContext } from "../../../../../context/userContext";
 import { getYearsTillToday } from "../../../../../utils/dates";
 
-function ActionBtn({ isLoading, handleYearChange }) {
+function ActionBtn({ isLoading, handleYearChange, selected }) {
   const { userInfo } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(2026);
   const [years, setYears] = useState(getYearsTillToday(userInfo.createdAt));
 
   const handnleSelection = (year) => {
     setIsOpen(false);
     if (year === selected) return;
-    setSelected(year);
     handleYearChange(year);
   };
 
