@@ -47,10 +47,10 @@ function BlogStatsPage() {
                     <div className="font-4 color-4 line20 font-normal">
                       <div className="flex flex-wrap">
                         {formatUTCToLocalDate(blog.createdAt)} - Today (UTC)
-                        <div className="margin73">
+                        {/* <div className="margin73">
                           <span className="color-4 custom-fs-1 line20 font-normal">•</span>
                         </div>{" "}
-                        Updated hourly
+                        Updated hourly */}
                       </div>
                     </div>
                   </div>

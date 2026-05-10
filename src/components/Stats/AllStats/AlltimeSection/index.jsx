@@ -1,11 +1,45 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ActionBtn from "./ActionBtn";
 import ListItem from "./ListItem";
 import ListItemLoader from "./ListItem/skeleton";
 import Skeleton from "react-loading-skeleton";
+import { UserContext } from "../../../../context/userContext";
+import { formatUTCToLocalDate } from "../../../../utils/dates";
 
 function AllTimeSection() {
+  const { userInfo } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [optionsArr, setOptionsArr] = useState([
+    {
+      name: "Latest",
+      value: "latest",
+    },
+    {
+      name: "Oldest",
+      value: "oldest",
+    },
+    {
+      name: "Most viewed",
+      value: "most-viewed",
+    },
+    {
+      name: "Least viewed",
+      value: "least-viewed",
+    },
+    {
+      name: "Most read",
+      value: "most-read",
+    },
+    {
+      name: "Least read",
+      value: "least-read",
+    },
+  ]);
+  const [selected, setSelected] = useState(optionsArr[0]);
+
+  const handleSelectionChange = (item) => {
+    setSelected(item);
+  };
 
   return (
     <div className="flex justify-center">
@@ -15,31 +49,11 @@ function AllTimeSection() {
             <h2 className="letter-spacing-6 line-h-9 font-11 font-semibold color-3 m-0">Lifetime</h2>
             <div className="margin68" style={{ marginBottom: 0 }}>
               <div className="font-4 color-4 line20 font-normal">
-                {isLoading && (
-                  <div className="flex flex-wrap relative">
-                    April 1, 2026 - Today (UTC)
-                    <div className="margin73">
-                      <span className="color-4 font-4">•</span>
-                    </div>{" "}
-                    Updated daily
-                    <div className="absolute inset-0 overflow-hidden">
-                      <Skeleton width={3434} height={23434} />
-                    </div>
-                  </div>
-                )}
-                {!isLoading && (
-                  <div className="flex flex-wrap">
-                    April 1, 2026 - Today (UTC)
-                    <div className="margin73">
-                      <span className="color-4 font-4">•</span>
-                    </div>{" "}
-                    Updated daily
-                  </div>
-                )}
+                <div className="flex flex-wrap">{formatUTCToLocalDate(userInfo.createdAt)} - Today (UTC)</div>
               </div>
             </div>
           </div>
-          <ActionBtn isLoading={isLoading} />
+          <ActionBtn isLoading={isLoading} optionsArr={optionsArr} selected={selected} handleSelectionChange={handleSelectionChange} />
         </div>
 
         <div>

@@ -63,10 +63,10 @@ function AllTimeSection() {
                 {!isLoading && !defaultLoader && (
                   <div className="flex flex-wrap">
                     {formatUTCToLocalDate(userInfo.createdAt)} - Today (UTC)
-                    <div className="margin73">
+                    {/* <div className="margin73">
                       <span className="color-4 custom-fs-1 line20 font-normal">•</span>
                     </div>{" "}
-                    Updated daily
+                    Updated daily */}
                   </div>
                 )}
               </div>

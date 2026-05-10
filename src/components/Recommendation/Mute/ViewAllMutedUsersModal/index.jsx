@@ -29,8 +29,6 @@ function ViewAllMutedUsers({ handleCloseUserModal, usersCount, onMuteStatusChang
       const response = await requestHandler(url);
       const result = await response.json();
 
-      console.log("result: ", result);
-
       if (response?.status === 200 && result?.data?.users) {
         setUsers((prev) => [...prev, ...result.data.users]);
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));

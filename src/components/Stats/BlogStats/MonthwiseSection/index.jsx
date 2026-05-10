@@ -42,7 +42,7 @@ function MonthwiseSection({ blog }) {
   };
 
   const getMonthlyStatsForBlog = async (month, year, datesArr) => {
-    setStats((prev) => ({ ...prev, views: datesArr, reads: datesArr, totalReads: 0, totalViews: 0, totalClappers: 0, totalResponders: 0, engagement: JSON.parse(JSON.stringify(engagement)) }));
+    setStats((prev) => ({ ...prev, views: JSON.parse(JSON.stringify(datesArr)), reads: JSON.parse(JSON.stringify(datesArr)), totalReads: 0, totalViews: 0, totalClappers: 0, totalResponders: 0, engagement: JSON.parse(JSON.stringify(engagement)) }));
     try {
       const startDate = new Date(year, month, 1);
       const endDate = new Date(year, month + 1, 1);
@@ -50,14 +50,13 @@ function MonthwiseSection({ blog }) {
       const response = await requestHandler(`/blogs/monthly-stats/${blog._id}/${startDate.toISOString()}/${endDate.toISOString()}`);
       const result = await response.json();
 
-      let views = [];
-      let reads = [];
-      let totalViews = 0;
-      let totalReads = 0;
-      let totalClappers = 0;
-      let totalResponders = 0;
-
       if (response?.status === 200) {
+        let views = JSON.parse(JSON.stringify(datesArr));
+        let reads = JSON.parse(JSON.stringify(datesArr));
+        let totalViews = 0;
+        let totalReads = 0;
+        let totalClappers = 0;
+        let totalResponders = 0;
         if (result?.data?.views?.length) {
           views = datesArr.map((item) => {
             const matchedView = result.data.views.find((view) => view.day === item.name);
@@ -146,10 +145,10 @@ function MonthwiseSection({ blog }) {
             <div className="font-4 color-4 line20 font-normal">
               <div className="flex flex-wrap">
                 {formatUTCToLocalDate(startDate)} - {`${endDate ? formatUTCToLocalDate(endDate) : "Today (UTC)"}`}
-                <div className="margin73">
+                {/* <div className="margin73">
                   <span className="color-4 custom-fs-1 line20 font-normal">•</span>
                 </div>{" "}
-                Updated hourly
+                Updated hourly */}
               </div>
             </div>
           </div>
