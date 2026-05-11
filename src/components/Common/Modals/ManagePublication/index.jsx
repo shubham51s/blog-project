@@ -28,7 +28,7 @@ function ManagePublication({ isShowModal, handleCloseModal }) {
       const response = await requestHandler(url);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.publications) {
+      if (response?.status === 200 && result?.data?.publications?.length) {
         setPublications((prev) => [...prev, ...result.data.publications]);
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
       } else {

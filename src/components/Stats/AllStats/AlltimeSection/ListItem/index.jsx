@@ -1,21 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { formatUTCToLocalDate } from "../../../../../utils/dates";
 
-function ListItem() {
+function ListItem({ blog }) {
   return (
     <tr>
       <td className="w-full padding83 padding62">
         <Link className="h-full cursor-pointer m-0 p-0">
           <div className="width103">
             <div className="flex flex-col custom-gap-5">
-              <h2 className="height90 font-bold font-10 color-3 line20 m-0 line-clamp-3">The Single Most Prevalent AI Writing Tell (Spoiler Alert — It’s Not Em Dashes)</h2>
+              <h2 className="height90 font-bold font-10 color-3 line20 m-0 line-clamp-3">{blog.previewTitle}</h2>
               <div className="font-4 color-4 line20 font-normal">
                 <div className="flex items-center flex-wrap">
-                  <span>1 min read</span>
+                  <span>{blog.readingTime} min read</span>
                   <div className="padding50">
                     <span className="color-4 custom-fs-1 line20 font-normal">•</span>
                   </div>
-                  <span>Apr 16, 2026</span>
+                  <span>{formatUTCToLocalDate(blog.createdAt)}</span>
                   <div className="padding50">
                     <span className="color-4 custom-fs-1 line20 font-normal">•</span>
                   </div>
