@@ -29,12 +29,12 @@ function ListItem({ blog }) {
       </td>
       <td className="width101 padding83 padding-24 padding62 text-center">
         <Link className="h-full cursor-pointer m-0 p-0">
-          <span className="line-h-8 font-10 color-3 font-normal">53</span>
+          <span className="line-h-8 font-10 color-3 font-normal">{blog.views}</span>
         </Link>
       </td>
       <td className="width101 padding83 padding-24 padding62 text-center">
         <Link className="h-full cursor-pointer m-0 p-0">
-          <span className="line-h-8 font-10 color-3 font-normal">7</span>
+          <span className="line-h-8 font-10 color-3 font-normal">{blog.reads}</span>
         </Link>
       </td>
     </tr>

@@ -10,7 +10,7 @@ import { useInfiniteScroll } from "../../../../hooks/useInfiniteScroll";
 
 function AllTimeSection() {
   const { requestHandler } = useRequestHandler();
-  const limit = 1;
+  const limit = 10;
   const { userInfo } = useContext(UserContext);
   const loaderTimeout = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,8 +19,10 @@ function AllTimeSection() {
   const [scroll, setScroll] = useState({
     loading: false,
     cursor: null,
+    hasMore: true,
   });
   const hasMore = useRef(true);
+  const cursor = useRef(null);
   const [optionsArr, setOptionsArr] = useState([
     {
       name: "Latest",
@@ -54,20 +56,23 @@ function AllTimeSection() {
     setScroll((prev) => ({ ...prev, loading: true }));
 
     try {
-      const url = scroll.cursor ? `/blogs/stats/all-time?type=${type}&cursor=${scroll.cursor}&limit=${limit}` : `/blogs/stats/all-time?type=${type}&limit=${limit}`;
+      const url = cursor.current ? `/blogs/stats/all-time?type=${type}&cursor=${cursor.current}&limit=${limit}` : `/blogs/stats/all-time?type=${type}&limit=${limit}`;
       const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.blogs?.length) {
         setBlogs((prev) => [...prev, ...result.data.blogs]);
-        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null }));
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
         hasMore.current = result.data.cursor ? true : false;
+        cursor.current = result.data.cursor || null;
       } else {
         hasMore.current = false;
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
       hasMore.current = false;
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
       setScroll((prev) => ({ ...prev, loading: false }));
@@ -79,8 +84,9 @@ function AllTimeSection() {
     setDefaultLoader(true);
     setSelected(item);
 
-    setScroll((prev) => ({ ...prev, loading: true, cursor: null }));
+    setScroll((prev) => ({ ...prev, loading: true, cursor: null, hasMore: true }));
     hasMore.current = true;
+    cursor.current = null;
     setBlogs([]);
     getBlogsList(item.value);
 
@@ -93,7 +99,7 @@ function AllTimeSection() {
 
   const sentinel = useInfiniteScroll({
     loadMore: getBlogsList,
-    hasMore: hasMore.current,
+    hasMore: scroll.hasMore,
     scrollLoader: scroll.loading,
   });
 
@@ -140,10 +146,10 @@ function AllTimeSection() {
                   {blogs.map((item) => (
                     <ListItem key={item._id} blog={item} />
                   ))}
-                  {hasMore.current && <tr style={{ height: "1px" }} ref={sentinel}></tr>}
+                  {scroll.hasMore && <tr style={{ height: "1px" }} ref={sentinel}></tr>}
                 </>
               )}
-              {(isLoading || defaultLoader) && Array.from({ length: 3 }).map((_, i) => <ListItemLoader key={i} />)}
+              {(isLoading || defaultLoader) && Array.from({ length: 4 }).map((_, i) => <ListItemLoader key={i} />)}
             </tbody>
           </table>
         </div>
