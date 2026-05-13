@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { defaultLoaderTime } from "../../../../constants/constant";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
-import ListItemNew from "./ListItem";
 import LoaderNew from "./ListItem/skeleton";
 import Loader from "./ListItem/skeleton";
 import ListItem from "./ListItem";

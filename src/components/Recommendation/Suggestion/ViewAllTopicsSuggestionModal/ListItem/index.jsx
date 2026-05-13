@@ -57,7 +57,7 @@ function ListItem({ item }) {
       {topic && (
         <div className="margin60 flex">
           <div className="margin60 flex">
-            <Link className="cursor-pointer list-none">
+            <Link to={`/tag/${topic.slug}`} className="cursor-pointer list-none">
               <div className="width-15 aspect-square rounded-full flex items-center justify-center bg-11">
                 <div className="width-19 aspect-square">
                   <RiFileList2Line className="w-full h-full" />
@@ -67,11 +67,11 @@ function ListItem({ item }) {
             <div className="padding82 w-full flex justify-between">
               <div className="w-full flex flex-col">
                 <div className="flex items-center">
-                  <Link className="cursor-pointer m-0 no-underline p-0">
+                  <Link to={`/tag/${topic.slug}`} className="cursor-pointer m-0 no-underline p-0">
                     <h2 className="height-15 font-10 font-medium color-3 line20 m-0 line-clamp-2 capitalize">{topic.name}</h2>
                   </Link>
                 </div>
-                <Link className="cursor-pointer m-0 no-underline p-0">
+                <Link to={`/tag/${topic.slug}`} className="cursor-pointer m-0 no-underline p-0">
                   <div className="w-full max-w-full whitespace-pre-wrap margin44 break-words">
                     <p className="custom-fs-1 color-4 line20 font-normal m-0">
                       {formatNumberCompact(topic.stats.stories)} stories · {formatNumberCompact(topic.stats.follower)} followers

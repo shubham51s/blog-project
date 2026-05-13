@@ -5,6 +5,7 @@ import { GoArrowUpRight } from "react-icons/go";
 import { MdOutlineExplore } from "react-icons/md";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { Link } from "react-router-dom";
+import { urlBasePath } from "../../../../constants/constant";
 
 function SearchHomeComp() {
   const { requestHandler } = useRequestHandler();
@@ -13,61 +14,12 @@ function SearchHomeComp() {
   const inputRef = useRef();
   const inputResultRef = useRef();
   const searchTimeout = useRef(null);
+  const controllerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchData, setSearchData] = useState({
     users: [],
     publications: [],
     topics: [],
-  });
-  const [searchedListResult, setSearchedListResult] = useState({
-    people: [
-      {
-        id: 0,
-        name: "Teressa Pence Morr",
-        image: "https://miro.medium.com/v2/resize:fill:30:30/1*yWQSXi7DUTz3mnjCCTVrCw.jpeg",
-      },
-      {
-        id: 1,
-        name: "People result 2",
-        image: "https://miro.medium.com/v2/resize:fill:30:30/1*4yjKwtSb_VjZyo2h-N6lYw.jpeg",
-      },
-      {
-        id: 2,
-        name: "People result 3",
-        image: "https://miro.medium.com/v2/resize:fill:30:30/1*rMshsyWaO5CA_744A1ZIrA.png",
-      },
-    ],
-    publications: [
-      {
-        id: 0,
-        name: "publications first result",
-        image: "",
-      },
-      {
-        id: 1,
-        name: "publications second result",
-        image: "",
-      },
-      {
-        id: 2,
-        name: "publications third result",
-        image: "",
-      },
-    ],
-    topics: [
-      {
-        id: 0,
-        name: "topics first result",
-      },
-      {
-        id: 1,
-        name: "topics second result",
-      },
-      {
-        id: 2,
-        name: "topics third result",
-      },
-    ],
   });
 
   const handleSearch = async (search) => {
@@ -76,7 +28,27 @@ function SearchHomeComp() {
     let topics = [];
 
     try {
-      const response = await requestHandler(`/users/search/common?search=${search}`);
+      // abort previous request
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+      }
+
+      // create new controller
+      const controller = new AbortController();
+      controllerRef.current = controller;
+
+      const response = await fetch(`${urlBasePath}/users/search/common?search=${search}`, {
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        method: "GET",
+        signal: controller.signal,
+      });
+
+      if (response?.status === 401) {
+        window.location.reload();
+        return;
+      }
+
       const result = await response.json();
 
       if (response?.status === 200 && result?.data) {
@@ -95,9 +67,13 @@ function SearchHomeComp() {
     } finally {
       setIsLoading(false);
     }
-
-    console.log("publications: ", publications, " topics: ", topics);
     setSearchData((prev) => ({ ...prev, users, publications, topics }));
+
+    if (!users.length && !publications.length && !topics.length) {
+      setIsShowSearchPopup(false);
+    } else {
+      setIsShowSearchPopup(true);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -105,15 +81,24 @@ function SearchHomeComp() {
     setSearchInput(value);
 
     if (!value.length) {
-      if (searchTimeout.current) clearTimeout(searchTimeout.current);
       setIsLoading(false);
+      setSearchData({ users: [], publications: [], topics: [] });
+      setIsShowSearchPopup(true);
+      if (searchTimeout.current) clearTimeout(searchTimeout.current);
     } else {
       setIsLoading(true);
       if (searchTimeout.current) clearTimeout(searchTimeout.current);
       searchTimeout.current = setTimeout(() => {
         handleSearch(value);
         searchTimeout.current = null;
-      }, 1000);
+      }, 500);
+    }
+  };
+
+  const handleInputFocus = () => {
+    // setIsShowSearchPopup(true);
+    if (!searchInput.length || searchData.users.length || searchData.publications.length || searchData.topics.length) {
+      setIsShowSearchPopup(true);
     }
   };
 
@@ -140,14 +125,14 @@ function SearchHomeComp() {
             {isLoading && <div className="w-[80%] h-[80%] rounded-full animate-spin bdr-7" style={{ borderTopColor: "transparent", borderRightColor: "transparent" }}></div>}
           </div>
         </div>
-        <input value={searchInput} onChange={(e) => handleInputChange(e)} onFocus={() => setIsShowSearchPopup(true)} ref={inputRef} className="color-3 bg-transparent padding-12 custom-fs-1 border-0 outline-none custom-line-h-1 w-full m-0 font-medium" type="text" placeholder="Search" />
+        <input value={searchInput} onChange={(e) => handleInputChange(e)} onFocus={() => handleInputFocus()} ref={inputRef} spellCheck={false} className="color-3 bg-transparent padding-12 custom-fs-1 border-0 outline-none custom-line-h-1 w-full m-0 font-medium" type="text" placeholder="Search" />
 
         {/* search results popup */}
         {isShowSearchPopup && (
           <div ref={inputResultRef} className="absolute translate-x-0 z-[9999] top-1 box-shadow-1 border-radius-3">
             <div className="custom-bg-8 border-radius-4 overflow-hidden">
               <div id="searchResults" className="width-12">
-                {searchInput.length > 0 && (
+                {searchInput.length > 0 && (searchData.users.length > 0 || searchData.publications.length || searchData.topics.length > 0) && (
                   <ul className="padding-13 flex flex-col items-stretch list-none m-0" style={{ paddingLeft: 0, paddingRight: 0 }}>
                     {/* People list result */}
                     {searchData.users.length > 0 && (
@@ -160,9 +145,9 @@ function SearchHomeComp() {
                             <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
                           </li>
                         </div>
-                        <div className="margin-7 margin-15 flex flex-col justify-between" style={{ marginInline: 0 }}>
+                        <div className="margin-7 margin-15 flex flex-col justify-between last:!mb-0" style={{ marginInline: 0 }}>
                           {searchData.users.map((item) => (
-                            <li className="padding-14 padding-15 flex box-border margin-7" key={item._id} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}>
+                            <li className="padding-14 padding-15 flex box-border margin-7 last:!mb-0" key={item._id} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}>
                               {/* <li className={`padding-14 padding-15 flex box-border ${index >= 2 ? "" : "margin-7"}`} key={index} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}> */}
                               <Link to={`/profile/${item.username}`} className="cursor-pointer m-0 p-0 no-underline">
                                 <div className="flex items-center">
@@ -199,9 +184,9 @@ function SearchHomeComp() {
                             <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
                           </li>
                         </div>
-                        <div className="margin-7 margin-15 flex flex-col justify-between" style={{ marginInline: 0 }}>
+                        <div className="margin-7 margin-15 flex flex-col justify-between last:!mb-0" style={{ marginInline: 0 }}>
                           {searchData.publications.map((item) => (
-                            <li className="padding-14 padding-15 flex box-border margin-7" key={item._id} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}>
+                            <li className="padding-14 padding-15 flex box-border margin-7 last:!mb-0" key={item._id} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}>
                               <Link to={`/publication/${item.slug}`} className="cursor-pointer m-0 p-0 no-underline">
                                 <div className="flex items-center">
                                   <div className="width-13 aspect-square">
@@ -237,10 +222,10 @@ function SearchHomeComp() {
                             <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
                           </li>
                         </div>
-                        <div className="margin-7 margin-15 flex flex-col justify-between" style={{ marginInline: 0 }}>
+                        <div className="margin-7 margin-15 flex flex-col justify-between last:!mb-0" style={{ marginInline: 0 }}>
                           {searchData.topics.map((item) => (
-                            <li className="padding-14 padding-15 flex box-border margin-7" key={item._id} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}>
-                              <a href="#" className="cursor-pointer m-0 p-0 no-underline">
+                            <li className="padding-14 padding-15 flex box-border margin-7 last:!mb-0" key={item._id} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}>
+                              <Link to={`/tag/${item.slug}`} className="cursor-pointer m-0 p-0 no-underline">
                                 <div className="flex items-center">
                                   <div className="width-13 aspect-square">
                                     <MdOutlineTopic className="w-full h-full bg-11 box-border rounded-full align-middle" src="https://miro.medium.com/v2/resize:fill:30:30/1*T5BNQkG7KKzsXhyfRyJkNA.jpeg" />
@@ -257,7 +242,7 @@ function SearchHomeComp() {
                                     </div>
                                   </div>
                                 </div>
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </div>
@@ -267,26 +252,26 @@ function SearchHomeComp() {
                 )}
 
                 {/* explore section */}
-                {searchInput.length === 0 && (
+                {(searchInput.length === 0 || (isLoading && searchData.users.length === 0 && searchData.publications.length === 0 && searchData.topics.length === 0)) && (
                   <ul className="flex flex-col items-stretch p-0 m-0 list-image-none list-none">
                     <div className="margin-17 margin-18">
                       <div className="flex items-center">
                         <div className="flex-auto">
-                          <a href="#" className="cursor-pointer m-0 p-0 no-underline">
+                          <Link to="/me/following/suggestions" className="cursor-pointer m-0 p-0 no-underline">
                             <div className="flex items-center">
                               <div className="margin-3 flex-none">
                                 <MdOutlineExplore className="width-13 aspect-square color-6 align-middle transition-all duration-300 ease-in-out opacity-75 hover:opacity-100" />
                               </div>
                               <p className="break-words text-ellipsis height-6 overflow-hidden color-3 custom-fs-1 custom-line-h-1 font-medium m-0 p-0">Explore topics</p>
                             </div>
-                          </a>
+                          </Link>
                         </div>
                         <div className="flex-none">
-                          <a href="#" className="cursor-pointer no-underline m-0 p-0">
+                          <Link to="/me/following/suggestions" className="cursor-pointer no-underline m-0 p-0">
                             <div className="width-13 aspect-square margin-5 flex justify-center items-center">
                               <GoArrowUpRight className="width-13 aspect-square color-6 align-middle transition-all duration-300 ease-in-out opacity-75 hover:opacity-100" />
                             </div>
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </div>
