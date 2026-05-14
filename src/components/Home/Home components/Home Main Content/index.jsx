@@ -91,7 +91,7 @@ function HomeMainContentComp() {
                       <div className="flex items-center scrollbar-none overflow-y-hidden overflow-x-auto bdr-5 w-full" style={{ borderTop: 0, borderInline: 0 }}>
                         {/* active topic border & all pending */}
                         {recommendedTopics.map((item) => (
-                          <div className={`margin-21 min-w-max padding-18 pt-0 bdr-6`} key={item.id} title={item.title} style={{ marginBlock: 0, marginLeft: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: activeTopicIndex == item.id ? "" : "transparent" }}>
+                          <div className={`margin-8 min-w-max padding-18 pt-0 bdr-6 first:!ml-0`} key={item.id} title={item.title} style={{ marginBlock: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: activeTopicIndex == item.id ? "" : "transparent" }}>
                             <div className="inline-block outline-none">
                               <div className="p-0 m-0 cursor-pointer no-underline">
                                 <div className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-300 ease-in-out hover:opacity-100 ${activeTopicIndex == item.id ? "opacity-100" : "opacity-75"}`}>

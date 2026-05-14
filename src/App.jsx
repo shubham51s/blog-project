@@ -41,6 +41,12 @@ import StatsPageWrapper from "./pages/Stats";
 import AllStatsPage from "./pages/Stats/AllStats";
 import BlogStatsPage from "./pages/Stats/Blog";
 import AudienceStats from "./pages/Stats/Audience";
+import SearchPage from "./pages/Search";
+import StoriesSection from "./components/Search/Stories";
+import PeopleSection from "./components/Search/People";
+import PublicationSection from "./components/Search/Publications";
+import TopicSection from "./components/Search/Topics";
+import ListSection from "./components/Search/Lists";
 
 function App() {
   const { isInitialLoading } = useContext(UserContext);
@@ -89,6 +95,13 @@ function App() {
             <Route path="lists" element={<List />} />
             <Route path="followers" element={<Follower />} />
             <Route path="following" element={<Following />} />
+          </Route>
+          <Route path="search" element={<SearchPage />}>
+            <Route path="posts" element={<StoriesSection />} />
+            <Route path="users" element={<PeopleSection />} />
+            <Route path="publications" element={<PublicationSection />} />
+            <Route path="tags" element={<TopicSection />} />
+            <Route path="lists" element={<ListSection />} />
           </Route>
           <Route path="profile/:username/list/:slug/:listId" element={<ListDetailsPage />} />
           <Route path="publication/:slug" element={<PublicationDetailsWrapper />} />
