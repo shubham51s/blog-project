@@ -79,7 +79,11 @@ function SearchPage() {
                 </div>
               </div>
             </div>
-            <Outlet context={search} />
+            <div className="flex justify-center">
+              <div className="w-full min-w-0 max-width-2 margin-12">
+                <Outlet context={search} />
+              </div>
+            </div>
           </div>
         </div>
       </main>

@@ -1659,6 +1659,10 @@ img {
     min-width: 174px;
   }
 
+  .width108 {
+    min-width: 110px;
+  }
+
   .margin-2 {
     margin: 0 24px;
   }
@@ -2040,6 +2044,14 @@ img {
     padding-top: 4px;
   }
 
+  .padding95 {
+    padding-right: 53px;
+  }
+
+  .padding96 {
+    padding-left: 26px;
+  }
+
   .margin-3 {
     margin-right: 16px;
   }
@@ -2334,5 +2346,9 @@ img {
 
   .margin76 {
     margin-bottom: 28px;
+  }
+
+  .margin77 {
+    margin-block: 36px
   }
 }

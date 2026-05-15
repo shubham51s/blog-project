@@ -63,7 +63,7 @@ function StoriesSection() {
 
   return (
     // <main className="width-20 h-full overflow-y-auto grow flex-shrink basis-auto block">
-    <div>
+    <>
       {!defaultLoader && !isLoading && blogs.length > 0 && (
         <>
           {blogs.map((item) => (
@@ -73,7 +73,7 @@ function StoriesSection() {
         </>
       )}
       {(defaultLoader || isLoading) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
-    </div>
+    </>
   );
 }
 

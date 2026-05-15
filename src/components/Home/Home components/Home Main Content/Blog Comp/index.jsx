@@ -34,7 +34,7 @@ function BlogComp({ item }) {
   return (
     <>
       {blog && (
-        <div className={`overflow-hidden transition-all duration-500 ease-out ${isHideBlog ? "height71" : "height-18"}`}>
+        <div className={`margin51 overflow-hidden transition-all duration-500 ease-out ${isHideBlog ? "height71 !mt-0" : "height-18"}`}>
           <div className="flex justify-center">
             <div className="w-full max-width-2 margin-2 min-w-0">
               <div className="w-full margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
