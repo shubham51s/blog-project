@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import BlogComp from "./BlogComp";
-import BlogLoader from "./BlogComp/skeleton";
 import { defaultLoaderTime } from "../../../constants/constant";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { useOutletContext } from "react-router-dom";
 import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
+import BlogComp from "../../Home/Home components/Home Main Content/Blog Comp";
+import BlogLoader from "../../Home/Home components/Home Main Content/Blog Comp/skeleton";
+import NoContent from "../NoContent";
 
 function StoriesSection() {
   const { requestHandler } = useRequestHandler();
@@ -56,13 +57,11 @@ function StoriesSection() {
     if (!loaderTimeout.current) {
       loaderTimeout.current = setTimeout(() => {
         setDefaultLoader(false);
-        loaderTimeout.current = null;
       }, defaultLoaderTime);
     }
   }, []);
 
   return (
-    // <main className="width-20 h-full overflow-y-auto grow flex-shrink basis-auto block">
     <>
       {!defaultLoader && !isLoading && blogs.length > 0 && (
         <>
@@ -72,6 +71,9 @@ function StoriesSection() {
           {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
         </>
       )}
+
+      {!defaultLoader && !isLoading && blogs.length === 0 && <NoContent />}
+
       {(defaultLoader || isLoading) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
     </>
   );

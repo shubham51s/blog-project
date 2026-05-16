@@ -9,7 +9,7 @@ function ListLoader() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="shrink-0">
-                <div className="width-15 aspect-square rounded-full overflow-hidden">
+                <div className="width-15 aspect-square border-radius-5 overflow-hidden">
                   <Skeleton width={34343} height={34343} />
                 </div>
               </div>
@@ -26,7 +26,7 @@ function ListLoader() {
                 </div>
                 <div className="margin44">
                   <div className="relative overflow-hidden">
-                    <p className="height-15 color-4 custom-fs-1 line20 font-normal m-0 line-clamp-2 invisible">Founder enjoyalgorithms.com | IIT | Super 30 | Educator | A learner who enjoys computer science, programming, algorithms, and problem-solving.</p>
+                    <p className="height-15 color-4 custom-fs-1 line20 font-normal m-0 line-clamp-2 invisible">Founder enjoyalgorithms.com | IIT | Super 30 | Educator | A learner who enjoys.</p>
                     <div className="absolute inset-0">
                       <Skeleton width={3434} height={3434} />
                     </div>

@@ -4,12 +4,14 @@ import { MdOutlineTopic } from "react-icons/md";
 import { GoArrowUpRight } from "react-icons/go";
 import { MdOutlineExplore } from "react-icons/md";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { urlBasePath } from "../../../../constants/constant";
+import ExploreSection from "./ExploreSection";
 
 function SearchHomeComp() {
   const { requestHandler } = useRequestHandler();
   const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
   const [isShowSearchPopup, setIsShowSearchPopup] = useState(false);
   const inputRef = useRef();
   const inputResultRef = useRef();
@@ -21,6 +23,10 @@ function SearchHomeComp() {
     publications: [],
     topics: [],
   });
+
+  const closePopup = () => {
+    setIsShowSearchPopup(false);
+  };
 
   const handleSearch = async (search) => {
     let users = [];
@@ -70,7 +76,7 @@ function SearchHomeComp() {
     setSearchData((prev) => ({ ...prev, users, publications, topics }));
 
     if (!users.length && !publications.length && !topics.length) {
-      setIsShowSearchPopup(false);
+      closePopup();
     } else {
       setIsShowSearchPopup(true);
     }
@@ -96,15 +102,40 @@ function SearchHomeComp() {
   };
 
   const handleInputFocus = () => {
-    // setIsShowSearchPopup(true);
     if (!searchInput.length || searchData.users.length || searchData.publications.length || searchData.topics.length) {
       setIsShowSearchPopup(true);
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      if (searchTimeout.current) clearTimeout(searchTimeout.current);
+      setIsLoading(false);
+
+      if (searchInput) {
+        let oldArr = [];
+        if (localStorage.getItem("search-history")) {
+          if (JSON.parse(localStorage.getItem("search-history"))?.length) {
+            oldArr = JSON.parse(localStorage.getItem("search-history"));
+            if (oldArr.includes(searchInput)) {
+              oldArr = oldArr.filter((item) => item !== searchInput);
+            }
+          }
+        }
+
+        const newArr = [searchInput, ...oldArr];
+        localStorage.setItem("search-history", JSON.stringify(newArr.slice(0, 10)));
+      }
+
+      searchInput ? navigate(`/search/posts?q=${searchInput}`) : navigate(`/search?q=${searchInput}`);
+
+      closePopup();
+    }
+  };
+
   const handleClickOutside = (e) => {
     if (inputRef.current && !inputRef.current.contains(e.target) && inputResultRef.current && !inputResultRef.current.contains(e.target)) {
-      setIsShowSearchPopup(false);
+      closePopup();
     }
   };
 
@@ -125,7 +156,7 @@ function SearchHomeComp() {
             {isLoading && <div className="w-[80%] h-[80%] rounded-full animate-spin bdr-7" style={{ borderTopColor: "transparent", borderRightColor: "transparent" }}></div>}
           </div>
         </div>
-        <input value={searchInput} onChange={(e) => handleInputChange(e)} onFocus={() => handleInputFocus()} ref={inputRef} spellCheck={false} className="color-3 bg-transparent padding-12 custom-fs-1 border-0 outline-none custom-line-h-1 w-full m-0 font-medium" type="text" placeholder="Search" />
+        <input value={searchInput} onChange={(e) => handleInputChange(e)} onFocus={() => handleInputFocus()} onKeyDown={(e) => handleKeyPress(e)} ref={inputRef} spellCheck={false} className="color-3 bg-transparent padding-12 custom-fs-1 border-0 outline-none custom-line-h-1 w-full m-0 font-medium" type="text" placeholder="Search" />
 
         {/* search results popup */}
         {isShowSearchPopup && (
@@ -149,7 +180,7 @@ function SearchHomeComp() {
                           {searchData.users.map((item) => (
                             <li className="padding-14 padding-15 flex box-border margin-7 last:!mb-0" key={item._id} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}>
                               {/* <li className={`padding-14 padding-15 flex box-border ${index >= 2 ? "" : "margin-7"}`} key={index} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}> */}
-                              <Link to={`/profile/${item.username}`} className="cursor-pointer m-0 p-0 no-underline">
+                              <Link to={`/profile/${item.username}`} onClick={closePopup} className="cursor-pointer m-0 p-0 no-underline">
                                 <div className="flex items-center">
                                   <div className="width-13 aspect-square">
                                     <img className="w-full h-full bg-11 box-border rounded-full align-middle" src={item.profileImg} />
@@ -187,7 +218,7 @@ function SearchHomeComp() {
                         <div className="margin-7 margin-15 flex flex-col justify-between last:!mb-0" style={{ marginInline: 0 }}>
                           {searchData.publications.map((item) => (
                             <li className="padding-14 padding-15 flex box-border margin-7 last:!mb-0" key={item._id} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}>
-                              <Link to={`/publication/${item.slug}`} className="cursor-pointer m-0 p-0 no-underline">
+                              <Link to={`/publication/${item.slug}`} onClick={closePopup} className="cursor-pointer m-0 p-0 no-underline">
                                 <div className="flex items-center">
                                   <div className="width-13 aspect-square">
                                     <img className="w-full h-full bg-11 box-border rounded-full align-middle" src={item.profileImg} />
@@ -225,7 +256,7 @@ function SearchHomeComp() {
                         <div className="margin-7 margin-15 flex flex-col justify-between last:!mb-0" style={{ marginInline: 0 }}>
                           {searchData.topics.map((item) => (
                             <li className="padding-14 padding-15 flex box-border margin-7 last:!mb-0" key={item._id} style={{ paddingBlock: 0, marginInline: 0, marginTop: 0 }}>
-                              <Link to={`/tag/${item.slug}`} className="cursor-pointer m-0 p-0 no-underline">
+                              <Link to={`/tag/${item.slug}`} onClick={closePopup} className="cursor-pointer m-0 p-0 no-underline">
                                 <div className="flex items-center">
                                   <div className="width-13 aspect-square">
                                     <MdOutlineTopic className="w-full h-full bg-11 box-border rounded-full align-middle" src="https://miro.medium.com/v2/resize:fill:30:30/1*T5BNQkG7KKzsXhyfRyJkNA.jpeg" />
@@ -252,31 +283,7 @@ function SearchHomeComp() {
                 )}
 
                 {/* explore section */}
-                {(searchInput.length === 0 || (isLoading && searchData.users.length === 0 && searchData.publications.length === 0 && searchData.topics.length === 0)) && (
-                  <ul className="flex flex-col items-stretch p-0 m-0 list-image-none list-none">
-                    <div className="margin-17 margin-18">
-                      <div className="flex items-center">
-                        <div className="flex-auto">
-                          <Link to="/me/following/suggestions" className="cursor-pointer m-0 p-0 no-underline">
-                            <div className="flex items-center">
-                              <div className="margin-3 flex-none">
-                                <MdOutlineExplore className="width-13 aspect-square color-6 align-middle transition-all duration-300 ease-in-out opacity-75 hover:opacity-100" />
-                              </div>
-                              <p className="break-words text-ellipsis height-6 overflow-hidden color-3 custom-fs-1 custom-line-h-1 font-medium m-0 p-0">Explore topics</p>
-                            </div>
-                          </Link>
-                        </div>
-                        <div className="flex-none">
-                          <Link to="/me/following/suggestions" className="cursor-pointer no-underline m-0 p-0">
-                            <div className="width-13 aspect-square margin-5 flex justify-center items-center">
-                              <GoArrowUpRight className="width-13 aspect-square color-6 align-middle transition-all duration-300 ease-in-out opacity-75 hover:opacity-100" />
-                            </div>
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </ul>
-                )}
+                {(searchInput.length === 0 || (isLoading && searchData.users.length === 0 && searchData.publications.length === 0 && searchData.topics.length === 0)) && <ExploreSection closePopup={closePopup} />}
               </div>
             </div>
           </div>

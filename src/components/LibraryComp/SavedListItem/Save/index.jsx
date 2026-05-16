@@ -4,7 +4,7 @@ import { MdOutlineBookmark } from "react-icons/md";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { showToast } from "../../../../utils/toaster";
 
-function SaveList({ list, filterUnsavedList }) {
+function SaveList({ list, removeUnsavedListItemFromList }) {
   const { requestHandler } = useRequestHandler();
   const [isSaved, setIsSaved] = useState(list.isSavedByMe || false);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +47,7 @@ function SaveList({ list, filterUnsavedList }) {
       if (response?.status === 200) {
         setIsSaved(false);
         showToast("List removed from Your Library");
-        filterUnsavedList(list._id);
+        removeUnsavedListItemFromList();
       } else {
         showToast(result?.message || "Some error occured");
       }

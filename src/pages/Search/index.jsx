@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import HomeRightSectionComp from "../../components/Home/Home components/Home Right Content";
 import HomeMainContentComp from "../../components/Home/Home components/Home Main Content";
 import { Link, Outlet, useLocation, useSearchParams } from "react-router-dom";
+import RecentSearchSection from "../../components/Search/RecentSearch";
 
 function SearchPage() {
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
-  //   const search = searchParams.get("q");
-  const search = "t";
+  const search = searchParams.get("q");
 
   const recommendedTopics = [
     {
@@ -38,7 +38,10 @@ function SearchPage() {
   ];
 
   const isTabActive = (item) => {
-    return pathname.includes(item.path);
+    const currentPath = pathname.split("/search")[1];
+
+    if (item.path === "posts") return currentPath.includes(item.path) || !currentPath;
+    return currentPath.includes(item.path);
   };
 
   return (
@@ -48,43 +51,47 @@ function SearchPage() {
         <div className="h-full flex flex-col">
           {/* <div className="height-10"></div> */}
           {/* <div className="sticky top-2 z-[499] custom-bg-8"> */}
-          <div className="grow shrink-0 basis-auto">
-            <div className="flex justify-center custom-bg-8">
-              <div className="w-full max-width-2 my-0 margin-12 min-w-0">
-                <div className="margin56 margin54">
-                  <div className="margin57">
-                    <h1 className="letter-spacing-7 height-53 line-h-10 font-12 break-all line-clamp-1 font-medium color-3 m-0">
-                      <span className="opacity-[0.6]">Results for </span>
-                      {search}
-                    </h1>
-                  </div>
-                  {/* <div className="padding-18 pb-0"> */}
-                  <div className="box-shadow-2 overflow-hidden relative">
-                    <div className="flex padding-18 w-full">
-                      <div className="flex items-center scrollbar-none overflow-y-hidden overflow-x-auto bdr-5 w-full" style={{ borderTop: 0, borderInline: 0 }}>
-                        {/* active topic border & all pending */}
-                        {recommendedTopics.map((item) => (
-                          <div className={`margin-8 min-w-max padding-18 pt-0 bdr-6 first:!ml-0`} key={item.id} title={item.title} style={{ marginBlock: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: isTabActive(item) ? "" : "transparent" }}>
-                            <Link to={`${item.path}`} className="p-0 m-0 cursor-pointer no-underline">
-                              <div className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-75 ease hover:opacity-100 ${isTabActive(item) ? "opacity-100" : "opacity-70"}`}>
-                                <div className="whitespace-nowrap border-0 p-0 m-0 bg-transparent">{item.name}</div>
-                              </div>
-                            </Link>
-                          </div>
-                        ))}
+          {search && (
+            <div className="grow shrink-0 basis-auto">
+              <div className="flex justify-center custom-bg-8">
+                <div className="w-full max-width-2 my-0 margin-12 min-w-0">
+                  <div className="margin56 margin54">
+                    <div className="margin57">
+                      <h1 className="letter-spacing-7 height-53 line-h-10 font-12 break-all line-clamp-1 font-semibold color-3 m-0">
+                        <span className="opacity-[0.6]">Results for </span>
+                        {search}
+                      </h1>
+                    </div>
+                    {/* <div className="padding-18 pb-0"> */}
+                    <div className="box-shadow-2 overflow-hidden relative">
+                      <div className="flex padding-18 w-full">
+                        <div className="flex items-center scrollbar-none overflow-y-hidden overflow-x-auto bdr-5 w-full" style={{ borderTop: 0, borderInline: 0 }}>
+                          {/* active topic border & all pending */}
+                          {recommendedTopics.map((item) => (
+                            <div className={`margin-8 min-w-max padding-18 pt-0 bdr-6 first:!ml-0`} key={item.id} title={item.title} style={{ marginBlock: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: isTabActive(item) ? "" : "transparent" }}>
+                              <Link to={`${item.path}?q=${search}`} className="p-0 m-0 cursor-pointer no-underline">
+                                <div className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-75 ease hover:opacity-100 ${isTabActive(item) ? "opacity-100" : "opacity-70"}`}>
+                                  <div className="whitespace-nowrap border-0 p-0 m-0 bg-transparent">{item.name}</div>
+                                </div>
+                              </Link>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
+                    {/* </div> */}
                   </div>
-                  {/* </div> */}
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <div className="w-full min-w-0 max-width-2 margin-12">
+                  <Outlet context={search} />
                 </div>
               </div>
             </div>
-            <div className="flex justify-center">
-              <div className="w-full min-w-0 max-width-2 margin-12">
-                <Outlet context={search} />
-              </div>
-            </div>
-          </div>
+          )}
+
+          {!search && <RecentSearchSection />}
         </div>
       </main>
       <HomeRightSectionComp />

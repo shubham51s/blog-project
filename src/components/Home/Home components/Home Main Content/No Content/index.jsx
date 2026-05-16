@@ -11,7 +11,7 @@ function NoContentComp({ item }) {
         <h3 className="font-10 color-3 font-normal custom-line-h-1 m-0 p-0">{item.description}</h3>
       </div>
       <p className="color-3 custom-fs-1 custom-line-h-1 font-normal m-0 p-0">
-        <Link className="underline cursor-pointer m-0 p-0" to={item.path}>
+        <Link to="/me/following/suggestions" className="underline cursor-pointer m-0 p-0">
           {item.action}
         </Link>
       </p>

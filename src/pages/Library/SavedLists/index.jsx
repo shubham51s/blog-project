@@ -4,42 +4,53 @@ import { useRequestHandler } from "../../../hooks/requestHandler";
 import ListLoader from "../../../components/ProfileComp/ListSection/ListComp/skeleton";
 import SavedListItem from "../../../components/LibraryComp/SavedListItem";
 import { defaultLoaderTime } from "../../../constants/constant";
+import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function SavedLists() {
   const { requestHandler } = useRequestHandler();
-  const isMounted = useRef(null);
+  const limit = 10;
   const [isLoading, setIsLoading] = useState(true);
   const [lists, setLists] = useState([]);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const fetchSavedLists = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
-      const response = await requestHandler(`/list/toggle-save/get-saved-lists`);
+      const url = scroll.cursor ? `/list/toggle-save/get-saved-lists?cursor=${scroll.cursor}&limit=${limit}` : `/list/toggle-save/get-saved-lists?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.lists) {
-        if (lists.length === 0) {
-          setLists(result.data.lists);
-        }
+      if (response?.status === 200 && result?.data?.lists?.length) {
+        setLists((prev) => [...prev, ...result.data.lists]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  const filterUnsavedList = (listId) => {
-    const updatedList = lists.filter((item) => item._id !== listId);
-    setLists(updatedList);
-  };
+  const sentinel = useInfiniteScroll({
+    loadMore: fetchSavedLists,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      fetchSavedLists(0);
-    }
+    fetchSavedLists();
 
     if (!defaultLoaderTimeout.current) {
       defaultLoaderTimeout.current = setTimeout(() => {
@@ -51,12 +62,22 @@ function SavedLists() {
 
   return (
     <>
-      <div>{(defaultLoader || isLoading) && Array.from({ length: 4 }).map((_, i) => <ListLoader key={i} />)}</div>
+      <div>
+        {(defaultLoader || isLoading) && Array.from({ length: 4 }).map((_, i) => <ListLoader key={i} />)}
 
-      <div>{!defaultLoader && !isLoading && lists.map((item) => <SavedListItem key={item._id} item={item} filterUnsavedList={filterUnsavedList} />)}</div>
+        {!defaultLoader && !isLoading && lists.length > 0 && (
+          <>
+            {lists.map((item) => (
+              <SavedListItem key={item._id} item={item} />
+            ))}
+
+            {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+          </>
+        )}
+      </div>
 
       {/* no data */}
-      {!defaultLoader && !isLoading && (
+      {!defaultLoader && !isLoading && lists.length === 0 && (
         <div className="text-center padding-42">
           <div className="padding-42 padding89">
             <h2 className="font-10 font-medium color-3 line20 m-0">No lists from others</h2>

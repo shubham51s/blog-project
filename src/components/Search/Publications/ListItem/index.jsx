@@ -9,10 +9,10 @@ function ListItem({ item }) {
       <div>
         <div className="padding87">
           <div className="flex items-center justify-between">
-            <Link to={`/profile/${item.username}`} className="flex items-center">
+            <Link to={`/publication/${item.slug}`} className="flex items-center">
               <div className="relative shrink-0">
-                <img src={item.profileImg} className="width-15 aspect-square rounded-full" />
-                <div className="absolute top-0 width-15 aspect-square rounded-full boxShadow7"></div>
+                <img src={item.profileImg} className="width-15 aspect-square border-radius-5" />
+                <div className="absolute top-0 width-15 aspect-square border-radius-5 boxShadow7"></div>
               </div>
               <div className="padding95 padding96">
                 <div className="flex items-center">
@@ -21,7 +21,7 @@ function ListItem({ item }) {
                   </h2>
                 </div>
                 <div className="margin44">
-                  <p className="height-15 color-4 custom-fs-1 line20 font-normal m-0 line-clamp-2">{item.bio}</p>
+                  <p className="height-15 color-4 custom-fs-1 line20 font-normal m-0 line-clamp-2">{item.description}</p>
                 </div>
               </div>
             </Link>

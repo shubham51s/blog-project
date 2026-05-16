@@ -421,6 +421,10 @@ img {
   line-height: 1.4;
 }
 
+.line23 {
+  line-height: 18px;
+}
+
 .box-shadow-1 {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 10px 0px;
 }
@@ -2350,5 +2354,25 @@ img {
 
   .margin77 {
     margin-block: 36px
+  }
+
+  .margin78 {
+    margin-inline: 10px;
+  }
+
+  .margin79 {
+    margin-top: 8px;
+  }
+
+  .margin80 {
+    margin-bottom: 11px;
+  }
+
+  .margin81 {
+    margin-block: 16px;
+  }
+
+  .margin82 {
+    margin-block: 25px;
   }
 }

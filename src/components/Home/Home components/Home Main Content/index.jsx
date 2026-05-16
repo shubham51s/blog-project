@@ -46,7 +46,7 @@ function HomeMainContentComp() {
     setActiveTopicIndex(index);
   };
 
-  const fetchBlogs = async () => {
+  const getBlogs = async () => {
     try {
       const response = await requestHandler("/blogs");
       const result = await response.json();
@@ -63,13 +63,13 @@ function HomeMainContentComp() {
   };
 
   useEffect(() => {
-    fetchBlogs();
+    getBlogs();
 
-    if (loaderTimeout.current) clearTimeout(loaderTimeout.current);
-    // minimum loader time
-    loaderTimeout.current = setTimeout(() => {
-      setInitialLoader(false);
-    }, defaultLoaderTime);
+    if (!loaderTimeout.current) {
+      loaderTimeout.current = setTimeout(() => {
+        setInitialLoader(false);
+      }, defaultLoaderTime);
+    }
   }, []);
 
   return (
@@ -84,7 +84,7 @@ function HomeMainContentComp() {
           {/* <div className="sticky top-2 z-[499] custom-bg-8"> */}
           <div className="custom-bg-8">
             <div className="flex justify-center">
-              <div className="w-full max-width-2 my-0 margin-12 min-w-0">
+              <div className="w-full min-w-0 max-width-2 margin-12">
                 <div className="padding-18 pb-0">
                   <div className="box-shadow-2 overflow-hidden relative">
                     <div className="flex padding-18 w-full">
@@ -115,10 +115,12 @@ function HomeMainContentComp() {
           {/* <div className="height-16"></div> */}
 
           {/* section-4 */}
-          <div>
-            {(initialLoader || loaders.blogsLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
-            {!initialLoader && !loaders.blogsLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-            {!initialLoader && !loaders.blogsLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
+          <div className="flex justify-center">
+            <div className="w-full max-width-2 margin-2 min-w-0">
+              {(initialLoader || loaders.blogsLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
+              {!initialLoader && !loaders.blogsLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
+              {!initialLoader && !loaders.blogsLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
+            </div>
           </div>
         </div>
       </main>
