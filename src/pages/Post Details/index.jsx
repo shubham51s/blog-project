@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { PiHandsClapping } from "react-icons/pi";
 import { FiMessageCircle } from "react-icons/fi";
-import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { IoBookmarkSharp } from "react-icons/io5";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import { GoShare } from "react-icons/go";
@@ -20,6 +19,10 @@ import NotFoundComp from "../../components/Common/NotFound";
 import { useRequestHandler } from "../../hooks/requestHandler";
 import SaveBlog from "../../components/Common/Buttons/ToggleBlogSave";
 import { defaultLoaderTime } from "../../constants/constant";
+import { formatUTCToLocalDate } from "../../utils/dates";
+import { MdOutlineMoreHoriz } from "react-icons/md";
+import { Tooltip } from "@mui/material";
+import PublicationLeftSection from "../../components/PostDetailsPageComponents/PublicationLeftSection";
 
 function PostDetailsPage() {
   const { slug, id } = useParams();
@@ -31,7 +34,7 @@ function PostDetailsPage() {
   const fullImgRef = useRef(null);
   const [blog, setBlog] = useState(null);
   const [myPrevClapsCount, setMyPrevClapsCount] = useState(0);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [defaultLoader, setDefaultLoader] = useState(true);
   const [isAnyErr, setIsAnyErr] = useState(false);
   const loadingTimeout = useRef(null);
   const readingTimeout = useRef(null);
@@ -50,7 +53,6 @@ function PostDetailsPage() {
   });
 
   const clapsTimeout = useRef(null);
-  const isMounted = useRef(null);
   const clapsClickedCount = useRef(0);
 
   const handlMarkupParentClick = (e) => {
@@ -69,30 +71,6 @@ function PostDetailsPage() {
   const handleCloseFullImg = () => {
     setIsShowFullImg(false);
     window.removeEventListener("scroll", handleOnScroll);
-  };
-
-  const formatDate = (dateString) => {
-    const inputDate = new Date(dateString);
-    const now = new Date();
-
-    const diffMs = now - inputDate;
-    const diffSec = Math.floor(diffMs / 1000);
-    const diffMin = Math.floor(diffSec / 60);
-    const diffHrs = Math.floor(diffMin / 60);
-    const diffDays = Math.floor(diffHrs / 24);
-
-    if (diffDays === 0) {
-      if (diffHrs > 0) return `${diffHrs} hour${diffHrs > 1 ? "s" : ""} ago`;
-      if (diffMin > 0) return `${diffMin} minute${diffMin > 1 ? "s" : ""} ago`;
-      return `${diffSec} second${diffSec > 1 ? "s" : ""} ago`;
-    }
-
-    if (diffDays === 1) {
-      return `1 day ago`;
-    }
-
-    const options = { month: "short", day: "numeric", year: "numeric" };
-    return inputDate.toLocaleDateString("en-US", options);
   };
 
   const getMyClapsCount = async (blogId) => {
@@ -214,7 +192,7 @@ function PostDetailsPage() {
     }
   };
 
-  const fetchBlogDetails = async () => {
+  const getBlogDetails = async () => {
     setLoaders((prev) => ({ ...prev, fetchBlog: true }));
     try {
       const response = await requestHandler(`/blogs/${slug}/${id}`);
@@ -279,78 +257,31 @@ function PostDetailsPage() {
   };
 
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-
-      window.scrollTo(0, 0);
-
-      fetchBlogDetails();
-    }
+    window.scrollTo(0, 0);
+    getBlogDetails();
 
     // minimun default loading time
-    if (loadingTimeout.current) clearTimeout(loadingTimeout.current);
-
-    loadingTimeout.current = setTimeout(() => {
-      setIsInitialLoading(false);
-    }, defaultLoaderTime);
+    if (!loadingTimeout.current) {
+      loadingTimeout.current = setTimeout(() => {
+        setDefaultLoader(false);
+      }, defaultLoaderTime);
+    }
 
     return () => {
       window.removeEventListener("scroll", handleOnScroll);
-      if (loadingTimeout.current) clearTimeout(loadingTimeout.current);
     };
   }, []);
 
   return (
     <>
       {/* home content */}
-      {(isInitialLoading || loaders.fetchBlog) && <BlogDetailsSkeletonComp />}
-      {!isInitialLoading && !loaders.fetchBlog && !isAnyErr && (
-        <div className="h-full overflow-y-auto">
-          {blog.community && (
-            <div className="bdr-5 w-full">
-              <div className="height-55 w-full"></div>
-              <div className="flex justify-center">
-                <div className="margin-27 w-full min-w-0 custom-max-w-1" style={{ marginBlock: 0 }}>
-                  <div className="height-3 flex items-center">
-                    <div className="width-32">
-                      <a href="#" className="cursor-pointer m-0 p-0 no-underline">
-                        <h2 className="line-h-8 font-3 font-medium color-3 p-0 m-0">
-                          <div className="max-w-full text-ellipsis whitespace-nowrap overflow-hidden">{blog.community.name}</div>
-                        </h2>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+      {(defaultLoader || loaders.fetchBlog) && <BlogDetailsSkeletonComp />}
+      {!defaultLoader && !loaders.fetchBlog && !isAnyErr && (
+        <div className="h-full overflow-y-auto relative">
+          {/* publication left section */}
+          {blog.publication && <PublicationLeftSection publication={blog.publication} />}
 
           <div className=""></div>
-
-          {/* left section (about community) */}
-          {blog.community && (
-            <div className="absolute translateY-1 top-0 width-17 transition-all duration-300 linear opacity-100 pointer-none">
-              <div className="flex justify-center">
-                <div className="margin-27 min-w-0 w-full custom-max-w-1" style={{ marginBlock: 0 }}>
-                  <div className="width-30 flex items-start flex-col">
-                    <a href="#" className="no-underline p-0 m-0">
-                      <div className="relative">
-                        <img src={blog.community.profileImg} className="width-31 aspect-square border-radius-5 block align-middle" />
-                      </div>
-                    </a>
-                    <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}></div>
-                    <p className="custom-fs-1 color-4 custom-line-h-1 font-normal m-0 p-0">
-                      <span>{blog.community.about}</span>
-                    </p>
-                    <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}></div>
-                    <p className="color-3 custom-fs-1 custom-line-h-1 font-medium m-0 p-0">
-                      <button className="underline cursor-pointer m-0 p-0">Follow publication</button>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
 
           <div className="margin-28" style={{ marginTop: 0, marginInline: 0 }}>
             <div className="flex justify-center">
@@ -362,34 +293,38 @@ function PostDetailsPage() {
                 <div className="flex justify-center">
                   <div className="w-full min-w-0 max-width-2 margin-12">
                     <div>
-                      <h1 className="letter-spacing-7 line-h-10 font-12 margin54 mt-0 font-bold color-3">{blog.heading.charAt(0).toUpperCase() + blog.heading.slice(1)}</h1>
+                      <h1 className="letter-spacing-7 line-h-10 font-12 margin54 mt-0 font-bold color-3">{blog.heading}</h1>
                     </div>
                     <div>
                       {/* <h2 className="line-h-3 margin-31 font-2 margin-17 color-4 font-normal">{blog.previewSubtitle}</h2> */}
                       <div className="w-full">
                         <div className="flex items-center custom-gap-5">
                           <div className="flex items-center custom-gap-5 ">
-                            <div className="flex items-baseline">
+                            <Link to={`/profile/${blog.author.username}`} className="flex items-baseline cursor-pointer">
                               <img src={blog.author.profileImg} className="width-11 aspect-square rounded-full" />
-                            </div>
+                            </Link>
                             <span className="custom-fs-1 custom-line-h-1 color-3 font-medium">
                               <div className="flex items-center margin-23" style={{ marginTop: 0, marginInline: 0 }}>
                                 <div className="flex items-center flex-nowrap">
-                                  <div className="flex items-center custom-fs-1 custom-line-h-1 color-3 capitalize">{blog.author.name}</div>
-                                  <div className="inline-block width-33"></div>
+                                  <Link to={`/profile/${blog.author.username}`} className="flex items-center custom-fs-1 custom-line-h-1 color-3 capitalize cursor-pointer hover:underline transition-all duration-75 ease">
+                                    {blog.author.name}
+                                  </Link>
                                   {userInfo?._id !== blog.author._id && !isFetchUserLoader && (
-                                    <div className="inline-block">
-                                      {followingUsers[blog.author._id] && (
-                                        <button onClick={unfollowAuthor} disabled={loaders.following} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
-                                          <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Unfollow</span>
-                                        </button>
-                                      )}
-                                      {!followingUsers[blog.author._id] && (
-                                        <button onClick={followAuthor} disabled={loaders.following} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
-                                          <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Follow</span>
-                                        </button>
-                                      )}
-                                    </div>
+                                    <>
+                                      <div className="inline-block width-33"></div>
+                                      <div className="inline-block">
+                                        {followingUsers[blog.author._id] && (
+                                          <button onClick={unfollowAuthor} disabled={loaders.following} className="bdr17-hover padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0 transition-all duration-700 ease">
+                                            <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Following</span>
+                                          </button>
+                                        )}
+                                        {!followingUsers[blog.author._id] && (
+                                          <button onClick={followAuthor} disabled={loaders.following} className="bdr-7 padding-28 padding-20 border-radius-7 cursor-pointer flex justify-between items-center m-0">
+                                            <span className="custom-fs-1 custom-line-h-1 font-medium w-full whitespace-nowrap">Follow</span>
+                                          </button>
+                                        )}
+                                      </div>
+                                    </>
                                   )}
                                 </div>
                               </div>
@@ -398,11 +333,16 @@ function PostDetailsPage() {
                           <div className="flex items-center flex-wrap">
                             <span className="custom-fs-1 custom-line-h-1 color-3 font-medium color-4">
                               <div className="flex grow shrink-0 basis-auto">
+                                {userInfo?._id === blog.author._id && (
+                                  <div className="padding-6 flex items-center text-center" style={{ paddingBlock: 0 }}>
+                                    •
+                                  </div>
+                                )}
                                 <span>{blog.readingTime} min read</span>
                                 <div className="padding-6 flex items-center text-center" style={{ paddingBlock: 0 }}>
-                                  .
+                                  •
                                 </div>
-                                <span>{formatDate(blog.updatedAt)}</span>
+                                <span>{formatUTCToLocalDate(blog.createdAt)}</span>
                               </div>
                             </span>
                           </div>
@@ -411,9 +351,11 @@ function PostDetailsPage() {
                           <div className="flex items-center">
                             <div className="width-34 flex items-center">
                               <div className="select-none margin-19 relative flex items-center" style={{ marginLeft: 0, marginBlock: 0 }}>
-                                <button onClick={handleAddClapsBtnClick} className={`select-none p-0 m-0 width-13 aspect-square opacity-[0.8] transition-all duration-300 linear ${userInfo?._id === blog.author._id ? "cursor-not-allowed" : "cursor-pointer hover:opacity-100"}`} title={`${userInfo?._id === blog.author._id ? "You cannot applaud your own story" : "Clap"}`} disabled={userInfo?._id === blog.author._id}>
-                                  {clapDetails.myClaps <= 0 && <PiHandsClapping className="w-full h-full" />}
-                                  {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
+                                <button onClick={handleAddClapsBtnClick} className={`select-none p-0 m-0 width-13 aspect-square opacity-[0.8] transition-all duration-300 linear ${userInfo?._id === blog.author._id ? "cursor-not-allowed" : "cursor-pointer hover:opacity-100"}`} disabled={userInfo?._id === blog.author._id}>
+                                  <Tooltip arrow placement="top" enterDelay={300} title={`${userInfo?._id === blog.author._id ? "You cannot applaud your own story" : "Clap"}`}>
+                                    {clapDetails.myClaps <= 0 && <PiHandsClapping className="w-full h-full" />}
+                                    {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
+                                  </Tooltip>
                                 </button>
                               </div>
                               {clapDetails.totalClaps > 0 && (
@@ -425,42 +367,33 @@ function PostDetailsPage() {
                               )}
                             </div>
                             <div className="inline-block">
-                              <button className="flex items-center color-6 padding-23 opacity-[0.65] transition-all duration-300 linear cursor-pointer m-0 hover:opacity-100" style={{ paddingInline: 0 }} title="Respond">
-                                <div className="width-13 aspect-square">
-                                  <FiMessageCircle className="w-full h-full" />
-                                </div>
-                                {blog.commentCount > 0 && (
-                                  <p className="font-4 custom-line-h-1 font-normal m-0 p-0 flex items-center text-center">
-                                    <span className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
-                                      {blog.commentCount}
-                                    </span>
-                                  </p>
-                                )}
+                              <button className="flex items-center color-6 padding-23 opacity-[0.65] transition-all duration-300 linear cursor-pointer m-0 hover:opacity-100" style={{ paddingInline: 0 }}>
+                                <Tooltip arrow placement="top" enterDelay={300} title="Respond">
+                                  <div className="width-13 aspect-square">
+                                    <FiMessageCircle className="w-full h-full" />
+                                  </div>
+                                  {blog.commentCount > 0 && (
+                                    <p className="font-4 custom-line-h-1 font-normal m-0 p-0 flex items-center text-center">
+                                      <span className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
+                                        {blog.commentCount}
+                                      </span>
+                                    </p>
+                                  )}
+                                </Tooltip>
                               </button>
                             </div>
                           </div>
                           <div className="flex items-center">
                             <div className="margin-12 shrink-0 inline-block" style={{ marginLeft: 0 }}>
-                              {/* <button onClick={handleToggleBookmark} disabled={loaders.isBookmarkLoader} className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" title="Save">
-                                <div className="width-13 aspect-square">
-                                  {blog.isBookmarked && <IoBookmarkSharp className="w-full h-full" />}
-                                  {!blog.isBookmarked && <MdOutlineBookmarkAdd className="w-full h-full" />}
-                                </div>
-                              </button> */}
                               <SaveBlog item={blog} handleToggleBlogSaveInParent={handleToggleBlogSaveInParent} />
                             </div>
-                            <div className="margin-12 shrink-0 inline-flex items-start" style={{ marginLeft: 0 }}>
-                              <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" title="Listen">
-                                <div className="width-13 aspect-square">
-                                  <IoPlayCircleOutline className="w-full h-full" />
-                                </div>
-                              </button>
-                            </div>
                             <div className="margin-12 shrink-0 inline-block" style={{ marginLeft: 0 }}>
-                              <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100" title="Share">
-                                <div className="width-13 aspect-square">
-                                  <GoShare className="w-full h-full" />
-                                </div>
+                              <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-300 linear cursor-pointer hover:opacity-100">
+                                <Tooltip arrow placement="top" enterDelay={300} title="Share">
+                                  <div className="width-13 aspect-square">
+                                    <GoShare className="w-full h-full" />
+                                  </div>
+                                </Tooltip>
                               </button>
                             </div>
                             <MoreOptionsComp blog={blog} clapDetails={clapDetails} undoMyClaps={undoMyClaps} />
@@ -489,16 +422,20 @@ function PostDetailsPage() {
                       <span className="inline-block">
                         <div className="flex items-center">
                           <div className="select-none color-6 margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                            <button onClick={handleAddClapsBtnClick} className={`width-13 aspect-square opacity-[0.7] transition-all duration-200 linear ${userInfo?._id === blog.author._id ? "cursor-not-allowed" : "cursor-pointer hover:opacity-[0.9]"}`} title={`${userInfo?._id === blog.author._id ? "You cannot applaud your own story" : "Clap"}`} disabled={userInfo?._id === blog.author._id}>
-                              {clapDetails.myClaps <= 0 && <PiHandsClapping className="w-full h-full" />}
-                              {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
+                            <button onClick={handleAddClapsBtnClick} className={`width-13 aspect-square opacity-[0.7] transition-all duration-200 linear ${userInfo?._id === blog.author._id ? "cursor-not-allowed" : "cursor-pointer hover:opacity-[0.9]"}`} disabled={userInfo?._id === blog.author._id}>
+                              <Tooltip arrow placement="top" enterDelay={300} title={`${userInfo?._id === blog.author._id ? "You cannot applaud your own story" : "Clap"}`}>
+                                {clapDetails.myClaps <= 0 && <PiHandsClapping className="w-full h-full" />}
+                                {clapDetails.myClaps > 0 && <FaHandsClapping className="w-full h-full" />}
+                              </Tooltip>
                             </button>
                           </div>
                           {clapDetails.totalClaps > 0 && (
                             <div className="margin-19" style={{ marginRight: 0, marginBlock: 0 }}>
-                              <p onClick={() => handleShowClapsUi()} className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer select-none opacity-[0.7] transition-all duration-200 linear hover:opacity-[0.9]" title="View Claps">
-                                {clapDetails.totalClaps}
-                              </p>
+                              <Tooltip arrow placement="top" enterDelay={300} title="View Claps">
+                                <p onClick={() => handleShowClapsUi()} className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center cursor-pointer select-none opacity-[0.7] transition-all duration-200 linear hover:opacity-[0.9]">
+                                  {clapDetails.totalClaps}
+                                </p>
+                              </Tooltip>
                             </div>
                           )}
                         </div>
@@ -506,36 +443,34 @@ function PostDetailsPage() {
                     </div>
                     <div className="margin-12" style={{ marginRight: 0 }}>
                       <span className="inline-block">
-                        <div className="flex items-center color-6 opacity-[0.7] transition-all duration-200 linear cursor-pointer hover:opacity-[0.9]" title="Respond">
-                          <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
-                            <div className="width-13 aspect-square">
-                              <FiMessageCircle className="w-full h-full opacity-[0.9]" />
+                        <Tooltip arrow placement="top" enterDelay={300} title="Respond">
+                          <div className="flex items-center color-6 opacity-[0.7] transition-all duration-200 linear cursor-pointer hover:opacity-[0.9]">
+                            <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
+                              <div className="width-13 aspect-square">
+                                <FiMessageCircle className="w-full h-full opacity-[0.9]" />
+                              </div>
                             </div>
+                            {blog.commentCount > 0 && (
+                              <div>
+                                <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center">{blog.commentCount}</p>
+                              </div>
+                            )}
                           </div>
-                          {blog.commentCount > 0 && (
-                            <div>
-                              <p className="font-4 color-6 custom-line-h-1 font-medium m-0 p-0 text-center">{blog.commentCount}</p>
-                            </div>
-                          )}
-                        </div>
+                        </Tooltip>
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center">
                     <div className="margin-18 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
-                      {/* <button onClick={handleToggleBookmark} disabled={loaders.isBookmarkLoader} className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 linear cursor-pointer hover:opacity-100">
-                        <div className="width-13 aspect-square">
-                          {blog.isBookmarked && <IoBookmarkSharp className="w-full h-full" title="Save" />}
-                          {!blog.isBookmarked && <MdOutlineBookmarkAdd className="w-full h-full" title="Save" />}
-                        </div>
-                      </button> */}
                       <SaveBlog item={blog} handleToggleBlogSaveInParent={handleToggleBlogSaveInParent} />
                     </div>
                     <div className="margin-18 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
                       <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-300 linear cursor-pointer hover:opacity-100">
-                        <div className="width-13 aspect-square">
-                          <GoShare className="w-full h-full" title="Share" />
-                        </div>
+                        <Tooltip arrow placement="top" enterDelay={300} title="Share">
+                          <div className="width-13 aspect-square">
+                            <GoShare className="w-full h-full" />
+                          </div>
+                        </Tooltip>
                       </button>
                     </div>
                     <MoreOptionsComp blog={blog} clapDetails={clapDetails} undoMyClaps={undoMyClaps} />
@@ -606,7 +541,7 @@ function PostDetailsPage() {
                 <div className="flex items-start">
                   <div className="margin-18 flex justify-between" style={{ marginLeft: 0 }}>
                     <div className="">
-                      <Link className="no-underline">
+                      <Link to={`/profile/${blog.author.username}`} className="no-underline">
                         <div className="relative">
                           <img src={blog.author.profileImg} className="width-15 aspect-square rounded-full" />
                         </div>
@@ -615,29 +550,26 @@ function PostDetailsPage() {
                   </div>
                   <div className="flex flex-col grow shrink-0 basis-auto">
                     <div className="width-37">
-                      <a href="#" className="m-0 p-0 cursor-pointer flex items-center no-underline">
+                      <Link to={`/profile/${blog.author.username}`} className="m-0 p-0 cursor-pointer flex items-center no-underline">
                         <h2 className="tracking-normal line-h-8 font-3 font-semibold color-3 m-0 p-0">
                           <span className="break-words padding-23" style={{ paddingLeft: 0, paddingBlock: 0 }}>
-                            {`Written by ${blog.author.name
-                              .split(" ")
-                              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                              .join(" ")}`}
+                            Written by <span className="capitalize">{blog.author.name}</span>
                           </span>
                         </h2>
-                      </a>
+                      </Link>
                       <div className="flex items-baseline margin-16" style={{ marginBottom: 0, marginInline: 0 }}>
                         <div className="grow-0 shrink-0 basis-auto">
                           <span className="custom-fs-1 custom-fs-1 color-4 custom-line-h-1">
-                            <a href="#" className="cursor-pointer m-0 p-0 no-underline font-medium hover:underline">{`${blog.author.followersCount} followers`}</a>
+                            <Link to={`/profile/${blog.author.username}/followers`} className="cursor-pointer m-0 p-0 no-underline font-medium hover:underline">{`${blog.author.followersCount} followers`}</Link>
                           </span>
                         </div>
                         <div className="whitespace-pre-wrap custom-fs-1 color-4 custom-line-h-1 flex font-normal">
                           <span className="margin-16" style={{ marginBlock: 0 }}>
                             <span className="custom-fs-1 color-4 custom-line-h-1 font-normal">·</span>
                           </span>
-                          <a href="#" className="cursor-pointer m-0 p-0 no-underline font-medium hover:underline">
+                          <Link to={`/profile/${blog.author.username}/following`} className="cursor-pointer m-0 p-0 no-underline font-medium hover:underline">
                             {`${blog.author.followingCount} following`}
-                          </a>
+                          </Link>
                         </div>
                       </div>
                       {blog.author.bio && (
@@ -653,8 +585,8 @@ function PostDetailsPage() {
                     {userInfo?._id !== blog.author._id && !isFetchUserLoader && (
                       <div className="flex">
                         {followingUsers[blog.author._id] && (
-                          <button onClick={unfollowAuthor} disabled={loaders.following} className="bdr-7 padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer">
-                            <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Unfollow</span>
+                          <button onClick={unfollowAuthor} disabled={loaders.following} className="bdr17-hover padding-37 padding-38 border-radius-8 flex items-center justify-center m-0 cursor-pointer transition-all duration-700 ease">
+                            <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-medium break-keep">Following</span>
                           </button>
                         )}
                         {!followingUsers[blog.author._id] && (
@@ -666,7 +598,7 @@ function PostDetailsPage() {
                     )}
                     {userInfo?._id === blog.author._id && (
                       <div className="flex">
-                        <Link className="text-center no-underline rounded-full bdr-6 custom-bg-1 custom-px-2 custom-py-2 color-2 box-border inline-block custom-fs-1 custom-line-h-1 font-normal opacity-[0.95] transition-all duration-200 linear hover:opacity-100">
+                        <Link to="/me/settings#profileInformation" className="text-center no-underline rounded-full bdr-6 custom-bg-1 custom-px-2 custom-py-2 color-2 box-border inline-block custom-fs-1 custom-line-h-1 font-normal opacity-[0.95] transition-all duration-200 linear hover:opacity-100">
                           <div className="whitespace-nowrap">Edit profile</div>
                         </Link>
                       </div>
@@ -692,7 +624,7 @@ function PostDetailsPage() {
 
       {clapDetails.isShowClapsComp && <ShowClapsComp clapDetails={clapDetails} setClapDetails={setClapDetails} blog={blog} />}
 
-      {!isInitialLoading && !loaders.fetchBlog && isAnyErr && <NotFoundComp />}
+      {!defaultLoader && !loaders.fetchBlog && isAnyErr && <NotFoundComp />}
     </>
   );
 }

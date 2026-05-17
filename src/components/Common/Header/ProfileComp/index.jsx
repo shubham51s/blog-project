@@ -104,7 +104,6 @@ function ProfileHeaderComp() {
                 <Popover.Trigger className="relative cursor-pointer">
                   <img className="width-11 aspect-square rounded-full align-middle" src={userInfo.profileImg} />
                 </Popover.Trigger>
-
                 <Popover.Portal>
                   <Popover.Content side="bottom" align="end" sideOffset={10} alignOffset={2} className="box-shadow-1 border-radius-3">
                     <div className="overflow-y-auto height-7 custom-bg-8 border-radius-3 font-normal bg-white">

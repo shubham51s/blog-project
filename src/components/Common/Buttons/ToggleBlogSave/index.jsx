@@ -7,6 +7,7 @@ import { useRequestHandler } from "../../../../hooks/requestHandler";
 import CreateNewListModal from "../../Modals/CreateNewList";
 import { ListContext } from "../../../../context/listContext";
 import { showToast } from "../../../../utils/toaster";
+import { Tooltip } from "@mui/material";
 
 function SaveBlog({ item, handleToggleBlogSaveInParent = () => {} }) {
   const [blog, setBlog] = useState({ ...item });
@@ -86,11 +87,13 @@ function SaveBlog({ item, handleToggleBlogSaveInParent = () => {} }) {
       {!isListLoader && (
         <div className="inline-block">
           <Popover.Root>
-            <Popover.Trigger onClick={(e) => handleBookmarkBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out color-3 opacity-[0.8] hover:opacity-100" title="Save">
-              <div className="width-13 aspect-square">
-                {!blog.lists.length > 0 && <MdOutlineBookmarkAdd className="w-full h-full align-middle" />}
-                {blog.lists.length > 0 && <IoBookmark className="w-full h-full align-middle" />}
-              </div>
+            <Popover.Trigger onClick={(e) => handleBookmarkBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out color-3 opacity-[0.8] hover:opacity-100">
+              <Tooltip arrow placement="top" enterDelay={300} title="Save">
+                <div className="width-13 aspect-square">
+                  {!blog.lists.length > 0 && <MdOutlineBookmarkAdd className="w-full h-full align-middle" />}
+                  {blog.lists.length > 0 && <IoBookmark className="w-full h-full align-middle" />}
+                </div>
+              </Tooltip>
             </Popover.Trigger>
             <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" align="middle" sideOffset={1} className="z-[700] box-shadow-4 border-radius-3 box-border">
               <div className="border-radius-3 custom-bg-8 overflow-hidden">
