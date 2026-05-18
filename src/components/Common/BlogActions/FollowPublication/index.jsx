@@ -9,7 +9,6 @@ function FollowPublicationBtn({ publication }) {
 
   const handleFollowPublication = async () => {
     setIsLoading(true);
-
     try {
       const params = {
         _id: publication._id,
@@ -23,7 +22,6 @@ function FollowPublicationBtn({ publication }) {
 
   const handleUnfollowPublication = async () => {
     setIsLoading(true);
-
     try {
       const params = {
         _id: publication._id,

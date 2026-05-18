@@ -7,7 +7,7 @@ import { useRequestHandler } from "../../../hooks/requestHandler";
 import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 import { defaultLoaderTime } from "../../../constants/constant";
 
-function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
+function ClappedUserListModal({ clapDetails, setClapDetails, blog }) {
   const { requestHandler } = useRequestHandler();
   const limit = 20;
   const [isClose, setIsClose] = useState(false);
@@ -136,4 +136,4 @@ function ShowClapsComp({ clapDetails, setClapDetails, blog }) {
   );
 }
 
-export default ShowClapsComp;
+export default ClappedUserListModal;
