@@ -98,7 +98,7 @@ function ClapAction({ clapDetails, setClapDetails, blog, myPrevClapsCount }) {
       </div>
 
       {/* clapped users list modal */}
-      {isShowModal && <ClappedUserListModal clapDetails={clapDetails} setClapDetails={setClapDetails} blog={blog} />}
+      {isShowModal && <ClappedUserListModal clapDetails={clapDetails} setClapDetails={setClapDetails} blog={blog} setIsShowModal={setIsShowModal} />}
     </>
   );
 }

@@ -11,13 +11,11 @@ import CharacterCount from "@tiptap/extension-character-count";
 import { formatMonthAndDayLong } from "../../../utils/monthDateLongFormatter";
 import { showToast } from "../../../utils/toaster";
 import { useRequestHandler } from "../../../hooks/requestHandler";
-import CommentDrawer from "../CommentDrawer";
 import ListItem from "./ListItem";
 
-function CommentsComp({ blog, setBlog }) {
+function CommentsComp({ blog, setBlog, recentComments, setRecentComments }) {
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
-  const [comments, setComments] = useState([]);
   const [isCommentLoader, setIsCommentLoader] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEnable, setIsEnable] = useState(false);
@@ -41,11 +39,7 @@ function CommentsComp({ blog, setBlog }) {
         limit: 3000,
       }),
     ],
-    content: "",
     shouldRerenderOnTransaction: true,
-    // onUpdate: ({ editor }) => {
-    //   setInput(editor.getHTML());
-    // },
   });
 
   if (!editor) return null;
@@ -76,17 +70,17 @@ function CommentsComp({ blog, setBlog }) {
       const response = await requestHandler("/comment", "POST", params);
       const result = await response.json();
 
-      if (response?.status === 201 && result?.data?.comment) {
+      if (response?.status === 200 && result?.data?.comment) {
         const newComment = result.data.comment;
-        setComments((prev) => [newComment, ...prev]);
+        setRecentComments((prev) => [newComment, ...prev]);
         setBlog((prev) => ({ ...prev, commentCount: prev.commentCount + 1 }));
         disableAddComment();
       } else {
         showToast(result?.message || "Some error occured", "error");
       }
     } catch (err) {
-      showToast("Some error occured", "error");
       console.error(err);
+      showToast("Some error occured", "error");
     } finally {
       setIsLoading(false);
     }
@@ -98,13 +92,13 @@ function CommentsComp({ blog, setBlog }) {
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.comments?.length) {
-        setComments(result.data.comments);
+        setRecentComments(result.data.comments);
       } else {
-        setComments([]);
+        setRecentComments([]);
       }
     } catch (err) {
       console.error(err);
-      setComments([]);
+      setRecentComments([]);
     }
   };
 
@@ -122,7 +116,6 @@ function CommentsComp({ blog, setBlog }) {
               {blog.commentCount > 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">{`Responses (${blog.commentCount})`}</h2>}
               {blog.commentCount <= 0 && <h2 className="letter-spacing-6 line-h-9 font-11 font-medium color-3 m-0 p-0">No responses yet</h2>}
             </div>
-
             <div className="margin-22 margin-33 bdr-5 padding-14" style={{ marginInline: 0, borderTop: 0, borderInline: 0, paddingTop: 0, paddingInline: 0 }}>
               <div className="color-3 custom-fs-1 line-h-8 font-normal">
                 <div className="margin-11" style={{ marginTop: 0 }}>
@@ -143,7 +136,6 @@ function CommentsComp({ blog, setBlog }) {
                           <EditorContent editor={editor} className={`w-full border-0 outline-0 ${isEnable ? "pointer-events-auto" : "height-60 pointer-events-none"}`} />
                         </div>
                       </div>
-
                       <div className={`color-4 margin-34 flex justify-between transition-all duration-400 ease-in-out ${isEnable ? "height-58 opacity-100" : "max-h-0 opacity-0"}`} style={{ marginRight: 0, marginBlock: 0 }}>
                         <span className="custom-fs-1 color-4 custom-line-h-1 font-normal">
                           <div className="flex">
@@ -179,9 +171,9 @@ function CommentsComp({ blog, setBlog }) {
             </div>
 
             {/* comments */}
-            {comments.length > 0 && comments.slice(0, 3).map((item) => <ListItem setBlog={setBlog} item={item} key={item._id} />)}
+            {recentComments.length > 0 && recentComments.slice(0, 3).map((item) => <ListItem setBlog={setBlog} comment={item} key={item._id} setRecentComments={setRecentComments} />)}
 
-            {comments.length > 3 && (
+            {recentComments.length > 3 && (
               <div className="margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
                 <button className="bdr-7 cursor-pointer border-radius-9 text-center padding-5 box-border color-3 custom-fs-1 inline-block custom-line-h-1 font-medium">See all responses</button>
               </div>
@@ -189,8 +181,6 @@ function CommentsComp({ blog, setBlog }) {
           </div>
         </div>
       </div>
-      {/* All comments */}
-      {false && <CommentDrawer blog={blog} />}
     </>
   );
 }

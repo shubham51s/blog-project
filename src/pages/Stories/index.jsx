@@ -24,7 +24,7 @@ function StoriesPage() {
       const response = await requestHandler("/stories/getAllStoriesCount");
       const result = await response.json();
 
-      if (response.status === 200 && result?.data) {
+      if (response?.status === 200 && result?.data) {
         const { drafts, published, submissions } = result.data;
         setDraftsCount(drafts);
         setPublishedCount(published);

@@ -57,7 +57,7 @@ function ClappedUsersList({ clapDetails, setClapDetails, list }) {
 
       const result = await response.json();
 
-      if (response.status === 200 && result?.data?.usersList) {
+      if (response?.status === 200 && result?.data?.usersList) {
         setClappedUsers((prev) => [...prev, ...result.data.usersList]);
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
       } else {

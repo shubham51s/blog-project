@@ -44,7 +44,7 @@ function ProfileSection() {
   const handleUserLogout = async () => {
     try {
       const response = await fetchRequest("/users/logout", "GET");
-      if (response.status === 200) {
+      if (response?.status === 200) {
         window.location.reload();
       } else {
         const msg = "Something went wrong!";

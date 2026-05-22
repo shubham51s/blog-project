@@ -61,7 +61,7 @@ function ProfileHeaderComp() {
   const handleUserLogout = async () => {
     try {
       const response = await requestHandler("/users/logout");
-      if (response.status === 200) {
+      if (response?.status === 200) {
         window.location.reload();
       } else {
         const msg = "Some error occured";

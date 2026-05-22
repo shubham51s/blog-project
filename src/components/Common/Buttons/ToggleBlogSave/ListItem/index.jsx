@@ -19,7 +19,7 @@ function ListItem({ list, blog, setBlog, handleToggleBlogSaveInParent }) {
 
       const response = await requestHandler("/list/items/delete", "POST", params);
 
-      if (response.status === 204 || response.status === 200) {
+      if (response?.status === 204 || response?.status === 200) {
         const updatedList = blog.lists.filter((item) => item !== list._id);
         setBlog((prev) => ({ ...prev, lists: updatedList }));
         handleToggleBlogSaveInParent("remove", list._id);

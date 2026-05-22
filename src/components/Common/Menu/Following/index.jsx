@@ -22,7 +22,7 @@ function Following() {
       const response = await requestHandler(url);
       const result = await response.json();
 
-      if (response.status === 200 && result?.data?.following) {
+      if (response?.status === 200 && result?.data?.following) {
         setFollowing((prev) => [...prev, ...result.data.following]);
         setHasMore(result.data.cursor ? true : false);
         setCursor(result.data.cursor || null);

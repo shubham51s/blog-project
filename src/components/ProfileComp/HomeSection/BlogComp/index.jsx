@@ -36,7 +36,7 @@ function BlogComp({ item }) {
 
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setBlog({ ...blog, isBookmarked: false });
         showToast("Blog unsaved");
       } else {
@@ -62,7 +62,7 @@ function BlogComp({ item }) {
       const result = await response.json();
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setBlog({ ...blog, isBookmarked: true });
         showToast("Blog saved");
       } else {

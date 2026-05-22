@@ -16,7 +16,7 @@ function NotFoundComp() {
       const response = await requestHandler("/blogs/recommended/users?limit=4");
       const result = await response.json();
 
-      if (response.status === 200 && result?.data?.blogs) {
+      if (response?.status === 200 && result?.data?.blogs) {
         setRecommendedBlogs(result.data.blogs);
       }
     } catch (err) {

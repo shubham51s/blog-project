@@ -19,31 +19,6 @@ function CommentList({ item, setList }) {
   const [isLoading, setIsLoading] = useState();
   const [isEdit, setIsEdit] = useState(false);
 
-  const handleDeleteComment = async () => {
-    setIsLoading(true);
-    try {
-      const params = {
-        commentId: comment._id,
-      };
-
-      const response = await requestHandler("/list/comment/delete", "POST", params);
-      const result = await response.json();
-
-      if (response?.status === 200) {
-        setComment(null);
-        setList((prev) => ({ ...prev, commentCount: prev.commentCount - 1 }));
-        showToast("Successfully deleted response.");
-      } else {
-        showToast(result?.message || "Some error occured.");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -63,6 +38,31 @@ function CommentList({ item, setList }) {
   });
 
   if (!editor) return null;
+
+  const handleDeleteComment = async () => {
+    setIsLoading(true);
+    try {
+      const params = {
+        commentId: comment._id,
+      };
+
+      const response = await requestHandler("/list/comment/delete", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        setList((prev) => ({ ...prev, commentCount: prev.commentCount > 0 ? prev.commentCount - 1 : 0 }));
+        showToast("Successfully deleted response.");
+        setComment(null);
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleInputStyleChange = (e, type) => {
     e.preventDefault(); // prevent editor losing focus

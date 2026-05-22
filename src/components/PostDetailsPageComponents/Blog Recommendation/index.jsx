@@ -69,7 +69,7 @@ function BlogRecommendComp({ blog }) {
       const response = await requestHandler(`/blogs/user/${author}?limit=6`);
       const result = await response.json();
 
-      if (response.status === 200 && result.data.blogs) {
+      if (response?.status === 200 && result.data.blogs) {
         setMoreBlogsFromAuthorAndCommunity(result.data.blogs);
         setAuthorBlogs(result.data.blogs);
       }
@@ -87,7 +87,7 @@ function BlogRecommendComp({ blog }) {
 
       const response = await requestHandler(`/blogs/categories?limit=6`, "POST", params);
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         const result = await response.json();
         setRecommendedBlogs(result.data.blogs);
       }

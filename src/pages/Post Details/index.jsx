@@ -26,6 +26,7 @@ import ClapAction from "../../components/PostDetailsPageComponents/ClapAction";
 import FollowBtn from "../../components/PostDetailsPageComponents/FollowBtn";
 import ViewFullImage from "../../components/PostDetailsPageComponents/ViewImage";
 import CommentAction from "../../components/PostDetailsPageComponents/CommentAction";
+import CommentDrawer from "../../components/PostDetailsPageComponents/CommentDrawer";
 
 function PostDetailsPage() {
   const { slug, id } = useParams();
@@ -39,10 +40,11 @@ function PostDetailsPage() {
   const loadingTimeout = useRef(null);
   const readingTimeout = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isShowDrawer, setIsShowDrawer] = useState(false);
+  const [recentComments, setRecentComments] = useState([]);
   const [clapDetails, setClapDetails] = useState({
     totalClaps: 0,
     myClaps: 0,
-    clappedUsers: [],
     skip: 0,
     clappedUsersCount: 0,
   });
@@ -58,7 +60,7 @@ function PostDetailsPage() {
     try {
       const response = await requestHandler(`/claps/${blogId}`);
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         const result = await response.json();
         setMyPrevClapsCount(result.data.count);
         setClapDetails((prev) => ({ ...prev, myClaps: result.data.count }));
@@ -73,7 +75,7 @@ function PostDetailsPage() {
       const response = await requestHandler(`/claps/${blog._id}`, "DELETE");
       // const result = await response.json();
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setClapDetails((prev) => ({ ...prev, myClaps: 0, totalClaps: blog.clapsCount - myPrevClapsCount >= 0 ? blog.clapsCount - myPrevClapsCount : 0 }));
         setBlog((prev) => ({ ...prev, clapsCount: prev.clapsCount - myPrevClapsCount >= 0 ? prev.clapsCount - myPrevClapsCount : 0 }));
         setMyPrevClapsCount(0);
@@ -228,7 +230,7 @@ function PostDetailsPage() {
                         <div className="flex justify-between margin-14 padding-35 bdr-5" style={{ marginBottom: 0, marginInline: 0, borderInline: 0 }}>
                           <div className="flex items-center">
                             <ClapAction clapDetails={clapDetails} setClapDetails={setClapDetails} blog={blog} myPrevClapsCount={myPrevClapsCount} />
-                            <CommentAction blog={blog} />
+                            <CommentAction blog={blog} setBlog={setBlog} setIsShowDrawer={setIsShowDrawer} />
                           </div>
                           <div className="flex items-center">
                             <div className="margin-12 shrink-0 inline-block" style={{ marginLeft: 0 }}>
@@ -266,7 +268,7 @@ function PostDetailsPage() {
                 <div className="min-w-0 w-full max-width-2 margin-2 flex justify-between">
                   <div className="flex items-center">
                     <ClapAction clapDetails={clapDetails} setClapDetails={setClapDetails} blog={blog} myPrevClapsCount={myPrevClapsCount} />
-                    <CommentAction blog={blog} />
+                    <CommentAction blog={blog} setBlog={setBlog} setIsShowDrawer={setIsShowDrawer} />
                   </div>
                   <div className="flex items-center">
                     <div className="margin-18 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
@@ -300,7 +302,7 @@ function PostDetailsPage() {
           </div>
 
           {/* comments section */}
-          <CommentsComp blog={blog} setBlog={setBlog} />
+          <CommentsComp blog={blog} setBlog={setBlog} recentComments={recentComments} setRecentComments={setRecentComments} />
           {blog && <BlogRecommendComp blog={blog} />}
         </div>
       )}
@@ -308,6 +310,7 @@ function PostDetailsPage() {
       {(defaultLoader || isLoading) && <BlogDetailsSkeletonComp />}
       {!defaultLoader && !isLoading && !blog && <NotFoundComp />}
       {/* full screen image view */}
+      {isShowDrawer && <CommentDrawer blog={blog} setBlog={setBlog} setIsShowDrawer={setIsShowDrawer} setRecentComments={setRecentComments} />}
       {isShowFullImg && <ViewFullImage img={isShowFullImg} setIsShowFullImg={setIsShowFullImg} />}
     </>
   );

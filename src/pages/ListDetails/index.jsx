@@ -26,6 +26,7 @@ function ListDetailsPage() {
   const { userInfo } = useContext(UserContext);
   const { requestHandler } = useRequestHandler();
   const loaderTimeout = useRef(null);
+  const drawerTimeout = useRef(null);
   const [isError, setIsError] = useState(false);
   const [list, setList] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -153,6 +154,24 @@ function ListDetailsPage() {
 
   const updateRemovedListItem = () => {
     setList((prev) => ({ ...prev, savedCount: prev.savedCount > 0 ? prev.savedCount - 1 : 0 }));
+  };
+
+  const handleToggleDrawerOpen = (e) => {
+    e.stopPropagation();
+
+    if (!drawerTimeout.current) {
+      setIsCommentDrawerOpen((prev) => !prev);
+      drawerTimeout.current = setTimeout(() => {
+        drawerTimeout.current = null;
+      }, 300);
+      return;
+    }
+
+    clearTimeout(drawerTimeout.current);
+    drawerTimeout.current = setTimeout(() => {
+      setIsCommentDrawerOpen((prev) => !prev);
+      drawerTimeout.current = null;
+    }, 300);
   };
 
   const sentinel = useInfiniteScroll({
@@ -300,7 +319,7 @@ function ListDetailsPage() {
                                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
                                   {!list.isPrivate && list.allowComments && (
                                     <div className="width-13 aspect-square flex items-center justify-center">
-                                      <div onClick={() => setIsCommentDrawerOpen((prev) => !prev)} id="listCommentBtn" className="w-[85%] aspect-square cursor-pointer opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
+                                      <div onClick={(e) => handleToggleDrawerOpen(e)} id="listCommentBtn" className="w-[85%] aspect-square cursor-pointer opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
                                         <Tooltip placement="top" arrow title="Respond">
                                           <FaRegComment className="w-full h-full" />
                                         </Tooltip>

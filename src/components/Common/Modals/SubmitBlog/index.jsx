@@ -112,7 +112,7 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true })
       const response = await requestHandler("/blogs/publish", "POST", params);
       const result = await response.json();
 
-      if (response.status === 200 && result?.data?.blog) {
+      if (response?.status === 200 && result?.data?.blog) {
         const blog = result.data.blog;
         navigate(`/${blog.slug}/${blog._id}`, { replace: true });
       } else {
@@ -141,7 +141,7 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true })
       const response = await requestHandler("/blogs/submit-to-publication", "POST", params);
       const result = await response.json();
 
-      if (response.status === 200 && result?.data?.blogId && result?.data?.slug) {
+      if (response?.status === 200 && result?.data?.blogId && result?.data?.slug) {
         showToast("Blog submitted successfully.");
         navigate(`/${result.data.slug}/${result.data.blogId}`);
         setIsShowSubmitModal(false);
