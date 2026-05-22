@@ -120,7 +120,7 @@ function CommentDrawer({ blog, setBlog, setIsShowDrawer, setRecentComments }) {
 
       if (response?.status === 200 && result?.data?.comments?.length) {
         setComments((prev) => [...prev, ...result.data.comments]);
-        if (isInit) setRecentComments(result.data.comments.slice(0, 3));
+        if (isInit) setRecentComments(result.data.comments.slice(0, 4));
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
       } else {
         setScroll((prev) => ({ ...prev, hasMore: false }));

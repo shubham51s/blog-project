@@ -13,9 +13,10 @@ import { showToast } from "../../../utils/toaster";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import ListItem from "./ListItem";
 
-function CommentsComp({ blog, setBlog, recentComments, setRecentComments }) {
+function CommentsComp({ blog, setBlog, recentComments, setRecentComments, setIsShowDrawer }) {
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
+  const drawerTimeout = useRef(null);
   const [isCommentLoader, setIsCommentLoader] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEnable, setIsEnable] = useState(false);
@@ -102,6 +103,24 @@ function CommentsComp({ blog, setBlog, recentComments, setRecentComments }) {
     }
   };
 
+  const handleOpenCommentDrawer = (e) => {
+    e.stopPropagation();
+
+    if (!drawerTimeout.current) {
+      setIsShowDrawer(true);
+      drawerTimeout.current = setTimeout(() => {
+        drawerTimeout.current = null;
+      }, 300);
+      return;
+    }
+
+    clearTimeout(drawerTimeout.current);
+    drawerTimeout.current = setTimeout(() => {
+      setIsShowDrawer(true);
+      drawerTimeout.current = null;
+    }, 300);
+  };
+
   useEffect(() => {
     if (blog.commentCount) getComments();
   }, []);
@@ -175,7 +194,9 @@ function CommentsComp({ blog, setBlog, recentComments, setRecentComments }) {
 
             {recentComments.length > 3 && (
               <div className="margin-14" style={{ marginBottom: 0, marginInline: 0 }}>
-                <button className="bdr-7 cursor-pointer border-radius-9 text-center padding-5 box-border color-3 custom-fs-1 inline-block custom-line-h-1 font-medium">See all responses</button>
+                <button onClick={(e) => handleOpenCommentDrawer(e)} className="listCommentBtn bdr-7 cursor-pointer border-radius-9 text-center padding-5 box-border color-3 custom-fs-1 inline-block custom-line-h-1 font-medium">
+                  See all responses
+                </button>
               </div>
             )}
           </div>

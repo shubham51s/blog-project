@@ -302,7 +302,7 @@ function PostDetailsPage() {
           </div>
 
           {/* comments section */}
-          <CommentsComp blog={blog} setBlog={setBlog} recentComments={recentComments} setRecentComments={setRecentComments} />
+          <CommentsComp blog={blog} setBlog={setBlog} recentComments={recentComments} setRecentComments={setRecentComments} setIsShowDrawer={setIsShowDrawer} />
           {blog && <BlogRecommendComp blog={blog} />}
         </div>
       )}
