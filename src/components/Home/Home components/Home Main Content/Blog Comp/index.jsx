@@ -123,7 +123,6 @@ function BlogComp({ item }) {
                                       </div>
                                     </div>
                                   </Link>
-
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
                                     {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
                                     <div>

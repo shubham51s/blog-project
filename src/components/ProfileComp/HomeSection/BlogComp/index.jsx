@@ -12,6 +12,7 @@ import MoreButton from "./MoreButtonComp";
 import noPreviewImg from "../../../../assets/images/noPreviewImage.png";
 import { showToast } from "../../../../utils/toaster";
 import { getImageUrl } from "../../../../utils/common";
+import SaveBlog from "../../../Common/Buttons/ToggleBlogSave";
 
 function BlogComp({ item }) {
   const { requestHandler } = useRequestHandler();
@@ -58,7 +59,6 @@ function BlogComp({ item }) {
       };
 
       const response = await requestHandler("/bookmarks", "POST", params);
-
       const result = await response.json();
       setLoaders((prev) => ({ ...prev, isBookmarkLoader: false }));
 
@@ -192,14 +192,7 @@ function BlogComp({ item }) {
 
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
                                     <div>
-                                      <div className="inline-block">
-                                        <button onClick={(e) => handleBookmarkBlogBtnClick(e)} className="z-[2] relative padding-33 cursor-pointer m-0 transition-all duration-200 ease-out opacity-[0.7] hover:opacity-100" title="Save">
-                                          <div className="width-13 aspect-square">
-                                            {!blog?.isBookmarked && <CiBookmarkPlus className="w-full h-full align-middle" />}
-                                            {blog?.isBookmarked && <IoBookmark className="w-full h-full align-middle" />}
-                                          </div>
-                                        </button>
-                                      </div>
+                                      <SaveBlog item={blog} />
                                     </div>
                                     <MoreButton blog={blog} />
                                   </div>

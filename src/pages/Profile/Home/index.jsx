@@ -20,7 +20,7 @@ function Home() {
     cursor: null,
   });
 
-  const fetchBlogs = async () => {
+  const getBlogs = async () => {
     if (!scroll.hasMore) return;
     setScroll((prev) => ({ ...prev, loading: true }));
 
@@ -45,7 +45,7 @@ function Home() {
   };
 
   const sentinel = useInfiniteScroll({
-    loadMore: fetchBlogs,
+    loadMore: getBlogs,
     hasMore: scroll.hasMore,
     scrollLoader: scroll.loading,
   });
@@ -53,7 +53,7 @@ function Home() {
   useEffect(() => {
     if (user && !user.isNoBlogPublished && !hasFetched.current) {
       setIsLoading(true);
-      fetchBlogs();
+      getBlogs();
       hasFetched.current = true;
     }
   }, [user]);
