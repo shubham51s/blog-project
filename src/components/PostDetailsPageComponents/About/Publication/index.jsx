@@ -45,7 +45,7 @@ function PublicationSection({ publication }) {
               <div className="">
                 <Link to={`/publication/${publication.slug}`}>
                   <div className="relative">
-                    <img src={publication.profileImg} className="width-15 aspect-square border-radius-5" />
+                    <img loading="lazy" src={publication.profileImg} className="width-15 aspect-square border-radius-5" />
                   </div>
                 </Link>
               </div>

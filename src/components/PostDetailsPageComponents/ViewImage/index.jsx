@@ -21,7 +21,7 @@ function ViewFullImage({ img, setIsShowFullImg }) {
 
   return (
     <div onClick={() => handleCloseFullImg()} className="w-screen h-screen max-w-screen max-h-screen fixed inset-0 z-[999] flex items-center justify-center custom-bg-4 select-none pointer-events-auto">
-      <img onClick={() => handleCloseFullImg()} src={img} className="h-full max-w-full max-h-full cursor-zoom-out" />
+      <img loading="lazy" onClick={() => handleCloseFullImg()} src={img} className="h-full max-w-full max-h-full cursor-zoom-out" />
     </div>
   );
 }

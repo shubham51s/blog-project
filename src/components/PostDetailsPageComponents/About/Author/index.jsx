@@ -42,7 +42,7 @@ function AuthorSection({ author }) {
         <div className="">
           <Link to={`/profile/${author.username}`} className="no-underline">
             <div className="relative">
-              <img src={author.profileImg} className="width-15 aspect-square rounded-full" />
+              <img loading="lazy" src={author.profileImg} className="width-15 aspect-square rounded-full" />
             </div>
           </Link>
         </div>

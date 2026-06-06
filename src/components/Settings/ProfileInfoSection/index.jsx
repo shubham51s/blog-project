@@ -27,7 +27,7 @@ function ProfileInfoSection() {
             <div className="inline-flex items-center padding-6" style={{ paddingRight: 0, paddingBlock: 0 }}>
               <span className="text-right align-bottom truncate opacity-[0.85] transition-all duration-75 ease group-hover:opacity-100">{userInfo.name}</span>
               <div className="margin-13" style={{ marginRight: 0 }}>
-                <img src={userInfo.profileImg} className="width-13 aspect-square rounded-full" />
+                <img loading="lazy" src={userInfo.profileImg} className="width-13 aspect-square rounded-full" />
               </div>
             </div>
           </div>

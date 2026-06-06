@@ -52,7 +52,7 @@ function FollowingList({ item, user, setUser }) {
     <div className="margin60 flex">
       <Link to={`/profile/${item.followee.username}`} className="no-underline">
         <div className="relative">
-          <img src={author.followee.profileImg} className="width-15 aspect-square rounded-full" />
+          <img loading="lazy" src={author.followee.profileImg} className="width-15 aspect-square rounded-full" />
           <div className="absolute top-0 boxShadow7 width-15 aspect-square rounded-full"></div>
         </div>
       </Link>

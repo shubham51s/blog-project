@@ -43,7 +43,7 @@ function UnauthenticatedHome() {
               <div className="flex custom-h-1 custom-p-y-1 px-0 items-center">
                 <div>
                   <span className="cursor-pointer m-0 p-0" onClick={() => navigate("/")}>
-                    <img className="custom-h-2 w-auto" src={logo} />
+                    <img loading="lazy" className="custom-h-2 w-auto" src={logo} />
                   </span>
                 </div>
                 <div className="grow shrink-0 basis-auto"></div>
@@ -104,7 +104,7 @@ function UnauthenticatedHome() {
           <div className="custom-margin-1 w-full min-w-0 custom-max-w-1 font-normal">
             <div>
               <div className="left-unset right-0 transform -translate-y-1/2 top-[54%] absolute">
-                <img src="	https://miro.medium.com/v2/format:webp/4*SdjkdS98aKH76I8eD0_qjw.png" className="align-middle custom-img-1" />
+                <img loading="lazy" src="	https://miro.medium.com/v2/format:webp/4*SdjkdS98aKH76I8eD0_qjw.png" className="align-middle custom-img-1" />
               </div>
             </div>
             <div className="custom-margin-b-1 custom-max-width-1">

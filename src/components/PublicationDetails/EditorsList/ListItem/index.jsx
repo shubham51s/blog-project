@@ -44,7 +44,7 @@ function ListItem({ item }) {
               <div className="w-full flex">
                 <div className="margin-3">
                   <Link to={`/profile/${user.username}`} className="relative block">
-                    <img src={user.profileImg} className="width-15 aspect-square rounded-full" />
+                    <img loading="lazy" src={user.profileImg} className="width-15 aspect-square rounded-full" />
                     <div className="absolute top-0 width-15 aspect-square rounded-full boxShadow7"></div>
                   </Link>
                 </div>

@@ -11,7 +11,7 @@ function PublicationListItem({ item }) {
           <Link to={`/publication/${item.publication.slug}`} className="cursor-pointer m-0 p-0">
             <div className="flex">
               <div className="relative shrink-0">
-                <img src={item.publication.profileImg} className="height-2 aspect-square rounded-full" />
+                <img loading="lazy" src={item.publication.profileImg} className="height-2 aspect-square rounded-full" />
                 <div className="absolute top-0 height-2 aspect-square rounded-full boxShadow7"></div>
               </div>
               <div className="margin-12" style={{ marginRight: 0 }}>

@@ -197,7 +197,7 @@ function PostDetailsPage() {
                         <div className="flex items-center custom-gap-5">
                           <div className="flex items-center custom-gap-5 ">
                             <Link to={`/profile/${blog.author.username}`} className="flex items-baseline cursor-pointer">
-                              <img src={blog.author.profileImg} className="width-11 aspect-square rounded-full" />
+                              <img loading="lazy" src={blog.author.profileImg} className="width-11 aspect-square rounded-full" />
                             </Link>
                             <span className="custom-fs-1 custom-line-h-1 color-3 font-medium">
                               <div className="flex items-center margin-23" style={{ marginTop: 0, marginInline: 0 }}>

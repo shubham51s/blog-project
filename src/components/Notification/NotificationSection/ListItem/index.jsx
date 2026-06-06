@@ -10,7 +10,7 @@ function ListItem({ item }) {
       <div className="padding-14 flex custom-gap-2">
         <Link to={`/profile/${item.sender.username}`} className="cursor-pointer">
           <div className="relative">
-            <img src={item.sender.profileImg} className="width-11 aspect-square rounded-full" />
+            <img loading="lazy" src={item.sender.profileImg} className="width-11 aspect-square rounded-full" />
             <div className="absolute top-0 width-11 aspect-square rounded-full boxShadow7"></div>
           </div>
         </Link>

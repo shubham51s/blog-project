@@ -58,7 +58,7 @@ function PublicationLeftSection({ publication }) {
                 <div className="width-30 flex items-start flex-col">
                   <Link to={`/publication/${publication.slug}`} className="no-underline p-0 m-0">
                     <div className="relative">
-                      <img src={publication.profileImg} className="width-31 aspect-square border-radius-5 block align-middle" />
+                      <img loading="lazy" src={publication.profileImg} className="width-31 aspect-square border-radius-5 block align-middle" />
                     </div>
                   </Link>
                   <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}></div>

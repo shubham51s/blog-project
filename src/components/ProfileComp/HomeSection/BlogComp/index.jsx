@@ -102,7 +102,7 @@ function BlogComp({ item }) {
                           <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
                             <Link to={`/profile/${blog.author.username}`} className="relative z-[2] no-underline cursor-pointer">
                               <div className="relative">
-                                <img className="height-12 aspect-square box-border rounded-full align-middle" src={blog.author.profileImg} />
+                                <img loading="lazy" className="height-12 aspect-square box-border rounded-full align-middle" src={blog.author.profileImg} />
                                 <div className="height-12 aspect-square absolute top-0 rounded-full"></div>
                               </div>
                             </Link>
@@ -123,7 +123,7 @@ function BlogComp({ item }) {
                           <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
                             <Link to={`/publication/${blog.publication.slug}`} className="relative z-[2] no-underline cursor-pointer">
                               <div className="relative">
-                                <img className="height-12 aspect-square box-border br13 align-middle" src={blog.publication.profileImg} />
+                                <img loading="lazy" className="height-12 aspect-square box-border br13 align-middle" src={blog.publication.profileImg} />
                                 <div className="height-12 aspect-square absolute top-0 br13"></div>
                               </div>
                             </Link>
@@ -202,7 +202,7 @@ function BlogComp({ item }) {
                           </div>
                         </div>
                         <Link to={`/${blog.slug}/${blog._id}`} className="block margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
-                          <img src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />
+                          <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />
                         </Link>
                       </div>
                     </div>

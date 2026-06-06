@@ -316,7 +316,7 @@ function LoginSignupComp() {
           <Slider {...sliderOptions} className="w-full h-full">
             {slidingImages.map((item, i) => (
               <div className="w-full h-full flex items-center justify-center" key={i}>
-                <img src={item} className="w-full h-full object-cover" />
+                <img loading="lazy" src={item} className="w-full h-full object-cover" />
               </div>
             ))}
           </Slider>
@@ -552,7 +552,7 @@ function LoginSignupComp() {
               </h3>
               <div className="w-full padding-37"></div>
               <div className="padding-37 flex items-center justify-center w-full">
-                <img src={infinity} className="w-24 aspect-square" />
+                <img loading="lazy" src={infinity} className="w-24 aspect-square" />
               </div>
 
               <div className="padding-37 flex items-center justify-center w-full line-h-5 font-3 font-normal" style={{ paddingBottom: 0 }}>

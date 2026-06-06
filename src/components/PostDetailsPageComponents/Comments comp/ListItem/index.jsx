@@ -122,7 +122,7 @@ function ListItem({ comment, setBlog, setRecentComments }) {
                   <div className="flex items-center">
                     <Link to={`/profile/${comment.user.username}`} className="inline-block cursor-pointer relative">
                       <div className="relative">
-                        <img src={comment.user.profileImg} className="width-11 aspect-square box-border rounded-full align-middle" />
+                        <img loading="lazy" src={comment.user.profileImg} className="width-11 aspect-square box-border rounded-full align-middle" />
                       </div>
                     </Link>
                     <div className="padding-33" style={{ paddingRight: 0, paddingBlock: 0 }}>

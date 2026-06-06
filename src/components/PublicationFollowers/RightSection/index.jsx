@@ -90,7 +90,7 @@ function RightSection({ publication }) {
                   <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                     <div className="padding-42">
                       <div className="relative">
-                        <img src={publication.profileImg} className="width74 aspect-square rounded-full" />
+                        <img loading="lazy" src={publication.profileImg} className="width74 aspect-square rounded-full" />
                         <div className="absolute top-0 width74 aspect-square rounded-full boxShadow7"></div>
                       </div>
                     </div>

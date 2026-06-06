@@ -183,7 +183,7 @@ function SearchHomeComp() {
                               <Link to={`/profile/${item.username}`} onClick={closePopup} className="cursor-pointer m-0 p-0 no-underline">
                                 <div className="flex items-center">
                                   <div className="width-13 aspect-square">
-                                    <img className="w-full h-full bg-11 box-border rounded-full align-middle" src={item.profileImg} />
+                                    <img loading="lazy" className="w-full h-full bg-11 box-border rounded-full align-middle" src={item.profileImg} />
                                   </div>
                                   <div className="margin-9" style={{ marginRight: 0, marginBlock: 0 }}>
                                     <div className="flex">
@@ -221,7 +221,7 @@ function SearchHomeComp() {
                               <Link to={`/publication/${item.slug}`} onClick={closePopup} className="cursor-pointer m-0 p-0 no-underline">
                                 <div className="flex items-center">
                                   <div className="width-13 aspect-square">
-                                    <img className="w-full h-full bg-11 box-border rounded-full align-middle" src={item.profileImg} />
+                                    <img loading="lazy" className="w-full h-full bg-11 box-border rounded-full align-middle" src={item.profileImg} />
                                   </div>
                                   <div className="margin-9" style={{ marginRight: 0, marginBlock: 0 }}>
                                     <div className="flex">

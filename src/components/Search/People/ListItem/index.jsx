@@ -46,7 +46,7 @@ function ListItem({ item }) {
           <div className="flex items-center justify-between">
             <Link to={`/profile/${user.username}`} className="flex items-center">
               <div className="relative shrink-0">
-                <img src={user.profileImg} className="width-15 aspect-square rounded-full" />
+                <img loading="lazy" src={user.profileImg} className="width-15 aspect-square rounded-full" />
                 <div className="absolute top-0 width-15 aspect-square rounded-full boxShadow7"></div>
               </div>
               <div className="padding95 padding96">

@@ -149,7 +149,7 @@ function ListItem({ item, list, updateRemovedListItem }) {
                               <div className="margin-21 flex items-center" style={{ marginInline: 0, marginTop: 0 }}>
                                 <div className="margin-9 shrink-0" style={{ marginLeft: 0 }}>
                                   <Link to={`/profile/${listItem.blog.author.username}`} className="relative no-underline cursor-pointer ">
-                                    <img src={listItem.blog.author.profileImg} className="width86 aspect-square box-border rounded-full" />
+                                    <img loading="lazy" src={listItem.blog.author.profileImg} className="width86 aspect-square box-border rounded-full" />
                                     <div className="absolute top-0 width86 aspect-square box-border rounded-full boxShadow7"></div>
                                   </Link>
                                 </div>
@@ -166,7 +166,7 @@ function ListItem({ item, list, updateRemovedListItem }) {
                               <div className="margin-21 flex items-center" style={{ marginInline: 0, marginTop: 0 }}>
                                 <div className="margin-9 shrink-0" style={{ marginLeft: 0 }}>
                                   <Link to={`/publication/${listItem.blog.publication.slug}`} className="relative no-underline cursor-pointer">
-                                    <img src={listItem.blog.publication.profileImg} className="width86 aspect-square box-border br13" />
+                                    <img loading="lazy" src={listItem.blog.publication.profileImg} className="width86 aspect-square box-border br13" />
                                     <div className="absolute top-0 width86 aspect-square box-border br13 boxShadow7"></div>
                                   </Link>
                                 </div>
@@ -241,7 +241,7 @@ function ListItem({ item, list, updateRemovedListItem }) {
 
                             <div className="margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
                               <Link to={`/${listItem.blog.slug}/${listItem.blog._id}`} className="block no-underline">
-                                <img src={listItem.blog.previewImg ? getImageUrl(listItem.blog.previewImg) : errImg} className="border-radius-5 width-29 height-52" />
+                                <img loading="lazy" src={listItem.blog.previewImg ? getImageUrl(listItem.blog.previewImg) : errImg} className="border-radius-5 width-29 height-52" />
                               </Link>
                             </div>
                           </div>

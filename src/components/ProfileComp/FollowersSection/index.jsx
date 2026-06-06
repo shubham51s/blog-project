@@ -51,7 +51,7 @@ function FollowersList({ item, user, setUser }) {
     <div className="margin60 flex">
       <Link to={`/profile/${item.follower.username}`} className="no-underline">
         <div className="relative">
-          <img src={author.follower.profileImg} className="width-15 aspect-square box-border rounded-full" />
+          <img loading="lazy" src={author.follower.profileImg} className="width-15 aspect-square box-border rounded-full" />
           <div className="absolute top-0 boxShadow7 width-15 aspect-square box-border rounded-full"></div>
         </div>
       </Link>

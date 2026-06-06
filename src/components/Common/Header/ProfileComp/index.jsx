@@ -102,7 +102,7 @@ function ProfileHeaderComp() {
             <div className="relative">
               <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
                 <Popover.Trigger className="relative cursor-pointer">
-                  <img className="width-11 aspect-square rounded-full align-middle" src={userInfo.profileImg} />
+                  <img loading="lazy" className="width-11 aspect-square rounded-full align-middle" src={userInfo.profileImg} />
                 </Popover.Trigger>
                 <Popover.Portal>
                   <Popover.Content side="bottom" align="end" sideOffset={10} alignOffset={2} className="box-shadow-1 border-radius-3">
@@ -115,7 +115,7 @@ function ProfileHeaderComp() {
                             <div className="padding-6 custom-fs-1 color-4 padding-19 custom-line-h-1 font-normal">
                               <div className="flex items-center custom-gap-2 max-w-full overflow-hidden">
                                 <div className="relative shrink-0">
-                                  <img className="width-15 aspect-square bg-11 box-border rounded-full align-middle" src={userInfo.profileImg} />
+                                  <img loading="lazy" className="width-15 aspect-square bg-11 box-border rounded-full align-middle" src={userInfo.profileImg} />
                                   <div className="absolute width-15 aspect-square top-0 rounded-full"></div>
                                 </div>
                                 <div className="flex flex-col custom-gap-1 overflow-hidden transition-all duration-75 ease opacity-[0.85] group-hover:opacity-100">

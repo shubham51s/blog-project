@@ -134,7 +134,7 @@ function HomeRightSectionComp() {
                             <a href="#" className="no-underline">
                               <div className="relative">
                                 {/* dynamic */}
-                                <img src={item.img} className="border-radius-5 height-12 aspect-square align-middle" style={{ borderRadius: "50%" }} />
+                                <img loading="lazy" src={item.img} className="border-radius-5 height-12 aspect-square align-middle" style={{ borderRadius: "50%" }} />
                                 <div className="absolute border-radius-5 height-12 aspect-square top-0"></div>
                               </div>
                             </a>
@@ -245,7 +245,7 @@ function HomeRightSectionComp() {
                               <div className="flex items-center justify-center">
                                 <a href="#" className="no-underline shrink-0">
                                   <div className="relative">
-                                    <img src={item.profileImg} className="width-11 aspect-square align-middle" style={{ borderRadius: "50%" }} />
+                                    <img loading="lazy" src={item.profileImg} className="width-11 aspect-square align-middle" style={{ borderRadius: "50%" }} />
                                   </div>
                                 </a>
                                 <div className="margin-16 overflow-hidden text-ellipsis" style={{ marginBlock: 0 }}>

@@ -62,7 +62,7 @@ function ProfileSection() {
         <Popover.Root>
           <Popover.Trigger className="align-middle font13 p-0 text-left font-10 cursor-pointer select-none box-border font-normal m-0">
             <div className="overflow-visible text-ellipsis text-left color10 font-10">
-              <img src={userInfo.profileImg} className="width-11 aspect-square align-middle rounded-full border-0" />
+              <img loading="lazy" src={userInfo.profileImg} className="width-11 aspect-square align-middle rounded-full border-0" />
             </div>
           </Popover.Trigger>
           <Popover.Content side="bottom" align="middle" sideOffset={1}>
@@ -72,7 +72,7 @@ function ProfileSection() {
                   <li className="text-left w-full whitespace-nowrap font-9 font-normal list-none custom-p-y-1 padding46">
                     <div className="flex items-center">
                       <div className="grow-0 shrink-0 basis-auto">
-                        <img src={userInfo.profileImg} className="align-middle rounded-full width-4 aspect-square" />
+                        <img loading="lazy" src={userInfo.profileImg} className="align-middle rounded-full width-4 aspect-square" />
                       </div>
                       <div className="font-10 padding44 grow shrink basis-auto" style={{ paddingRight: 0, paddingBlock: 0 }}>
                         <div className="font-semibold">

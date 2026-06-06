@@ -124,7 +124,7 @@ function ListItem({ item, setBlog, setRecentComments }) {
                   <div className="flex items-center">
                     <div className="inline-block cursor-pointer relative">
                       <div className="relative">
-                        <img src={comment.user.profileImg} className="width-11 aspect-square box-border rounded-full align-middle" />
+                        <img loading="lazy" src={comment.user.profileImg} className="width-11 aspect-square box-border rounded-full align-middle" />
                       </div>
                     </div>
                     <div className="padding-33" style={{ paddingRight: 0, paddingBlock: 0 }}>

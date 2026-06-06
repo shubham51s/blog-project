@@ -27,7 +27,7 @@ function BlogComp({ blogDetails }) {
               <div className="grid relative h-full custom-gap-8 grid-rows-[auto_1fr] grid-cols-12 grid-area-1">
                 <div className="[grid-area:image]">
                   <div>
-                    <img src={blogDetails.previewImg ? getImageUrl(blogDetails.previewImg) : noPreviewImg} className="object-cover object-center aspect-[2/1] w-full align-middle" />
+                    <img loading="lazy" src={blogDetails.previewImg ? getImageUrl(blogDetails.previewImg) : noPreviewImg} className="object-cover object-center aspect-[2/1] w-full align-middle" />
                   </div>
                 </div>
                 <div className="[grid-area:content] flex flex-col justify-center">
@@ -35,7 +35,7 @@ function BlogComp({ blogDetails }) {
                     {!blogDetails.publication && (
                       <div className="margin-21 flex items-center" style={{ marginTop: 0, marginInline: 0 }}>
                         <Link to={`/profile/${blogDetails.author.username}`} className="margin-16 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
-                          <img src={blogDetails.author.profileImg} className="height-12 aspect-square rounded-full" />
+                          <img loading="lazy" src={blogDetails.author.profileImg} className="height-12 aspect-square rounded-full" />
                         </Link>
                         <div>
                           <Link to={`/profile/${blogDetails.author.username}`} title={blogDetails.author.name} className="break-words text-ellipsis height-6 color-3 overflow-hidden font-4 capitalize custom-line-h-1 font-normal m-0 p-0">
@@ -47,7 +47,7 @@ function BlogComp({ blogDetails }) {
                     {blogDetails.publication && (
                       <div className="margin-21 flex items-center overflow-hidden truncate" style={{ marginTop: 0, marginInline: 0 }}>
                         <Link to={`/publication/${blogDetails.publication.slug}`} className="margin-16 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
-                          <img src={blogDetails.publication.profileImg} className="height-12 aspect-square br13" />
+                          <img loading="lazy" src={blogDetails.publication.profileImg} className="height-12 aspect-square br13" />
                         </Link>
                         <div className="padding-23 whitespace-nowrap" style={{ paddingLeft: 0, paddingBlock: 0 }}>
                           <p className="font-4 color-4 custom-line-h-1 font-normal m-0 p-0">In</p>

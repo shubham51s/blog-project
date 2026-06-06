@@ -45,7 +45,7 @@ function ListItem({ item, onMuteStatusChange }) {
         <div className="margin60 flex">
           <Link to={`/publication/${publication.slug}`} className="cursor-pointer list-none">
             <div className="relative">
-              <img src={publication.profileImg} className="width-15 aspect-square br13" />
+              <img loading="lazy" src={publication.profileImg} className="width-15 aspect-square br13" />
               <div className="absolute top-0 boxShadow7 width-15 aspect-square br13"></div>
             </div>
           </Link>

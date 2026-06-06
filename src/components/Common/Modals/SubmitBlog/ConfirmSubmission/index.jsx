@@ -67,7 +67,7 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publ
                       Change preview image
                     </button>
                     <div>
-                      <img src={getImageUrl(blog.previewImg)} className="w-full height67" />
+                      <img loading="lazy" src={getImageUrl(blog.previewImg)} className="w-full height67" />
                     </div>
                   </div>
                 )}
@@ -80,7 +80,7 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publ
                     <div className="height69 padding-27 padding56 padding57 overflow-scroll">
                       {blog.images.map((item, index) => (
                         <div className="w-[30%] padding57 padding-27 inline-block" key={index} style={{ paddingTop: 0, paddingLeft: 0 }}>
-                          <img onClick={() => handlePreviewImgChange(index)} src={getImageUrl(item.public_id)} className={`w-full transition-all duration-200 ease-in-out ${imgIndex === index ? "bdr13" : "bdr14"}`} />
+                          <img loading="lazy" onClick={() => handlePreviewImgChange(index)} src={getImageUrl(item.public_id)} className={`w-full transition-all duration-200 ease-in-out ${imgIndex === index ? "bdr13" : "bdr14"}`} />
                         </div>
                       ))}
                     </div>
@@ -138,7 +138,7 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publ
                 <h2 className="font-10 font-medium color-3 line20 m-0">Publication</h2>
                 {blog.publication && (
                   <div className="flex items-center gap10">
-                    <img src={blog.publication.profileImg} className="margin-23 border-radius-5 width-19 aspect-square" style={{ marginLeft: 0, marginBlock: 0 }} />
+                    <img loading="lazy" src={blog.publication.profileImg} className="margin-23 border-radius-5 width-19 aspect-square" style={{ marginLeft: 0, marginBlock: 0 }} />
                     <p className="line-clamp-1 height-6 color-3 custom-fs-1 font-normal m-0">{blog.publication.name}</p>
                     <div className="inline-block">
                       <Popover.Root>

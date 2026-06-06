@@ -253,7 +253,7 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
               <div className="flex">
                 <button className="cursor-pointer p-0 m-0">
                   <div className="relative">
-                    <img onClick={handleUploadImgBtnClick} src={user.profile} className="height76 aspect-square rounded-full" />
+                    <img loading="lazy" onClick={handleUploadImgBtnClick} src={user.profile} className="height76 aspect-square rounded-full" />
                     <div className="absolute top-0 boxShadow7 height76 aspect-square rounded-full"></div>
                   </div>
                 </button>
@@ -333,7 +333,7 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
               <div className="flex">
                 <button className="cursor-pointer p-0 m-0">
                   <div className="relative" onClick={handleCoverImgBtnClick}>
-                    <img src={user.coverImg ? getImageUrl(user.coverImg) : null} className="height-63 aspect-[3/1]" />
+                    <img loading="lazy" src={user.coverImg ? getImageUrl(user.coverImg) : null} className="height-63 aspect-[3/1]" />
                     <div className="absolute top-0 boxShadow7 height-63 aspect-[3/1]"></div>
                   </div>
                 </button>

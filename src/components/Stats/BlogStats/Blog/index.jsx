@@ -29,7 +29,7 @@ function BlogDetails({ blog }) {
         <div className="flex">
           <Link to={`/${blog.slug}/${blog._id}`} className="cursor-pointer">
             <div className="height92 width106 margin58" style={{ marginLeft: 0, marginBlock: 0 }}>
-              <img src={blog.previewImg ? getImageUrl(blog.previewImg) : defaultImg} className="w-full h-full" />
+              <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : defaultImg} className="w-full h-full" />
             </div>
           </Link>
           <div className="width105">

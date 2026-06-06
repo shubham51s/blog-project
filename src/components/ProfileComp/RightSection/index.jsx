@@ -93,7 +93,7 @@ function RightSectionComp({ user, setUser }) {
                 <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                   {user && (
                     <div className="relative">
-                      <img src={user._id === userInfo._id ? userInfo.profileImg : user.profileImg} className="width74 aspect-square rounded-full" />
+                      <img loading="lazy" src={user._id === userInfo._id ? userInfo.profileImg : user.profileImg} className="width74 aspect-square rounded-full" />
                       <div className="absolute top-0 width74 aspect-square rounded-full boxShadow9"></div>
                     </div>
                   )}

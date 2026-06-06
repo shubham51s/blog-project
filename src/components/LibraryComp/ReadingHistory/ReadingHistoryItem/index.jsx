@@ -35,7 +35,7 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                             <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
                               <Link to={`/profile/${blog.author.username}`} className="no-underline cursor-pointer">
                                 <div className="relative">
-                                  <img src={blog.author.profileImg} className="width86 aspect-square rounded-full" />
+                                  <img loading="lazy" src={blog.author.profileImg} className="width86 aspect-square rounded-full" />
                                   <div className="absolute top-0 width86 aspect-square rounded-full boxShadow7"></div>
                                 </div>
                               </Link>
@@ -54,7 +54,7 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                             <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
                               <Link to={`/${blog.publication.slug}`} className="no-underline cursor-pointer">
                                 <div className="relative">
-                                  <img src={blog.publication.profileImg} className="width86 aspect-square br13" />
+                                  <img loading="lazy" src={blog.publication.profileImg} className="width86 aspect-square br13" />
                                   <div className="absolute top-0 width86 aspect-square br13 boxShadow7"></div>
                                 </div>
                               </Link>
@@ -140,7 +140,7 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                         </div>
 
                         <Link to={`/${blog.slug}/${blog._id}`} className="block margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
-                          <img src={blog.previewImg ? getImageUrl(blog.previewImg) : noImage} className="border-radius-5 align-middle width-29 height-52" />
+                          <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : noImage} className="border-radius-5 align-middle width-29 height-52" />
                         </Link>
                       </div>
                     </div>

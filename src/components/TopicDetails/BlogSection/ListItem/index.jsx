@@ -27,7 +27,7 @@ function ListItem({ item }) {
               <div className="h-full w-full">
                 <div className="relative h-full flex flex-col custom-gap-2">
                   <Link to={`/${blog.slug}/${blog._id}`} className="block">
-                    <img src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreview} className="w-full border-radius-5 bg-10 object-cover aspect-[2/1] object-center" />
+                    <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreview} className="w-full border-radius-5 bg-10 object-cover aspect-[2/1] object-center" />
                   </Link>
                   <div className="grow">
                     <div className="w-full flex flex-col">
@@ -38,7 +38,7 @@ function ListItem({ item }) {
                               <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
                                 <Link to={`/profile/${blog.author.username}`} className="cursor-pointer m-0 p-0">
                                   <div className="relative">
-                                    <img src={blog.author.profileImg} className="width86 aspect-square rounded-full" />
+                                    <img loading="lazy" src={blog.author.profileImg} className="width86 aspect-square rounded-full" />
                                     <div className="absolute top-0 width86 aspect-square rounded-full boxShadow7"></div>
                                   </div>
                                 </Link>
@@ -58,7 +58,7 @@ function ListItem({ item }) {
                               <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
                                 <Link to={`/publication/${blog.publication.slug}`} className="cursor-pointer m-0 p-0">
                                   <div className="relative">
-                                    <img src={blog.publication.profileImg} className="width86 aspect-square br13" />
+                                    <img loading="lazy" src={blog.publication.profileImg} className="width86 aspect-square br13" />
                                     <div className="absolute top-0 width86 aspect-square br13 boxShadow7"></div>
                                   </div>
                                 </Link>

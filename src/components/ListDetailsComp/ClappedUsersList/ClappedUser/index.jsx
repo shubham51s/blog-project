@@ -41,7 +41,7 @@ function ClappedUser({ item }) {
       <div className="width64 flex items-start">
         <div className="padding-7" style={{ paddingLeft: 0 }}>
           <div className="relative height-2 aspect-square">
-            <img src={item.user.profileImg} className="box-border rounded-full align-middle" />
+            <img loading="lazy" src={item.user.profileImg} className="box-border rounded-full align-middle" />
             <div className="absolute inset-0 aspect-square rounded-full border-0 boxShadow7"></div>
             <span className="absolute padding-36 left4 bg-[#1a8917] border-radius11 bottom-0 color-2 text-center">
               <div className="height-4 aspect-square">

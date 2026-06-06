@@ -77,7 +77,7 @@ function ImageInput({ publication, setPublication }) {
 
         {publication.profileImg && (
           <div>
-            <img src={publication.profileImg} className="width88 aspect-square object-cover" />
+            <img loading="lazy" src={publication.profileImg} className="width88 aspect-square object-cover" />
           </div>
         )}
       </div>

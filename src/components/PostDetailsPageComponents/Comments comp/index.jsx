@@ -140,7 +140,7 @@ function CommentsComp({ blog, setBlog, recentComments, setRecentComments, setIsS
                 <div className="margin-11" style={{ marginTop: 0 }}>
                   <div className="margin-7 flex items-center" style={{ marginTop: 0, marginInline: 0 }}>
                     <div className="relative">
-                      <img src={userInfo.profileImg} className="width-11 aspect-square rounded-full align-middle" />
+                      <img loading="lazy" src={userInfo.profileImg} className="width-11 aspect-square rounded-full align-middle" />
                     </div>
                     <div className="flex flex-col justify-center items-start margin-7" style={{ marginRight: 0, marginBlock: 0 }}>
                       <div className="flex flex-wrap items-baseline">

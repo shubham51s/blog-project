@@ -43,7 +43,7 @@ function PublicationListItem({ item, onPublicationFollowStatusChange = () => {} 
     <div className="margin60 flex">
       <Link to={`/publication/${item.slug}`} className="cursor-pointer list-none">
         <div className="relative">
-          <img src={item.profileImg} className="width-15 aspect-square br13" />
+          <img loading="lazy" src={item.profileImg} className="width-15 aspect-square br13" />
           <div className="absolute top-0 boxShadow7 width-15 aspect-square br13"></div>
         </div>
       </Link>

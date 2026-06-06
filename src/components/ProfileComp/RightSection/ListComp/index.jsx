@@ -7,17 +7,17 @@ function ListComp({ list }) {
       <div className="width77 grow-0 shrink-0 basis-auto flex overflow-hidden relative">
         <div className="relative z-[3]">
           <div className="height-50 overflow-hidden">
-            <img src="https://miro.medium.com/v2/resize:fill:60:60/1*T92daLRP2FWL2ZKR5TYoJA.jpeg" className="h-full aspect-square" />
+            <img loading="lazy" src="https://miro.medium.com/v2/resize:fill:60:60/1*T92daLRP2FWL2ZKR5TYoJA.jpeg" className="h-full aspect-square" />
           </div>
         </div>
         <div className="relative z-[2] margin61">
           <div className="height-50 overflow-hidden">
-            <img src="https://miro.medium.com/v2/resize:fill:60:60/1*qHYfL3G4f_oQDwn32s4ZEA.jpeg" className="h-full aspect-square" />
+            <img loading="lazy" src="https://miro.medium.com/v2/resize:fill:60:60/1*qHYfL3G4f_oQDwn32s4ZEA.jpeg" className="h-full aspect-square" />
           </div>
         </div>
         <div className="relative z-[1] margin62">
           <div className="height-50 overflow-hidden">
-            <img src="https://miro.medium.com/v2/resize:fill:60:60/1*TJaYPEVb4RTJjyVxHDbggQ.png" className="h-full aspect-square" />
+            <img loading="lazy" src="https://miro.medium.com/v2/resize:fill:60:60/1*TJaYPEVb4RTJjyVxHDbggQ.png" className="h-full aspect-square" />
           </div>
         </div>
       </div>

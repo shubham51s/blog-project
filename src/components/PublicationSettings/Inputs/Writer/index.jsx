@@ -55,7 +55,7 @@ function WriterInput({ publication, setPublication }) {
 
               return (
                 <li key={key} {...rest} className="flex items-center custom-gap-3 padding59 custom-px-2 custom-fs-1 font-normal cursor-pointer bg-transparent border-radius-1 transition-all duration-75 ease hover:bg-gray-300">
-                  <img src={option.profileImg} className="width-25 aspect-square rounded-full" />
+                  <img loading="lazy" src={option.profileImg} className="width-25 aspect-square rounded-full" />
                   <div className="color-3">{option.name}</div>
                   <div className="color-4">{option.username}</div>
                 </li>

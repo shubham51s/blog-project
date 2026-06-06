@@ -43,7 +43,7 @@ function ListItem({ item }) {
             <div className="flex">
               <Link to={`/profile/${user.username}`} className="cursor-pointer">
                 <div className="relative">
-                  <img src={user.profileImg} className="width-11 aspect-square rounded-full" />
+                  <img loading="lazy" src={user.profileImg} className="width-11 aspect-square rounded-full" />
                   <div className="absolute top-0 width-11 aspect-square rounded-full boxShadow7"></div>
                 </div>
               </Link>

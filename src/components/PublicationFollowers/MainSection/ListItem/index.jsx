@@ -41,7 +41,7 @@ function ListItem({ item }) {
         <div className="margin60 flex">
           <Link to={`/profile/${user.username}`} className="cursor-pointer p-0 m-0">
             <div className="relative">
-              <img src={user.profileImg} className="width-15 aspect-square rounded-full" />
+              <img loading="lazy" src={user.profileImg} className="width-15 aspect-square rounded-full" />
               <div className="absolute top-0 width-15 aspect-square rounded-full boxShadow7"></div>
             </div>
           </Link>

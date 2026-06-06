@@ -21,7 +21,7 @@ function Blog({ blog }) {
         </Link>
         <div className="margin-11 margin52 flex items-center">
           <Link to={`/profile/${blog.author.username}`} className="relative cursor-pointer">
-            <img src={blog.author.profileImg} className="box-border height-2 aspect-square rounded-full align-middle" />
+            <img loading="lazy" src={blog.author.profileImg} className="box-border height-2 aspect-square rounded-full align-middle" />
             <div className="boxShadow9 absolute height-2 aspect-square rounded-full top-0"></div>
           </Link>
           <Link to={`/profile/${blog.author.username}`} className="margin-21" style={{ marginRight: 0, marginBlock: 0 }}>

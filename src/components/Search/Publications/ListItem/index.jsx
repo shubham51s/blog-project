@@ -44,7 +44,7 @@ function ListItem({ item }) {
           <div className="flex items-center justify-between">
             <Link to={`/publication/${publication.slug}`} className="flex items-center">
               <div className="relative shrink-0">
-                <img src={publication.profileImg} className="width-15 aspect-square border-radius-5" />
+                <img loading="lazy" src={publication.profileImg} className="width-15 aspect-square border-radius-5" />
                 <div className="absolute top-0 width-15 aspect-square border-radius-5 boxShadow7"></div>
               </div>
               <div className="padding95 padding96">

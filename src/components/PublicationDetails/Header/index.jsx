@@ -60,7 +60,7 @@ function HeaderSection({ publication, setPublication }) {
           <div className="w-full min-w-0 custom-max-w-1 custom-m-x-1">
             <div className="margin54 flex items-start">
               <div className="relative grow-0 shrink-0 custom-m-r">
-                <img src={publication.profileImg} className="width70 aspect-square border-radius-5" />
+                <img loading="lazy" src={publication.profileImg} className="width70 aspect-square border-radius-5" />
                 <div className="absolute top-0 width70 aspect-square border-radius-5 boxShadow7"></div>
               </div>
 
