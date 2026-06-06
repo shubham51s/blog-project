@@ -10,11 +10,12 @@ import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function Follower() {
   const { user, setUser } = useOutletContext();
+  const [hasFetched, setHasFetched] = useState(false);
   const { requestHandler } = useRequestHandler();
   const [followersArr, setFollowersArr] = useState([]);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const limit = 20;
   const [scroll, setScroll] = useState({
     loading: false,
@@ -53,8 +54,8 @@ function Follower() {
   });
 
   useEffect(() => {
-    if (user && !isLoading) {
-      setIsLoading(true);
+    if (user && !hasFetched) {
+      setHasFetched(true);
       fetchFollowersList();
     }
   }, [user]);

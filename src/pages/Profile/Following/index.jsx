@@ -12,10 +12,11 @@ import { defaultLoaderTime } from "../../../constants/constant";
 function Following() {
   const { user, setUser } = useOutletContext();
   const { requestHandler } = useRequestHandler();
+  const [hasFetched, setHasFetched] = useState(false);
   const [peopleFollowing, setPeopleFollowing] = useState([]);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const limit = 20;
   const [scroll, setScroll] = useState({
     loading: false,
@@ -59,8 +60,8 @@ function Following() {
   });
 
   useEffect(() => {
-    if (user && !isLoading) {
-      setIsLoading(true);
+    if (user && !hasFetched) {
+      setHasFetched(true);
       fetchPeopleFollowingList();
     }
   }, [user]);

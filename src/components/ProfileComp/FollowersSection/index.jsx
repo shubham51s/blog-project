@@ -15,17 +15,17 @@ function FollowersList({ item, user, setUser }) {
 
   const handleFollowUser = async () => {
     setIsLoading(true);
-
-    const params = {
-      _id: author.follower._id,
-      name: author.follower.name,
-    };
-    const isSuccess = await followUser(params);
-
-    if (isSuccess) {
-      if (userInfo._id === user._id) {
+    try {
+      const params = {
+        _id: author.follower._id,
+        name: author.follower.name,
+      };
+      const isSuccess = await followUser(params);
+      if (isSuccess && userInfo._id === user._id) {
         setUser((prev) => ({ ...prev, followingCount: prev.followingCount + 1 }));
       }
+    } finally {
+      setIsLoading(false);
     }
 
     setIsLoading(false);
@@ -33,20 +33,18 @@ function FollowersList({ item, user, setUser }) {
 
   const handleUnfollowUser = async () => {
     setIsLoading(true);
-
-    const params = {
-      _id: author.follower._id,
-      name: author.follower.name,
-    };
-    const isSuccess = await unfollowUser(params);
-
-    if (isSuccess) {
-      if (userInfo._id === user._id) {
+    try {
+      const params = {
+        _id: author.follower._id,
+        name: author.follower.name,
+      };
+      const isSuccess = await unfollowUser(params);
+      if (isSuccess && userInfo._id === user._id) {
         setUser((prev) => ({ ...prev, followingCount: prev.followingCount > 0 ? prev.followingCount - 1 : 0 }));
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (
