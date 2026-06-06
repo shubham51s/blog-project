@@ -81,7 +81,7 @@ function FollowingComp({ item, user, setUser }) {
         <div className="flex padding57">
           <div className="padding-15">
             <div className="relative">
-              <img src={author.followee.profileImg} alt={author.followee.name} className="height-12 aspect-square rounded-full" />
+              <img src={author.followee.profileImg} className="height-12 aspect-square rounded-full" />
               <div className="absolute top-0 height-12 aspect-square rounded-full boxShadow7"></div>
             </div>
           </div>
@@ -105,7 +105,7 @@ function FollowingComp({ item, user, setUser }) {
                     <div className="flex items-end justify-between">
                       <Link to="" className="no-underline cursor-pointer">
                         <div className="relative">
-                          <img src={author.followee.profileImg} alt={author.followee.name} className="width76 aspect-square box-border rounded-full" />
+                          <img src={author.followee.profileImg} className="width76 aspect-square box-border rounded-full" />
                           <div className="absolute top-0 width76 aspect-square rounded-full boxShadow7"></div>
                         </div>
                       </Link>

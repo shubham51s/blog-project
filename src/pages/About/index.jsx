@@ -60,7 +60,7 @@ function AboutPage() {
           {/* header */}
           <div className="padding-3 custom-bg-3 flex items-center justify-between bdr-2 custom-bdr-4">
             <Link to="/" className="cursor-pointer m-0 p-0 no-underline">
-              <img className="custom-h-2 w-auto align-middle" src={logo} alt="brand logo" />
+              <img className="custom-h-2 w-auto align-middle" src={logo} />
             </Link>
             <div className="flex">
               <div className="margin-3">
@@ -101,7 +101,7 @@ function AboutPage() {
           {/* footer */}
           <div className="flex items-center justify-between padding-3 bdr-1 custom-bdr-5">
             <Link to="/" className="cursor-pointer m-0 p-0">
-              <img className="custom-h-2 w-auto align-middle" src={logo} alt="brand logo" />
+              <img className="custom-h-2 w-auto align-middle" src={logo} />
             </Link>
             <div className="flex padding-6">
               {footerOptions.map((item) => (

@@ -208,7 +208,7 @@ function ListDetailsPage() {
                         <Link to="" className="no-underline m-0 p-0 cursor-pointer">
                           {list && (
                             <div className="relative">
-                              <img src={list.user.profileImg} alt={list.user.name} className="width-15 aspect-square rounded-full" />
+                              <img src={list.user.profileImg} className="width-15 aspect-square rounded-full" />
                               <div className="absolute top-0 width-15 aspect-square rounded-full boxShadow7"></div>
                             </div>
                           )}

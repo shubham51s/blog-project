@@ -42,7 +42,7 @@ function ListItem({ item, onPublicationFollowStatusChange }) {
         <div className="margin60 flex">
           <Link to={`/profile/${item.username}`} className="cursor-pointer list-none">
             <div className="relative">
-              <img src={item.profileImg} alt={item.name} className="width-15 aspect-square br13" />
+              <img src={item.profileImg} className="width-15 aspect-square br13" />
               <div className="absolute top-0 boxShadow7 width-15 aspect-square br13"></div>
             </div>
           </Link>

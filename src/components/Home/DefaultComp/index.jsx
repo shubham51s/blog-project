@@ -104,7 +104,7 @@ function UnauthenticatedHome() {
           <div className="custom-margin-1 w-full min-w-0 custom-max-w-1 font-normal">
             <div>
               <div className="left-unset right-0 transform -translate-y-1/2 top-[54%] absolute">
-                <img src="	https://miro.medium.com/v2/format:webp/4*SdjkdS98aKH76I8eD0_qjw.png" alt="brand image" className="align-middle custom-img-1" />
+                <img src="	https://miro.medium.com/v2/format:webp/4*SdjkdS98aKH76I8eD0_qjw.png" className="align-middle custom-img-1" />
               </div>
             </div>
             <div className="custom-margin-b-1 custom-max-width-1">

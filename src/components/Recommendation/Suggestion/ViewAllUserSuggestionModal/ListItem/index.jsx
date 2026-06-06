@@ -40,7 +40,7 @@ function ListItem({ user }) {
         <div className="margin60 flex">
           <Link to={`/profile/${user.username}`} className="cursor-pointer list-none">
             <div className="relative">
-              <img src={user.profileImg} alt={user.name} className="width-15 aspect-square rounded-full" />
+              <img src={user.profileImg} className="width-15 aspect-square rounded-full" />
               <div className="absolute top-0 boxShadow7 width-15 aspect-square rounded-full"></div>
             </div>
           </Link>

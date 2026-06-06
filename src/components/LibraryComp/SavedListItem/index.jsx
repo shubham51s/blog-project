@@ -26,7 +26,7 @@ function SavedListItem({ item }) {
             <Link to={`/profile/${list.user.username}`} onClick={(e) => e.stopPropagation()} className="no-underline">
               <div className="flex opacity-[0.95] transition-all duration-75 linear hover:opacity-100">
                 <div className="relative">
-                  <img src={list.user.profileImg} alt="" className="height-12 aspect-square rounded-full" />
+                  <img src={list.user.profileImg} className="height-12 aspect-square rounded-full" />
                   <div className="absolute top-0 height-12 aspect-square rounded-full boxShadow7"></div>
                 </div>
                 <div className="flex items-center z-[1] padding50" style={{ paddingRight: 0 }}>
@@ -61,17 +61,17 @@ function SavedListItem({ item }) {
             <div className="relative h-full flex overflow-hidden justify-end">
               <div className="relative bg-10 z-[3] bdr18" style={{ borderLeft: 0, borderBlock: 0 }}>
                 <div className="h-full">
-                  <img src="https://miro.medium.com/v2/da:true/resize:fill:332:288/0*zvupDdPT2GwFZDCH" alt="" className="height78 width79 bg-10" />
+                  <img src="https://miro.medium.com/v2/da:true/resize:fill:332:288/0*zvupDdPT2GwFZDCH" className="height78 width79 bg-10" />
                 </div>
               </div>
               <div className="relative z-[2] bg-10 margin63 padding-23 bdr18" style={{ paddingRight: 0, paddingBlock: 0, borderLeft: 0, borderBlock: 0 }}>
                 <div className="h-full">
-                  <img src="https://miro.medium.com/v2/da:true/resize:fill:332:288/0*kSYjYtnol_rPJ--o" alt="" className="height78 width79 bg-10" />
+                  <img src="https://miro.medium.com/v2/da:true/resize:fill:332:288/0*kSYjYtnol_rPJ--o" className="height78 width79 bg-10" />
                 </div>
               </div>
               <div className="relative z-[1] bg-10 margin64 padding-23" style={{ paddingRight: 0, paddingBlock: 0 }}>
                 <div className="h-full">
-                  <img src="https://miro.medium.com/v2/da:true/resize:fill:332:288/0*OWVf_TQ-bkGcEfOP" alt="" className="height78 width79 bg-10" />
+                  <img src="https://miro.medium.com/v2/da:true/resize:fill:332:288/0*OWVf_TQ-bkGcEfOP" className="height78 width79 bg-10" />
                 </div>
               </div>
             </div>

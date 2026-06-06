@@ -17,8 +17,8 @@ function BlogComp({ item }) {
               <div className="margin58 width69 flex items-start custom-gap-2" style={{ marginLeft: 0, marginBlock: 0 }}>
                 <div>
                   <div className="relative z-[2] cursor-pointer m-0 p-0 height-54 width70">
-                    {blog.previewImg && <img src={getImageUrl(blog.previewImg)} alt={blog.name} className="w-full object-cover object-center aspect-[3/2] border-radius-5 align-middle" />}
-                    {!blog.previewImg && <img src={noPreviewImg} alt={blog.name} className="w-full object-cover object-center aspect-[3/2] border-radius-5 align-middle" />}
+                    {blog.previewImg && <img src={getImageUrl(blog.previewImg)} className="w-full object-cover object-center aspect-[3/2] border-radius-5 align-middle" />}
+                    {!blog.previewImg && <img src={noPreviewImg} className="w-full object-cover object-center aspect-[3/2] border-radius-5 align-middle" />}
                   </div>
                 </div>
                 <div className="w-full flex items-stretch justify-between custom-gap-3">
