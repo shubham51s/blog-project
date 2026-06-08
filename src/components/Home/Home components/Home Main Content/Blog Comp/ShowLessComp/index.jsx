@@ -1,25 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CiCircleMinus } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { GoMute } from "react-icons/go";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import { showToast } from "../../../../../../utils/toaster";
+import { useRequestHandler } from "../../../../../../hooks/requestHandler";
 
 function ShowLessComp({ isHideBlog, setIsHideBlog, blog }) {
+  const { requestHandler } = useRequestHandler();
   const [isShowModal, setIsShowModal] = useState(false);
-  let showModalTimeout = null;
+  const showModalTimeout = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const addNotInterested = async () => {
+    setIsLoading(true);
+    try {
+      // const params = {}
+      const response = await requestHandler("/blog/not-interested/add", "POST", params);
+    } catch (err) {
+      if (showModalTimeout.current) clearTimeout(showModalTimeout.current);
+      setIsShowModal(false);
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleShowLessLikeThisBtnClick = (e) => {
     e.stopPropagation();
-
-    if (showModalTimeout) clearTimeout(showModalTimeout);
     setIsHideBlog(true);
-    showModalTimeout = setTimeout(() => {
+
+    if (showModalTimeout.current) clearTimeout(showModalTimeout.current);
+    showModalTimeout.current = setTimeout(() => {
       setIsShowModal(true);
     }, 400);
   };
 
-  const closeShowLikeThisModal = (e) => {
+  const handleCloseMuteModal = (e) => {
     e.stopPropagation();
     setIsShowModal(false);
   };
@@ -39,6 +56,12 @@ function ShowLessComp({ isHideBlog, setIsHideBlog, blog }) {
     setIsShowModal(false);
   };
 
+  useEffect(() => {
+    return () => {
+      if (showModalTimeout.current) clearTimeout(showModalTimeout.current);
+    };
+  }, []);
+
   return (
     <>
       <div>
@@ -52,7 +75,7 @@ function ShowLessComp({ isHideBlog, setIsHideBlog, blog }) {
       </div>
       {/* show less like this confirmation modal */}
       {isHideBlog && isShowModal && (
-        <div onClick={(e) => closeShowLikeThisModal(e)} className="fixed inset-0 z-[800] padding-2 flex items-center justify-center bg17">
+        <div onClick={(e) => handleCloseMuteModal(e)} className="fixed inset-0 z-[800] padding-2 flex items-center justify-center bg17">
           <div className="my-auto p-0" onClick={(e) => e.stopPropagation()}>
             <div className="width60 boxShadow6 padding62 padding61 padding60 border-radius-3 relative custom-bg-8">
               <div className="text-center">
@@ -103,14 +126,14 @@ function ShowLessComp({ isHideBlog, setIsHideBlog, blog }) {
                   <button onClick={() => handleUndoBtnClick()} className="cursor-pointer padding-5 custom-line-h-1 custom-fs-1 bdr-7 border-radius-9 text-center box-border color-6 font-medium m-0 transition-all duration-200 ease-out opacity-[0.9] hover:opacity-100">
                     Undo
                   </button>
-                  <button onClick={(e) => closeShowLikeThisModal(e)} className="cursor-pointer padding-5 custom-line-h-1 custom-fs-1 border-radius-9 text-center box-border font-normal m-0 bdr-6 custom-bg-1 color-2 transition-all duration-200 ease-out opacity-[0.95] hover:opacity-100">
+                  <button onClick={(e) => handleCloseMuteModal(e)} className="cursor-pointer padding-5 custom-line-h-1 custom-fs-1 border-radius-9 text-center box-border font-normal m-0 bdr-6 custom-bg-1 color-2 transition-all duration-200 ease-out opacity-[0.95] hover:opacity-100">
                     Done
                   </button>
                 </div>
               </div>
 
               <div className="absolute right5 top6">
-                <button onClick={(e) => closeShowLikeThisModal(e)} className="cursor-pointer m-0 p-0 width-13 aspect-square color-6 transition-all duration-200 ease-out opacity-75 hover:opacity-100">
+                <button onClick={(e) => handleCloseMuteModal(e)} className="cursor-pointer m-0 p-0 width-13 aspect-square color-6 transition-all duration-200 ease-out opacity-75 hover:opacity-100">
                   <IoMdClose className="w-full h-full" />
                 </button>
               </div>

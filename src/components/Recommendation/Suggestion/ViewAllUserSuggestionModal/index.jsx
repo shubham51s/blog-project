@@ -75,7 +75,6 @@ function ViewAllUserSuggestion({ handleCloseUserModal }) {
           </div>
         </div>
       </div>
-
       <div className="absolute right6 top7 z-22">
         <button className="cursor-pointer m-0 p-0 opacity-[0.75] transition-all duration-75 ease hover:opacity-100">
           <div className="width-25 aspect-square">

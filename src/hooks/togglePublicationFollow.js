@@ -8,6 +8,7 @@ export function useTogglePublicationFollow() {
   const { addFollowingPublication, removeFollowingPublication } = useContext(PublicationContext);
 
   const followPublication = async (publication) => {
+    addFollowingPublication(publication._id);
     try {
       const params = {
         publication: publication._id,
@@ -17,21 +18,23 @@ export function useTogglePublicationFollow() {
       const result = await response.json();
 
       if (response?.status === 200) {
-        addFollowingPublication(publication._id);
         showToast(`Success! You're now following ${publication.name}.`);
       } else {
+        removeFollowingPublication(publication._id);
         showToast(result?.message || "Some error occured");
       }
 
       return response?.status === 200;
     } catch (err) {
       console.error(err);
+      removeFollowingPublication(publication._id);
       showToast("Some error occured");
       return false;
     }
   };
 
   const unfollowPublication = async (publication) => {
+    removeFollowingPublication(publication._id);
     try {
       const params = {
         publication: publication._id,
@@ -41,15 +44,16 @@ export function useTogglePublicationFollow() {
       const result = await response.json();
 
       if (response?.status === 200) {
-        removeFollowingPublication(publication._id);
         showToast(`You unfollowed ${publication.name}..`);
       } else {
+        addFollowingPublication(publication._id);
         showToast(result?.message || "Some error occured");
       }
 
       return response?.status === 200;
     } catch (err) {
       console.error(err);
+      addFollowingPublication(publication._id);
       showToast("Some error occured");
       return false;
     }
