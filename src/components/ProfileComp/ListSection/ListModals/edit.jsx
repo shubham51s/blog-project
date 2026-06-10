@@ -103,7 +103,7 @@ function EditListModal({ isEditListModal, handleCloseEditListModal, list, editLi
                         <Checkbox checked={isListPrivate} onChange={(e) => setIsListPrivate(e.target.checked)} className="w-full h-full" />
                       </div>
                       <div>
-                        <p onClick={() => setIsListPrivate(!isListPrivate)} className="line-h-8 font-10 color-3 font-normal m-0 p-0">
+                        <p onClick={() => setIsListPrivate(!isListPrivate)} className="line-h-8 font-10 color-3 font-normal m-0 p-0 cursor-default">
                           Make it private
                         </p>
                       </div>

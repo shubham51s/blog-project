@@ -310,6 +310,7 @@ img {
   color: var(--text-color-16)
 }
 
+
 .markupContainer img {
   margin-left: auto;
   margin-right: auto;
@@ -886,7 +887,7 @@ img {
   }
 
   .height71 {
-    max-height: 0 !important;
+    max-height: 0;
   }
 
   .height72 {

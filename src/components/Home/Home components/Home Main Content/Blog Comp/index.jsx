@@ -25,7 +25,7 @@ function BlogComp({ item }) {
   return (
     <>
       {blog && (
-        <div className={`margin51 first:!mt-0 overflow-hidden transition-all duration-500 ease-out ${isHideBlog ? "height71 !mt-0" : "height-18"}`}>
+        <div className={`margin51 first:!mt-0 overflow-hidden transition-all duration-500 linear ${isHideBlog ? "height71 !mt-0" : "height-18"}`}>
           <div className="w-full" style={{ marginBottom: 0, marginInline: 0 }}>
             <article>
               <div className="box-content">
@@ -124,7 +124,7 @@ function BlogComp({ item }) {
                                     </div>
                                   </Link>
                                   <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
-                                    {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} isHideBlog={isHideBlog} blog={blog} />}
+                                    {!blog.isMyBlog && <ShowLessComp setIsHideBlog={setIsHideBlog} blog={blog} setBlog={setBlog} />}
                                     <div>
                                       <SaveBlog item={blog} />
                                     </div>

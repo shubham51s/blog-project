@@ -87,8 +87,8 @@ const MuteProvider = ({ children }) => {
   };
 
   const fetchMutedUsersAndPublications = () => {
-    fetchMutedUserIds();
-    fetchMutedPublicationIds();
+    // fetchMutedUserIds();
+    // fetchMutedPublicationIds();
   };
 
   return <MuteContext.Provider value={{ muteLoader, mutedUsers, mutedPublications, fetchMutedUsersAndPublications, addMutedUser, removeMutedUser, addMutedPublication, removeMutedPublication }}>{children}</MuteContext.Provider>;
