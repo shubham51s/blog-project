@@ -3,26 +3,47 @@ import { Dialog } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import Checkbox from "@mui/material/Checkbox";
 import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mui/material";
+import { useRequestHandler } from "../../../../hooks/requestHandler";
+import { showToast } from "../../../../utils/toaster";
 
-function ReportBlogModal({ isReportModal, handleCloseReportModal, blog }) {
+function ReportBlogModal({ isReportModal, blog, handleCloseReportModal }) {
+  const { requestHandler } = useRequestHandler();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
+  const [reportReason, setReportReason] = useState("");
   const [isBlockUser, setIsBlockUser] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   const handleOnChange = (value) => {
-    setSelectedValue(value);
+    setReportReason(value);
   };
 
   const checkIsSelected = (value) => {
-    return selectedValue === value;
+    return reportReason === value;
   };
 
   const handleReportStory = async () => {
-    console.log("selected value: ", selectedValue, " isblock user: ", isBlockUser);
+    console.log("selected value: ", reportReason, " isblock user: ", isBlockUser);
     setIsLoading(true);
     try {
+      const params = {
+        blogId: blog._id,
+        reason: reportReason,
+        blockAuthor: isBlockUser,
+      };
+      const response = await requestHandler("/blog/report", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        showToast(result?.message || "Successfully reported post.");
+        handleCloseReportModal();
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
+
+      console.log("result: ", result);
     } catch (err) {
       console.error(err);
+      showToast("Some error occured.");
     } finally {
       setIsLoading(false);
     }
@@ -56,40 +77,40 @@ function ReportBlogModal({ isReportModal, handleCloseReportModal, blog }) {
                   <div className="flex flex-col custom-gap-2">
                     <div className="flex items-center">
                       <div className="relative grow-0 shrink-0 basis-auto margin-34 width72 aspect-square flex items-stretch" style={{ marginLeft: 0, marginBlock: 0 }}>
-                        <Radio className="w-full h-full" checked={checkIsSelected("harassment")} onChange={() => handleOnChange("harassment")} />
+                        <Radio className="w-full h-full" checked={checkIsSelected("HARASSMENT")} onChange={() => handleOnChange("HARASSMENT")} />
                       </div>
                       <div>
-                        <p onClick={() => handleOnChange("harassment")} className="line-h-8 custom-fs-1 color-3 font-medium m-0 p-0 cursor-default">
+                        <p onClick={() => handleOnChange("HARASSMENT")} className="line-h-8 custom-fs-1 color-3 font-medium m-0 p-0 cursor-default">
                           Harassment
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center">
                       <div className="relative grow-0 shrink-0 basis-auto margin-34 width72 aspect-square flex items-stretch" style={{ marginLeft: 0, marginBlock: 0 }}>
-                        <Radio className="w-full h-full" checked={checkIsSelected("rules_violation")} onChange={() => handleOnChange("rules_violation")} />
+                        <Radio className="w-full h-full" checked={checkIsSelected("RULES_VIOLATION")} onChange={() => handleOnChange("RULES_VIOLATION")} />
                       </div>
                       <div>
-                        <p onClick={() => handleOnChange("rules_violation")} className="line-h-8 custom-fs-1 color-3 font-medium m-0 p-0 cursor-default">
+                        <p onClick={() => handleOnChange("RULES_VIOLATION")} className="line-h-8 custom-fs-1 color-3 font-medium m-0 p-0 cursor-default">
                           Rules Violation
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center">
                       <div className="relative grow-0 shrink-0 basis-auto margin-34 width72 aspect-square flex items-stretch" style={{ marginLeft: 0, marginBlock: 0 }}>
-                        <Radio className="w-full h-full" checked={checkIsSelected("spam")} onChange={() => handleOnChange("spam")} />
+                        <Radio className="w-full h-full" checked={checkIsSelected("SPAM")} onChange={() => handleOnChange("SPAM")} />
                       </div>
                       <div>
-                        <p onClick={() => handleOnChange("spam")} className="line-h-8 custom-fs-1 color-3 font-medium m-0 p-0 cursor-default">
+                        <p onClick={() => handleOnChange("SPAM")} className="line-h-8 custom-fs-1 color-3 font-medium m-0 p-0 cursor-default">
                           Spam
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center">
                       <div className="relative grow-0 shrink-0 basis-auto margin-34 width72 aspect-square flex items-stretch" style={{ marginLeft: 0, marginBlock: 0 }}>
-                        <Radio className="w-full h-full" checked={checkIsSelected("ai_generated")} onChange={() => handleOnChange("ai_generated")} />
+                        <Radio className="w-full h-full" checked={checkIsSelected("AI_GENERATED")} onChange={() => handleOnChange("AI_GENERATED")} />
                       </div>
                       <div>
-                        <p onClick={() => handleOnChange("ai_generated")} className="line-h-8 custom-fs-1 color-3 font-medium m-0 p-0 cursor-default">
+                        <p onClick={() => handleOnChange("AI_GENERATED")} className="line-h-8 custom-fs-1 color-3 font-medium m-0 p-0 cursor-default">
                           AI-generated
                         </p>
                       </div>
@@ -113,7 +134,7 @@ function ReportBlogModal({ isReportModal, handleCloseReportModal, blog }) {
                   Cancel
                 </button>
                 <div className="padding50" style={{ paddingRight: 0 }}>
-                  <button disabled={isLoading || !selectedValue} onClick={handleReportStory} className={`flex items-center custom-gap-3 bdr-3 border-[#b63636] bg-[#b63636] border-radius-9 text-center text-white custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 transition-all duration-75 linear ${isLoading || !selectedValue ? "cursor-default opacity-[0.5]" : "cursor-pointer opacity-[0.9] hover:opacity-100"}`}>
+                  <button disabled={isLoading || !reportReason} onClick={handleReportStory} className={`flex items-center custom-gap-3 bdr-3 border-[#b63636] bg-[#b63636] border-radius-9 text-center text-white custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 transition-all duration-75 linear ${isLoading || !reportReason ? "cursor-default opacity-[0.5]" : "cursor-pointer opacity-[0.9] hover:opacity-100"}`}>
                     {isLoading && <div className="width83 aspect-square rounded-full border-2 border-white border-t-0 border-r-0 animate-spin"></div>} Done
                   </button>
                 </div>
