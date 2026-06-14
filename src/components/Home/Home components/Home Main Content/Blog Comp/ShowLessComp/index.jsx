@@ -9,7 +9,7 @@ import { useToggleMute } from "../../../../../../hooks/toggleMute";
 import { MuteContext } from "../../../../../../context/mute";
 import ReportBlogModal from "../../../../../Common/Modals/ReportBlog";
 
-function ShowLessComp({ setIsHideBlog, blog, setBlog }) {
+function ShowLessComp({ setIsHideBlog, blog }) {
   const { requestHandler } = useRequestHandler();
   const { muteUser, unmuteUser, mutePublication, unmutePublication } = useToggleMute();
   const { mutedUsers, mutedPublications } = useContext(MuteContext);
@@ -100,7 +100,6 @@ function ShowLessComp({ setIsHideBlog, blog, setBlog }) {
     setLoaders((prev) => ({ ...prev, publication: true }));
     try {
       const isSuccess = await unmutePublication(blog.publication);
-      if (isSuccess) setBlog((prev) => ({ ...prev, publication: { ...prev.publication, isMuted: false } }));
     } finally {
       setLoaders((prev) => ({ ...prev, publication: false }));
     }
@@ -119,15 +118,14 @@ function ShowLessComp({ setIsHideBlog, blog, setBlog }) {
     setLoaders((prev) => ({ ...prev, user: true }));
     try {
       const isSuccess = await unmuteUser(blog.author);
-      if (isSuccess) setBlog((prev) => ({ ...prev, author: { ...prev.author, isMuted: false } }));
     } finally {
       setLoaders((prev) => ({ ...prev, user: false }));
     }
   };
 
   const handleToggleMuteAction = (type) => {
-    if (type === "user") mutedUsers[blog.author._id] || blog.author.isMuted ? handleUnmuteUser() : handleMuteUser();
-    if (type === "publication") mutedPublications[blog.publication._id] || blog.publication.isMuted ? handleUnmutePublication() : handleMutePublication();
+    if (type === "user") mutedUsers[blog.author._id] ? handleUnmuteUser() : handleMuteUser();
+    if (type === "publication") mutedPublications[blog.publication._id] ? handleUnmutePublication() : handleMutePublication();
   };
 
   const handleCloseReportModal = () => {
@@ -173,7 +171,7 @@ function ShowLessComp({ setIsHideBlog, blog, setBlog }) {
               <div className="margin51">
                 <div className="margin-14 flex justify-center" style={{ marginTop: 0, marginInline: 0 }}>
                   <div className="border-radius10 bdr-5 flex flex-col w-full width61">
-                    <button onClick={() => handleToggleMuteAction("user")} disabled={loaders.user} className={`bdr-5 padding-19 padding-42 padding63 cursor-pointer m-0 flex transition-all duration-75 ease opacity-[0.9] hover:opacity-100 ${mutedUsers[blog.author._id] || blog.author.isMuted ? "bg-[#f9f9f9]" : "bg-transparent"}`} style={{ borderInline: 0, borderTop: 0 }}>
+                    <button onClick={() => handleToggleMuteAction("user")} disabled={loaders.user} className={`bdr-5 padding-19 padding-42 padding63 cursor-pointer m-0 flex transition-all duration-75 ease opacity-[0.9] hover:opacity-100 ${mutedUsers[blog.author._id] ? "bg-[#f9f9f9]" : "bg-transparent"}`} style={{ borderInline: 0, borderTop: 0 }}>
                       <div className="width-13 aspect-square">
                         <GoMute className="w-full h-full color-3" />
                       </div>
@@ -183,7 +181,7 @@ function ShowLessComp({ setIsHideBlog, blog, setBlog }) {
                       </div>
                     </button>
                     {blog.publication && (
-                      <button onClick={() => handleToggleMuteAction("publication")} disabled={loaders.publication} className={`bdr-5 padding-19 padding-42 padding63 cursor-pointer m-0 flex transition-all duration-75 ease opacity-[0.9] hover:opacity-100 ${mutedPublications[blog.publication._id] || blog.publication.isMuted ? "bg-[#f9f9f9]" : "bg-transparent"}`} style={{ borderInline: 0, borderTop: 0 }}>
+                      <button onClick={() => handleToggleMuteAction("publication")} disabled={loaders.publication} className={`bdr-5 padding-19 padding-42 padding63 cursor-pointer m-0 flex transition-all duration-75 ease opacity-[0.9] hover:opacity-100 ${mutedPublications[blog.publication._id] ? "bg-[#f9f9f9]" : "bg-transparent"}`} style={{ borderInline: 0, borderTop: 0 }}>
                         <div className="width-13 aspect-square">
                           <GoMute className="w-full h-full color-3" />
                         </div>

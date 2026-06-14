@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dialog } from "@mui/material";
+import { Dialog, Fade, Grow, Slide, Zoom } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 
 function DeleteReadingHistoryModal({ isDeleteModal, handleCloseDeleteModal, clearReadingHistory }) {

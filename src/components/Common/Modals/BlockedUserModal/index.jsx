@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Dialog } from "@mui/material";
+import { Dialog, Slide } from "@mui/material";
 import { MdClose } from "react-icons/md";
 import { defaultLoaderTime } from "../../../../constants/constant";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import ListItem from "./ListItem";
 import Spinner from "../../Spinner";
+import { useInfiniteScroll } from "../../../../hooks/useInfiniteScroll";
 
 function BlockedUserModal({ isShowModal, handleCloseModal }) {
   const { requestHandler } = useRequestHandler();
@@ -12,23 +13,40 @@ function BlockedUserModal({ isShowModal, handleCloseModal }) {
   const [isLoading, setIsLoading] = useState(true);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const [users, setUsers] = useState([]);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const getBlockedUsers = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
     try {
-      const response = await requestHandler("/user/block/get-blocked-users");
+      const url = scroll.cursor ? `/user/block/get-blocked-users?cursor=${scroll.cursor}&limit=${20}` : `/user/block/get-blocked-users?limit=${20}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.users) {
-        setUsers(result.data.users);
+        setUsers((prev) => [...prev, ...result.data.users]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
-
-      console.log("result: ", result);
     } catch (err) {
       console.error(err);
+      setScroll((prev) => ({ ...prev, hasMore: false }));
     } finally {
       setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getBlockedUsers,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     getBlockedUsers();
@@ -44,6 +62,7 @@ function BlockedUserModal({ isShowModal, handleCloseModal }) {
     <Dialog
       open={isShowModal}
       onClose={handleCloseModal}
+      transitionDuration={500}
       PaperProps={{
         sx: {
           maxWidth: "none",
@@ -74,6 +93,7 @@ function BlockedUserModal({ isShowModal, handleCloseModal }) {
               {users.map((item) => (
                 <ListItem item={item} key={item._id} />
               ))}
+              {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
             </>
           )}
         </div>

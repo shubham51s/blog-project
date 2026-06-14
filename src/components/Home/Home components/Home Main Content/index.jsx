@@ -4,11 +4,21 @@ import BlogComp from "./Blog Comp";
 import BlogLoader from "./Blog Comp/skeleton";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { defaultLoaderTime } from "../../../../constants/constant";
+import { useInfiniteScroll } from "../../../../hooks/useInfiniteScroll";
 
 function HomeMainContentComp() {
   const { requestHandler } = useRequestHandler();
   const [initialLoader, setInitialLoader] = useState(true);
+  const limit = 8;
   const loaderTimeout = useRef(null);
+  const [blogs, setBlogs] = useState([]);
+  const [activeTopicIndex, setActiveTopicIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [scroll, setScroll] = useState({
+    loading: false,
+    hasMore: true,
+    cursor: null,
+  });
 
   const [recommendedTopics, setRecommendedTopics] = useState([
     {
@@ -35,32 +45,39 @@ function HomeMainContentComp() {
     },
   ]);
 
-  const [blogs, setBlogs] = useState([]);
-  const [activeTopicIndex, setActiveTopicIndex] = useState(0);
-  const [loaders, setLoaders] = useState({
-    blogsLoader: true,
-  });
-
   const handleActiveTabChange = (index) => {
     if (index === activeTopicIndex) return;
     setActiveTopicIndex(index);
   };
 
   const getBlogs = async () => {
+    if (!scroll.hasMore) return;
+    setScroll((prev) => ({ ...prev, loading: true }));
     try {
-      const response = await requestHandler("/blogs");
+      const url = scroll.cursor ? `/blogs?cursor=${scroll.cursor}&limit=${limit}` : `/blogs?limit=${limit}`;
+      const response = await requestHandler(url);
       const result = await response.json();
 
-      if (loaders.blogsLoader) setLoaders((prev) => ({ ...prev, blogsLoader: false }));
-
-      if (response?.status === 200) {
-        setBlogs(result.data.blogs);
+      if (response?.status === 200 && result?.data?.blogs) {
+        setBlogs((prev) => [...prev, ...result.data.blogs]);
+        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+      } else {
+        setScroll((prev) => ({ ...prev, hasMore: false }));
       }
     } catch (err) {
+      setScroll((prev) => ({ ...prev, hasMore: false }));
       console.error(err);
-      if (loaders.blogsLoader) setLoaders((prev) => ({ ...prev, blogsLoader: false }));
+    } finally {
+      setIsLoading(false);
+      setScroll((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const sentinel = useInfiniteScroll({
+    loadMore: getBlogs,
+    hasMore: scroll.hasMore,
+    scrollLoader: scroll.loading,
+  });
 
   useEffect(() => {
     getBlogs();
@@ -95,7 +112,7 @@ function HomeMainContentComp() {
                             <div className="inline-block outline-none">
                               <div className="p-0 m-0 cursor-pointer no-underline">
                                 <div className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-300 ease-in-out hover:opacity-100 ${activeTopicIndex == item.id ? "opacity-100" : "opacity-75"}`}>
-                                  <button onClick={() => handleActiveTabChange(item.id)} disabled={loaders.blogsLoader || initialLoader} className="whitespace-nowrap border-0 p-0 m-0 bg-transparent cursor-pointer">
+                                  <button onClick={() => handleActiveTabChange(item.id)} disabled={isLoading || initialLoader} className="whitespace-nowrap border-0 p-0 m-0 bg-transparent cursor-pointer">
                                     {item.name}
                                   </button>
                                 </div>
@@ -117,9 +134,16 @@ function HomeMainContentComp() {
           {/* section-4 */}
           <div className="flex justify-center">
             <div className="w-full max-width-2 margin-2 min-w-0">
-              {(initialLoader || loaders.blogsLoader) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
-              {!initialLoader && !loaders.blogsLoader && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
-              {!initialLoader && !loaders.blogsLoader && blogs.length > 0 && blogs.map((item) => <BlogComp item={item} key={item._id} />)}
+              {(initialLoader || isLoading) && Array.from({ length: 3 }).map((_, i) => <BlogLoader key={i} />)}
+              {!initialLoader && !isLoading && blogs.length === 0 && <NoContentComp item={recommendedTopics[activeTopicIndex].noData} />}
+              {!initialLoader && !isLoading && blogs.length > 0 && (
+                <>
+                  {blogs.map((item) => (
+                    <BlogComp item={item} key={item._id} />
+                  ))}
+                  {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+                </>
+              )}
             </div>
           </div>
         </div>

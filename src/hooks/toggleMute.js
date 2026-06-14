@@ -8,6 +8,7 @@ export function useToggleMute() {
   const { addMutedUser, removeMutedUser, addMutedPublication, removeMutedPublication } = useContext(MuteContext);
 
   const muteUser = async (user) => {
+    addMutedUser(user._id);
     try {
       const params = {
         target: user._id,
@@ -18,20 +19,22 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${user.name} has been muted. You will no longer see their stories on your homepage.`);
-        addMutedUser(user._id);
       } else {
         showToast(result?.message || "Some error occured.");
+        removeMutedUser(user._id);
       }
 
       return response?.status === 200;
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+      removeMutedUser(user._id);
       return false;
     }
   };
 
   const unmuteUser = async (user) => {
+    removeMutedUser(user._id);
     try {
       const params = {
         target: user._id,
@@ -42,15 +45,16 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${user.name} has been unmuted.`);
-        removeMutedUser(user._id);
       } else {
         showToast(result?.message || "Some error occured");
+        addMutedUser(user._id);
       }
 
       return response?.status === 200;
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+      addMutedUser(user._id);
       return false;
     }
   };
