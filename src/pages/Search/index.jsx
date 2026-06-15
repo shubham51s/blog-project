@@ -46,11 +46,8 @@ function SearchPage() {
 
   return (
     <div className="width-18 m-auto h-full overflow-hidden flex justify-evenly">
-      {/* <Outlet /> */}
       <main className="width-20 h-full overflow-y-auto invisible-scrollbar grow flex-shrink basis-auto block">
         <div className="h-full flex flex-col">
-          {/* <div className="height-10"></div> */}
-          {/* <div className="sticky top-2 z-[499] custom-bg-8"> */}
           {search && (
             <div className="grow shrink-0 basis-auto">
               <div className="flex justify-center custom-bg-8">
