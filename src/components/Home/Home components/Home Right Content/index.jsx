@@ -3,106 +3,16 @@ import { Link } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
 import { CiBookmarkPlus } from "react-icons/ci";
 import StaffListItem from "./StaffListItem";
-import FollowListItem from "./FollowListItem";
 import StaffListItemLoader from "./StaffListItem/skeleton";
 import { CommonContext } from "../../../../context/commonContext";
 import TopicListItem from "./TopicListItem";
 import TopicListLoader from "./TopicListItem/skeleton";
 import FollowListItemLoader from "./FollowListItem/skeleton";
+import UserListItem from "./FollowListItem/user";
+import PublicationListItem from "./FollowListItem/publication";
 
 function HomeRightSectionComp() {
   const { sidebarData, isLoading } = useContext(CommonContext);
-
-  const staffPickedPosts = [
-    {
-      id: 0,
-      name: "Elizabeth Villano",
-      img: "https://miro.medium.com/v2/resize:fill:40:40/0*P8MtVUVSdQsZYtfM.",
-      title: "This Is What Censorship Looks Like in a National Park: The First Park Sign That Came Down",
-      date: "Jul 22",
-    },
-    {
-      id: 1,
-      name: "Dr. Cheryl Fogle-Hatch",
-      img: "https://miro.medium.com/v2/resize:fill:40:40/1*StB59injG6ZBN2B2iksKYg.png",
-      title: "Learning About Places Through Touch",
-      date: "3d ago",
-    },
-    {
-      id: 2,
-      name: "Zach Fernandez",
-      img: "https://miro.medium.com/v2/resize:fill:40:40/1*N3GI4jUlY2HugYm1EtWdPg.jpeg",
-      title: "Message Undelivered",
-      date: "May 28",
-    },
-    {
-      id: 3,
-      name: "Zach Fernandez",
-      img: "https://miro.medium.com/v2/resize:fill:40:40/1*N3GI4jUlY2HugYm1EtWdPg.jpeg",
-      title: "Message Undelivered",
-      date: "May 28",
-    },
-  ];
-
-  const [isShowWritingSection, setIsShowWritingSection] = useState(true);
-  const [RecommendedTopics, setRecommendedTopics] = useState([
-    {
-      id: 0,
-      name: "Programming",
-      path: "/",
-    },
-    {
-      id: 1,
-      name: "Writing",
-      path: "/",
-    },
-    {
-      id: 3,
-      name: "Self Improvement",
-      path: "/",
-    },
-    {
-      id: 4,
-      name: "Data Science",
-      path: "/",
-    },
-    {
-      id: 5,
-      name: "Technology",
-      path: "/",
-    },
-    {
-      id: 6,
-      name: "Relationships",
-      path: "/",
-    },
-    {
-      id: 7,
-      name: "Cryptocurrency",
-      path: "/",
-    },
-  ]);
-
-  const [peopleToFollow, showPeopleToFollow] = useState([
-    {
-      id: 0,
-      name: "Xinran Ma",
-      profileImg: "https://miro.medium.com/v2/resize:fill:64:64/1*vApbrRD-tGko7Ifvhzc3cg.png",
-      path: "/",
-    },
-    {
-      id: 1,
-      name: "Personal Growth",
-      profileImg: "https://miro.medium.com/v2/resize:fill:64:64/1*vT9qT49CpcgqXBZAh-X3cA.jpeg",
-      path: "/",
-    },
-    {
-      id: 2,
-      name: "Mark Simmons",
-      profileImg: "https://miro.medium.com/v2/resize:fill:64:64/1*uPc0nFQIyN2ZCAuitoZZ2g.jpeg",
-      path: "/",
-    },
-  ]);
 
   return (
     <div className="width-22 width-21 h-full overflow-y-auto bdr-5 padding-3 custom-bg-8 padding-24" style={{ borderRight: 0, borderBlock: 0, paddingBlock: 0 }}>
@@ -120,8 +30,8 @@ function HomeRightSectionComp() {
                   </div>
                   <div className="margin-21" style={{ marginTop: 0, marginInline: 0 }}>
                     {/* staff pick posts */}
-                    {!isLoading && sidebarData.blogs.slice(0, 3).map((item) => <StaffListItem item={item.blog} key={item._id} />)}
-                    {isLoading && Array.from({ length: 3 }).map((_, i) => <StaffListItemLoader key={i} />)}
+                    {!isLoading && sidebarData.blogs.slice(0, 4).map((item) => <StaffListItem item={item} key={item._id} />)}
+                    {isLoading && Array.from({ length: 4 }).map((_, i) => <StaffListItemLoader key={i} />)}
                   </div>
                   {/* <p className="custom-fs-1 color-4 custom-line-h-1 m-0 p-0">
                   <Link className="cursor-pointer m-0 p-0 no-underline font-medium custom-line-h-1 custom-fs-1">See the full list</Link>
@@ -151,7 +61,7 @@ function HomeRightSectionComp() {
                   </div>
                 )}
 
-                {(isLoading || (!isLoading && sidebarData?.users?.length > 0)) && (
+                {(isLoading || (!isLoading && sidebarData?.toFollow?.length > 0)) && (
                   <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                     <div>
                       <div className="padding-18" style={{ paddingBottom: 0 }}>
@@ -161,11 +71,18 @@ function HomeRightSectionComp() {
                           </div>
                         </div>
                         <div>
-                          {!isLoading && peopleToFollow.slice(0, 3).map((item) => <FollowListItem item={item} key={item.id} />)}
+                          {!isLoading &&
+                            sidebarData.toFollow.slice(0, 6).map((item) => (
+                              <React.Fragment key={item.type + item._id}>
+                                {item.type === "user" && <UserListItem item={item} key={item._id} />}
+                                {item.type === "publication" && <PublicationListItem item={item} key={item._id} />}
+                              </React.Fragment>
+                            ))}
+
                           {isLoading && Array.from({ length: 6 }).map((_, i) => <FollowListItemLoader key={i} />)}
                         </div>
                       </div>
-                      <div className={`padding-18 ${!isLoading && sidebarData?.users?.length >= 9 ? "visible" : "invisible"}`} style={{ paddingBottom: 0, paddingTop: 0 }}>
+                      <div className={`padding-18 ${!isLoading && sidebarData?.toFollow?.length >= 9 ? "visible" : "invisible"}`} style={{ paddingBottom: 0, paddingTop: 0 }}>
                         <p className="custom-fs-1 color-4 custom-line-h-1 m-0 p-0 font-medium">
                           <Link to="/me/following/suggestions" className="cursor-pointer m-0 p-0 hover:underline transition-all duration-75 ease">
                             See more suggestions
