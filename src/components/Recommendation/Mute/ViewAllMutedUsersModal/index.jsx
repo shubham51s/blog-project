@@ -8,7 +8,7 @@ import { useInfiniteScroll } from "../../../../hooks/useInfiniteScroll";
 
 function ViewAllMutedUsers({ handleCloseUserModal, usersCount, onMuteStatusChange }) {
   const { requestHandler } = useRequestHandler();
-  const limit = 1;
+  const limit = 20;
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [defaultLoader, setDefaultLoader] = useState(true);

@@ -1,29 +1,37 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { useToggleMute } from "../../../../../hooks/toggleMute";
-import { MuteContext } from "../../../../../context/mute";
 
 function ListItem({ item, onMuteStatusChange }) {
-  const { muteLoader, mutedPublications } = useContext(MuteContext);
   const { mutePublication, unmutePublication, publicationMuteLoader } = useToggleMute();
   const [publication, setPublication] = useState(item);
 
   const handleMuteBtnClick = async () => {
+    setPublication((prev) => ({ ...prev, isMuted: true }));
     const params = {
       _id: publication._id,
       name: publication.name,
     };
     const isSuccess = await mutePublication(params);
-    if (isSuccess) onMuteStatusChange("publication", true, publication._id);
+    if (isSuccess) {
+      onMuteStatusChange("publication", true, publication._id);
+    } else {
+      setPublication((prev) => ({ ...prev, isMuted: false }));
+    }
   };
 
   const handleUnmuteBtnClick = async () => {
+    setPublication((prev) => ({ ...prev, isMuted: false }));
     const params = {
       _id: publication._id,
       name: publication.name,
     };
     const isSuccess = await unmutePublication(params);
-    if (isSuccess) onMuteStatusChange("publication", false, publication._id);
+    if (isSuccess) {
+      onMuteStatusChange("publication", false, publication._id);
+    } else {
+      setPublication((prev) => ({ ...prev, isMuted: true }));
+    }
   };
 
   return (
@@ -53,12 +61,12 @@ function ListItem({ item, onMuteStatusChange }) {
             </div>
 
             <div className="margin-14 flex items-start justify-end width-23" style={{ marginRight: 0, marginBlock: 0 }}>
-              {!muteLoader.publication && mutedPublications[publication._id] && (
+              {publication.isMuted && (
                 <button onClick={handleUnmuteBtnClick} disabled={publicationMuteLoader} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease ${publicationMuteLoader ? "opacity-75" : "opacity-100"}`}>
                   <div className="color-3 custom-fs-1 line20 font-normal flex items-center">Muted</div>
                 </button>
               )}
-              {!muteLoader.publication && !mutedPublications[publication._id] && (
+              {!publication.isMuted && (
                 <button onClick={handleMuteBtnClick} disabled={publicationMuteLoader} className={`bdr-6 bg-[#191919] padding-20 padding-28 border-radius-7 cursor-pointer opacity-[0.95] transition-all duration-75 ease  ${publicationMuteLoader ? "" : "hover:opacity-100"}`}>
                   <div className="text-white custom-fs-1 line20 font-normal">Mute</div>
                 </button>

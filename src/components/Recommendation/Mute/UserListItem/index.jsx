@@ -7,33 +7,24 @@ import { MuteContext } from "../../../../context/mute";
 function UserListItem({ user, onMuteStatusChange }) {
   const { muteLoader, mutedUsers } = useContext(MuteContext);
   const { userInfo } = useContext(UserContext);
-  const { muteUser, unmuteUser } = useToggleMute();
-  const [isLoading, setIsLoading] = useState(false);
+  const { muteUser, unmuteUser, userMuteLoader } = useToggleMute();
 
   const handleMuteBtnClick = async () => {
-    setIsLoading(true);
-
     const params = {
       _id: user._id,
       name: user.name,
     };
     const isSuccess = await muteUser(params);
     if (isSuccess) onMuteStatusChange("user", true, user._id);
-
-    setIsLoading(false);
   };
 
   const handleUnmuteBtnClick = async () => {
-    setIsLoading(true);
-
     const params = {
       _id: user._id,
       name: user.name,
     };
     const isSuccess = await unmuteUser(params);
     if (isSuccess) onMuteStatusChange("user", false, user._id);
-
-    setIsLoading(false);
   };
 
   return (
@@ -65,12 +56,12 @@ function UserListItem({ user, onMuteStatusChange }) {
             {!muteLoader.user && userInfo._id !== user._id && (
               <div className="margin-14 flex items-start justify-end width-23" style={{ marginRight: 0, marginBlock: 0 }}>
                 {mutedUsers[user._id] && (
-                  <button onClick={handleUnmuteBtnClick} disabled={isLoading} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease ${isLoading ? "opacity-75" : "opacity-100"}`}>
+                  <button onClick={handleUnmuteBtnClick} disabled={userMuteLoader} className={`bdr17-hover padding-20 padding-28 border-radius-7 cursor-pointer transition-all duration-500 ease ${userMuteLoader ? "opacity-75" : "opacity-100"}`}>
                     <div className="color-3 custom-fs-1 line20 font-normal flex items-center">Muted</div>
                   </button>
                 )}
                 {!mutedUsers[user._id] && (
-                  <button onClick={handleMuteBtnClick} disabled={isLoading} className={`bdr-6 bg-[#191919] padding-20 padding-28 border-radius-7 cursor-pointer opacity-[0.95] transition-all duration-75 ease ${isLoading ? "" : "hover:opacity-100"}`}>
+                  <button onClick={handleMuteBtnClick} disabled={userMuteLoader} className={`bdr-6 bg-[#191919] padding-20 padding-28 border-radius-7 cursor-pointer opacity-[0.95] transition-all duration-75 ease ${userMuteLoader ? "" : "hover:opacity-100"}`}>
                     <div className="text-white custom-fs-1 line20 font-normal">Mute</div>
                   </button>
                 )}

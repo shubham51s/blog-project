@@ -32,6 +32,8 @@ function Follower() {
       const response = await requestHandler(url);
       const result = await response.json();
 
+      console.log("result: ", result);
+
       if (response?.status === 200 && result?.data?.follower) {
         setFollowersArr((prev) => [...prev, ...result.data.follower]);
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));

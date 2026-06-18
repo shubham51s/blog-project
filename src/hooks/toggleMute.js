@@ -126,5 +126,5 @@ export function useToggleMute() {
     }
   };
 
-  return { muteUser, unmuteUser, mutePublication, unmutePublication, publicationMuteLoader, userMuteLoader };
+  return { muteUser, unmuteUser, userMuteLoader, mutePublication, unmutePublication, publicationMuteLoader };
 }

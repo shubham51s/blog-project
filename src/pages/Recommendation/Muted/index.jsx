@@ -46,19 +46,9 @@ function Muted() {
 
   const onMuteStatusChange = (type, isMuted, id) => {
     if (type === "user") {
-      if (isMuted) {
-        setUsersCount((prev) => prev + 1);
-      }
-      if (!isMuted) {
-        setUsersCount((prev) => prev - 1);
-      }
+      setUsersCount((prev) => (isMuted ? prev + 1 : prev - 1));
     } else if (type === "publication") {
-      if (isMuted) {
-        setPublicationsCount((prev) => prev + 1);
-      }
-      if (!isMuted) {
-        setPublicationsCount((prev) => prev - 1);
-      }
+      setPublicationsCount((prev) => (isMuted ? prev + 1 : prev - 1));
     }
   };
 
@@ -107,7 +97,7 @@ function Muted() {
                   </div>
                 )}
 
-                {!defautlLoader && !isLoading && (users.length > 0 || publications.lengt > 0) && (
+                {!defautlLoader && !isLoading && (users.length > 0 || publications.length > 0) && (
                   <div>
                     {/* writer */}
                     {users.length > 0 && (
@@ -118,7 +108,7 @@ function Muted() {
                             <UserListItem key={item._id} user={item.target} onMuteStatusChange={onMuteStatusChange} />
                           ))}
 
-                          {users.length >= 0 && (
+                          {usersCount > 5 && (
                             <div className="margin60">
                               <p className="custom-fs-1 color-4 line20 font-normal m-0">
                                 <button onClick={() => setIsShowUserModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">
@@ -141,7 +131,7 @@ function Muted() {
                             <PublicationListItem publication={item.target} onMuteStatusChange={onMuteStatusChange} key={item._id} />
                           ))}
 
-                          {publications.length >= 5 && (
+                          {publicationCount > 5 && (
                             <div className="margin60">
                               <p className="custom-fs-1 color-4 line20 font-normal m-0">
                                 <button onClick={() => setIsPublicationModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">
