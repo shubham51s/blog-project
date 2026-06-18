@@ -5,22 +5,25 @@ const CommonContext = createContext();
 
 const CommonProvider = ({ children }) => {
   const { requestHandler } = useRequestHandler();
-  const [sidebarData, setSidebarData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [sidebarData, setSidebarData] = useState({
+    isLoading: true,
+    blogs: [],
+    topics: [],
+    toFollow: [],
+  });
 
   const getSidebarData = async () => {
     try {
       const response = await requestHandler("/users/top-recommendation");
       const result = await response.json();
 
-      console.log("result: ", result);
       if (response?.status === 200 && result?.data) {
-        setSidebarData(result.data);
+        setSidebarData((prev) => ({ ...prev, ...result.data }));
       }
     } catch (err) {
       console.error(err);
     } finally {
-      setIsLoading(false);
+      setSidebarData((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
@@ -28,7 +31,7 @@ const CommonProvider = ({ children }) => {
     getSidebarData();
   }, []);
 
-  return <CommonContext.Provider value={{ sidebarData, isLoading }}>{children}</CommonContext.Provider>;
+  return <CommonContext.Provider value={{ sidebarData }}>{children}</CommonContext.Provider>;
 };
 
 export { CommonContext };

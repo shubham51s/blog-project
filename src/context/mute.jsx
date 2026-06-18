@@ -61,34 +61,36 @@ const MuteProvider = ({ children }) => {
   };
 
   const addMutedUser = (userId) => {
-    if (!mutedUsers[userId]) setMutedUsers((prev) => ({ ...prev, [userId]: true }));
+    if (userId) setMutedUsers((prev) => ({ ...prev, [userId]: true }));
   };
 
   const removeMutedUser = (userId) => {
-    if (mutedUsers[userId])
+    if (userId) {
       setMutedUsers((prev) => {
         const copy = { ...prev };
         delete copy[userId];
         return copy;
       });
+    }
   };
 
   const addMutedPublication = (publicationId) => {
-    if (!mutedPublications[publicationId]) setMutedPublications((prev) => ({ ...prev, [publicationId]: true }));
+    if (publicationId) setMutedPublications((prev) => ({ ...prev, [publicationId]: true }));
   };
 
   const removeMutedPublication = (publicationId) => {
-    if (mutedPublications[publicationId])
+    if (publicationId) {
       setMutedPublications((prev) => {
         const copy = { ...prev };
         delete copy[publicationId];
         return copy;
       });
+    }
   };
 
   const fetchMutedUsersAndPublications = () => {
-    // fetchMutedUserIds();
-    // fetchMutedPublicationIds();
+    fetchMutedUserIds();
+    fetchMutedPublicationIds();
   };
 
   return <MuteContext.Provider value={{ muteLoader, mutedUsers, mutedPublications, fetchMutedUsersAndPublications, addMutedUser, removeMutedUser, addMutedPublication, removeMutedPublication }}>{children}</MuteContext.Provider>;

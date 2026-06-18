@@ -35,17 +35,18 @@ const PublicationProvider = ({ children }) => {
     }
   };
 
-  const addFollowingPublication = (userId) => {
-    if (!followingPublication[userId]) setFollowingPublication((prev) => ({ ...prev, [userId]: true }));
+  const addFollowingPublication = (publicationId) => {
+    if (publicationId) setFollowingPublication((prev) => ({ ...prev, [publicationId]: true }));
   };
 
-  const removeFollowingPublication = (userId) => {
-    if (followingPublication[userId])
+  const removeFollowingPublication = (publicationId) => {
+    if (publicationId) {
       setFollowingPublication((prev) => {
         const copy = { ...prev };
-        delete copy[userId];
+        delete copy[publicationId];
         return copy;
       });
+    }
   };
 
   return <PublicationContext.Provider value={{ isPublicationLoader, followingPublication, fetchFollowingPublicationIds, addFollowingPublication, removeFollowingPublication }}>{children}</PublicationContext.Provider>;

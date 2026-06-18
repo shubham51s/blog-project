@@ -10,9 +10,10 @@ import TopicListLoader from "./TopicListItem/skeleton";
 import FollowListItemLoader from "./FollowListItem/skeleton";
 import UserListItem from "./FollowListItem/user";
 import PublicationListItem from "./FollowListItem/publication";
+import Skeleton from "react-loading-skeleton";
 
 function HomeRightSectionComp() {
-  const { sidebarData, isLoading } = useContext(CommonContext);
+  const { sidebarData } = useContext(CommonContext);
 
   return (
     <div className="width-22 width-21 h-full overflow-y-auto bdr-5 padding-3 custom-bg-8 padding-24" style={{ borderRight: 0, borderBlock: 0, paddingBlock: 0 }}>
@@ -21,17 +22,22 @@ function HomeRightSectionComp() {
         <div className="sticky top-2 mt-0">
           <div className="height-14 flex flex-col">
             <div className="grow shrink-0 basis-auto">
-              {(isLoading || (!isLoading && sidebarData?.blogs?.length > 0)) && (
+              {(sidebarData.isLoading || (!sidebarData.isLoading && sidebarData?.blogs?.length > 0)) && (
                 <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                   <div className="margin-17" style={{ marginTop: 0 }}>
-                    <div className="cursor-pointer m-0 p-0 no-underline">
-                      <h2 className="font-10 font-semibold color-3 custom-line-h-1 m-0 p-0">Staff Picks</h2>
+                    <div className="cursor-pointer m-0 p-0 no-underline relative overflow-hidden">
+                      <h2 className={`font-10 font-semibold color-3 custom-line-h-1 m-0 p-0 ${sidebarData.isLoading ? "invisible" : "visible"}`}>Staff Picks</h2>
+                      {sidebarData.isLoading && (
+                        <div className="absolute top-0">
+                          <Skeleton height={3434} width={3434} />
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="margin-21" style={{ marginTop: 0, marginInline: 0 }}>
                     {/* staff pick posts */}
-                    {!isLoading && sidebarData.blogs.slice(0, 4).map((item) => <StaffListItem item={item} key={item._id} />)}
-                    {isLoading && Array.from({ length: 4 }).map((_, i) => <StaffListItemLoader key={i} />)}
+                    {!sidebarData.isLoading && sidebarData.blogs.slice(0, 4).map((item) => <StaffListItem item={item} key={item._id} />)}
+                    {sidebarData.isLoading && Array.from({ length: 4 }).map((_, i) => <StaffListItemLoader key={i} />)}
                   </div>
                   {/* <p className="custom-fs-1 color-4 custom-line-h-1 m-0 p-0">
                   <Link className="cursor-pointer m-0 p-0 no-underline font-medium custom-line-h-1 custom-fs-1">See the full list</Link>
@@ -40,17 +46,22 @@ function HomeRightSectionComp() {
               )}
 
               <div>
-                {(isLoading || (!isLoading && sidebarData?.topics?.length > 0)) && (
+                {(sidebarData.isLoading || (!sidebarData.isLoading && sidebarData?.topics?.length > 0)) && (
                   <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                     <div>
-                      <div className="padding-3" style={{ paddingTop: 0, paddingInline: 0 }}>
-                        <h2 className="tracking-normal font-10 font-semibold color-3 custom-line-h-1 m-0 p-0">Recommended topics</h2>
+                      <div className="padding-3 relative overflow-hidden" style={{ paddingTop: 0, paddingInline: 0 }}>
+                        <h2 className={`tracking-normal font-10 font-semibold color-3 custom-line-h-1 m-0 p-0 ${sidebarData.isLoading ? "invisible" : "visible"}`}>Recommended topics</h2>
+                        {sidebarData.isLoading && (
+                          <div className="absolute top-0">
+                            <Skeleton height={3434} width={3434} />
+                          </div>
+                        )}
                       </div>
                       <div className="flex items-start flex-wrap">
-                        {!isLoading && sidebarData.topics.map((item) => <TopicListItem item={item} key={item._id} />)}
-                        {isLoading && Array.from({ length: 8 }).map((_, i) => <TopicListLoader key={i} />)}
+                        {!sidebarData.isLoading && sidebarData.topics.map((item) => <TopicListItem item={item} key={item._id} />)}
+                        {sidebarData.isLoading && Array.from({ length: 8 }).map((_, i) => <TopicListLoader key={i} />)}
                       </div>
-                      <div className={`margin-6 ${!isLoading && sidebarData?.topics?.length >= 8 ? "visible" : "invisible"}`} style={{ marginBottom: 0 }}>
+                      <div className={`margin-6 ${!sidebarData.isLoading && sidebarData?.topics?.length >= 8 ? "visible" : "invisible"}`} style={{ marginBottom: 0 }}>
                         <p className="custom-fs-1 color-4 custom-line-h-1 font-medium m-0 p-0">
                           <Link to="/me/following/suggestions" className="cursor-pointer m-0 p-0 hover:underline transition-all duration-75 ease">
                             See more topics
@@ -61,17 +72,22 @@ function HomeRightSectionComp() {
                   </div>
                 )}
 
-                {(isLoading || (!isLoading && sidebarData?.toFollow?.length > 0)) && (
+                {(sidebarData.isLoading || (!sidebarData.isLoading && sidebarData?.toFollow?.length > 0)) && (
                   <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                     <div>
                       <div className="padding-18" style={{ paddingBottom: 0 }}>
                         <div>
-                          <div className="padding-3" style={{ paddingTop: 0, paddingInline: 0 }}>
-                            <h2 className="font-10 font-semibold color-3 custom-line-h-1 m-0 p-0">Who to follow</h2>
+                          <div className="padding-3 relative overflow-hidden" style={{ paddingTop: 0, paddingInline: 0 }}>
+                            <h2 className={`font-10 font-semibold color-3 custom-line-h-1 m-0 p-0 ${sidebarData.isLoading ? "invisible" : "visible"}`}>Who to follow</h2>
+                            {sidebarData.isLoading && (
+                              <div className="absolute top-0">
+                                <Skeleton height={3434} width={3434} />
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div>
-                          {!isLoading &&
+                          {!sidebarData.isLoading &&
                             sidebarData.toFollow.slice(0, 6).map((item) => (
                               <React.Fragment key={item.type + item._id}>
                                 {item.type === "user" && <UserListItem item={item} key={item._id} />}
@@ -79,10 +95,10 @@ function HomeRightSectionComp() {
                               </React.Fragment>
                             ))}
 
-                          {isLoading && Array.from({ length: 6 }).map((_, i) => <FollowListItemLoader key={i} />)}
+                          {sidebarData.isLoading && Array.from({ length: 6 }).map((_, i) => <FollowListItemLoader key={i} />)}
                         </div>
                       </div>
-                      <div className={`padding-18 ${!isLoading && sidebarData?.toFollow?.length >= 9 ? "visible" : "invisible"}`} style={{ paddingBottom: 0, paddingTop: 0 }}>
+                      <div className={`padding-18 ${!sidebarData.isLoading && sidebarData?.toFollow?.length >= 6 ? "visible" : "invisible"}`} style={{ paddingBottom: 0, paddingTop: 0 }}>
                         <p className="custom-fs-1 color-4 custom-line-h-1 m-0 p-0 font-medium">
                           <Link to="/me/following/suggestions" className="cursor-pointer m-0 p-0 hover:underline transition-all duration-75 ease">
                             See more suggestions

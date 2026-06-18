@@ -2,21 +2,19 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaHandsClapping } from "react-icons/fa6";
 import { IoChatbubbleSharp } from "react-icons/io5";
-import DeleteButton from "./DeleteButton";
 import MoreButton from "./MoreButton";
 import { formatDateInMonthDayYear } from "../../../../utils/dates";
 import noImage from "../../../../assets/images/noPreviewImage.png";
 import SaveBlog from "../../../Common/Buttons/ToggleBlogSave";
 import { getImageUrl } from "../../../../utils/common";
+import RemoveHistoryItem from "../../../Common/BlogActions/RemoveHistoryItem";
 
-function ReadingHistoryItem({ item, removeBlogFromHistory }) {
+function ReadingHistoryItem({ item }) {
   const navigate = useNavigate();
   const [blog, setBlog] = useState({ ...item.blog });
 
-  const navigateToBlogDetais = (e) => {
-    e.stopPropagation();
-
-    navigate(`/${blog.slug}/${blog._id}`);
+  const removeListItem = () => {
+    setBlog(null);
   };
 
   return (
@@ -52,30 +50,26 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                         {blog.publication && (
                           <div className="flex items-center">
                             <div className="margin-9 shrink-0" style={{ marginLeft: 0, marginBlock: 0 }}>
-                              <Link to={`/${blog.publication.slug}`} className="no-underline cursor-pointer">
+                              <Link to={`/publication/${blog.publication.slug}`} className="no-underline cursor-pointer">
                                 <div className="relative">
                                   <img loading="lazy" src={blog.publication.profileImg} className="width86 aspect-square br13" />
                                   <div className="absolute top-0 width86 aspect-square br13 boxShadow7"></div>
                                 </div>
                               </Link>
                             </div>
-
                             <div className="padding-23 whitespace-nowrap" style={{ paddingLeft: 0, paddingBlock: 0 }}>
                               <p className="font-4 color-4 line20 font-normal m-0">In</p>
                             </div>
-
                             <div>
-                              <Link to={`/${blog.publication.slug}`} className="no-underline cursor-pointer m-0 p-0 flex items-center">
+                              <Link to={`/publication/${blog.publication.slug}`} className="no-underline cursor-pointer m-0 p-0 flex items-center">
                                 <p className="truncate height-6 color-3 font-4 line20 font-normal m-0" title={blog.publication.name}>
                                   {blog.publication.name}
                                 </p>
                               </Link>
                             </div>
-
                             <div className="padding-23" style={{ paddingBlock: 0 }}>
                               <p className="font-4 color-4 line20 font-normal m-0">by</p>
                             </div>
-
                             <div>
                               <Link to={`/profile/${blog.author.username}`} className="no-underline cursor-pointer m-0 p-0 flex items-center">
                                 <p className="truncate height-6 color-3 font-4 line20 font-normal m-0" title={blog.author.name}>
@@ -98,7 +92,7 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                             </Link>
                           </div>
 
-                          <div onClick={(e) => navigateToBlogDetais(e)}>
+                          <div>
                             <div className="w-full padding72" style={{ paddingBottom: 0 }}>
                               <span className="font-4 color-4 line20 font-normal">
                                 <div className="height-50 flex justify-between">
@@ -128,9 +122,9 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                                     </div>
                                   </div>
                                   <div className="grow-0 shrink-0 basis-0 flex items-center justify-end">
-                                    <DeleteButton removeBlogFromHistory={removeBlogFromHistory} blog={blog} setBlog={setBlog} />
-                                    <SaveBlog item={item.blog} />
-                                    <MoreButton removeBlogFromHistory={removeBlogFromHistory} blog={blog} setBlog={setBlog} />
+                                    <RemoveHistoryItem blog={blog} type="button" removeListItem={removeListItem} />
+                                    <SaveBlog item={blog} />
+                                    <MoreButton blog={blog} removeListItem={removeListItem} setBlog={setBlog} />
                                     <div></div>
                                   </div>
                                 </div>
@@ -138,7 +132,6 @@ function ReadingHistoryItem({ item, removeBlogFromHistory }) {
                             </div>
                           </div>
                         </div>
-
                         <Link to={`/${blog.slug}/${blog._id}`} className="block margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
                           <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : noImage} className="border-radius-5 align-middle width-29 height-52" />
                         </Link>

@@ -1,18 +1,40 @@
 import React, { useState } from "react";
 import { Dialog } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
+import { useRequestHandler } from "../../../../hooks/requestHandler";
+import { showToast } from "../../../../utils/toaster";
 
-function DisableBlogCommentsModal({ isHideResponseModal, handleCloseHideResponseModal, hideResponses }) {
+function DisableBlogCommentsModal({ blog, isResponseModal, handleCloseResponseModal, onHideResponse }) {
+  const { requestHandler } = useRequestHandler();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleHideResponsesBtnClick = () => {
-    hideResponses(setIsLoading);
+  const disableShowComments = async () => {
+    setIsLoading(true);
+    try {
+      const params = {
+        blogId: blog._id,
+      };
+      const response = await requestHandler("/blogs/hide-responses", "POST", params);
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        showToast("Responses are now hidden for the blog.");
+        onHideResponse();
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Dialog
-      open={isHideResponseModal}
-      onClose={handleCloseHideResponseModal}
+      open={isResponseModal}
+      onClose={handleCloseResponseModal}
       PaperProps={{
         sx: {
           maxWidth: "none",
@@ -35,11 +57,11 @@ function DisableBlogCommentsModal({ isHideResponseModal, handleCloseHideResponse
                 <p className="line-h-8 font-10 color-4 font-normal m-0">This will disable the ability to respond or view responses to a story. Any existing responses will also no longer be visible. You can always undo this action.</p>
               </div>
               <div className="w-full flex justify-center">
-                <button onClick={handleCloseHideResponseModal} className="border-radius-9 bdr-7 text-center box-border color-3 custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 cursor-pointer opacity-[0.9] transition-all duration-75 linear hover:opacity-100">
+                <button onClick={handleCloseResponseModal} className="border-radius-9 bdr-7 text-center box-border color-3 custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 cursor-pointer opacity-[0.9] transition-all duration-75 linear hover:opacity-100">
                   Cancel
                 </button>
                 <div className="padding50" style={{ paddingRight: 0 }}>
-                  <button onClick={handleHideResponsesBtnClick} disabled={isLoading} className={`flex items-center custom-gap-3 bdr-3 border-[#1a8917] bg-[#1a8917] border-radius-9 text-center text-white custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 transition-all duration-75 linear ${isLoading ? "cursor-default opacity-[0.5]" : "cursor-pointer opacity-[0.95] hover:opacity-100"}`}>
+                  <button onClick={disableShowComments} disabled={isLoading} className={`flex items-center custom-gap-3 bdr-3 border-[#1a8917] bg-[#1a8917] border-radius-9 text-center text-white custom-fs-1 line20 font-medium custom-px-2 padding-38 m-0 transition-all duration-75 linear ${isLoading ? "cursor-default opacity-[0.5]" : "cursor-pointer opacity-[0.95] hover:opacity-100"}`}>
                     {isLoading && <div className="width83 aspect-square rounded-full border-2 border-white border-t-0 border-r-0 animate-spin"></div>}Confirm
                   </button>
                 </div>
@@ -49,7 +71,7 @@ function DisableBlogCommentsModal({ isHideResponseModal, handleCloseHideResponse
         </div>
 
         <div className="absolute topRight2">
-          <button onClick={handleCloseHideResponseModal} className="cursor-pointer m-0 p-0 color-3 opacity-50 transition-all duration-75 linear hover:opacity-100">
+          <button onClick={handleCloseResponseModal} className="cursor-pointer m-0 p-0 color-3 opacity-50 transition-all duration-75 linear hover:opacity-100">
             <div className="width58 aspect-square">
               <IoMdClose className="w-full h-full" />
             </div>

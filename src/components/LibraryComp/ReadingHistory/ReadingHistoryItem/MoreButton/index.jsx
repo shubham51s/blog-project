@@ -6,68 +6,31 @@ import { useToggleUserFollow } from "../../../../../hooks/toggleUserFollow";
 import { FollowingContext } from "../../../../../context/followingContext";
 import { showToast } from "../../../../../utils/toaster";
 import { UserContext } from "../../../../../context/userContext";
+import FollowAuthorBtn from "../../../../Common/BlogActions/FollowAuthor";
+import BreakLine from "../../../../Common/BlogActions/BreakLine";
+import FollowPublicationBtn from "../../../../Common/BlogActions/FollowPublication";
+import MuteAuthorBtn from "../../../../Common/BlogActions/MuteAuthor";
+import MutePublicationBtn from "../../../../Common/BlogActions/MutePublication";
+import ReportStory from "../../../../Common/BlogActions/ReportStory";
+import RemoveHistoryItem from "../../../../Common/BlogActions/RemoveHistoryItem";
+import DeleteBlogBtn from "../../../../Common/BlogActions/Delete";
+import StoryStatsBtn from "../../../../Common/BlogActions/StoryStats";
+import Edit from "../../../../Common/BlogActions/Edit";
+import SubmitToPublicationBtn from "../../../../Common/BlogActions/SubmitToPublication";
+import HideResponsesBtn from "../../../../Common/BlogActions/HideResponses";
 
-function MoreButton({ blog, setBlog, removeBlogFromHistory }) {
+function MoreButton({ blog, setBlog, removeListItem }) {
   const { userInfo } = useContext(UserContext);
-  const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
-  const { followUser, unfollowUser } = useToggleUserFollow();
-  const [isMuteUser, setIsMuteUser] = useState(true);
-  const [loaders, setLoaders] = useState({
-    delete: false,
-    follow: false,
-  });
+  const [isOpen, setIsOpen] = useState(false);
+  const isMyBlog = userInfo._id === blog?.author?._id;
 
-  const handleRemoveBlogBtnClick = async () => {
-    setLoaders((prev) => ({ ...prev, delete: true }));
-    try {
-      const params = {
-        blogId: blog._id,
-      };
-      const isDeleted = await removeBlogFromHistory(params);
-
-      if (isDeleted) setBlog(null);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoaders((prev) => ({ ...prev, delete: false }));
-    }
-  };
-
-  const handleFollowUser = async () => {
-    setLoaders((prev) => ({ ...prev, follow: true }));
-
-    const params = {
-      _id: blog.author._id,
-      name: blog.author.name,
-    };
-    await followUser(params);
-
-    setLoaders((prev) => ({ ...prev, follow: false }));
-  };
-
-  const handleUnfollowUser = async () => {
-    setLoaders((prev) => ({ ...prev, follow: true }));
-
-    const params = {
-      _id: blog.author._id,
-      name: blog.author.name,
-    };
-    await unfollowUser(params);
-
-    setLoaders((prev) => ({ ...prev, follow: false }));
-  };
-
-  const handleMuteUser = () => {
-    setIsMuteUser(true);
-  };
-
-  const handleUnmuteUser = () => {
-    setIsMuteUser(false);
+  const closePopup = () => {
+    setIsOpen(false);
   };
 
   return (
-    <Popover.Root>
-      <Popover.Trigger onClick={(e) => e.stopPropagation()} className="cursor-pointer m-0 padding-33 color-3 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
+    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger className="cursor-pointer m-0 padding-33 color-3 opacity-[0.8] transition-all duration-75 ease hover:opacity-100">
         <Tooltip arrow placement="top" enterDelay={500} title="More">
           <div className="width-13 aspect-square">
             <MdOutlineMoreHoriz className="w-full h-full" />
@@ -75,61 +38,23 @@ function MoreButton({ blog, setBlog, removeBlogFromHistory }) {
         </Tooltip>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" align="middle" sideOffset={1} className="box-shadow-4 border-radius-3 box-border custom-bg-8">
+        <Popover.Content onClick={(e) => e.stopPropagation()} side="bottom" align="middle" sideOffset={1} className="box-shadow-4 border-radius-3 box-border custom-bg-8 z-99">
           <Popover.Arrow className="fill-white" />
           <ul className="flex flex-col items-stretch p-0 m-0 list-none custom-px-2 width59 overflow-hidden">
-            <li className="custom-px-2 padding59 custom-fs-1 color-3 font-normal">
-              <button onClick={handleRemoveBlogBtnClick} disabled={loaders.delete} className="cursor-pointer m-0 p-0 text-[#c94a4a] transition-all duration-75 ease hover:text-[#b63636]">
-                Remove from reading history
-              </button>
-            </li>
-            <li className="custom-px-2">
-              <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
-            </li>
-            {!isFetchUserLoader && userInfo._id !== blog.author._id && (
-              <li className="custom-px-2 padding59 custom-fs-1 color-3 font-normal">
-                {!followingUsers[blog.author._id] && (
-                  <button onClick={handleFollowUser} disabled={loaders.follow} className="cursor-pointer m-0 p-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
-                    Follow author
-                  </button>
-                )}
-                {followingUsers[blog.author._id] && (
-                  <button onClick={handleUnfollowUser} disabled={loaders.follow} className="cursor-pointer m-0 p-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
-                    Unfollow author
-                  </button>
-                )}
-              </li>
-            )}
-            {blog.publication && (
-              <li className="custom-px-2 padding59 custom-fs-1 color-3 font-normal">
-                <button className="cursor-pointer m-0 p-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">Follow publication</button>
-              </li>
-            )}
-            {!isFetchUserLoader && userInfo._id !== blog.author._id && !blog.publication && (
-              <li className="custom-px-2">
-                <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
-              </li>
-            )}
-            <li className="custom-px-2 padding59 custom-fs-1 color-3 font-normal">
-              {!isMuteUser && (
-                <button onClick={handleMuteUser} className="cursor-pointer m-0 p-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
-                  Mute author
-                </button>
-              )}
-              {isMuteUser && (
-                <button onClick={handleUnmuteUser} className="cursor-pointer m-0 p-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">
-                  Unmute author
-                </button>
-              )}
-            </li>
-            {blog.publication && (
-              <li className="custom-px-2 padding59 custom-fs-1 color-3 font-normal">
-                <button className="cursor-pointer m-0 p-0 color-3 opacity-[0.85] transition-all duration-75 ease hover:opacity-100">Mute publication</button>
-              </li>
-            )}
-            <li className="custom-px-2 padding59 custom-fs-1 color-3 font-normal">
-              <button className="cursor-pointer m-0 p-0 text-[#c94a4a] transition-all duration-75 ease hover:text-[#b63636]">Report story</button>
-            </li>
+            <RemoveHistoryItem blog={blog} removeListItem={removeListItem} />
+            <BreakLine />
+            <Edit blog={blog} />
+            <StoryStatsBtn blog={blog} />
+            {isMyBlog && <BreakLine />}
+            <FollowAuthorBtn user={blog.author} />
+            <FollowPublicationBtn publication={blog.publication} />
+            <SubmitToPublicationBtn blog={blog} closePopup={closePopup} />
+            <BreakLine />
+            <MuteAuthorBtn user={blog.author} />
+            <MutePublicationBtn publication={blog.publication} />
+            <HideResponsesBtn blog={blog} closePopup={closePopup} setBlog={setBlog} />
+            <ReportStory blog={blog} closePopup={closePopup} />
+            <DeleteBlogBtn blog={blog} handleAfterBlogDelete={removeListItem} closePopup={closePopup} />
           </ul>
         </Popover.Content>
       </Popover.Portal>

@@ -36,16 +36,17 @@ const FollowingProvider = ({ children }) => {
   };
 
   const addUserFollowing = (userId) => {
-    if (!followingUsers[userId]) setFollowingUsers((prev) => ({ ...prev, [userId]: true }));
+    if (userId) setFollowingUsers((prev) => ({ ...prev, [userId]: true }));
   };
 
   const removeFollowingUser = (userId) => {
-    if (followingUsers[userId])
+    if (userId) {
       setFollowingUsers((prev) => {
         const copy = { ...prev };
         delete copy[userId];
         return copy;
       });
+    }
   };
 
   return <FollowingContext.Provider value={{ isFetchUserLoader, followingUsers, fetchFollowingAuthorIds, addUserFollowing, removeFollowingUser }}>{children}</FollowingContext.Provider>;

@@ -4,7 +4,6 @@ import * as Popover from "@radix-ui/react-popover";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { showToast } from "../../../../utils/toaster";
 import { UserContext } from "../../../../context/userContext";
-import DisableBlogCommentsModal from "../../../Common/Modals/DisableComments";
 import DeleteBlogModal from "../../../Common/Modals/ConfirmDeleteBlog";
 import { Tooltip } from "@mui/material";
 import { FollowingContext } from "../../../../context/followingContext";
@@ -182,7 +181,6 @@ function BlogMoreBtn({ listItem, deleteListItem, list }) {
           </Popover.Content>
         </Popover.Root>
       </div>
-      <DisableBlogCommentsModal isHideResponseModal={isHideResponseModal} handleCloseHideResponseModal={handleCloseHideResponseModal} hideResponses={hideResponses} />
       <DeleteBlogModal isDeleteModal={isDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal} blog={listItem.blog} />
     </>
   );

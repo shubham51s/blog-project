@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import DeleteBlogModal from "../../Modals/ConfirmDeleteBlog";
+import { UserContext } from "../../../../context/userContext";
 
-function DeleteBlogBtn({ blog, handleAfterBlogDelete = () => {} }) {
+function DeleteBlogBtn({ blog, handleAfterBlogDelete = () => {}, closePopup = () => {} }) {
+  const { userInfo } = useContext(UserContext);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
 
   const handleShowDeleteModal = () => {
@@ -9,16 +11,19 @@ function DeleteBlogBtn({ blog, handleAfterBlogDelete = () => {} }) {
   };
 
   const handleCloseDeleteModal = () => {
+    closePopup();
     setIsDeleteModal(false);
   };
 
   return (
     <>
-      <li className="custom-px-2 padding59">
-        <button onClick={handleShowDeleteModal} className="cursor-pointer m-0 p-0 flex items-center color-3 custom-fs-1 font-normal transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
-          <div className="flex items-start text-left color-9">Delete story</div>
-        </button>
-      </li>
+      {blog?.author?._id == userInfo._id && (
+        <li className="custom-px-2 padding59">
+          <button onClick={handleShowDeleteModal} className="cursor-pointer m-0 p-0 flex items-center color-3 custom-fs-1 font-normal transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
+            <div className="flex items-start text-left color-9">Delete story</div>
+          </button>
+        </li>
+      )}
       {isDeleteModal && <DeleteBlogModal isDeleteModal={isDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal} blog={blog} handleAfterBlogDelete={handleAfterBlogDelete} />}
     </>
   );

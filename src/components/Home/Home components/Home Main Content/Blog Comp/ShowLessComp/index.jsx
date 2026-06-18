@@ -11,16 +11,12 @@ import ReportBlogModal from "../../../../../Common/Modals/ReportBlog";
 
 function ShowLessComp({ setIsHideBlog, blog }) {
   const { requestHandler } = useRequestHandler();
-  const { muteUser, unmuteUser, mutePublication, unmutePublication } = useToggleMute();
+  const { muteUser, unmuteUser, mutePublication, unmutePublication, publicationMuteLoader, userMuteLoader } = useToggleMute();
   const { mutedUsers, mutedPublications } = useContext(MuteContext);
   const [isShowModal, setIsShowModal] = useState(false);
   const showModalTimeout = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isReportModal, setIsReportModal] = useState(false);
-  const [loaders, setLoaders] = useState({
-    user: false,
-    publication: false,
-  });
 
   const addNotInterested = async () => {
     setIsLoading(true);
@@ -88,39 +84,27 @@ function ShowLessComp({ setIsHideBlog, blog }) {
   };
 
   const handleMutePublication = async () => {
-    setLoaders((prev) => ({ ...prev, publication: true }));
-    try {
-      await mutePublication(blog.publication);
-    } finally {
-      setLoaders((prev) => ({ ...prev, publication: false }));
-    }
+    const params = {
+      _id: blog.publication._id,
+      name: blog.publication.name,
+    };
+    await mutePublication(params);
   };
 
   const handleUnmutePublication = async () => {
-    setLoaders((prev) => ({ ...prev, publication: true }));
-    try {
-      const isSuccess = await unmutePublication(blog.publication);
-    } finally {
-      setLoaders((prev) => ({ ...prev, publication: false }));
-    }
+    const params = {
+      _id: blog.publication._id,
+      name: blog.publication.name,
+    };
+    await unmutePublication(params);
   };
 
   const handleMuteUser = async () => {
-    setLoaders((prev) => ({ ...prev, user: true }));
-    try {
-      await muteUser(blog.author);
-    } finally {
-      setLoaders((prev) => ({ ...prev, user: false }));
-    }
+    await muteUser(blog.author);
   };
 
   const handleUnmuteUser = async () => {
-    setLoaders((prev) => ({ ...prev, user: true }));
-    try {
-      const isSuccess = await unmuteUser(blog.author);
-    } finally {
-      setLoaders((prev) => ({ ...prev, user: false }));
-    }
+    await unmuteUser(blog.author);
   };
 
   const handleToggleMuteAction = (type) => {
@@ -171,7 +155,7 @@ function ShowLessComp({ setIsHideBlog, blog }) {
               <div className="margin51">
                 <div className="margin-14 flex justify-center" style={{ marginTop: 0, marginInline: 0 }}>
                   <div className="border-radius10 bdr-5 flex flex-col w-full width61">
-                    <button onClick={() => handleToggleMuteAction("user")} disabled={loaders.user} className={`bdr-5 padding-19 padding-42 padding63 cursor-pointer m-0 flex transition-all duration-75 ease opacity-[0.9] hover:opacity-100 ${mutedUsers[blog.author._id] ? "bg-[#f9f9f9]" : "bg-transparent"}`} style={{ borderInline: 0, borderTop: 0 }}>
+                    <button onClick={() => handleToggleMuteAction("user")} disabled={userMuteLoader} className={`bdr-5 padding-19 padding-42 padding63 cursor-pointer m-0 flex transition-all duration-75 ease opacity-[0.9] hover:opacity-100 ${mutedUsers[blog.author._id] ? "bg-[#f9f9f9]" : "bg-transparent"}`} style={{ borderInline: 0, borderTop: 0 }}>
                       <div className="width-13 aspect-square">
                         <GoMute className="w-full h-full color-3" />
                       </div>
@@ -181,7 +165,7 @@ function ShowLessComp({ setIsHideBlog, blog }) {
                       </div>
                     </button>
                     {blog.publication && (
-                      <button onClick={() => handleToggleMuteAction("publication")} disabled={loaders.publication} className={`bdr-5 padding-19 padding-42 padding63 cursor-pointer m-0 flex transition-all duration-75 ease opacity-[0.9] hover:opacity-100 ${mutedPublications[blog.publication._id] ? "bg-[#f9f9f9]" : "bg-transparent"}`} style={{ borderInline: 0, borderTop: 0 }}>
+                      <button onClick={() => handleToggleMuteAction("publication")} disabled={publicationMuteLoader} className={`bdr-5 padding-19 padding-42 padding63 cursor-pointer m-0 flex transition-all duration-75 ease opacity-[0.9] hover:opacity-100 ${mutedPublications[blog.publication._id] ? "bg-[#f9f9f9]" : "bg-transparent"}`} style={{ borderInline: 0, borderTop: 0 }}>
                         <div className="width-13 aspect-square">
                           <GoMute className="w-full h-full color-3" />
                         </div>

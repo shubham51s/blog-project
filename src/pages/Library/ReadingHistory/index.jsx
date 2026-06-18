@@ -13,7 +13,6 @@ function ReadingHistory() {
   const isMounted = useRef(null);
   const loaderTimeout = useRef(null);
   const [blogs, setBlogs] = useState([]);
-  const [deletedCount, setDeletedCount] = useState(0);
   const [loaders, setLoaders] = useState({
     default: true,
     fetchHistory: true,
@@ -42,7 +41,6 @@ function ReadingHistory() {
       const result = await response.json();
 
       if (response?.status === 200) {
-        setDeletedCount(0);
         setBlogs([]);
         handleCloseDeleteModal();
       }
@@ -73,23 +71,6 @@ function ReadingHistory() {
     } finally {
       setLoaders((prev) => ({ ...prev, fetchHistory: false }));
       setScroll((prev) => ({ ...prev, loading: false }));
-    }
-  };
-
-  const removeBlogFromHistory = async (params) => {
-    try {
-      const response = await requestHandler(`/blog/read/user/remove/${params.blogId}`, "DELETE");
-      const result = await response.json();
-
-      if (response?.status === 200) {
-        setDeletedCount((prev) => prev + 1);
-      } else showToast(result?.message || "Some error occured.");
-
-      return response?.status === 200;
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured.");
-      return false;
     }
   };
 
@@ -141,8 +122,14 @@ function ReadingHistory() {
           )}
 
           {/* list */}
-          {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && blogs.map((item) => <ReadingHistoryItem removeBlogFromHistory={removeBlogFromHistory} key={item._id} item={item} />)}
-          {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+          {!loaders.default && !loaders.fetchHistory && blogs.length > 0 && (
+            <>
+              {blogs.map((item) => (
+                <ReadingHistoryItem key={item._id} item={item} />
+              ))}
+              {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+            </>
+          )}
         </div>
       </div>
 

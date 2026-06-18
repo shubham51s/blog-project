@@ -5,9 +5,12 @@ import { MuteContext } from "../context/mute";
 
 export function useToggleMute() {
   const { requestHandler } = useRequestHandler();
-  const { addMutedUser, removeMutedUser, addMutedPublication, removeMutedPublication } = useContext(MuteContext);
+  const { addMutedUser, removeMutedUser, addMutedPublication, removeMutedPublication, mutedPublications } = useContext(MuteContext);
+  const [publicationMuteLoader, setPublicationMuteLoader] = useState(false);
+  const [userMuteLoader, setUserMuteLoader] = useState(false);
 
   const muteUser = async (user) => {
+    setUserMuteLoader(true);
     addMutedUser(user._id);
     try {
       const params = {
@@ -30,11 +33,14 @@ export function useToggleMute() {
       showToast("Some error occured");
       removeMutedUser(user._id);
       return false;
+    } finally {
+      setUserMuteLoader(false);
     }
   };
 
   const unmuteUser = async (user) => {
     removeMutedUser(user._id);
+    setUserMuteLoader(true);
     try {
       const params = {
         target: user._id,
@@ -56,10 +62,15 @@ export function useToggleMute() {
       showToast("Some error occured");
       addMutedUser(user._id);
       return false;
+    } finally {
+      setUserMuteLoader(false);
     }
   };
 
   const mutePublication = async (publication) => {
+    setPublicationMuteLoader(true);
+    addMutedPublication(publication._id);
+
     try {
       const params = {
         target: publication._id,
@@ -70,20 +81,25 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${publication.name} has been muted. You will no longer see their stories on your homepage.`);
-        addMutedPublication(publication._id);
       } else {
         showToast(result?.message || "Some error occured.");
+        removeMutedPublication(publication._id);
       }
 
       return response?.status === 200;
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+      removeMutedPublication(publication._id);
       return false;
+    } finally {
+      setPublicationMuteLoader(false);
     }
   };
 
   const unmutePublication = async (publication) => {
+    setPublicationMuteLoader(true);
+    removeMutedPublication(publication._id);
     try {
       const params = {
         target: publication._id,
@@ -94,18 +110,21 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${publication.name} has been unmuted.`);
-        removeMutedPublication(publication._id);
       } else {
         showToast(result?.message || "Some error occured");
+        addMutedPublication(publication._id);
       }
 
       return response?.status === 200;
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+      addMutedPublication(publication._id);
       return false;
+    } finally {
+      setPublicationMuteLoader(false);
     }
   };
 
-  return { muteUser, unmuteUser, mutePublication, unmutePublication };
+  return { muteUser, unmuteUser, mutePublication, unmutePublication, publicationMuteLoader, userMuteLoader };
 }

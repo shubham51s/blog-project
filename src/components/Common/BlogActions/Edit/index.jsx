@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../../../utils/toaster";
+import { UserContext } from "../../../../context/userContext";
 
 function Edit({ blog }) {
   const { requestHandler } = useRequestHandler();
+  const { userInfo } = useContext(UserContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,11 +34,15 @@ function Edit({ blog }) {
   };
 
   return (
-    <li className="custom-px-2 padding59">
-      <button onClick={handleEditStoryBtnClick} disabled={isLoading} className="cursor-pointer m-0 p-0 flex items-center color-3 custom-fs-1 font-normal transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
-        <div className="flex items-start text-left">Edit story</div>
-      </button>
-    </li>
+    <>
+      {blog?.author?._id === userInfo._id && (
+        <li className="custom-px-2 padding59">
+          <button onClick={handleEditStoryBtnClick} disabled={isLoading} className="cursor-pointer m-0 p-0 flex items-center color-3 custom-fs-1 font-normal transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
+            <div className="flex items-start text-left">Edit story</div>
+          </button>
+        </li>
+      )}
+    </>
   );
 }
 
