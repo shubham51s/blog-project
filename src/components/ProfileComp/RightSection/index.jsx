@@ -27,34 +27,35 @@ function RightSectionComp({ user, setUser }) {
 
   const handleFollowUser = async () => {
     setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
-
-    const params = {
-      _id: user._id,
-      name: user.name,
-    };
-    const isSuccess = await followUser(params);
-
-    if (isSuccess) {
-      setUser((prev) => ({ ...prev, followersCount: prev.followersCount + 1 }));
+    try {
+      const params = {
+        _id: user._id,
+        name: user.name,
+      };
+      const isSuccess = await followUser(params);
+      if (isSuccess) {
+        setUser((prev) => ({ ...prev, followersCount: prev.followersCount + 1 }));
+      }
+    } finally {
+      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
     }
-
-    setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
   };
 
   const handleUnfollowUser = async () => {
     setLoaders((prev) => ({ ...prev, toggleFollowLoader: true }));
 
-    const params = {
-      _id: user._id,
-      name: user.name,
-    };
-    const isSuccess = await unfollowUser(params);
-
-    if (isSuccess) {
-      setUser((prev) => ({ ...prev, followersCount: prev.followersCount > 0 ? prev.followersCount - 1 : 0 }));
+    try {
+      const params = {
+        _id: user._id,
+        name: user.name,
+      };
+      const isSuccess = await unfollowUser(params);
+      if (isSuccess) {
+        setUser((prev) => ({ ...prev, followersCount: prev.followersCount > 0 ? prev.followersCount - 1 : 0 }));
+      }
+    } finally {
+      setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
     }
-
-    setLoaders((prev) => ({ ...prev, toggleFollowLoader: false }));
   };
 
   const fetchFollowingList = async () => {
@@ -63,7 +64,7 @@ function RightSectionComp({ user, setUser }) {
       const response = await requestHandler(`/follow/following/${user._id}?limit=5`);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.following) {
+      if (response?.status === 200 && result?.data?.following?.length) {
         setFollowingArr(result.data.following);
       }
     } catch (err) {
@@ -170,12 +171,11 @@ function RightSectionComp({ user, setUser }) {
                     </div>
                   )}
                 </div>
-                {/* reading list */}
+                {/* public lists */}
                 {user && user.publicLists?.length > 0 && (
                   <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                     <span className="font-10 font-medium color-3 line20">Lists</span>
                     <div className="margin-37"></div>
-
                     {user.publicLists.slice(0, 3).map((item) => (
                       <ListComp list={item} key={item._id} />
                     ))}
@@ -188,14 +188,14 @@ function RightSectionComp({ user, setUser }) {
                 )}
               </div>
               {/* footer */}
-              <div className="flex flex-wrap padding-3" style={{ paddingInline: 0 }}>
-                {footerOptions.map((item) => (
+              <div className="flex flex-wrap padding-3" style={{ paddingInline: 0, paddingBottom: 0 }}>
+                {/* {footerOptions.map((item) => (
                   <div className="margin-24" style={{ marginLeft: 0, marginBlock: 0 }} key={item.id}>
                     <Link to={item.path} className="cursor-pointer m-0 p-0 no-underline">
                       <p className="line-h-7 font-8 color-4 font-normal m-0">{item.name}</p>
                     </Link>
                   </div>
-                ))}
+                ))} */}
               </div>
             </div>
           </div>

@@ -43,19 +43,19 @@ function ListDetailsPage() {
   const [loaders, setLoaders] = useState({
     clapLoader: false,
   });
-  const limit = 15;
+  const limit = 13;
   const [scroll, setScroll] = useState({
     loading: false,
     hasMore: true,
     cursor: null,
   });
 
-  const fetchListItems = async (listId) => {
+  const getListItems = async (listId = null) => {
     if (!scroll.hasMore) return;
     setScroll((prev) => ({ ...prev, loading: true }));
 
     try {
-      const url = scroll.cursor ? `/list/items/get/${listId}?cursor=${scroll.cursor}&limit=${limit}` : `/list/items/get/${listId}?limit=${limit}`;
+      const url = scroll.cursor ? `/list/items/get/${listId ? listId : list._id}?cursor=${scroll.cursor}&limit=${limit}` : `/list/items/get/${listId ? listId : list._id}?limit=${limit}`;
       const response = await requestHandler(url);
       const result = await response.json();
 
@@ -79,9 +79,9 @@ function ListDetailsPage() {
       const response = await requestHandler(`/list/${slug}/${listId}`);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.list && result?.data?.list?.user.username === username) {
+      if (response?.status === 200 && result?.data?.list?.user?.username === username) {
         setList(result.data.list);
-        if (!listItems.length) fetchListItems(result.data.list._id);
+        if (!listItems.length) getListItems(result.data.list._id);
 
         if (result.data.list?.clapsCount) {
           setClapDetails((prev) => ({ ...prev, total: result.data.list.clapsCount }));
@@ -130,9 +130,7 @@ function ListDetailsPage() {
 
   const handleAddClapsBtnClick = () => {
     if (list.myClaps >= 50 || loaders.clapLoader) return;
-
     clapsClickedCount.current++;
-
     setClapDetails((prev) => {
       const newTotal = list.clapsCount - list.myClaps + Math.min(list.myClaps + clapsClickedCount.current, 50);
       return {
@@ -142,7 +140,6 @@ function ListDetailsPage() {
     });
 
     if (addClapTimeout.current) clearTimeout(addClapTimeout.current);
-
     addClapTimeout.current = setTimeout(() => {
       addClaps();
     }, 800);
@@ -175,7 +172,7 @@ function ListDetailsPage() {
   };
 
   const sentinel = useInfiniteScroll({
-    loadMore: fetchListItems,
+    loadMore: getListItems,
     hasMore: scroll.hasMore,
     scrollLoader: scroll.loading,
   });

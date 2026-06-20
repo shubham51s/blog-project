@@ -27,11 +27,7 @@ const CommonProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    getSidebarData();
-  }, []);
-
-  return <CommonContext.Provider value={{ sidebarData }}>{children}</CommonContext.Provider>;
+  return <CommonContext.Provider value={{ sidebarData, getSidebarData }}>{children}</CommonContext.Provider>;
 };
 
 export { CommonContext };

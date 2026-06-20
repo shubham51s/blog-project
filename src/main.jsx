@@ -19,8 +19,8 @@ createRoot(document.getElementById("root")).render(
       <PublicationProvider>
         <FollowingProvider>
           <ListProvider>
-            <UserProvider>
-              <CommonProvider>
+            <CommonProvider>
+              <UserProvider>
                 <App />
                 <Toaster
                   position="top-center"
@@ -35,8 +35,8 @@ createRoot(document.getElementById("root")).render(
                     },
                   }}
                 />
-              </CommonProvider>
-            </UserProvider>
+              </UserProvider>
+            </CommonProvider>
           </ListProvider>
         </FollowingProvider>
       </PublicationProvider>

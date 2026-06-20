@@ -29,7 +29,7 @@ function Home() {
       const response = await requestHandler(url);
       const result = await response.json();
 
-      if (response?.status === 200) {
+      if (response?.status === 200 && result?.data?.blogs?.length) {
         setBlogs((prev) => [...prev, ...result.data.blogs]);
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
       } else {

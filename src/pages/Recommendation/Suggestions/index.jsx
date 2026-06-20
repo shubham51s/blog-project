@@ -143,7 +143,7 @@ function Suggestions() {
                           {publications.map((item) => (
                             <PublicationListItem key={item._id} item={item} />
                           ))}
-                          {publications.length >= 1 && (
+                          {publications.length >= 5 && (
                             <div className="margin60">
                               <p className="custom-fs-1 color-4 line20 font-normal m-0">
                                 <button onClick={() => setIsShowPublicationModal(true)} className="cursor-pointer p-0 transition-all duration-75 ease hover:underline">

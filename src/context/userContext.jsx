@@ -6,6 +6,7 @@ import { ListContext } from "./listContext";
 import { showToast } from "../utils/toaster";
 import { PublicationContext } from "./publication";
 import { MuteContext } from "./mute";
+import { CommonContext } from "./commonContext";
 
 const UserContext = createContext();
 
@@ -16,6 +17,7 @@ const UserProvider = ({ children }) => {
   const { fetchMutedUsersAndPublications } = useContext(MuteContext);
   const { fetchFollowingPublicationIds } = useContext(PublicationContext);
   const { fetchMyLists } = useContext(ListContext);
+  const { getSidebarData } = useContext(CommonContext);
   const [userInfo, setUserInfo] = useState({});
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -41,6 +43,7 @@ const UserProvider = ({ children }) => {
         fetchFollowingPublicationIds();
         fetchMyLists();
         fetchMutedUsersAndPublications();
+        getSidebarData();
       } else {
         // need to check later
         if (location.pathname !== "/") navigate("/");

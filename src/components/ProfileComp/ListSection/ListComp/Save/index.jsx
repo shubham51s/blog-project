@@ -19,18 +19,18 @@ function SaveList({ user, setUser, list }) {
       };
 
       const response = await requestHandler("/list/toggle-save/save", "POST", params);
+      const result = await response.json();
 
       if (response?.status === 200) {
         setIsSaved(true);
         showToast("List saved to Your Library");
       } else {
-        showToast("Some error occured");
+        showToast(result?.message || "Some error occured");
       }
-
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -49,13 +49,12 @@ function SaveList({ user, setUser, list }) {
         setIsSaved(false);
         showToast("List removed from Your Library");
       } else {
-        showToast("Some error occured");
+        showToast(result?.message || "Some error occured");
       }
-
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+    } finally {
       setIsLoading(false);
     }
   };

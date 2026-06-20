@@ -17,16 +17,13 @@ function ProfileCommonLayout() {
   const [isError, setIsError] = useState(false);
   const { username } = useParams();
   const { requestHandler } = useRequestHandler();
-  const isCompMounted = useRef(null);
   const [user, setUser] = useState();
   const { pathname } = useLocation();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const isActiveTab = (id) => {
     if (id === 0) return !pathname.includes("/about") && !pathname.includes("/lists");
-
     if (id === 1) return pathname.includes("/lists");
-
     if (id === 2) return pathname.includes("/about");
   };
 
@@ -40,18 +37,20 @@ function ProfileCommonLayout() {
     }
   };
 
-  const fetchUserLists = async (userId) => {
+  const fetchUserLists = async (user) => {
     try {
-      const response = await requestHandler(`/list/user/${userId}`);
-
+      const response = await requestHandler(`/list/user/${user._id}`);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.lists?.length > 0) {
         const publicOnlyLists = result.data.lists.filter((item) => !item.isPrivate);
-        setUser((prev) => ({ ...prev, lists: result.data.lists, publicLists: publicOnlyLists }));
+        setUser({ ...user, lists: result.data.lists, publicLists: publicOnlyLists });
+      } else {
+        setUser({ ...user, lists: [], publicLists: [] });
       }
     } catch (err) {
       console.error(err);
+      setUser({ ...user, lists: [], publicLists: [] });
     }
   };
 
@@ -61,14 +60,11 @@ function ProfileCommonLayout() {
         setIsError(true);
         return;
       }
-
       const response = await requestHandler(`/users/${username}`);
-
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.user) {
-        setUser({ ...result.data.user, lists: [], publicLists: [] });
-        fetchUserLists(result.data.user._id);
+        fetchUserLists(result.data.user);
       } else setIsError(true);
     } catch (err) {
       console.error(err);
@@ -76,11 +72,13 @@ function ProfileCommonLayout() {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   useEffect(() => {
-    if (!isCompMounted.current) {
-      isCompMounted.current = true;
-      fetchUserDetails();
-    }
+    window.scrollTo(0, 0);
+    fetchUserDetails();
   }, []);
 
   return (
@@ -145,7 +143,7 @@ function ProfileCommonLayout() {
                             <div className="flex items-center overflow-y-hidden overflow-x-auto">
                               <div className="min-w-[-webkit-max-content]">
                                 <div className={`margin-14 min-w-max padding-42 ${isActiveTab(0) ? "bdr-7" : ""}`} style={{ marginLeft: 0, marginBlock: 0, borderTop: 0, borderInline: 0 }}>
-                                  <Link to="" className="p-0 border-0 cursor-pointer">
+                                  <Link to="" onClick={scrollToTop} className="p-0 border-0 cursor-pointer">
                                     <p className={`color-3 custom-fs-1 custom-line-h-1 font-medium m-0 transition-all duration-100 linear ${isActiveTab(0) ? "opacity-100" : "opacity-[0.85] hover:opacity-100"}`}>
                                       <span>Home</span>
                                     </p>
@@ -155,7 +153,7 @@ function ProfileCommonLayout() {
                               {!user.isNoBlogPublished && (
                                 <div className="min-w-[-webkit-max-content]">
                                   <div className={`margin-14 min-w-max padding-42 ${isActiveTab(1) ? "bdr-7" : ""}`} style={{ marginLeft: 0, marginBlock: 0, borderTop: 0, borderInline: 0 }}>
-                                    <Link to="lists" className="p-0 border-0 cursor-pointer">
+                                    <Link to="lists" onClick={scrollToTop} className="p-0 border-0 cursor-pointer">
                                       <p className={`color-3 custom-fs-1 custom-line-h-1 font-medium m-0 transition-all duration-100 linear ${isActiveTab(1) ? "opacity-100" : "opacity-[0.85] hover:opacity-100"}`}>
                                         <span>Lists</span>
                                       </p>
@@ -165,7 +163,7 @@ function ProfileCommonLayout() {
                               )}
                               <div className="min-w-[-webkit-max-content]">
                                 <div className={`margin-14 min-w-max padding-42 ${isActiveTab(2) ? "bdr-7" : ""}`} style={{ marginLeft: 0, marginBlock: 0, borderTop: 0, borderInline: 0 }}>
-                                  <Link to="about" className="p-0 border-0 cursor-pointer">
+                                  <Link to="about" onClick={scrollToTop} className="p-0 border-0 cursor-pointer">
                                     <p className={`color-3 custom-fs-1 custom-line-h-1 font-medium m-0 transition-all duration-100 linear ${isActiveTab(2) ? "opacity-100" : "opacity-[0.85] hover:opacity-100"}`}>
                                       <span>About</span>
                                     </p>
@@ -181,7 +179,7 @@ function ProfileCommonLayout() {
                 </div>
               )}
 
-              {/* passing data to all outlet components */}
+              {/* passing data to all child routes */}
               <Outlet context={{ user, setUser }} />
             </div>
           </main>

@@ -14,8 +14,8 @@ function Following() {
   const { requestHandler } = useRequestHandler();
   const [hasFetched, setHasFetched] = useState(false);
   const [peopleFollowing, setPeopleFollowing] = useState([]);
-  const [defaultLoader, setDefaultLoader] = useState(true);
   const defaultLoaderTimeout = useRef(null);
+  const [defaultLoader, setDefaultLoader] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const limit = 20;
   const [scroll, setScroll] = useState({
@@ -114,9 +114,7 @@ function Following() {
                 </div>
               )}
             </nav>
-
             <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}></div>
-
             <div>
               <div className="p-0 m-0">
                 {peopleFollowing.map((item) => (

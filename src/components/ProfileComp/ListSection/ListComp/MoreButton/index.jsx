@@ -120,16 +120,15 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
 
         const updatedPublicList = user.lists.filter((item) => !item.isPrivate || item._id === list._id);
         setUser((prev) => ({ ...prev, publicLists: updatedPublicList }));
+        setIsPopupOpen(false);
       } else {
         showToast(result?.message || "Some error occured");
       }
-      setLoaders((prev) => ({ ...prev, makeListPublicLoader: false }));
-      setIsPopupOpen(false);
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+    } finally {
       setLoaders((prev) => ({ ...prev, makeListPublicLoader: false }));
-      setIsPopupOpen(false);
     }
   };
 
@@ -149,17 +148,15 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
         const updatedPublicList = user.publicLists.filter((item) => item._id !== list._id);
         setUser((prev) => ({ ...prev, publicLists: updatedPublicList }));
         makeListItemPrivate(list._id);
+        handleClosePrivateListModal();
       } else {
         showToast(result?.message || "Some error occured");
       }
-
-      setIsLoading(false);
-      handleClosePrivateListModal();
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+    } finally {
       setIsLoading(false);
-      handleClosePrivateListModal();
     }
   };
 
