@@ -3,6 +3,7 @@ import HomeRightSectionComp from "../../components/Home/Home components/Home Rig
 import HomeMainContentComp from "../../components/Home/Home components/Home Main Content";
 import { Link, Outlet, useLocation, useSearchParams } from "react-router-dom";
 import RecentSearchSection from "../../components/Search/RecentSearch";
+import { scrollToTop } from "../../utils/common";
 
 function SearchPage() {
   const { pathname } = useLocation();
@@ -66,7 +67,7 @@ function SearchPage() {
                           {/* active topic border & all pending */}
                           {recommendedTopics.map((item) => (
                             <div className={`margin-8 min-w-max padding-18 pt-0 bdr-6 first:!ml-0`} key={item.id} title={item.title} style={{ marginBlock: 0, paddingTop: 0, borderTop: 0, borderInline: 0, borderColor: isTabActive(item) ? "" : "transparent" }}>
-                              <Link to={`${item.path}?q=${search}`} className="p-0 m-0 cursor-pointer no-underline">
+                              <Link onClick={scrollToTop} to={`${item.path}?q=${search}`} className="p-0 m-0 cursor-pointer no-underline">
                                 <div className={`custom-fs-1 cursor-pointer custom-line-h-1 color-6 font-medium transition-all duration-75 ease hover:opacity-100 ${isTabActive(item) ? "opacity-100" : "opacity-70"}`}>
                                   <div className="whitespace-nowrap border-0 p-0 m-0 bg-transparent">{item.name}</div>
                                 </div>

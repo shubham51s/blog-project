@@ -28,13 +28,13 @@ function MyLists() {
     setScroll((prev) => ({ ...prev, loading: true }));
 
     try {
-      const url = scroll.cursor ? `/list/my-lists?cursor=${scroll.cursor}&limit=${limit}` : `/list/my-lists?limit=${limit}`;
-      const response = await requestHandler(url);
+      const response = await requestHandler("/list/my-lists");
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.lists) {
         setLists((prev) => [...prev, ...result.data.lists]);
-        setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
+        // pagination removed for now
+        // setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
       } else {
         setScroll((prev) => ({ ...prev, hasMore: false }));
       }
@@ -57,13 +57,13 @@ function MyLists() {
     hasMore: scroll.hasMore,
     scrollLoader: scroll.loading,
   });
+
   useEffect(() => {
     fetchMyLists();
 
     if (!defaultLoaderTimeout.current) {
       defaultLoaderTimeout.current = setTimeout(() => {
         setDefaultLoader(false);
-        defaultLoaderTimeout.current = true;
       }, defaultLoaderTime);
     }
   }, []);
@@ -71,11 +71,9 @@ function MyLists() {
   return (
     <>
       {isShowListBanner && <CreateListBanner setIsShowListBanner={setIsShowListBanner} />}
-
       <div>{(defaultLoader || isLoading) && Array.from({ length: 4 }).map((_, i) => <ListLoader key={i} />)}</div>
-
       <div>{!defaultLoader && !isLoading && lists.map((item) => <ListComp key={item._id} user={user} setUser={setUser} item={item} filterOutDeletedList={filterOutDeletedList} />)}</div>
-      <div>{!defaultLoader && !isLoading && lists.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}</div>
+      <div>{!defaultLoader && !isLoading && lists.length > 0 && scroll.hasMore && false && <div ref={sentinel} style={{ height: "1px" }}></div>}</div>
     </>
   );
 }

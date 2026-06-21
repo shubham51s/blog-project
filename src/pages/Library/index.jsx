@@ -27,7 +27,6 @@ function LibraryPage() {
         <div className="flex justify-center">
           <div className="w-full max-width-2 min-w-0 margin-12">
             <SectionHeader handleCreateNewBlogBtnClick={handleCreateNewBlogBtnClick} />
-
             <Outlet />
           </div>
         </div>

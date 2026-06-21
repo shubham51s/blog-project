@@ -58,7 +58,6 @@ function ListSection() {
     if (!defaultLoaderTimeout.current) {
       defaultLoaderTimeout.current = setTimeout(() => {
         setDefaultLoader(false);
-        defaultLoaderTimeout.current = null;
       }, defaultLoaderTime);
     }
   }, []);
@@ -70,7 +69,7 @@ function ListSection() {
       {!defaultLoader && !isLoading && lists.length > 0 && (
         <>
           {lists.map((item) => (
-            <SavedListItem key={item._id} item={item} />
+            <SavedListItem key={item._id} item={item} isRemove={false} />
           ))}
 
           {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}

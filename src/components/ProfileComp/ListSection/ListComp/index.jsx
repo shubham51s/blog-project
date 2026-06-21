@@ -11,9 +11,9 @@ function ListComp({ user, setUser, item, filterOutDeletedList }) {
   const { userInfo } = useContext(UserContext);
   const [list, setList] = useState(item);
   const preview = {
-    first: list.previewImages[0] ? getImageUrl(list.previewImages[0]) : null,
-    second: list.previewImages[1] ? getImageUrl(list.previewImages[1]) : null,
-    third: list.previewImages[2] ? getImageUrl(list.previewImages[2]) : null,
+    first: list?.previewImages[0] ? getImageUrl(list.previewImages[0]) : null,
+    second: list?.previewImages[1] ? getImageUrl(list.previewImages[1]) : null,
+    third: list?.previewImages[2] ? getImageUrl(list.previewImages[2]) : null,
   };
 
   const handleNavigateToLink = () => {

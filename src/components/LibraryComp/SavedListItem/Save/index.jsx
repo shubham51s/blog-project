@@ -11,6 +11,7 @@ function SaveList({ list, removeUnsavedListItemFromList }) {
 
   const saveList = async () => {
     setIsLoading(true);
+
     try {
       const params = {
         listId: list._id,
@@ -20,22 +21,22 @@ function SaveList({ list, removeUnsavedListItemFromList }) {
       const result = await response.json();
 
       if (response?.status === 200) {
-        setIsSaved(true);
         showToast("List saved to Your Library");
+        setIsSaved(true);
       } else {
         showToast(result?.message || "Some error occured");
       }
-
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+    } finally {
       setIsLoading(false);
     }
   };
 
   const unsaveList = async () => {
     setIsLoading(true);
+
     try {
       const params = {
         listId: list._id,
@@ -45,41 +46,40 @@ function SaveList({ list, removeUnsavedListItemFromList }) {
       const result = await response.json();
 
       if (response?.status === 200) {
-        setIsSaved(false);
         showToast("List removed from Your Library");
+        setIsSaved(false);
         removeUnsavedListItemFromList();
       } else {
         showToast(result?.message || "Some error occured");
       }
-
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
       showToast("Some error occured");
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <>
-      {isSaved && (
-        <div className="margin-16 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0, marginBlock: 0 }}>
-          {!isSaved && (
-            <button onClick={saveList} disabled={isLoading} className={`custom-px-2 padding-36 transition-all duration-200 linear ${isLoading ? "cursor-default opacity-50" : "cursor-pointer opacity-[0.75] hover:opacity-100"}`} title="Save list">
-              <div className="width-13 aspect-square color-3">
-                <MdOutlineBookmarkAdd className="w-full h-full" />
-              </div>
-            </button>
-          )}
-          {isSaved && (
-            <button onClick={unsaveList} disabled={isLoading} className={`custom-px-2 padding-36 transition-all duration-200 linear ${isLoading ? "cursor-default opacity-50" : "cursor-pointer opacity-[0.75] hover:opacity-100"}`} title="Remove from Your library">
-              <div className="width-13 aspect-square color-3">
-                <MdOutlineBookmark className="w-full h-full" />
-              </div>
-            </button>
-          )}
-        </div>
-      )}
+      {/* {(isSaved || true) && ( */}
+      <div className="margin-16 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0, marginBlock: 0 }}>
+        {!isSaved && (
+          <button onClick={saveList} disabled={isLoading} className={`custom-px-2 padding-36 transition-all duration-200 linear ${isLoading ? "cursor-default opacity-50" : "cursor-pointer opacity-[0.75] hover:opacity-100"}`} title="Save list">
+            <div className="width-13 aspect-square color-3">
+              <MdOutlineBookmarkAdd className="w-full h-full" />
+            </div>
+          </button>
+        )}
+        {isSaved && (
+          <button onClick={unsaveList} disabled={isLoading} className={`custom-px-2 padding-36 transition-all duration-200 linear ${isLoading ? "cursor-default opacity-50" : "cursor-pointer opacity-[0.75] hover:opacity-100"}`} title="Remove from Your library">
+            <div className="width-13 aspect-square color-3">
+              <MdOutlineBookmark className="w-full h-full" />
+            </div>
+          </button>
+        )}
+      </div>
+      {/* )} */}
     </>
   );
 }

@@ -33,3 +33,7 @@ export const getSubmissionStatus = (status) => {
   if (status === "withdrawn") return "Withdrawn";
   return status;
 };
+
+export const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};

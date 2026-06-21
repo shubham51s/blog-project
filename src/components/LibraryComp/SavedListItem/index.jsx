@@ -4,18 +4,24 @@ import { IoLockClosed } from "react-icons/io5";
 import MoreButton from "./MoreButton";
 import SaveList from "./Save";
 import { UserContext } from "../../../context/userContext";
+import { getImageUrl } from "../../../utils/common";
 
-function SavedListItem({ item }) {
+function SavedListItem({ item, isRemove = true }) {
   const navigate = useNavigate();
   const { userInfo } = useContext(UserContext);
   const [list, setList] = useState(item);
+  const preview = {
+    first: list?.previewImages[0] ? getImageUrl(list.previewImages[0]) : null,
+    second: list?.previewImages[1] ? getImageUrl(list.previewImages[1]) : null,
+    third: list?.previewImages[2] ? getImageUrl(list.previewImages[2]) : null,
+  };
 
   const handleNavigateToLink = () => {
     navigate(`/profile/${list.user.username}/list/${list.slug}/${list._id}`);
   };
 
   const removeUnsavedListItemFromList = () => {
-    setList(null);
+    if (isRemove) setList(null);
   };
 
   return (
@@ -42,13 +48,13 @@ function SavedListItem({ item }) {
             <div className="flex items-center justify-between">
               <div className="flex margin-6 items-center">
                 <p className="font-4 color-4 line20 font-normal m-0">{list.savedCount > 0 ? list.savedCount + " stories" : "No stories"}</p>
-                {list.isPrivate && (
+                {/* {list.isPrivate && (
                   <div className="padding50" style={{ paddingRight: 0 }}>
                     <div className="width68 aspect-square opacity-[0.80]">
                       <IoLockClosed className="w-full h-full" />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               <div className="flex items-center">
                 {userInfo._id !== list.user._id && <SaveList list={list} removeUnsavedListItemFromList={removeUnsavedListItemFromList} />}
@@ -61,17 +67,20 @@ function SavedListItem({ item }) {
             <div className="relative h-full flex overflow-hidden justify-end">
               <div className="relative bg-10 z-[3] bdr18" style={{ borderLeft: 0, borderBlock: 0 }}>
                 <div className="h-full">
-                  <img loading="lazy" src="https://miro.medium.com/v2/da:true/resize:fill:332:288/0*zvupDdPT2GwFZDCH" className="height78 width79 bg-10" />
+                  {preview.first && <img loading="lazy" src={`${preview.first}`} className="height78 width79 bg-10" />}
+                  {!preview.first && <div className="height78 width79 bg-11"></div>}
                 </div>
               </div>
               <div className="relative z-[2] bg-10 margin63 padding-23 bdr18" style={{ paddingRight: 0, paddingBlock: 0, borderLeft: 0, borderBlock: 0 }}>
                 <div className="h-full">
-                  <img loading="lazy" src="https://miro.medium.com/v2/da:true/resize:fill:332:288/0*kSYjYtnol_rPJ--o" className="height78 width79 bg-10" />
+                  {preview.second && <img loading="lazy" src={`${preview.second}`} className="height78 width79 bg-10" />}
+                  {!preview.second && <div className="height78 width79 bg-11"></div>}
                 </div>
               </div>
               <div className="relative z-[1] bg-10 margin64 padding-23" style={{ paddingRight: 0, paddingBlock: 0 }}>
                 <div className="h-full">
-                  <img loading="lazy" src="https://miro.medium.com/v2/da:true/resize:fill:332:288/0*OWVf_TQ-bkGcEfOP" className="height78 width79 bg-10" />
+                  {preview.third && <img loading="lazy" src={`${preview.third}`} className="height78 width79 bg-10" />}
+                  {!preview.third && <div className="height78 width79 bg-11"></div>}
                 </div>
               </div>
             </div>

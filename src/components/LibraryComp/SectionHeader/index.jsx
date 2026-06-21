@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { scrollToTop } from "../../../utils/common";
 
 function SectionHeader({ handleCreateNewBlogBtnClick }) {
   const pathName = useLocation().pathname;
@@ -23,13 +24,10 @@ function SectionHeader({ handleCreateNewBlogBtnClick }) {
   ]);
 
   const isTabActive = (id) => {
-    if (id === 0) {
-      return !pathName.includes("saved") && !pathName.includes("reading-history");
-    } else if (id === 1) {
-      return pathName.includes("saved");
-    } else if (id === 2) {
-      return pathName.includes("reading-history");
-    }
+    if (id === 0) return !pathName.includes("saved") && !pathName.includes("reading-history");
+    if (id === 1) return pathName.includes("saved");
+    if (id === 2) return pathName.includes("reading-history");
+
     return false;
   };
 
@@ -53,7 +51,7 @@ function SectionHeader({ handleCreateNewBlogBtnClick }) {
           <div className="w-full flex justify-start">
             {libraryList.map((item) => (
               <div key={item.id} className={`min-w-max margin52 padding-42 ${isTabActive(item.id) ? "bdr-7" : "bdr16"}`} style={{ borderTop: 0, borderInline: 0, marginLeft: item.id === 0 ? 0 : undefined }}>
-                <Link to={item.path} className="p-0 cursor-pointer no-underline">
+                <Link onClick={scrollToTop} to={item.path} className="p-0 cursor-pointer no-underline">
                   <p className={`color-3 custom-fs-1 line20 m-0 font-normal transition-all duration-75 ease ${isTabActive(item.id) ? "opacity-100" : "opacity-[0.8] hover:opacity-100"}`}>
                     <span>{item.name}</span>
                   </p>

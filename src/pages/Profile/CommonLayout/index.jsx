@@ -8,7 +8,7 @@ import * as Popover from "@radix-ui/react-popover";
 import { showToast } from "../../../utils/toaster";
 import { FollowingContext } from "../../../context/followingContext";
 import NotFoundComp from "../../../components/Common/NotFound";
-import { getImageUrl } from "../../../utils/common";
+import { getImageUrl, scrollToTop } from "../../../utils/common";
 import { UserContext } from "../../../context/userContext";
 
 function ProfileCommonLayout() {
@@ -70,10 +70,6 @@ function ProfileCommonLayout() {
       console.error(err);
       setIsError(true);
     }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo(0, 0);
   };
 
   useEffect(() => {

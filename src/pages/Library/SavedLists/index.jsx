@@ -8,7 +8,7 @@ import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function SavedLists() {
   const { requestHandler } = useRequestHandler();
-  const limit = 10;
+  const limit = 8;
   const [isLoading, setIsLoading] = useState(true);
   const [lists, setLists] = useState([]);
   const [defaultLoader, setDefaultLoader] = useState(true);
@@ -19,7 +19,7 @@ function SavedLists() {
     cursor: null,
   });
 
-  const fetchSavedLists = async () => {
+  const getSavedLists = async () => {
     if (!scroll.hasMore) return;
     setScroll((prev) => ({ ...prev, loading: true }));
 
@@ -44,18 +44,17 @@ function SavedLists() {
   };
 
   const sentinel = useInfiniteScroll({
-    loadMore: fetchSavedLists,
+    loadMore: getSavedLists,
     hasMore: scroll.hasMore,
     scrollLoader: scroll.loading,
   });
 
   useEffect(() => {
-    fetchSavedLists();
+    getSavedLists();
 
     if (!defaultLoaderTimeout.current) {
       defaultLoaderTimeout.current = setTimeout(() => {
         setDefaultLoader(false);
-        defaultLoaderTimeout.current = true;
       }, defaultLoaderTime);
     }
   }, []);
@@ -64,13 +63,11 @@ function SavedLists() {
     <>
       <div>
         {(defaultLoader || isLoading) && Array.from({ length: 4 }).map((_, i) => <ListLoader key={i} />)}
-
         {!defaultLoader && !isLoading && lists.length > 0 && (
           <>
             {lists.map((item) => (
-              <SavedListItem key={item._id} item={item} />
+              <SavedListItem key={item._id} item={item.list} />
             ))}
-
             {scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
           </>
         )}
