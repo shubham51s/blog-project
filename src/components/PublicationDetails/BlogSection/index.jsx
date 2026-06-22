@@ -21,13 +21,12 @@ function Blogs({ publication }) {
     cursor: null,
   });
 
-  const fetchPublicationBlogs = async () => {
+  const getPublicationBlogs = async () => {
     if (!scroll.hasMore) return;
 
     setScroll((prev) => ({ ...prev, loading: true }));
     try {
       const url = scroll.cursor ? `/blogs/publication/${publication._id}?cursor=${scroll.cursor}&limit=${limit}` : `/blogs/publication/${publication._id}?limit=${limit}`;
-
       const response = await requestHandler(url);
       const result = await response.json();
 
@@ -47,7 +46,7 @@ function Blogs({ publication }) {
   };
 
   const sentinel = useInfiniteScroll({
-    loadMore: fetchPublicationBlogs,
+    loadMore: getPublicationBlogs,
     hasMore: scroll.hasMore,
     scrollLoader: scroll.loading,
   });
@@ -55,7 +54,7 @@ function Blogs({ publication }) {
   useEffect(() => {
     if (publication && !hasFetched.current) {
       hasFetched.current = true;
-      fetchPublicationBlogs();
+      getPublicationBlogs();
     }
 
     if (!loaderTimeout.current) {

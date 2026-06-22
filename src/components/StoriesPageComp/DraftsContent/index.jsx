@@ -13,6 +13,7 @@ function DraftContainer({ isInitialLoading, draftsCount }) {
   const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
   const loaderTimeout = useRef(null);
+  const hasFetched = useRef(null);
   const [scroll, setScroll] = useState({
     loading: false,
     hasMore: true,
@@ -50,7 +51,8 @@ function DraftContainer({ isInitialLoading, draftsCount }) {
   });
 
   useEffect(() => {
-    if (!isInitialLoading && draftsCount > 0) {
+    if (!isInitialLoading && draftsCount > 0 && !hasFetched.current) {
+      hasFetched.current = true;
       setIsLoading(true);
       getDraftBlogsList();
     }

@@ -10,7 +10,7 @@ import NoContent from "../NoContent";
 function PeopleSection() {
   const { requestHandler } = useRequestHandler();
   const search = useOutletContext();
-  const limit = 8;
+  const limit = 11;
   const loaderTimeout = useRef(null);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const [isLoading, setIsLoading] = useState(true);

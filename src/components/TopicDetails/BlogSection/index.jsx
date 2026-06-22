@@ -23,11 +23,10 @@ function Blogs({ topic }) {
 
   const fetchBlogsByCategory = async () => {
     if (!scroll.hasMore) return;
-
     setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
       const url = scroll.cursor ? `/blogs/topic/${topic._id}?cursor=${scroll.cursor}&limit=${limit}` : `/blogs/topic/${topic._id}?limit=${limit}`;
-
       const response = await requestHandler(url);
       const result = await response.json();
 

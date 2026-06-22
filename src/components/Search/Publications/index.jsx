@@ -10,7 +10,7 @@ import NoContent from "../NoContent";
 function PublicationSection() {
   const { requestHandler } = useRequestHandler();
   const search = useOutletContext();
-  const limit = 1;
+  const limit = 11;
   const loaderTimeout = useRef(null);
   const [defaultLoader, setDefaultLoader] = useState(true);
   const [isLoading, setIsLoading] = useState(true);

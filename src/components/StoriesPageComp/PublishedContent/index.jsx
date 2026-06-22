@@ -7,11 +7,12 @@ import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 
 function PublishContainer({ isInitialLoading, publishedCount }) {
   const { requestHandler } = useRequestHandler();
-  const limit = 20;
+  const limit = 10;
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [defaultLoader, setDefaultLoader] = useState(true); // min loading time
   const loaderTimeout = useRef(null);
+  const hasFetched = useRef(null);
   const [scroll, setScroll] = useState({
     loading: false,
     hasMore: true,
@@ -21,13 +22,13 @@ function PublishContainer({ isInitialLoading, publishedCount }) {
   const getPublishedBlogs = async () => {
     if (!scroll.hasMore) return;
     setScroll((prev) => ({ ...prev, loading: true }));
+
     try {
       const url = scroll.cursor ? `/blogs/published?cursor=${scroll.cursor}&limit=${limit}` : `/blogs/published?limit=${limit}`;
       const response = await requestHandler(url);
-
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.blogs) {
+      if (response?.status === 200 && result?.data?.blogs?.length) {
         setBlogs((prev) => [...prev, ...result.data.blogs]);
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));
       } else {
@@ -49,7 +50,8 @@ function PublishContainer({ isInitialLoading, publishedCount }) {
   });
 
   useEffect(() => {
-    if (!isInitialLoading && publishedCount > 0) {
+    if (!isInitialLoading && publishedCount > 0 && !hasFetched.current) {
+      hasFetched.current = true;
       setIsLoading(true);
       getPublishedBlogs();
     }
@@ -80,7 +82,7 @@ function PublishContainer({ isInitialLoading, publishedCount }) {
             <tbody className="m-0 no-first-row-border">
               {/* blogs list */}
               {!defaultLoader && !isLoading && !isInitialLoading && blogs.map((item) => <BlogComp key={item._id} item={item} />)}
-              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <div ref={sentinel} style={{ height: "1px" }}></div>}
+              {!defaultLoader && !isLoading && !isInitialLoading && blogs.length > 0 && scroll.hasMore && <tr ref={sentinel} style={{ height: "1px" }}></tr>}
               {/* loader */}
               {(defaultLoader || isLoading || isInitialLoading) && Array.from({ length: 3 }).map((_, i) => <SkeletonComp key={i} />)}
             </tbody>

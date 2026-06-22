@@ -111,7 +111,7 @@ function BlogComp({ item }) {
                             <div className="z-[2] relative cursor-pointer flex items-center grow min-w-0">
                               <div className="truncate w-[60%] text-ellipsis whitespace-nowrap color-3 height-6 font-4 custom-line-h-1">
                                 <Link to={`/profile/${blog.author.username}`} title={blog.author.name} className="font-normal no-underline hover:underline">
-                                  {blog.isMyBlog ? "You" : blog.author.name}
+                                  {blog.author.name}
                                 </Link>
                               </div>
                             </div>
@@ -137,7 +137,7 @@ function BlogComp({ item }) {
                                 </Link>
                                 <span className="font-light"> by </span>
                                 <Link to={`/profile/${blog.author.username}`} title={blog.author.name} className="font-normal no-underline hover:underline">
-                                  {blog.isMyBlog ? "You" : blog.author.name}
+                                  {blog.author.name}
                                 </Link>
                               </div>
                             </div>

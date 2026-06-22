@@ -5,6 +5,7 @@ import SubmissionContainer from "../../components/StoriesPageComp/SubmissionCont
 import { useRequestHandler } from "../../hooks/requestHandler";
 import { Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { showToast } from "../../utils/toaster";
+import { scrollToTop } from "../../utils/common";
 
 function StoriesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,6 +17,7 @@ function StoriesPage() {
   const tab = searchParams.get("tab");
 
   const handleActiveTabChange = (tab) => {
+    scrollToTop();
     tab ? setSearchParams({ tab }) : setSearchParams({});
   };
 
@@ -103,10 +105,8 @@ function StoriesPage() {
 
         {/* 1. Drafts section */}
         {isTabActive(0) && <DraftContainer isInitialLoading={isInitialLoading} draftsCount={draftsCount} />}
-
         {/* 2. Published section */}
         {isTabActive(1) && <PublishContainer isInitialLoading={isInitialLoading} publishedCount={publishedCount} setPublishedCount={setPublishedCount} />}
-
         {/* 3. Submission section */}
         {isTabActive(2) && <SubmissionContainer isInitialLoading={isInitialLoading} submissionsCount={submissionsCount} setSubmissionsCount={setSubmissionsCount} />}
       </div>

@@ -1,23 +1,22 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { PublicationContext } from "../../../../context/publication";
 import { useTogglePublicationFollow } from "../../../../hooks/togglePublicationFollow";
 
 function ListItem({ item }) {
-  const { followingPublication, isPublicationLoader } = useContext(PublicationContext);
   const { followPublication, unfollowPublication } = useTogglePublicationFollow();
   const [publication, setPublication] = useState(item);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFollowPublication = async () => {
     setIsLoading(true);
-
+    setPublication((prev) => ({ ...prev, isFollowing: true }));
     try {
       const params = {
         _id: publication._id,
         name: publication.name,
       };
-      await followPublication(params);
+      const isSuccess = await followPublication(params);
+      if (!isSuccess) setPublication((prev) => ({ ...prev, isFollowing: false }));
     } finally {
       setIsLoading(false);
     }
@@ -25,13 +24,14 @@ function ListItem({ item }) {
 
   const handleUnfollowPublication = async () => {
     setIsLoading(true);
-
+    setPublication((prev) => ({ ...prev, isFollowing: false }));
     try {
       const params = {
         _id: publication._id,
         name: publication.name,
       };
-      await unfollowPublication(params);
+      const isSuccess = await unfollowPublication(params);
+      if (!isSuccess) setPublication((prev) => ({ ...prev, isFollowing: true }));
     } finally {
       setIsLoading(false);
     }
@@ -59,14 +59,14 @@ function ListItem({ item }) {
               </div>
             </Link>
             <div className="width108 flex justify-end">
-              {publication && !isPublicationLoader && (
+              {publication && (
                 <>
-                  {!followingPublication[publication._id] && (
+                  {!publication.isFollowing && (
                     <button onClick={handleFollowPublication} disabled={isLoading} className="padding-20 padding-38 border-radius-8 cursor-pointer m-0 transition-all duration-800 ease bdr-7">
                       <span className="color-3 custom-fs-1 line20 font-medium break-keep">Follow</span>
                     </button>
                   )}
-                  {followingPublication[publication._id] && (
+                  {publication.isFollowing && (
                     <button onClick={handleUnfollowPublication} disabled={isLoading} className="padding-20 padding-38 border-radius-8 cursor-pointer m-0 transition-all duration-800 ease bdr17-hover">
                       <span className="color-3 custom-fs-1 line20 font-medium break-keep">Following</span>
                     </button>

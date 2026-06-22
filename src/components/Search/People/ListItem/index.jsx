@@ -1,11 +1,9 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { useToggleUserFollow } from "../../../../hooks/toggleUserFollow";
-import { FollowingContext } from "../../../../context/followingContext";
 import { UserContext } from "../../../../context/userContext";
 
 function ListItem({ item }) {
-  const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
   const { userInfo } = useContext(UserContext);
   const [user, setUser] = useState(item);
   const { followUser, unfollowUser } = useToggleUserFollow();
@@ -13,13 +11,14 @@ function ListItem({ item }) {
 
   const handleFollowUser = async () => {
     setIsLoading(true);
-
+    setUser((prev) => ({ ...prev, isFollowing: true }));
     try {
       const params = {
         _id: user._id,
         name: user.name,
       };
-      await followUser(params);
+      const isSuccess = await followUser(params);
+      if (!isSuccess) setUser((prev) => ({ ...prev, isFollowing: false }));
     } finally {
       setIsLoading(false);
     }
@@ -27,13 +26,14 @@ function ListItem({ item }) {
 
   const handleUnfollowUser = async () => {
     setIsLoading(true);
-
+    setUser((prev) => ({ ...prev, isFollowing: false }));
     try {
       const params = {
         _id: user._id,
         name: user.name,
       };
-      await unfollowUser(params);
+      const isSuccess = await unfollowUser(params);
+      if (!isSuccess) setUser((prev) => ({ ...prev, isFollowing: true }));
     } finally {
       setIsLoading(false);
     }
@@ -61,14 +61,14 @@ function ListItem({ item }) {
               </div>
             </Link>
             <div className="width108 flex justify-end">
-              {user && userInfo._id !== user._id && !isFetchUserLoader && (
+              {user && userInfo._id !== user._id && (
                 <>
-                  {!followingUsers[user._id] && (
+                  {!user.isFollowing && (
                     <button onClick={handleFollowUser} disabled={isLoading} className="padding-20 padding-38 border-radius-8 cursor-pointer m-0 transition-all duration-500 ease bdr-7">
                       <span className="color-3 custom-fs-1 line20 font-medium break-keep">Follow</span>
                     </button>
                   )}
-                  {followingUsers[user._id] && (
+                  {user.isFollowing && (
                     <button onClick={handleUnfollowUser} disabled={isLoading} className="padding-20 padding-38 border-radius-8 cursor-pointer m-0 transition-all duration-800 ease bdr17-hover">
                       <span className="color-3 custom-fs-1 line20 font-medium break-keep">Following</span>
                     </button>
