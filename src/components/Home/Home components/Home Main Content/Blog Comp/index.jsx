@@ -128,7 +128,7 @@ function BlogComp({ item }) {
                                     <div>
                                       <SaveBlog item={blog} />
                                     </div>
-                                    <MoreComp blog={blog} removeBlogFromList={removeBlogFromList} />
+                                    <MoreComp blog={blog} removeBlogFromList={removeBlogFromList} setBlog={setBlog} />
                                   </div>
                                 </div>
                               </span>

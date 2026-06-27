@@ -5,7 +5,6 @@ import { IoIosLink } from "react-icons/io";
 import Edit from "../../Common/BlogActions/Edit";
 import DeleteBlogBtn from "../../Common/BlogActions/Delete";
 import SubmitToPublicationBtn from "../../Common/BlogActions/SubmitToPublication";
-import WithdrawSubmission from "../../Common/BlogActions/WithdrawSubmission";
 import { showToast } from "../../../utils/toaster";
 
 function ActionBtn({ blog, setBlog }) {
@@ -53,11 +52,6 @@ function ActionBtn({ blog, setBlog }) {
               </li>
               <Edit blog={blog} />
               {(!blog.publication || (blog.publication && (blog.publicationInfo.status === "withdrawn" || blog.publicationInfo.status === "declined"))) && <SubmitToPublicationBtn blog={blog} />}
-              {blog.publication && (blog.publicationInfo.status === "pending_review" || blog.publicationInfo.status === "approved") && (
-                <li className="custom-px-2 padding59 custom-fs-1 color-3 opacity-[0.85] transition-all duration-200 linear hover:opacity-100 font-normal">
-                  <WithdrawSubmission blog={blog} setBlog={setBlog} setIsOpen={setIsOpen} />
-                </li>
-              )}
               <li className="custom-px-2">
                 <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
               </li>

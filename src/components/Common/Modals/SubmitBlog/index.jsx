@@ -8,7 +8,7 @@ import { showToast } from "../../../../utils/toaster";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 
-function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true }) {
+function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true, closePopup = () => {}, isNaviate = true, handleOnSubmission = () => {} }) {
   const portalRoot = document.getElementById("portal-root");
   const navigate = useNavigate();
   const { requestHandler } = useRequestHandler();
@@ -21,12 +21,16 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true })
     setTab(tab);
   };
 
+  const closeModal = () => {
+    closePopup();
+    setIsShowSubmitModal(false);
+  };
+
   const getDraftDetails = async () => {
     setBlogLoader(true);
     try {
       const response = await requestHandler(`/draft/before-publish/${id}`);
       const result = await response.json();
-
       if (response?.status === 200 && result?.data?.draft) {
         const draft = result.data.draft;
         const blog = {
@@ -52,10 +56,8 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true })
     try {
       const response = await requestHandler(`/blogs/blog-preview-details/${id}`);
       const result = await response.json();
-
       if (response?.status === 200 && result?.data?.blog) {
         const data = result.data.blog;
-
         if (data.publication) {
           showToast("Blog is already published");
           return;
@@ -137,14 +139,14 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true })
         publicationId: blog.publication._id,
         blogId: id,
       };
-
       const response = await requestHandler("/blogs/submit-to-publication", "POST", params);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.blogId && result?.data?.slug) {
         showToast("Blog submitted successfully.");
-        navigate(`/${result.data.slug}/${result.data.blogId}`);
-        setIsShowSubmitModal(false);
+        if (isNaviate) navigate(`/${result.data.slug}/${result.data.blogId}`);
+        handleOnSubmission();
+        closeModal();
       } else {
         showToast(result?.message || "Some error occured");
       }
@@ -182,7 +184,7 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true })
       {!blogLoader && !blog && <div className="w-full flex items-center justify-center margin69 font-9 color-4 font-medium">Blog not found.</div>}
 
       <div className="absolute right-0 top-0 padding-13">
-        <button onClick={() => setIsShowSubmitModal(false)} className="cursor-pointer m-0 p-0">
+        <button onClick={() => closeModal()} className="cursor-pointer m-0 p-0">
           <div className="width-13 aspect-square">
             <IoCloseOutline className="w-full h-full" />
           </div>

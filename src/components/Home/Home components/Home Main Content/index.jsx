@@ -57,7 +57,6 @@ function HomeMainContentComp() {
       const url = scroll.cursor ? `/blogs?cursor=${scroll.cursor}&limit=${limit}` : `/blogs?limit=${limit}`;
       const response = await requestHandler(url);
       const result = await response.json();
-
       if (response?.status === 200 && result?.data?.blogs) {
         setBlogs((prev) => [...prev, ...result.data.blogs]);
         setScroll((prev) => ({ ...prev, cursor: result.data.cursor || null, hasMore: result.data.cursor ? true : false }));

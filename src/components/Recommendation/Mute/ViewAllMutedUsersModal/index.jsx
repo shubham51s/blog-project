@@ -19,9 +19,8 @@ function ViewAllMutedUsers({ handleCloseUserModal, usersCount, onMuteStatusChang
     cursor: null,
   });
 
-  const fetchMutedUsers = async () => {
+  const getMutedUsers = async () => {
     if (!scroll.hasMore) return;
-
     setScroll((prev) => ({ ...prev, loader: true }));
 
     try {
@@ -45,13 +44,13 @@ function ViewAllMutedUsers({ handleCloseUserModal, usersCount, onMuteStatusChang
   };
 
   const sentinel = useInfiniteScroll({
-    loadMore: fetchMutedUsers,
+    loadMore: getMutedUsers,
     hasMore: scroll.hasMore,
     scrollLoader: scroll.loader,
   });
 
   useEffect(() => {
-    fetchMutedUsers();
+    getMutedUsers();
 
     if (!loaderTimeout.current) {
       loaderTimeout.current = setTimeout(() => {

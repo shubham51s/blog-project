@@ -13,7 +13,6 @@ function PublicationListItem({ publication, onMuteStatusChange }) {
       name: publication.name,
     };
     const isSuccess = await mutePublication(params);
-
     if (isSuccess) {
       onMuteStatusChange("publication", true, publication._id);
     }

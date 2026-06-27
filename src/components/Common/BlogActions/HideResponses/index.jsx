@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import SubmitBlogModal from "../../Modals/SubmitBlog";
 import { UserContext } from "../../../../context/userContext";
 import DisableBlogCommentsModal from "../../Modals/DisableComments";
 import { showToast } from "../../../../utils/toaster";
@@ -33,6 +32,7 @@ function HideResponsesBtn({ blog, closePopup, setBlog }) {
       if (response?.status === 200) {
         showToast("Responses are now shown for the blog.");
         setBlog((prev) => ({ ...prev, allowComments: true }));
+        closePopup();
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -46,7 +46,7 @@ function HideResponsesBtn({ blog, closePopup, setBlog }) {
 
   return (
     <>
-      {blog?.author?._id === userInfo._id && (
+      {blog?.author?._id === userInfo._id && blog.hasOwnProperty("allowComments") && (
         <>
           {blog.allowComments && (
             <li className="custom-px-2 padding59">

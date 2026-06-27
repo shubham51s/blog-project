@@ -48,7 +48,7 @@ function MoreButton({ blog, setBlog, removeListItem }) {
             {isMyBlog && <BreakLine />}
             <FollowAuthorBtn user={blog.author} />
             <FollowPublicationBtn publication={blog.publication} />
-            <SubmitToPublicationBtn blog={blog} closePopup={closePopup} />
+            <SubmitToPublicationBtn blog={blog} closePopup={closePopup} setBlog={setBlog} />
             <BreakLine />
             <MuteAuthorBtn user={blog.author} />
             <MutePublicationBtn publication={blog.publication} />

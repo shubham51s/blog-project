@@ -197,14 +197,12 @@ function LoginSignupComp() {
         email: userDetails.email,
         password: userDetails.password,
       };
-
       const response = await fetch(urlBasePath + "/users/login", {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         method: "POST",
         body: JSON.stringify(params),
       });
-
       const result = await response.json();
 
       if (response?.status === 200) {
@@ -268,7 +266,6 @@ function LoginSignupComp() {
       });
 
       const result = await response.json();
-
       if (response?.status === 201) {
         verifyAuthentication();
       } else {

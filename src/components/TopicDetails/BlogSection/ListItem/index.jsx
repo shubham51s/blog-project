@@ -8,6 +8,7 @@ import { IoChatbubbleSharp } from "react-icons/io5";
 import { RiMoreFill } from "react-icons/ri";
 import ActionBtn from "./ActionBtn";
 import { UserContext } from "../../../../context/userContext";
+import SaveBlog from "../../../Common/Buttons/ToggleBlogSave";
 
 function ListItem({ item }) {
   const [blog, setBlog] = useState(item);
@@ -119,8 +120,11 @@ function ListItem({ item }) {
                         </div>
                       </Link>
                       <div className="grow-0 shrink-0 flex items-center justify-end">
-                        <div>
-                          <ActionBtn blog={blog} handleAfterBlogDelete={handleAfterBlogDelete} />
+                        <div className="flex justify-end items-center grow-0 shrink-0 basis-0 color-6">
+                          <div>
+                            <SaveBlog item={blog} />
+                          </div>
+                          <ActionBtn blog={blog} setBlog={setBlog} handleAfterBlogDelete={handleAfterBlogDelete} />
                         </div>
                       </div>
                     </div>

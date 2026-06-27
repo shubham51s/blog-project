@@ -24,6 +24,8 @@ const UserProvider = ({ children }) => {
   const [isShowLoginPopup, setIsShowLoginPopup] = useState(false);
   const [isLoginTabActive, setIsLoginTabActive] = useState(true);
   const [isShowMenu, setIsShowMenu] = useState(localStorage.hasOwnProperty("isShowMenu") ? JSON.parse(localStorage.getItem("isShowMenu")) : true); // to toggle left side menu bar
+  const lastDataFetched = useRef(Date.now());
+  const isLoggedIn = useRef(null);
 
   const verifyAuthentication = async () => {
     setIsInitialLoading(true);
@@ -33,12 +35,12 @@ const UserProvider = ({ children }) => {
         credentials: "include",
         method: "GET",
       });
-
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.user) {
         setUserInfo(result.data.user);
         setIsUserLoggedIn(true);
+        isLoggedIn.current = true;
         fetchFollowingAuthorIds();
         fetchFollowingPublicationIds();
         fetchMyLists();
@@ -46,10 +48,12 @@ const UserProvider = ({ children }) => {
         getSidebarData();
       } else {
         // need to check later
+        isLoggedIn.current = null;
         if (location.pathname !== "/") navigate("/");
       }
     } catch (err) {
       // need to check later
+      isLoggedIn.current = null;
       if (location.pathname !== "/") navigate("/");
     } finally {
       setIsInitialLoading(false);
@@ -63,7 +67,6 @@ const UserProvider = ({ children }) => {
         credentials: "include",
         method: "GET",
       });
-
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.user) {
@@ -81,8 +84,25 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const handleFocusChange = () => {
+    if (document.visibilityState === "visible" && isLoggedIn.current && Date.now() - lastDataFetched.current > 5 * 60 * 1000) {
+      lastDataFetched.current = Date.now();
+      fetchFollowingAuthorIds();
+      fetchFollowingPublicationIds();
+      fetchMutedUsersAndPublications();
+    }
+    if (document.visibilityState === "visible" && isLoggedIn.current && Date.now() - lastDataFetched.current > 120 * 60 * 1000) {
+      fetchMyLists();
+    }
+  };
+
   useEffect(() => {
     verifyAuthentication();
+
+    window.addEventListener("visibilitychange", handleFocusChange);
+    return () => {
+      window.removeEventListener("visibilitychange", handleFocusChange);
+    };
   }, []);
 
   return <UserContext.Provider value={{ userInfo, isUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu, verifyAuthentication, fetchUpdatedUserDetails }}>{children}</UserContext.Provider>;

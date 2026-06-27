@@ -1,18 +1,18 @@
 import React, { useContext, useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
-import FollowAuthorBtn from "../../../../Common/BlogActions/FollowAuthor";
-import FollowPublicationBtn from "../../../../Common/BlogActions/FollowPublication";
 import { RiMoreFill } from "react-icons/ri";
-import { UserContext } from "../../../../../context/userContext";
-import MuteAuthorBtn from "../../../../Common/BlogActions/MuteAuthor";
-import MutePublicationBtn from "../../../../Common/BlogActions/MutePublication";
-import Edit from "../../../../Common/BlogActions/Edit";
-import SubmitToPublicationBtn from "../../../../Common/BlogActions/SubmitToPublication";
-import DeleteBlogBtn from "../../../../Common/BlogActions/Delete";
-import StoryStatsBtn from "../../../../Common/BlogActions/StoryStats";
-import BreakLine from "../../../../Common/BlogActions/BreakLine";
-import HideResponsesBtn from "../../../../Common/BlogActions/HideResponses";
-import ReportStory from "../../../../Common/BlogActions/ReportStory";
+import { UserContext } from "../../../../context/userContext";
+import Edit from "../../../Common/BlogActions/Edit";
+import StoryStatsBtn from "../../../Common/BlogActions/StoryStats";
+import BreakLine from "../../../Common/BlogActions/BreakLine";
+import FollowAuthorBtn from "../../../Common/BlogActions/FollowAuthor";
+import FollowPublicationBtn from "../../../Common/BlogActions/FollowPublication";
+import SubmitToPublicationBtn from "../../../Common/BlogActions/SubmitToPublication";
+import MuteAuthorBtn from "../../../Common/BlogActions/MuteAuthor";
+import MutePublicationBtn from "../../../Common/BlogActions/MutePublication";
+import HideResponsesBtn from "../../../Common/BlogActions/HideResponses";
+import ReportStory from "../../../Common/BlogActions/ReportStory";
+import DeleteBlogBtn from "../../../Common/BlogActions/Delete";
 
 function ActionBtn({ blog, setBlog, handleAfterBlogDelete }) {
   const { userInfo } = useContext(UserContext);

@@ -49,10 +49,10 @@ function MyReadingHistory() {
     }
   };
 
-  const fetchMyBlogHistory = async () => {
+  const getBlogHistory = async () => {
     if (!hasMore) return;
-
     setScrollLoader(true);
+
     try {
       const url = cursor ? `/blog/read/user/all-history?cursor=${cursor}&limit=${limit}` : `/blog/read/user/all-history?limit=${limit}`;
       const response = await requestHandler(url);
@@ -92,13 +92,13 @@ function MyReadingHistory() {
   };
 
   const sentinel = useInfiniteScroll({
-    loadMore: fetchMyBlogHistory,
+    loadMore: getBlogHistory,
     hasMore,
     scrollLoader,
   });
 
   useEffect(() => {
-    fetchMyBlogHistory();
+    getBlogHistory();
 
     if (!defaultLoaderTimeout.current) {
       defaultLoaderTimeout.current = setTimeout(() => {
