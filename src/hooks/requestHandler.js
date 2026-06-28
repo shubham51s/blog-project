@@ -1,24 +1,49 @@
 import { urlBasePath } from "../constants/constant";
+let refreshPromise = null;
 
-// same as useApi custom hook but created later for better names
 export function useRequestHandler() {
-  async function requestHandler(url, method = "GET", param = null) {
-    try {
-      const response = await fetch(`${urlBasePath}${url}`, {
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        method,
-        body: param ? JSON.stringify(param) : null,
-      });
+  async function sendRequest(url, method = "GET", param = null) {
+    return fetch(`${urlBasePath}${url}`, {
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      method,
+      body: param ? JSON.stringify(param) : null,
+    });
+  }
 
-      if (response?.status === 401) {
-        // useNavigate("/");
-        window.location.reload();
+  async function refreshAccessToken() {
+    if (!refreshPromise) {
+      refreshPromise = (async () => {
+        try {
+          const response = await sendRequest("/users/refresh-token");
+          return response.status === 200;
+        } finally {
+          refreshPromise = null;
+        }
+      })();
+    }
+
+    return refreshPromise;
+  }
+
+  async function requestHandler(url, method = "GET", param = null, retry = true) {
+    try {
+      let response = await sendRequest(url, method, param);
+
+      if (!retry || response.status !== 401) {
+        return response;
       }
 
-      return response;
+      const refreshSuccess = await refreshAccessToken();
+
+      if (!refreshSuccess) {
+        window.location.reload();
+        return null;
+      }
+
+      return await requestHandler(url, method, param, false);
     } catch (err) {
-      window.location.reload();
+      console.error(err);
       return null;
     }
   }

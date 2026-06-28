@@ -23,6 +23,7 @@ const UserProvider = ({ children }) => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isShowLoginPopup, setIsShowLoginPopup] = useState(false);
   const [isLoginTabActive, setIsLoginTabActive] = useState(true);
+  const [isAnyErr, setIsAnyErr] = useState(false);
   const [isShowMenu, setIsShowMenu] = useState(localStorage.hasOwnProperty("isShowMenu") ? JSON.parse(localStorage.getItem("isShowMenu")) : true); // to toggle left side menu bar
   const lastDataFetched = useRef(Date.now());
   const isLoggedIn = useRef(null);
@@ -47,15 +48,33 @@ const UserProvider = ({ children }) => {
         fetchMutedUsersAndPublications();
         getSidebarData();
       } else {
-        // need to check later
         isLoggedIn.current = null;
-        if (location.pathname !== "/") navigate("/");
+        setIsAnyErr(true);
       }
     } catch (err) {
-      // need to check later
       isLoggedIn.current = null;
-      if (location.pathname !== "/") navigate("/");
+      setIsAnyErr(true);
     } finally {
+      setIsInitialLoading(false);
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      const response = await fetch(`${urlBasePath}/users/refresh-token`, {
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        method: "GET",
+      });
+
+      if (response?.status === 200) {
+        verifyAuthentication();
+      } else {
+        setIsInitialLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
+      setIsAnyErr(true);
       setIsInitialLoading(false);
     }
   };
@@ -97,7 +116,7 @@ const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    verifyAuthentication();
+    refreshToken();
 
     window.addEventListener("visibilitychange", handleFocusChange);
     return () => {
@@ -105,7 +124,7 @@ const UserProvider = ({ children }) => {
     };
   }, []);
 
-  return <UserContext.Provider value={{ userInfo, isUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu, verifyAuthentication, fetchUpdatedUserDetails }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ userInfo, isUserLoggedIn, isShowLoginPopup, setIsShowLoginPopup, isInitialLoading, setIsInitialLoading, isLoginTabActive, setIsLoginTabActive, isShowMenu, setIsShowMenu, verifyAuthentication, fetchUpdatedUserDetails, isAnyErr }}>{children}</UserContext.Provider>;
 };
 
 export { UserContext };

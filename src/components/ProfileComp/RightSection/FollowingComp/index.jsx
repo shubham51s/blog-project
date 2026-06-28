@@ -15,17 +15,17 @@ function FollowingComp({ item, user, setUser }) {
   const { followingUsers, isFetchUserLoader } = useContext(FollowingContext);
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [defaultLoader, setDefaultLoader] = useState(true);
   const initialLoadingTimeout = useRef(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [author, setAuthor] = useState(item);
 
   const toggleInitialLoader = () => {
-    if (isInitialLoading) {
+    if (defaultLoader) {
       if (!initialLoadingTimeout.current) {
         initialLoadingTimeout.current = setTimeout(() => {
-          setIsInitialLoading(false);
+          setDefaultLoader(false);
         }, 500);
       }
     }
@@ -98,7 +98,7 @@ function FollowingComp({ item, user, setUser }) {
             </div>
           </Popover.Trigger>
           <Popover.Content side="bottom" className="z-[700] mr-3" align="middle" sideOffset={1}>
-            {!isInitialLoading && (
+            {!defaultLoader && (
               <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
                 <div className="border-radius-4 overflow-hidden custom-bg-8">
                   <div className="boxShadow12 width75 padding-3 border-radius-3 flex flex-col">
@@ -150,7 +150,7 @@ function FollowingComp({ item, user, setUser }) {
                 </div>
               </div>
             )}
-            {isInitialLoading && (
+            {defaultLoader && (
               <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
                 <div className="border-radius-4 overflow-hidden custom-bg-8">
                   <div className="boxShadow12 width75 padding-3 border-radius-3 flex flex-col">

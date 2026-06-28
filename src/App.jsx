@@ -3,7 +3,7 @@ import CreatePostPage from "./pages/Create post";
 import NotFoundPage from "./pages/Not found";
 import AboutPage from "./pages/About";
 import GlobalLoaderComp from "./components/Common/globalLoader";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "./context/userContext";
 import MainComp from "./pages/Common";
 import HomePageProtected from "./pages/Home/Home Protected";
@@ -47,73 +47,85 @@ import PublicationSection from "./components/Search/Publications";
 import TopicSection from "./components/Search/Topics";
 import ListSection from "./components/Search/Lists";
 import SearchPageWrapper from "./pages/Search/wrapper";
+import AppErrorPage from "./pages/Error";
+import NoInternetPage from "./pages/NoInternet";
+import useOnlineStatus from "./hooks/onlineStatus";
 
 function App() {
-  const { isInitialLoading } = useContext(UserContext);
+  const { isInitialLoading, isAnyErr } = useContext(UserContext);
+  const isOnline = useOnlineStatus();
 
   // onPointerDownOutside={(e) => e.preventDefault()}
   return (
     <>
       {isInitialLoading && <GlobalLoaderComp />}
-      <Routes>
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/new-story" element={<CreatePostPage />} />
-        <Route path="p/:draftId/edit" element={<CreatePostPage />} />
-        <Route path="/" element={<MainComp />}>
-          // nested routes
-          <Route index element={<HomePageProtected />} />
-          <Route path="new-publication" element={<NewPublication />} />
-          <Route path="me" element={<MePageWrapper />}>
-            <Route index element={<MePageDefaultComp />} />
-            <Route path="lists" element={<LibraryPage />}>
-              <Route index element={<MyLists />} />
-              <Route path="saved" element={<SavedLists />} />
-              <Route path="reading-history" element={<ReadingHistory />} />
-            </Route>
-            <Route path="stories" element={<StoriesPage />} />
-            <Route path="following">
-              <Route index element={<MyFollowing />} />
-              <Route path="suggestions" element={<Suggestions />} />
-            </Route>
-            <Route path="settings/mute" element={<Muted />} />
-            <Route path="settings" element={<CommonLayout />}>
-              <Route index element={<Account />} />
-              <Route path="publishing" element={<Publishing />} />
-              <Route path="security" element={<Security />} />
-            </Route>
-            <Route path="readinghistory" element={<MyReadingHistory />} />
-            <Route path="notifications" element={<NotificationPage />} />
-            <Route path="stats" element={<StatsPageWrapper />}>
-              <Route index element={<AllStatsPage />} />
-              <Route path="post/:postId" element={<BlogStatsPage />} />
-            </Route>
-            <Route path="audience" element={<AudienceStats />} />
-          </Route>
-          <Route path="profile/:username" element={<ProfilePage />}>
-            <Route index element={<Home />} />
-            <Route path="about" element={<About />} />
-            <Route path="lists" element={<List />} />
-            <Route path="followers" element={<Follower />} />
-            <Route path="following" element={<Following />} />
-          </Route>
-          <Route path="search" element={<SearchPageWrapper />}>
-            <Route index element={<StoriesSection />} />
-            <Route path="posts" element={<StoriesSection />} />
-            <Route path="users" element={<PeopleSection />} />
-            <Route path="publications" element={<PublicationSection />} />
-            <Route path="tags" element={<TopicSection />} />
-            <Route path="lists" element={<ListSection />} />
-          </Route>
-          <Route path="profile/:username/list/:slug/:listId" element={<ListDetailsPage />} />
-          <Route path="publication/:slug" element={<PublicationDetailsWrapper />} />
-          <Route path="publication/:slug/followers" element={<PublicationFollowers />} />
-          <Route path="publication/:slug/manage/inbox" element={<PublicationInbox />} />
-          <Route path="tag/:slug" element={<TopicDetails />} />
-          <Route path=":slug/settings" element={<PublicationSettingsWrapper />} />
-          <Route path=":slug/:id" element={<PostDetailsPageWrapper />} />
-        </Route>
-        <Route path="/*" element={<NotFoundPage />} />
-      </Routes>
+      {!isInitialLoading && !isAnyErr && (
+        <>
+          {!isOnline && <NoInternetPage />}
+          {isOnline && (
+            <Routes>
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/new-story" element={<CreatePostPage />} />
+              <Route path="p/:draftId/edit" element={<CreatePostPage />} />
+              <Route path="/" element={<MainComp />}>
+                // nested routes
+                <Route index element={<HomePageProtected />} />
+                <Route path="new-publication" element={<NewPublication />} />
+                <Route path="me" element={<MePageWrapper />}>
+                  <Route index element={<MePageDefaultComp />} />
+                  <Route path="lists" element={<LibraryPage />}>
+                    <Route index element={<MyLists />} />
+                    <Route path="saved" element={<SavedLists />} />
+                    <Route path="reading-history" element={<ReadingHistory />} />
+                  </Route>
+                  <Route path="stories" element={<StoriesPage />} />
+                  <Route path="following">
+                    <Route index element={<MyFollowing />} />
+                    <Route path="suggestions" element={<Suggestions />} />
+                  </Route>
+                  <Route path="settings/mute" element={<Muted />} />
+                  <Route path="settings" element={<CommonLayout />}>
+                    <Route index element={<Account />} />
+                    <Route path="publishing" element={<Publishing />} />
+                    <Route path="security" element={<Security />} />
+                  </Route>
+                  <Route path="readinghistory" element={<MyReadingHistory />} />
+                  <Route path="notifications" element={<NotificationPage />} />
+                  <Route path="stats" element={<StatsPageWrapper />}>
+                    <Route index element={<AllStatsPage />} />
+                    <Route path="post/:postId" element={<BlogStatsPage />} />
+                  </Route>
+                  <Route path="audience" element={<AudienceStats />} />
+                </Route>
+                <Route path="profile/:username" element={<ProfilePage />}>
+                  <Route index element={<Home />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="lists" element={<List />} />
+                  <Route path="followers" element={<Follower />} />
+                  <Route path="following" element={<Following />} />
+                </Route>
+                <Route path="search" element={<SearchPageWrapper />}>
+                  <Route index element={<StoriesSection />} />
+                  <Route path="posts" element={<StoriesSection />} />
+                  <Route path="users" element={<PeopleSection />} />
+                  <Route path="publications" element={<PublicationSection />} />
+                  <Route path="tags" element={<TopicSection />} />
+                  <Route path="lists" element={<ListSection />} />
+                </Route>
+                <Route path="profile/:username/list/:slug/:listId" element={<ListDetailsPage />} />
+                <Route path="publication/:slug" element={<PublicationDetailsWrapper />} />
+                <Route path="publication/:slug/followers" element={<PublicationFollowers />} />
+                <Route path="publication/:slug/manage/inbox" element={<PublicationInbox />} />
+                <Route path="tag/:slug" element={<TopicDetails />} />
+                <Route path=":slug/settings" element={<PublicationSettingsWrapper />} />
+                <Route path=":slug/:id" element={<PostDetailsPageWrapper />} />
+              </Route>
+              <Route path="/*" element={<NotFoundPage />} />
+            </Routes>
+          )}
+        </>
+      )}
+      {!isInitialLoading && isAnyErr && <AppErrorPage />}
     </>
   );
 }

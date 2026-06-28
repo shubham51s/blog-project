@@ -6,7 +6,7 @@ import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { showToast } from "../../../../utils/toaster";
 
 function ProfileSection() {
-  const { fetchRequest } = useRequestHandler();
+  const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const [profileOptions, setProfileOptions] = useState([
     {
@@ -43,16 +43,16 @@ function ProfileSection() {
 
   const handleUserLogout = async () => {
     try {
-      const response = await fetchRequest("/users/logout", "GET");
+      const response = await requestHandler("/users/logout");
+      const result = await response.json();
+
       if (response?.status === 200) {
         window.location.reload();
       } else {
-        const msg = "Something went wrong!";
-        showToast(msg, "error");
+        showToast(result?.message || "Some error occured.", "error");
       }
     } catch (err) {
-      const msg = "Something went wrong!";
-      showToast(msg, "error");
+      showToast("Some error occured.", "error");
     }
   };
 

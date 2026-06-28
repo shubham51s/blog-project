@@ -13,17 +13,17 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
-import { useApi } from "../../hooks/useApi";
 import { urlBasePath } from "../../constants/constant";
 import { IoMdClose } from "react-icons/io";
 import infinity from "../../assets/images/infinity.png";
 import Select from "react-select";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { showToast } from "../../utils/toaster";
+import { useRequestHandler } from "../../hooks/requestHandler";
 
 function LoginSignupComp() {
   const { setIsShowLoginPopup, isLoginTabActive, setIsLoginTabActive, verifyAuthentication } = useContext(UserContext);
-  const { fetchRequest } = useApi();
+  const { requestHandler } = useRequestHandler();
 
   const sliderOptions = {
     dots: true, // show dots
@@ -172,20 +172,18 @@ function LoginSignupComp() {
       const params = {
         email: userDetails.email,
       };
-
-      const response = await fetchRequest("/users/pre-signup", "POST", params);
-
+      const response = await requestHandler("/users/pre-signup", "POST", params);
       const result = await response.json();
-      setIsLoading(false);
 
       if (response?.status === 200) {
         setIsTopicsTabActive(true);
       } else {
-        showToast(result?.message || "Something went wrong", "error");
+        showToast(result?.message || "Some error occured.", "error");
       }
     } catch (err) {
       console.error(err);
-      showToast("Something went wrong", "error");
+      showToast("Some error occured.", "error");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -253,10 +251,7 @@ function LoginSignupComp() {
         password: userDetails.password,
         interests,
       };
-
-      if (userDetails.gender) {
-        params.gender = userDetails.gender;
-      }
+      if (userDetails.gender) params.gender = userDetails.gender;
 
       const response = await fetch(urlBasePath + "/users/signup", {
         headers: { "Content-Type": "application/json" },
@@ -264,8 +259,8 @@ function LoginSignupComp() {
         method: "POST",
         body: JSON.stringify(params),
       });
-
       const result = await response.json();
+
       if (response?.status === 201) {
         verifyAuthentication();
       } else {
@@ -281,7 +276,7 @@ function LoginSignupComp() {
 
   const getAllTopics = async () => {
     try {
-      const response = await fetchRequest("/topic", "GET");
+      const response = await requestHandler("/topic");
       if (!response?.status === 200) return;
 
       const result = await response.json();

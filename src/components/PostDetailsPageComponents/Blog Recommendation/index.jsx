@@ -21,7 +21,6 @@ function BlogRecommendComp({ blog }) {
       if (blog.publication) params.publicationId = blog.publication._id;
       const response = await requestHandler(`/blogs/top-related`, "POST", params);
       const result = await response.json();
-      console.log("result: ", result);
       if (response?.status === 200 && result?.data?.blogs?.length) {
         setRelatedBlogs(result.data.blogs);
       }

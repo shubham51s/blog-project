@@ -13,7 +13,7 @@ function ClappedUsersList({ clapDetails, setClapDetails, list }) {
   const [isClose, setIsClose] = useState(false);
   const closeTimeout = useRef(null);
   const isMounted = useRef(null);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [defaultLoader, setDefaultLoader] = useState(true);
   const initialTimeout = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [clappedUsers, setClappedUsers] = useState([]);
@@ -86,14 +86,14 @@ function ClappedUsersList({ clapDetails, setClapDetails, list }) {
 
     if (!initialTimeout.current) {
       initialTimeout.current = setTimeout(() => {
-        setIsInitialLoading(false);
+        setDefaultLoader(false);
       }, defaultLoaderTime);
     }
   }, []);
 
   return (
     <div onClick={() => handleClose()} className={`fixed inset-0 overflow-x-hidden overflow-y-auto flex justify-center items-center bg13 scroll-smooth z-[800] transition-all duration-300 linear ${isClose ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"}`}>
-      {!isInitialLoading && !isLoading && clappedUsers.length > 0 && (
+      {!defaultLoader && !isLoading && clappedUsers.length > 0 && (
         <div className="mb-auto padding64">
           <div onClick={(e) => e.stopPropagation()} className="width63 padding-44">
             <div className="margin-17 text-center flex flex-col" style={{ marginTop: 0 }}>
@@ -110,7 +110,7 @@ function ClappedUsersList({ clapDetails, setClapDetails, list }) {
       )}
 
       {/* loader */}
-      {(isInitialLoading || isLoading) && (
+      {(defaultLoader || isLoading) && (
         <div className="mb-auto padding64">
           <div onClick={(e) => e.stopPropagation()} className="width63 overflow-hidden padding-44">
             <Skeleton height={40} width={23434} className="mb-10" />

@@ -8,7 +8,7 @@ import MenuComp from "../../components/Common/Menu";
 
 function MainComp() {
   const { pathname } = useLocation();
-  const { isUserLoggedIn, isShowLoginPopup, isInitialLoading } = useContext(UserContext);
+  const { isUserLoggedIn, isShowLoginPopup } = useContext(UserContext);
   const [isMenu, setIsMenu] = useState(true);
   const { slug } = useParams();
 
@@ -32,10 +32,9 @@ function MainComp() {
           <HomeDefaultComp />
         </>
       )}
-      {!isInitialLoading && isUserLoggedIn && (
+      {isUserLoggedIn && (
         <div className="custom-bg-8">
           <HeaderComp />
-
           {isMenu && (
             <div className="flex height-11">
               <MenuComp />
@@ -44,7 +43,6 @@ function MainComp() {
               </div>
             </div>
           )}
-
           {!isMenu && <Outlet />}
         </div>
       )}
