@@ -138,7 +138,7 @@ function EditUsernameModal({ isShowModal, handleCloseModal }) {
                 <input ref={inpRef} disabled={isLoading} type="text" maxLength={30} value={username} onChange={(e) => handleInputChange(e.target.value)} onFocus={() => handleFocusChange(true)} onBlur={() => handleFocusChange(false)} className="p-0 grow shrink basis-0 outline-none border-none w-full m-0 color-3 font-semibold" />
               </div>
               <div className="flex justify-between margin-9" style={{ marginBottom: 0, marginInline: 0 }}>
-                {!errorMsg && <span className="font-4 color-4 grow shrink line20 font-normal">{`${basePath}/@${username}`}</span>}
+                {!errorMsg && <span className="font-4 color-4 grow shrink line20 font-normal">{`${basePath}/profile/@${username}`}</span>}
                 {errorMsg && <span className="font-4 text-[#C94A4A] grow shrink line20 font-normal">{errorMsg}</span>}
                 <span className="font-4 color-4 max-w-fit shrink-0 line20 font-normal">{`${username.length}/30`}</span>
               </div>

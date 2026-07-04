@@ -12,7 +12,7 @@ function EmailSection() {
 
   return (
     <>
-      <button onClick={() => setIsShowModal(true)} className="w-full flex items-center justify-between text-left margin-14 color-3 custom-fs-1 cursor-pointer p-0 group" style={{ marginInline: 0 }}>
+      <button onClick={() => setIsShowModal(true)} disabled={true} className="w-full flex items-center justify-between text-left margin-14 color-3 custom-fs-1 cursor-default p-0 group" style={{ marginInline: 0 }}>
         <div className="flex w-full items-baseline justify-between">
           <div className="flex items-baseline">
             <div className="grow shrink basis-0 my-auto">
@@ -21,7 +21,7 @@ function EmailSection() {
           </div>
 
           <div className="inline-block margin-14" style={{ marginRight: 0, marginBlock: 0 }}>
-            <span className="inline-block width-28 text-right align-bottom truncate opacity-[0.75] transition-all duration-75 ease group-hover:opacity-[0.95]">{userInfo.email}</span>
+            <span className="inline-block width-28 text-right align-bottom truncate opacity-[0.75] transition-all duration-75 ease group-hover:opacity-[0.75]">{userInfo.email}</span>
           </div>
         </div>
       </button>

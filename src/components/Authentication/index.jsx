@@ -242,12 +242,10 @@ function LoginSignupComp() {
         }
       } else {
         showToast(result?.message || "Some error occured.");
-        console.log("else");
       }
     } catch (err) {
       console.error(err);
       showToast("Some error occured.");
-      console.log("catch: ", err);
     } finally {
       setIsLoading(false);
     }
