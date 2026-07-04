@@ -11,6 +11,8 @@ import ListProvider from "./context/listContext.jsx";
 import PublicationProvider from "./context/publication.jsx";
 import MuteProvider from "./context/mute.jsx";
 import CommonProvider from "./context/commonContext.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GOOGLE_CLIENT_ID } from "../constants.js";
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
@@ -21,11 +23,13 @@ createRoot(document.getElementById("root")).render(
           <ListProvider>
             <CommonProvider>
               <UserProvider>
-                <App />
+                <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                  <App />
+                </GoogleOAuthProvider>
                 <Toaster
                   position="top-center"
                   toastOptions={{
-                    duration: 2500,
+                    duration: 3000,
                     style: {
                       background: "#111",
                       color: "#fff",

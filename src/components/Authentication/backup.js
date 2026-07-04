@@ -24,8 +24,8 @@ import { FcGoogle } from "react-icons/fc";
 import { GoogleLogin } from "@react-oauth/google";
 
 function LoginSignupComp() {
-  const { requestHandler } = useRequestHandler();
   const { setIsShowLoginPopup, isLoginTabActive, setIsLoginTabActive, verifyAuthentication } = useContext(UserContext);
+  const { requestHandler } = useRequestHandler();
 
   const sliderOptions = {
     dots: true, // show dots
@@ -61,7 +61,6 @@ function LoginSignupComp() {
   const [isTopicsTabActive, setIsTopicsTabActive] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState([]);
   const [topics, setTopics] = useState([]);
-  const [googleCredential, setGoogleCredential] = useState(null);
 
   const [userDetails, setUserDetails] = useState({ ...defaultUserInput });
   const [errDetails, setErrDetails] = useState({ ...defaultErrMsg });
@@ -233,21 +232,19 @@ function LoginSignupComp() {
       });
       const result = await response.json();
 
+      console.log("result: ", result);
+
       if (response?.status === 200 && result?.data) {
         if (result.data.newUser) {
-          setGoogleCredential(credentialResponse.credential);
-          setIsTopicsTabActive(true);
         } else {
           verifyAuthentication();
         }
       } else {
         showToast(result?.message || "Some error occured.");
-        console.log("else");
       }
     } catch (err) {
       console.error(err);
       showToast("Some error occured.");
-      console.log("catch: ", err);
     } finally {
       setIsLoading(false);
     }
@@ -274,45 +271,13 @@ function LoginSignupComp() {
   const handleCloseTopicsTab = () => {
     setSelectedTopic([]);
     setIsTopicsTabActive(false);
-
-    if (googleCredential) {
-      setGoogleCredential(null);
-      setIsLoginTabActive(true);
-    }
   };
 
-  const googleSignup = async (interests) => {
+  const handleFinishSignuBtnClick = async () => {
     setIsLoading(true);
     try {
-      const params = {
-        credential: googleCredential,
-        interests,
-      };
+      const interests = selectedTopic.map((item) => item.value);
 
-      const response = await fetch(urlBasePath + "/users/google-signup", {
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        method: "POST",
-        body: JSON.stringify(params),
-      });
-      const result = await response.json();
-
-      if (response?.status === 201) {
-        verifyAuthentication();
-      } else {
-        showToast(result?.message || "Some error occured.");
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Some error occured.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const localSignup = async (interests) => {
-    setIsLoading(true);
-    try {
       const params = {
         firstName: userDetails.firstName,
         lastName: userDetails.lastName,
@@ -322,7 +287,7 @@ function LoginSignupComp() {
       };
       if (userDetails.gender) params.gender = userDetails.gender;
 
-      const response = await fetch(urlBasePath + "/users/local-signup", {
+      const response = await fetch(urlBasePath + "/users/signup", {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         method: "POST",
@@ -340,15 +305,6 @@ function LoginSignupComp() {
       showToast("Some error occured.");
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleFinishSignup = () => {
-    const interests = selectedTopic.map((item) => item.value);
-    if (googleCredential) {
-      googleSignup(interests);
-    } else {
-      localSignup(interests);
     }
   };
 
@@ -376,7 +332,7 @@ function LoginSignupComp() {
     <div onClick={closeLoginPopup} className="absolute z-[999] w-full custom-bg-6 h-screen flex items-center justify-center select-none">
       <div onClick={(e) => e.stopPropagation()} className="width67 flex items-center height74 border-radius-1 overflow-hidden custom-bg-2 padding-23 boxShadow6 relative">
         <div className="absolute z-[999] top-0 right-0 padding-6 bg-transparent">
-          <button onClick={closeLoginPopup} className="width-13 aspect-square cursor-pointer transition-all duration-75 linear opacity-[0.85] hover:opacity-100">
+          <button onClick={closeLoginPopup} className="width-13 aspect-square cursor-pointer transition-all duration-200 linear opacity-75 hover:opacity-100">
             <IoMdClose className="w-full h-full" />
           </button>
         </div>
@@ -395,7 +351,7 @@ function LoginSignupComp() {
         {/* right section */}
         <div className="w-[50%] max-w-[50%] h-full relative overflow-hidden">
           {/* login */}
-          <div className={`w-full h-full flex items-center transition-all ease duration-75 absolute ${isLoginTabActive && !isTopicsTabActive ? "translate-x-0 visible pointer-events-auto" : "-translate-x-full invisible pointer-events-none"}`}>
+          <div className={`w-full h-full flex items-center transition-all ease-in-out duration-200 absolute ${isLoginTabActive ? "translate-x-0 visible pointer-none-auto" : "-translate-x-full invisible pointer-events-none"}`}>
             <div className="padding65 padding66 w-full h-full flex flex-col items-center justify-start">
               <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-normal select-none" style={{ marginTop: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
                 Welcome back.
@@ -451,16 +407,23 @@ function LoginSignupComp() {
                 </div>
               </div>
 
-              <div className="border-radius-9 margin65" style={{ marginInline: 0 }}>
-                <GoogleLogin
-                  onSuccess={(credentialResponse) => {
-                    loginWithGoogle(credentialResponse);
-                  }}
-                  onError={() => {
-                    console.log("Login Failed");
-                  }}
-                />
-              </div>
+              {/* <button className="width82 bdr-7 padding-6 line-h-8 font-10 text-center border-radius-9 color-3 font-normal margin65 cursor-pointer" style={{ marginInline: 0 }}>
+                <div className="w-full flex items-center justify-between">
+                  <div className="grow-0 shrink-0 basis-auto width-13 aspect-square">
+                    <FcGoogle className="w-full h-full" />
+                  </div>
+                  <div className="margin-13">Sign in with Google</div>
+                  <div className="grow-0 shrink-0 basis-auto width-13 aspect-square"></div>
+                </div>
+              </button> */}
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  loginWithGoogle(credentialResponse);
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
 
               <div className="flex items-center justify-center">
                 <p className="color-3 custom-line-h-1 margin-6 font-normal custom-fs-1" style={{ marginBottom: 0 }}>
@@ -471,7 +434,7 @@ function LoginSignupComp() {
                 </p>
               </div>
               <div className="height-2 margin-8 flex items-center w-full justify-center" style={{ marginInline: 0, marginBottom: 0 }}>
-                <button onClick={handleLoginBtnClick} disabled={isLoading} className={`h-full w-full flex items-center justify-center custom-gap-3 custom-bg-7 font-normal color-5 font-10 rounded-full opacity-[0.85] transition-all ease duration-75 ${isLoading ? "" : "cursor-pointer hover:opacity-100"}`}>
+                <button onClick={handleLoginBtnClick} disabled={isLoading} className={`h-full w-full flex items-center justify-center custom-gap-3 custom-bg-7 font-normal color-5 font-10 rounded-full opacity-75 transition-all ease-in-out duration-200 ${isLoading ? "" : "cursor-pointer hover:opacity-100"}`}>
                   {isLoading && <CircularProgress size={22} />}
                   Submit
                 </button>
@@ -481,7 +444,7 @@ function LoginSignupComp() {
 
           {/* signup */}
           <div
-            className={`w-full h-full flex items-center transition-all ease duration-75 absolute ${isLoginTabActive ? "translate-x-full invisible pointer-events-none" : isTopicsTabActive ? (googleCredential ? "translate-x-full invisible pointer-events-none" : "-translate-x-full invisible pointer-events-none") : "translate-x-0 visible pointer-events-auto"}
+            className={`w-full h-full flex items-center transition-all ease-in-out duration-200 absolute ${isLoginTabActive ? "translate-x-full invisible pointer-events-none" : isTopicsTabActive ? "-translate-x-full invisible pointer-events-none" : "translate-x-0 visible pointer-events-auto"}
 `}
           >
             <div className="padding-18 padding60 w-full h-full flex flex-col items-center justify-start">
@@ -610,7 +573,7 @@ function LoginSignupComp() {
                 </p>
               </div>
               <div className="height-2 margin-8 flex items-center w-full justify-center" style={{ marginInline: 0, marginBottom: 0 }}>
-                <button onClick={handleSignupBtnClick} disabled={isLoading} className={`h-full w-full flex items-center justify-center custom-gap-3 custom-bg-7 font-normal color-5 font-10 rounded-full opacity-[0.85] transition-all ease duration-75 ${isLoading ? "" : "cursor-pointer hover:opacity-100"}`}>
+                <button onClick={handleSignupBtnClick} disabled={isLoading} className={`h-full w-full flex items-center justify-center custom-gap-3 custom-bg-7 font-normal color-5 font-10 rounded-full opacity-75 transition-all ease-in-out duration-200 ${isLoading ? "" : "cursor-pointer hover:opacity-100"}`}>
                   {isLoading && <CircularProgress size={22} />}
                   Submit
                 </button>
@@ -619,9 +582,9 @@ function LoginSignupComp() {
           </div>
 
           {/* select topics */}
-          <div className={`w-full h-full overflow-y-auto flex items-center transition-all ease duration-75 absolute ${isTopicsTabActive ? "translate-x-0 visible pointer-events-auto" : googleCredential ? "-translate-x-full invisible pointer-events-none" : "translate-x-full invisible pointer-events-none"}`}>
+          <div className={`w-full h-full overflow-y-auto flex items-center transition-all ease-in-out duration-200 absolute ${!isLoginTabActive && isTopicsTabActive ? "translate-x-0 visible pointer-events-auto" : "translate-x-full invisible pointer-events-none "}`}>
             <div className="absolute z-[999] top-0 left-0 padding-6 bg-transparent">
-              <button onClick={handleCloseTopicsTab} className="width-13 aspect-square cursor-pointer transition-all duration-75 linear opacity-[0.85] hover:opacity-100" disabled={isLoading}>
+              <button onClick={handleCloseTopicsTab} className="width-13 aspect-square cursor-pointer transition-all duration-200 linear opacity-75 hover:opacity-100" disabled={isLoading}>
                 <IoMdArrowRoundBack className="w-full h-full" />
               </button>
             </div>
@@ -648,7 +611,7 @@ function LoginSignupComp() {
               </div>
 
               <div className="height-2 margin-8 flex items-center w-full justify-center shrink-0" style={{ marginInline: 0, marginBottom: 0 }}>
-                <button onClick={handleFinishSignup} disabled={isLoading || selectedTopic.length < 3} className={`h-full w-full flex items-center justify-center custom-gap-3 custom-bg-7 font-normal color-5 font-10 rounded-full transition-all linear duration-75 ${selectedTopic.length < 3 ? "opacity-[0.4]" : "opacity-[0.85] cursor-pointer hover:opacity-100"}`}>
+                <button onClick={handleFinishSignuBtnClick} disabled={isLoading || selectedTopic.length < 3} className={`h-full w-full flex items-center justify-center custom-gap-3 custom-bg-7 font-normal color-5 font-10 rounded-full transition-all linear duration-200 ${selectedTopic.length < 3 ? "opacity-[0.4]" : "opacity-75 cursor-pointer hover:opacity-100"}`}>
                   {isLoading && <CircularProgress size={22} />}
                   Finish
                 </button>

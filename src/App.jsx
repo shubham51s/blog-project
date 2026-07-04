@@ -50,6 +50,9 @@ import SearchPageWrapper from "./pages/Search/wrapper";
 import AppErrorPage from "./pages/Error";
 import NoInternetPage from "./pages/NoInternet";
 import useOnlineStatus from "./hooks/onlineStatus";
+import EmailVerification from "./pages/EmailVerification";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const { isInitialLoading, isAnyErr } = useContext(UserContext);
@@ -65,6 +68,9 @@ function App() {
           {isOnline && (
             <Routes>
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/verify-email" element={<EmailVerification />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password?" element={<ResetPassword />} />
               <Route path="/new-story" element={<CreatePostPage />} />
               <Route path="p/:draftId/edit" element={<CreatePostPage />} />
               <Route path="/" element={<MainComp />}>
