@@ -4,6 +4,7 @@ import { MdClose } from "react-icons/md";
 import { UserContext } from "../../../../context/userContext";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import ButtonSpinner from "../../ButtonSpinner";
+import { showToast } from "../../../../utils/toaster";
 
 function DeleteAccountModal({ isShowModal, handleCloseModal }) {
   const { userInfo } = useContext(UserContext);
@@ -24,10 +25,35 @@ function DeleteAccountModal({ isShowModal, handleCloseModal }) {
     setValue(val);
   };
 
+  const closeModal = () => {
+    if (isLoading) return;
+    handleCloseModal();
+  };
+
+  const deleteUser = async () => {
+    setIsLoading(true);
+    try {
+      const response = await requestHandler("/users/delete", "DELETE");
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        showToast(result.message);
+        window.location.reload();
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Dialog
       open={isShowModal}
-      onClose={handleCloseModal}
+      onClose={closeModal}
       PaperProps={{
         sx: {
           maxWidth: "none",
@@ -65,11 +91,11 @@ function DeleteAccountModal({ isShowModal, handleCloseModal }) {
 
         <div className="margin51">
           <div className="flex justify-end custom-gap-2">
-            <button onClick={handleCloseModal} className="padding-28 custom-px-2 line20 custom-fs-1 text-center border-radius-9 font-normal m-0 bdr22 border-solid border-[#b63636] text-[#b63636] transition-all duration-75 ease opacity-[0.9] cursor-pointer hover:opacity-100">
+            <button onClick={closeModal} className="padding-28 custom-px-2 line20 custom-fs-1 text-center border-radius-9 font-normal m-0 bdr22 border-solid border-[#b63636] text-[#b63636] transition-all duration-75 ease opacity-[0.9] cursor-pointer hover:opacity-100">
               Cancel
             </button>
 
-            <button disabled={isLoading || value !== "delete"} className={`flex items-center justify-center custom-gap-3 padding-28 custom-px-2 line20 custom-fs-1 text-center border-radius-9 bg-[#b63636] text-white font-normal m-0 bdr22 border-solid border-[#b63636] transition-all duration-75 ease ${isLoading || value !== "delete" ? "opacity-[0.6] cursor-default" : "cursor-pointer opacity-[0.95] hover:opacity-100"}`}>
+            <button onClick={deleteUser} disabled={isLoading || value !== "delete"} className={`flex items-center justify-center custom-gap-3 padding-28 custom-px-2 line20 custom-fs-1 text-center border-radius-9 bg-[#b63636] text-white font-normal m-0 bdr22 border-solid border-[#b63636] transition-all duration-75 ease ${isLoading || value !== "delete" ? "opacity-[0.6] cursor-default" : "cursor-pointer opacity-[0.95] hover:opacity-100"}`}>
               {isLoading && <ButtonSpinner />}
               Delete account
             </button>
@@ -77,7 +103,7 @@ function DeleteAccountModal({ isShowModal, handleCloseModal }) {
         </div>
 
         <div className="absolute right5 top6">
-          <button onClick={handleCloseModal} className="cursor-pointer m-0 p-0 flex color-3 opacity-[0.6] transition-all duration-75 ease hover:opacity-[0.8]">
+          <button onClick={closeModal} className="cursor-pointer m-0 p-0 flex color-3 opacity-[0.6] transition-all duration-75 ease hover:opacity-[0.8]">
             <div className="width-13 aspect-square">
               <MdClose className="w-full h-full" />
             </div>
