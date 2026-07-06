@@ -15,7 +15,7 @@ function CreateListBanner({ setIsShowListBanner }) {
 
   const createNewUserList = async (list, setIsLoading) => {
     setIsLoading(false);
-    navigate(`/profile/${userInfo.username}/list/${list.slug}/${list._id}`);
+    navigate(`/profile/${userInfo.username}/list/${list.slug}`);
   };
 
   const handleCreateNewBlogBtnClick = () => {

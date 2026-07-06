@@ -117,7 +117,7 @@ function CreatePostPage() {
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.blogId && result?.data?.slug) {
-        navigate(`/${result.data.slug}/${result.data.blogId}`, { replace: true });
+        navigate(`/${result.data.slug}`, { replace: true });
       } else {
         showToast(result?.message || "Some error occured.");
       }

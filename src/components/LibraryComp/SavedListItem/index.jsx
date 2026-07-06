@@ -17,7 +17,7 @@ function SavedListItem({ item, isRemove = true }) {
   };
 
   const handleNavigateToLink = () => {
-    navigate(`/profile/${list.user.username}/list/${list.slug}/${list._id}`);
+    navigate(`/profile/${list.user.username}/list/${list.slug}`);
   };
 
   const removeUnsavedListItemFromList = () => {

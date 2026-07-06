@@ -116,7 +116,7 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true, c
 
       if (response?.status === 200 && result?.data?.blog) {
         const blog = result.data.blog;
-        navigate(`/${blog.slug}/${blog._id}`, { replace: true });
+        navigate(`/${blog.slug}`, { replace: true });
       } else {
         showToast(result?.message || "Some error occured");
       }
@@ -144,7 +144,7 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true, c
 
       if (response?.status === 200 && result?.data?.blogId && result?.data?.slug) {
         showToast("Blog submitted successfully.");
-        if (isNaviate) navigate(`/${result.data.slug}/${result.data.blogId}`);
+        if (isNaviate) navigate(`/${result.data.slug}`);
         handleOnSubmission();
         closeModal();
       } else {
