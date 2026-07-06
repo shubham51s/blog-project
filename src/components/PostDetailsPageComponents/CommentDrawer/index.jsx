@@ -167,7 +167,7 @@ function CommentDrawer({ blog, setBlog, setIsShowDrawer, setRecentComments }) {
   }, []);
 
   return (
-    <div ref={container} onClick={(e) => e.stopPropagation()} className={`fixed right-0 top-2 z-[999] height-11 flex flex-col justify-stretch box-border overflow-y-auto overflow-x-hidden overscroll-contain custom-bg-8 box-shadow-3 bdr-5 transition-all duration-100 linear" ${isShow ? "width-40" : "!w-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
+    <div ref={container} onClick={(e) => e.stopPropagation()} className={`fixed right-0 top2 z-[999] height-11 flex flex-col justify-stretch box-border overflow-y-auto overflow-x-hidden overscroll-contain custom-bg-8 box-shadow-3 bdr-5 transition-all duration-100 linear" ${isShow ? "width-40" : "!w-0"}`} style={{ borderRight: 0, borderBlock: 0 }}>
       <div className="overflow-y-auto">
         <div className="padding-3 flex items-center justify-between">
           <div className="flex">

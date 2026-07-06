@@ -30,7 +30,7 @@ function RightSection() {
     <>
       {users?.length > 0 && (
         <div className="relative inline-block w-full h-full">
-          <div className="sticky top-2">
+          <div className="sticky top2">
             <div className="height-14 flex flex-col">
               <div className="grow shrink-0 basis-auto">
                 <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>

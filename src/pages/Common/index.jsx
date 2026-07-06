@@ -36,9 +36,9 @@ function MainComp() {
         <div className="custom-bg-8">
           <HeaderComp />
           {isMenu && (
-            <div className="flex height-11">
+            <div className="flex">
               <MenuComp />
-              <div className="width-17 grow shrink basis-auto h-full">
+              <div className="width-17 grow shrink basis-auto">
                 <Outlet />
               </div>
             </div>

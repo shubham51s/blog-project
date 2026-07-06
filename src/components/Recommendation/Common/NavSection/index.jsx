@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { scrollToTop } from "../../../../utils/common";
 
 function NavSection() {
   const navOptions = [
@@ -49,7 +50,7 @@ function NavSection() {
           <div className="w-full flex justify-start">
             {navOptions.map((item) => (
               <div key={item.id} className={`min-w-max margin52 padding-42 ${isTabActive(item.id) ? "bdr-7" : "bdr-5"}`} style={{ borderTop: 0, borderInline: 0, marginLeft: item.id === 0 ? "0" : "" }}>
-                <Link to={`/me/${item.path}`} className="p-0 cursor-pointer no-underline">
+                <Link to={`/me/${item.path}`} onClick={scrollToTop} className="p-0 cursor-pointer no-underline">
                   <p className={`color-3 custom-fs-1 line20 font-normal m-0 transition-all duration-75 ease ${isTabActive(item.id) ? "opacity-100" : "opacity-[0.9] hover:opacity-100"}`}>
                     <span>{item.name}</span>
                   </p>

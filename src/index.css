@@ -8,6 +8,14 @@ body {
   color: rgba(0, 0, 0, 0.8);
   box-sizing: border-box;
   font-weight: 400;
+  /* new */
+  position: relative;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+html {
+  color-scheme: light;
 }
 
 p {
@@ -533,6 +541,21 @@ img {
   display: none;
 }
 
+/* Chrome, Edge, Safari */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+/* IE/old Edge */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+}
+
 .no-first-row-border>tr:first-child {
   border-top: 0 !important;
 }
@@ -677,11 +700,11 @@ img {
     left: 24px;
   }
 
-  .top-1 {
+  .top1 {
     top: 50px;
   }
 
-  .top-2 {
+  .top2 {
     top: 57px;
   }
 

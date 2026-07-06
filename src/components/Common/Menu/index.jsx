@@ -13,11 +13,13 @@ import { UserContext } from "../../../context/userContext";
 import { GoPersonFill } from "react-icons/go";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import Following from "./Following";
+import { scrollToTop } from "../../../utils/common";
 
 function MenuComp() {
   const { isShowMenu } = useContext(UserContext);
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const container = useRef(null);
   const { userInfo } = useContext(UserContext);
 
   const menuOptions = [
@@ -58,10 +60,6 @@ function MenuComp() {
     },
   ];
 
-  const handleMenuTabButtonClick = (item) => {
-    navigate(item.path);
-  };
-
   const isActiveTab = (id) => {
     if (id === 0) return !pathname.includes("/me/lists") && !pathname.includes("/profile") && !pathname.includes("/me/stories");
     if (id === 1) return pathname.includes("/me/lists");
@@ -70,8 +68,18 @@ function MenuComp() {
     if (id === 4) return pathname.includes("/me/stats");
   };
 
+  const handleTabClick = (id) => {
+    if (isActiveTab(id)) return;
+
+    container.current?.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    scrollToTop();
+  };
+
   return (
-    <div className={`flex-none transition-all h-full overflow-y-auto duration-300 ease-in-out overflow-x-hidden ${isShowMenu ? "width-16 visible" : "w-0 invisible"}`}>
+    <div ref={container} className={`flex-none sticky top2 height-11 height-14 height77 transition-all duration-300 ease-in-out overflow-y-auto overflow-x-hidden ${isShowMenu ? "width-16 visible" : "w-0 invisible"}`}>
       <div className="bdr-5 w-full custom-bg-8" style={{ borderLeft: 0, borderBlock: 0 }}>
         <div className="h-full w-full max-h-full flex-shrink basis-auto flex">
           <div className="flex flex-col custom-gap-4 overflow-auto padding-14" style={{ paddingTop: 0, paddingInline: 0 }}>
@@ -80,7 +88,7 @@ function MenuComp() {
 
               {menuOptions.map((item) => (
                 <div key={item.id}>
-                  <Link to={item.path} className={`text-left line-h-8 select-none padding-21 py-0 flex items-center custom-gap-2 font-10 relative cursor-pointer m-0 color-6 font-normal no-underline transition-all duration-300 ease-in-out hover:opacity-100 ${isActiveTab(item.id) ? "opacity-100" : "opacity-[0.7]"}`}>
+                  <Link onClick={() => handleTabClick(item.id)} to={item.path} className={`text-left line-h-8 select-none padding-21 py-0 flex items-center custom-gap-2 font-10 relative cursor-pointer m-0 color-6 font-normal no-underline transition-all duration-300 ease-in-out hover:opacity-100 ${isActiveTab(item.id) ? "opacity-100" : "opacity-[0.7]"}`}>
                     {isActiveTab(item.id) ? <item.IconActive className="width-13 height-10 align-middle" /> : <item.IconInactive className="width-13 height-10 align-middle" />}
                     <span className="shrink grow text-ellipsis overflow-hidden whitespace-nowrap">{item.name}</span>
                   </Link>

@@ -3,7 +3,7 @@ import { useRequestHandler } from "../../../hooks/requestHandler";
 import { Link, useOutletContext } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { formatNumberCompact } from "../../../utils/common";
+import { formatNumberCompact, scrollToTop } from "../../../utils/common";
 import FollowingList from "../../../components/ProfileComp/FollowingSection";
 import Spinner from "../../../components/Common/Spinner";
 import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
@@ -67,6 +67,7 @@ function Following() {
   }, [user]);
 
   useEffect(() => {
+    scrollToTop();
     if (!defaultLoaderTimeout.current) {
       defaultLoaderTimeout.current = setTimeout(() => {
         setDefaultLoader(false);

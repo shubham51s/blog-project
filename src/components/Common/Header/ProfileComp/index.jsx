@@ -13,50 +13,13 @@ import { Link } from "react-router-dom";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { FiMoreHorizontal } from "react-icons/fi";
 import PublicationListItem from "./PublicationListItem";
+import { scrollToTop } from "../../../../utils/common";
 
 function ProfileHeaderComp() {
   const { requestHandler } = useRequestHandler();
   const { userInfo } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
   const [publications, setPublications] = useState([]);
-
-  const profileNavOptions = [
-    {
-      id: 0,
-      name: "About",
-      path: "/",
-    },
-    {
-      id: 1,
-      name: "Blog",
-      path: "/",
-    },
-    {
-      id: 2,
-      name: "Careers",
-      path: "/",
-    },
-    {
-      id: 3,
-      name: "Privacy",
-      path: "/",
-    },
-    {
-      id: 4,
-      name: "Terms",
-      path: "/",
-    },
-    {
-      id: 5,
-      name: "Text to speech",
-      path: "/",
-    },
-    {
-      id: 6,
-      name: "More",
-      path: "/",
-    },
-  ];
 
   const handleUserLogout = async () => {
     try {
@@ -90,6 +53,11 @@ function ProfileHeaderComp() {
     }
   };
 
+  const handleTabClick = () => {
+    closePopup();
+    scrollToTop();
+  };
+
   useEffect(() => {
     getMyContributedPublications();
   }, []);
@@ -111,7 +79,7 @@ function ProfileHeaderComp() {
                         <div className="width-9">
                           <div className="height-8"></div>
 
-                          <Link to={`/profile/${userInfo.username}`} onClick={closePopup} className="text-left cursor-pointer no-underline m-0 p-0 group">
+                          <Link to={`/profile/${userInfo.username}`} onClick={handleTabClick} className="text-left cursor-pointer no-underline m-0 p-0 group">
                             <div className="padding-6 custom-fs-1 color-4 padding-19 custom-line-h-1 font-normal">
                               <div className="flex items-center custom-gap-2 max-w-full overflow-hidden">
                                 <div className="relative shrink-0">
@@ -128,11 +96,11 @@ function ProfileHeaderComp() {
 
                           <div className="padding-42 padding94 bdr-5" style={{ borderTop: 0, borderInline: 0 }}>
                             {publications.slice(0, 3).map((item) => (
-                              <PublicationListItem publication={item.publication} closePopup={closePopup} key={item._id} />
+                              <PublicationListItem publication={item.publication} handleTabClick={handleTabClick} key={item._id} />
                             ))}
 
                             {publications.length >= 4 && (
-                              <Link to="/me/settings/publishing#managePublications" onClick={closePopup} className="color-3 cursor-pointer text-left m-0 p-0 transition-all ease duration-75 opacity-[0.85] hover:opacity-100">
+                              <Link to="/me/settings/publishing#managePublications" onClick={handleTabClick} className="color-3 cursor-pointer text-left m-0 p-0 transition-all ease duration-75 opacity-[0.85] hover:opacity-100">
                                 <div className="padding-6 padding-19 custom-fs-1 color-3 custom-line-h-1 font-medium">
                                   <div className="flex items-center custom-gap-2">
                                     <div className="height-10 aspect-square shrink-0 bg-11 rounded-full flex items-center justify-center">
@@ -148,7 +116,7 @@ function ProfileHeaderComp() {
                           </div>
 
                           <div className="padding-6 padding-16 bdr-5" style={{ paddingInline: 0, borderTop: 0, borderInline: 0 }}>
-                            <Link to="/me/settings" onClick={closePopup} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
+                            <Link to="/me/settings" onClick={handleTabClick} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
                               <div className="padding-6 padding-19 custom-fs-1 color-3 custom-line-h-1 font-medium">
                                 <div className="flex items-center custom-gap-2">
                                   <div className="height-10 aspect-square shrink-0">
@@ -160,7 +128,7 @@ function ProfileHeaderComp() {
                                 </div>
                               </div>
                             </Link>
-                            <Link to="/new-publication" onClick={closePopup} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
+                            <Link to="/new-publication" onClick={handleTabClick} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
                               <div className="padding-6 padding-19 custom-fs-1 color-3 custom-line-h-1 font-medium">
                                 <div className="flex items-center custom-gap-2">
                                   <div className="height-10 aspect-square shrink-0">
@@ -172,7 +140,7 @@ function ProfileHeaderComp() {
                                 </div>
                               </div>
                             </Link>
-                            <Link to="/me/following/suggestions" onClick={closePopup} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
+                            <Link to="/me/following/suggestions" onClick={handleTabClick} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
                               <div className="padding-6 padding-19 custom-fs-1 color-3 custom-line-h-1 font-medium">
                                 <div className="flex items-center custom-gap-2">
                                   <div className="height-10 aspect-square shrink-0">
@@ -184,14 +152,14 @@ function ProfileHeaderComp() {
                                 </div>
                               </div>
                             </Link>
-                            <Link to="/me/lists/reading-history" onClick={closePopup} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
+                            <Link to="/me/lists/reading-history" onClick={handleTabClick} className="text-left border-0 cursor-pointer no-underline m-0 p-0 transition-all duration-75 ease opacity-[0.85] hover:opacity-100">
                               <div className="padding-6 padding-19 custom-fs-1 color-3 custom-line-h-1 font-medium">
                                 <div className="flex items-center custom-gap-2">
                                   <div className="height-10 aspect-square shrink-0">
                                     <RiHistoryFill className="w-full h-full" />
                                   </div>
                                   <div className="flex overflow-hidden">
-                                    <p className="height-6 truncate custom-fs-1 custom-line-h-1 font-medium m-0 p-0">History</p>
+                                    <p className="height-6 truncate custom-fs-1 custom-line-h-1 font-medium m-0 p-0">Reading History</p>
                                   </div>
                                 </div>
                               </div>

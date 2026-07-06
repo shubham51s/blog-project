@@ -91,13 +91,13 @@ function HomeMainContentComp() {
   return (
     // <main className="width-20 h-full overflow-y-auto grow flex-shrink basis-auto block">
     <>
-      <main className="width-20 h-full overflow-y-auto invisible-scrollbar grow flex-shrink basis-auto block">
+      <main className="width-20 grow shrink basis-auto block">
         <div className="block">
           {/* section-1 */}
           <div className="height-10"></div>
 
           {/* section-2 */}
-          {/* <div className="sticky top-2 z-[499] custom-bg-8"> */}
+          {/* <div className="sticky top2 z-[499] custom-bg-8"> */}
           <div className="custom-bg-8">
             <div className="flex justify-center">
               <div className="w-full min-w-0 max-width-2 margin-12">

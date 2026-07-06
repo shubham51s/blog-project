@@ -160,7 +160,7 @@ function SearchHomeComp() {
 
         {/* search results popup */}
         {isShowSearchPopup && (
-          <div ref={inputResultRef} className="absolute translate-x-0 z-[9999] top-1 box-shadow-1 border-radius-3">
+          <div ref={inputResultRef} className="absolute translate-x-0 z-[9999] top1 box-shadow-1 border-radius-3">
             <div className="custom-bg-8 border-radius-4 overflow-hidden">
               <div id="searchResults" className="width-12">
                 {searchInput.length > 0 && (searchData.users.length > 0 || searchData.publications.length || searchData.topics.length > 0) && (

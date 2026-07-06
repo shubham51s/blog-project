@@ -52,7 +52,7 @@ function PublicationLeftSection({ publication }) {
       </div>
       <div className="relative">
         {publication && (
-          <div className="absolute top-1 left-0 transition-all duration-300 linear opacity-100 pointer-none">
+          <div className="absolute top1 left-0 transition-all duration-300 linear opacity-100 pointer-none">
             <div className="flex justify-center">
               <div className="margin-27 min-w-0 w-full custom-max-w-1" style={{ marginBlock: 0 }}>
                 <div className="width-30 flex items-start flex-col">

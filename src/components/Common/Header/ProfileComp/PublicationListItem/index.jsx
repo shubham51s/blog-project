@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function PublicationListItem({ publication, closePopup }) {
+function PublicationListItem({ publication, handleTabClick }) {
   return (
     <>
       {publication && (
-        <Link to={`/publication/${publication.slug}`} onClick={closePopup} className="color-3 cursor-pointer text-left m-0 p-0 group">
+        <Link to={`/publication/${publication.slug}`} onClick={handleTabClick} className="color-3 cursor-pointer text-left m-0 p-0 group">
           <div className="padding-6 padding-19 custom-fs-1 color-3 custom-line-h-1 font-medium">
             <div className="flex items-center custom-gap-2">
               <div className="relative shrink-0">

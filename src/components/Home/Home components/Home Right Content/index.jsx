@@ -16,11 +16,10 @@ function HomeRightSectionComp() {
   const { sidebarData } = useContext(CommonContext);
 
   return (
-    <div className="width-22 width-21 h-full overflow-y-auto bdr-5 padding-3 custom-bg-8 padding-24" style={{ borderRight: 0, borderBlock: 0, paddingBlock: 0 }}>
-      <div className="relative inline-block h-full w-full">
-        {/* position sticky & scroll need to check */}
-        <div className="sticky top-2 mt-0">
-          <div className="height-14 flex flex-col">
+    <div className="width-22 width-21 h-full bdr-5 padding-3 custom-bg-8 padding-24" style={{ borderRight: 0, borderBlock: 0, paddingBlock: 0 }}>
+      <div className="inline-block h-full w-full relative">
+        <div className="sticky top2 mt-0">
+          <div className="height-11 flex flex-col overflow-y-auto hide-scrollbar">
             <div className="grow shrink-0 basis-auto">
               {(sidebarData.isLoading || (!sidebarData.isLoading && sidebarData?.blogs?.length > 0)) && (
                 <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>

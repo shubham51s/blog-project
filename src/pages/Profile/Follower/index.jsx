@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRequestHandler } from "../../../hooks/requestHandler";
 import { Link, useOutletContext } from "react-router-dom";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { formatNumberCompact } from "../../../utils/common";
+import { formatNumberCompact, scrollToTop } from "../../../utils/common";
 import FollowersList from "../../../components/ProfileComp/FollowersSection";
 import Spinner from "../../../components/Common/Spinner";
 import { defaultLoaderTime } from "../../../constants/constant";
@@ -61,6 +61,8 @@ function Follower() {
   }, [user]);
 
   useEffect(() => {
+    scrollToTop();
+
     if (!defaultLoaderTimeout.current) {
       defaultLoaderTimeout.current = setTimeout(() => {
         setDefaultLoader(false);

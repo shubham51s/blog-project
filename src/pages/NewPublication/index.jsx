@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/NewPublication/Header";
 import NameInput from "../../components/NewPublication/Inputs/Name";
 import DescriptionInput from "../../components/NewPublication/Inputs/Description";
@@ -8,6 +8,7 @@ import EditorInput from "../../components/NewPublication/Inputs/Editor";
 import { showToast } from "../../utils/toaster";
 import { useRequestHandler } from "../../hooks/requestHandler";
 import { useNavigate } from "react-router-dom";
+import { scrollToTop } from "../../utils/common";
 
 function NewPublication() {
   const { requestHandler } = useRequestHandler();
@@ -66,6 +67,10 @@ function NewPublication() {
       createPublication();
     }
   };
+
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   return (
     <>

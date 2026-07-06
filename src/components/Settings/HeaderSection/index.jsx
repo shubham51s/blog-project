@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { scrollToTop } from "../../../utils/common";
 
 function HeaderSection() {
   const { pathname } = useLocation();
@@ -32,6 +33,7 @@ function HeaderSection() {
 
   const handleNavigation = (path) => {
     navigate(path);
+    scrollToTop();
   };
 
   return (

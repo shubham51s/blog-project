@@ -11,6 +11,7 @@ import { useRequestHandler } from "../../../hooks/requestHandler";
 import { useToggleUserFollow } from "../../../hooks/toggleUserFollow";
 import { FollowingContext } from "../../../context/followingContext";
 import EditProfileInfoModal from "../../Common/Modals/EditProfileInfoModal";
+import { scrollToTop } from "../../../utils/common";
 
 function RightSectionComp({ user, setUser }) {
   const { requestHandler } = useRequestHandler();
@@ -88,7 +89,7 @@ function RightSectionComp({ user, setUser }) {
     <>
       <div className="width-22 width-21 height-13 bdr-5 padding-24 padding75 box-border custom-bg-8" style={{ borderRight: 0, borderBlock: 0 }}>
         <div className="relative h-full inline-block w-full">
-          <div className="sticky top-2">
+          <div className="sticky top2">
             <div className="flex flex-col height-14">
               <div className="grow shrink-0 basis-auto">
                 <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
@@ -180,7 +181,7 @@ function RightSectionComp({ user, setUser }) {
                       <ListComp list={item} user={user} key={item._id} />
                     ))}
                     <p className="font-4 color-3 opacity-[0.85] line20 font-medium transition-all duration-75 ease-in-out hover:opacity-100">
-                      <Link to="lists" className="cursor-pointer m-0 p-0 no-underline">
+                      <Link to="lists" onClick={scrollToTop} className="cursor-pointer m-0 p-0 no-underline">
                         View All
                       </Link>
                     </p>

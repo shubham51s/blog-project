@@ -3,12 +3,12 @@ import HomeMainContentComp from "../../../components/Home/Home components/Home M
 import HomeRightSectionComp from "../../../components/Home/Home components/Home Right Content";
 
 function HomePageProtected() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
 
   return (
-    <div className="width-18 m-auto h-full overflow-hidden flex justify-evenly">
+    <div className="width-18 m-auto flex justify-evenly h-full">
       <HomeMainContentComp />
       <HomeRightSectionComp />
     </div>

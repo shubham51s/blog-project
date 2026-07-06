@@ -125,7 +125,7 @@ function AllTimeSection() {
 
         <div>
           <table className="w-full table-fixed h-fit border-collapse" style={{ border: "0" }}>
-            <thead className="sticky custom-bg-8 height-3 top-2 text-left display-[table-header-group] bdr-5" style={{ borderTop: 0, borderInline: 0 }}>
+            <thead className="sticky custom-bg-8 height-3 top2 text-left display-[table-header-group] bdr-5" style={{ borderTop: 0, borderInline: 0 }}>
               <tr>
                 <th className="w-full min-w-full padding-42 color-4 custom-fs-1 line20 font-normal">
                   <span>Story</span>
