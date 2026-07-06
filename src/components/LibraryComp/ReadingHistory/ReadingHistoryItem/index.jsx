@@ -84,7 +84,7 @@ function ReadingHistoryItem({ item }) {
                       <div className="flex">
                         <div className="break-words grow shrink basis-auto">
                           <div>
-                            <Link to={`/${blog.slug}/${blog._id}`} className="flex flex-col cursor-pointer no-underline m-0 p-0">
+                            <Link to={`/${blog.slug}`} className="flex flex-col cursor-pointer no-underline m-0 p-0">
                               <h2 className="letter-spacing-6line-clamp-3 height-19 line-h-9 font-11 font-bold color-3 m-0">{blog.previewTitle}</h2>
                               <div className="custom-px-2" style={{ paddingBottom: 0 }}>
                                 <h3 className="line-clamp-2 height-15 font-10 color-4 line20 font-normal m-0">{blog.previewSubtitle}</h3>
@@ -132,7 +132,7 @@ function ReadingHistoryItem({ item }) {
                             </div>
                           </div>
                         </div>
-                        <Link to={`/${blog.slug}/${blog._id}`} className="block margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
+                        <Link to={`/${blog.slug}`} className="block margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
                           <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : noImage} className="border-radius-5 align-middle width-29 height-52" />
                         </Link>
                       </div>

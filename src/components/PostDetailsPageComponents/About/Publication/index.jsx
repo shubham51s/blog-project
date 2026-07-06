@@ -69,7 +69,7 @@ function PublicationSection({ publication }) {
                     <span className="margin-16" style={{ marginBlock: 0 }}>
                       <span className="custom-fs-1 color-4 custom-line-h-1">·</span>
                     </span>
-                    <Link to={`/${publication.lastPublished.slug}/${publication.lastPublished._id}`} className="cursor-pointer m-0 p-0 no-underline hover:underline">{`Last published ${formatUTCToLocalDate(publication.lastPublished.createdAt)}`}</Link>
+                    <Link to={`/${publication.lastPublished.slug}`} className="cursor-pointer m-0 p-0 no-underline hover:underline">{`Last published ${formatUTCToLocalDate(publication.lastPublished.createdAt)}`}</Link>
                   </div>
                 </div>
                 <div className="margin-21" style={{ marginBottom: 0, marginInline: 0 }}>

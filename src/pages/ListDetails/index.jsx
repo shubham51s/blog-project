@@ -22,7 +22,7 @@ import { defaultLoaderTime } from "../../constants/constant";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 function ListDetailsPage() {
-  const { username, slug, listId } = useParams();
+  const { username, slug } = useParams();
   const { userInfo } = useContext(UserContext);
   const { requestHandler } = useRequestHandler();
   const loaderTimeout = useRef(null);
@@ -35,6 +35,7 @@ function ListDetailsPage() {
   const clapsClickedCount = useRef(0);
   const [isCommentDrawerOpen, setIsCommentDrawerOpen] = useState(false);
   const [isDefaultLoader, setIsDefaultLoader] = useState(true);
+  const listId = useRef(null);
 
   const [clapDetails, setClapDetails] = useState({
     total: 0,
@@ -50,12 +51,12 @@ function ListDetailsPage() {
     cursor: null,
   });
 
-  const getListItems = async (listId = null) => {
+  const getListItems = async () => {
     if (!scroll.hasMore) return;
     setScroll((prev) => ({ ...prev, loading: true }));
 
     try {
-      const url = scroll.cursor ? `/list/items/get/${listId ? listId : list._id}?cursor=${scroll.cursor}&limit=${limit}` : `/list/items/get/${listId ? listId : list._id}?limit=${limit}`;
+      const url = scroll.cursor ? `/list/items/get/${listId.current}?cursor=${scroll.cursor}&limit=${limit}` : `/list/items/get/${listId.current}?limit=${limit}`;
       const response = await requestHandler(url);
       const result = await response.json();
 
@@ -76,12 +77,13 @@ function ListDetailsPage() {
 
   const fetchListDetails = async () => {
     try {
-      const response = await requestHandler(`/list/${slug}/${listId}`);
+      const response = await requestHandler(`/list/${slug}`);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.list?.user?.username === username) {
         setList(result.data.list);
-        if (!listItems.length) getListItems(result.data.list._id);
+        listId.current = result.data.list._id;
+        if (!listItems.length) getListItems();
 
         if (result.data.list?.clapsCount) {
           setClapDetails((prev) => ({ ...prev, total: result.data.list.clapsCount }));
@@ -202,21 +204,21 @@ function ListDetailsPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex">
                       <div className="margin-3">
-                        <Link to="" className="no-underline m-0 p-0 cursor-pointer">
+                        <div>
                           {list && (
-                            <div className="relative">
+                            <Link to={`/profile/${list.user.username}`} className="relative">
                               <img loading="lazy" src={list.user.profileImg} className="width-15 aspect-square rounded-full" />
                               <div className="absolute top-0 width-15 aspect-square rounded-full boxShadow7"></div>
-                            </div>
+                            </Link>
                           )}
                           {!list && <Skeleton circle className="width-15 aspect-square rounded-full" />}
-                        </Link>
+                        </div>
                       </div>
                       <div>
                         <div className="line-h-8 font-10 color-3 font-normal">
                           <div className="flex items-center margin-19" style={{ marginTop: 0, marginInline: 0 }}>
                             {list && (
-                              <Link to="" className="no-underline cursor-pointer m-0 p-0 font-medium">
+                              <Link to={`/profile/${list.user.username}`} className="no-underline cursor-pointer m-0 p-0 font-medium">
                                 {list.user.name}
                               </Link>
                             )}

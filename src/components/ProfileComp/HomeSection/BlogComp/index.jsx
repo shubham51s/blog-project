@@ -86,7 +86,7 @@ function BlogComp({ item }) {
                           <div className="flex">
                             {/* left section */}
                             <div className="grow shrink basis-auto" style={{ wordBreak: "break-word" }}>
-                              <Link to={`/${blog.slug}/${blog._id}`} className="block">
+                              <Link to={`/${blog.slug}`} className="block">
                                 <div className="flex flex-col static cursor-pointer">
                                   <h2 className="letter-spacing-6 height-19 line-h-9 font-11 font-bold overflow-hidden text-ellipsis color-3 m-0 p-0">{blog.previewTitle}</h2>
                                   <div className="padding-6" style={{ paddingBottom: 0, paddingInline: 0 }}>
@@ -98,7 +98,7 @@ function BlogComp({ item }) {
                                 <div className="w-full padding-25 cursor-pointer" style={{ paddingBottom: 0, paddingInline: 0 }}>
                                   <span className="font-4 color-4 custom-line-h-1 font-normal">
                                     <div className="height-50 flex justify-between items-center">
-                                      <Link to={`/${blog.slug}/${blog._id}`} className="flex items-center custom-gap-2 align-middle text-center">
+                                      <Link to={`/${blog.slug}`} className="flex items-center custom-gap-2 align-middle text-center">
                                         {formatMonthAndDayShort(blog.updatedAt)}
                                         <div className="width-28 height-51 relative flex items-center">
                                           <div className="z-[2] relative transition-all duration-300 ease-out flex custom-gap-2 items-center no-underline p-0 m-0">
@@ -136,7 +136,7 @@ function BlogComp({ item }) {
                                 </div>
                               </div>
                             </div>
-                            <Link to={`/${blog.slug}/${blog._id}`} className="block margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
+                            <Link to={`/${blog.slug}`} className="block margin-25 shrink-0 cursor-pointer" style={{ marginRight: 0, marginBlock: 0 }}>
                               <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreviewImg} className="bg-10 border-radius-5 align-middle width-29 height-52" />
                             </Link>
                           </div>

@@ -11,14 +11,14 @@ function ListItem({ item }) {
         <div className="box-content h-full">
           <div className="h-full w-full">
             <div className="relative h-full flex flex-col custom-gap-2">
-              <Link to={`/${item.slug}/${item._id}`} className="block">
+              <Link to={`/${item.slug}`} className="block">
                 <img loading="lazy" src={item.previewImg ? getImageUrl(item.previewImg) : noPreview} className="w-full border-radius-5 bg-10 object-cover aspect-[2/1] object-center" />
               </Link>
               <div>
                 <div className="w-full flex flex-col">
                   <div className="box-border break-words">
                     <div>
-                      <Link to={`/${item.slug}/${item._id}`} className="flex flex-col cursor-pointer m-0 p-0">
+                      <Link to={`/${item.slug}`} className="flex flex-col cursor-pointer m-0 p-0">
                         <h2 className="height84 line-clamp-4 font-3 line-h-8 font-semibold color-3 m-0">{item.previewTitle}</h2>
                         <div className="padding72" style={{ paddingBottom: 0 }}>
                           <h3 className="height-15 line20 font-10 line-clamp-2 color-3 font-normal m-0">{item.previewSubtitle}</h3>
@@ -41,7 +41,7 @@ function ListItem({ item }) {
                             <p className="break-all height-6 font-4 color-4 line20 font-normal m-0 transition-all duration-75 ease hover:underline">{item.author.name}</p>
                           </Link>
                         </div>
-                        <Link to={`/${item.slug}/${item._id}`} className="flex items-center">
+                        <Link to={`/${item.slug}`} className="flex items-center">
                           <span className="margin-19" style={{ marginBlock: 0 }}>
                             <span className="custom-fs-1 color-4 line20 font-normal">•</span>
                           </span>

@@ -27,7 +27,7 @@ function ListItem({ item }) {
             <div className="box-content h-full">
               <div className="h-full w-full">
                 <div className="relative h-full flex flex-col custom-gap-2">
-                  <Link to={`/${blog.slug}/${blog._id}`} className="block">
+                  <Link to={`/${blog.slug}`} className="block">
                     <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreview} className="w-full border-radius-5 bg-10 object-cover aspect-[2/1] object-center" />
                   </Link>
                   <div className="grow">
@@ -85,7 +85,7 @@ function ListItem({ item }) {
                           </div>
                         )}
                         <div>
-                          <Link to={`/${blog.slug}/${blog._id}`} className="flex flex-col cursor-pointer m-0 p-0">
+                          <Link to={`/${blog.slug}`} className="flex flex-col cursor-pointer m-0 p-0">
                             <h2 className="height84 line-clamp-4 font-3 line-h-8 font-semibold color-3 m-0">{blog.previewTitle}</h2>
                             <div className="padding72" style={{ paddingBottom: 0 }}>
                               <h3 className="height-15 line20 font-10 line-clamp-2 color-3 font-normal m-0">{blog.previewSubtitle}</h3>
@@ -97,7 +97,7 @@ function ListItem({ item }) {
                   </div>
                   <span className="font-4 color-4 line20 font-normal">
                     <div className="flex justify-between height-50">
-                      <Link to={`/${blog.slug}/${blog._id}`} className="flex items-center custom-gap-2 color-3 transition-all duration-75 ease opacity-[0.85]">
+                      <Link to={`/${blog.slug}`} className="flex items-center custom-gap-2 color-3 transition-all duration-75 ease opacity-[0.85]">
                         <div className="whitespace-nowrap">
                           {/* <span>{formatMonthAndDayShort()}</span> */}
                           <span>Apr 11</span>

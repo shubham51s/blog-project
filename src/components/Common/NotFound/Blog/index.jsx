@@ -10,13 +10,13 @@ function Blog({ blog }) {
     <div className="max-w-[48%] basis-1/2 grow-0 px-0 boxShadow8 border-radius12 bdr-5 mb-4 overflow-hidden margin-9" style={{ marginInline: 0 }}>
       <div className="height72 flex flex-col">
         <Link
-          to={`/${blog.slug}/${blog._id}`}
+          to={`/${blog.slug}`}
           className="width66 height73 bg-center bg-cover bg-origin-border cursor-pointer"
           style={{
             backgroundImage: `url('${blog.previewImg ? getImageUrl(blog.previewImg) : defaultImg}')`,
           }}
         ></Link>
-        <Link to={`/${blog.slug}/${blog._id}`} className="margin-21 grow shrink-0 basis-auto cursor-pointer" style={{ marginBottom: 0 }}>
+        <Link to={`/${blog.slug}`} className="margin-21 grow shrink-0 basis-auto cursor-pointer" style={{ marginBottom: 0 }}>
           <h4 className="line-clamp1 tracking-normal font-bold select-none">{blog.previewTitle}</h4>
         </Link>
         <div className="margin-11 margin52 flex items-center">

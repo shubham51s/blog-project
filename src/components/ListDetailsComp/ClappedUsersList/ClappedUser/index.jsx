@@ -51,7 +51,7 @@ function ClappedUser({ item }) {
           </div>
         </div>
         <div className="flex flex-col items-start">
-          <Link className="cursor-pointer m-0 p-0 no-underline">
+          <Link to={`/profile/${item.user.username}`} className="cursor-pointer m-0 p-0 no-underline">
             <h2 className="font-10 font-semibold color-3 custom-line-h-1 m-0 capitalize">{item.user.name}</h2>
           </Link>
           {item.user.bio && <p className="font-4 color-4 custom-line-h-1 font-medium m-0 p-0">{item.user.bio}</p>}

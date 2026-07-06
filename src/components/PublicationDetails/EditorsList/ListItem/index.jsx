@@ -31,7 +31,6 @@ function ListItem({ item }) {
       name: user.name,
     };
     await unfollowUser(params);
-
     setIsLoading(false);
   };
 

@@ -52,19 +52,21 @@ function FollowingComp({ item, user, setUser }) {
   const handleUnfollowUser = async () => {
     setIsLoading(true);
 
-    const params = {
-      _id: author.followee._id,
-      name: author.followee.name,
-    };
-    const isSuccess = await unfollowUser(params);
+    try {
+      const params = {
+        _id: author.followee._id,
+        name: author.followee.name,
+      };
+      const isSuccess = await unfollowUser(params);
 
-    if (isSuccess) {
-      if (userInfo._id === user._id) {
-        setUser((prev) => ({ ...prev, followingCount: prev.followingCount > 0 ? prev.followingCount - 1 : 0 }));
+      if (isSuccess) {
+        if (userInfo._id === user._id) {
+          setUser((prev) => ({ ...prev, followingCount: prev.followingCount > 0 ? prev.followingCount - 1 : 0 }));
+        }
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -85,7 +87,7 @@ function FollowingComp({ item, user, setUser }) {
               <div className="absolute top-0 height-12 aspect-square rounded-full boxShadow7"></div>
             </div>
           </div>
-          <p className="height-6 overflow-hidden font-4 custom-line-h-1 font-normal m-0 text-ellipsis line-clamp-1 break-words color-3 opacity-[0.8] transition-all duration-75 ease-in-out hover:underline hover:opacity-[0.95]" title={author.followee.name}>
+          <p className="height-6 overflow-hidden font-4 custom-line-h-1 font-normal m-0 text-ellipsis line-clamp-1 break-words color-3 opacity-[0.8] transition-all duration-75 ease-out hover:underline hover:opacity-[0.95]" title={author.followee.name}>
             {author.followee.name}
           </p>
         </div>
@@ -103,26 +105,26 @@ function FollowingComp({ item, user, setUser }) {
                 <div className="border-radius-4 overflow-hidden custom-bg-8">
                   <div className="boxShadow12 width75 padding-3 border-radius-3 flex flex-col">
                     <div className="flex items-end justify-between">
-                      <Link to="" className="no-underline cursor-pointer">
+                      <Link to={`/profile/${item.followee.username}`} className="no-underline cursor-pointer">
                         <div className="relative">
                           <img loading="lazy" src={author.followee.profileImg} className="width76 aspect-square box-border rounded-full" />
                           <div className="absolute top-0 width76 aspect-square rounded-full boxShadow7"></div>
                         </div>
                       </Link>
                       {!isFetchUserLoader && followingUsers[author.followee._id] && (
-                        <button onClick={() => handleUnfollowUser()} disabled={isLoading} title={`Following ${author.followee.name}`} className={`flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
+                        <button onClick={() => handleUnfollowUser()} disabled={isLoading} className="flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium cursor-pointer transition-all duration-500 ease">
                           Following
                         </button>
                       )}
                       {!isFetchUserLoader && !followingUsers[author.followee._id] && (
-                        <button onClick={() => handleFollowUser()} disabled={isLoading} title={`Follow ${author.followee.name}`} className={`flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
+                        <button onClick={() => handleFollowUser()} disabled={isLoading} className="flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 m-0 color-3 custom-fs-1 custom-line-h-1 font-medium cursor-pointer transition-all duration-500 ease">
                           Follow
                         </button>
                       )}
                     </div>
 
                     <div className="flex flex-col margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
-                      <Link to="" className="no-underline cursor-pointer">
+                      <Link to={`/profile/${item.followee.username}`} className="no-underline cursor-pointer">
                         <div className="flex flex-wrap items-baseline">
                           <span className="break-words line-clamp-2 height-15 padding-23 text-ellipsis font-10 font-semibold color-3 overflow-hidden line20" style={{ paddingLeft: 0, paddingBlock: 0 }} title={author.followee.name}>
                             {author.followee.name}
@@ -130,7 +132,7 @@ function FollowingComp({ item, user, setUser }) {
                         </div>
                       </Link>
                       <div className="margin44">
-                        <Link to="" className="cursor-pointer m-0 p-0 no-underline group">
+                        <Link to={`/profile/${item.followee.username}/followers`} className="cursor-pointer m-0 p-0 no-underline group">
                           <span className="color-3 font-4 line20 font-normal">{formatNumberCompact(author.followee.followersCount)}</span>
                           <span className="color-3 font-4 line20 font-normal opacity-[0.8] group-hover:opacity-100"> followers</span>
                         </Link>
@@ -155,14 +157,14 @@ function FollowingComp({ item, user, setUser }) {
                 <div className="border-radius-4 overflow-hidden custom-bg-8">
                   <div className="boxShadow12 width75 padding-3 border-radius-3 flex flex-col">
                     <div className="flex items-end justify-between">
-                      <Link to="" className="no-underline cursor-pointer">
+                      <div className="no-underline cursor-pointer">
                         <div className="relative">
                           <div className="width76 aspect-square rounded-full">
                             <Skeleton circle className="w-full h-full" />
                           </div>
                         </div>
-                      </Link>
-                      <button className="flex items-center justify-center border-radius-7 cursor-pointer m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease-in w-[55%] overflow-hidden">
+                      </div>
+                      <button className="flex items-center justify-center border-radius-7 cursor-pointer m-0 color-3 custom-fs-1 custom-line-h-1 font-medium transition-all duration-500 ease w-[55%] overflow-hidden">
                         <Skeleton height={35} width={34343} />
                       </button>
                     </div>

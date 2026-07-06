@@ -42,7 +42,7 @@ function ListItem({ item }) {
     <div className="padding-33 flex items-start justify-between" style={{ paddingInline: 0 }}>
       <div className="width64 flex items-start">
         <div className="padding-7" style={{ paddingLeft: 0 }}>
-          <div className="relative height-2 aspect-square">
+          <Link to={`/profile/${item.user.username}`} className="relative block height-2 aspect-square">
             <img loading="lazy" src={item.user.profileImg} className="box-border rounded-full align-middle" />
             <div className="absolute inset-0 aspect-square rounded-full border-0 boxShadow7"></div>
             <span className="absolute padding-36 left4 bg-[#1a8917] border-radius11 bottom-0 color-2 text-center">
@@ -50,14 +50,14 @@ function ListItem({ item }) {
                 <PiHandsClappingThin className="w-full h-full" />
               </div>
             </span>
-          </div>
-        </div>
-        <div className="flex flex-col items-start">
-          <Link className="cursor-pointer m-0 p-0 no-underline">
-            <h2 className="font-10 font-semibold color-3 custom-line-h-1 m-0 capitalize">{item.user.name}</h2>
           </Link>
-          {item.user.bio && <p className="font-4 color-4 custom-line-h-1 font-medium m-0 p-0">{item.user.bio}</p>}
         </div>
+        <Link to={`/profile/${item.user.username}`} className="flex flex-col items-start">
+          <div className="cursor-pointer m-0 p-0 no-underline">
+            <h2 className="font-10 font-semibold color-3 custom-line-h-1 m-0 capitalize">{item.user.name}</h2>
+          </div>
+          {item.user.bio && <p className="font-4 color-4 custom-line-h-1 font-medium m-0 p-0">{item.user.bio}</p>}
+        </Link>
       </div>
 
       <div className="padding50 width65 text-right" style={{ paddingRight: 0 }}>

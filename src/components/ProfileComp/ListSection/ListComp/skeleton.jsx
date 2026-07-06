@@ -7,9 +7,8 @@ import Skeleton from "react-loading-skeleton";
 function ListLoader() {
   return (
     <div className="relative w-full width55 z-0 flex justify-between margin57 bdr-5 border-radius-3">
-      {/* <Link to="" className=""></Link> */}
       <div className="grow shrink-0 basis-0 padding-3 padding76 flex flex-col break-words justify-between">
-        <Link to="" className="no-underline">
+        <div className="no-underline">
           <div className="flex opacity-[0.95] transition-all duration-75 linear hover:opacity-100">
             <div className="relative">
               <Skeleton circle className="height-12 aspect-square" />
@@ -20,7 +19,7 @@ function ListLoader() {
               </p>
             </div>
           </div>
-        </Link>
+        </div>
         <div className="margin-7" style={{ marginBottom: 0, marginInline: 0 }}>
           <h2 className="height-61 line-h-8 font-3 overflow-hidden line-clamp-2 font-bold text-ellipsis color-3 m-0">
             <Skeleton height={22} width={190} />

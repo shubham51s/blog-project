@@ -27,14 +27,14 @@ function BlogDetails({ blog }) {
 
       <div className="mr-auto">
         <div className="flex">
-          <Link to={`/${blog.slug}/${blog._id}`} className="cursor-pointer">
+          <Link to={`/${blog.slug}`} className="cursor-pointer">
             <div className="height92 width106 margin58" style={{ marginLeft: 0, marginBlock: 0 }}>
               <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : defaultImg} className="w-full h-full" />
             </div>
           </Link>
           <div className="width105">
             <div className="break-words">
-              <Link to={`/${blog.slug}/${blog._id}`} className="cursor-pointer">
+              <Link to={`/${blog.slug}`} className="cursor-pointer">
                 <h2 className="letter-spacing10 height93 line21 font15 line-clamp-3 color-3 m-0 font-semibold">{blog.previewTitle}</h2>
               </Link>
             </div>
@@ -48,7 +48,7 @@ function BlogDetails({ blog }) {
               </div>
             </div>
             <div className="flex items-center padding63">
-              <Link to={`/${blog.slug}/${blog._id}`} className="flex items-center color-4">
+              <Link to={`/${blog.slug}`} className="flex items-center color-4">
                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
                   <div className="width86 aspect-square">
                     <PiHandsClappingBold className="w-full h-full" />
@@ -58,7 +58,7 @@ function BlogDetails({ blog }) {
                   <p className="font-4 color-4 line20 font-normal m-0 p-0">{blog.clapsCount}</p>
                 </div>
               </Link>
-              <Link to={`/${blog.slug}/${blog._id}`} className="margin-18 flex items-center color-4" style={{ marginRight: 0 }}>
+              <Link to={`/${blog.slug}`} className="margin-18 flex items-center color-4" style={{ marginRight: 0 }}>
                 <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
                   <div className="width86 aspect-square">
                     <FaRegComment className="w-full h-full" />

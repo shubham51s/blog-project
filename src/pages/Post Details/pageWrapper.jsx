@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import PostDetailsPage from "./index";
 
 function PostDetailsPageWrapper() {
-  const { id } = useParams();
+  const { slug } = useParams();
 
-  return <PostDetailsPage key={id} />;
+  return <PostDetailsPage key={slug} />;
 }
 
 export default PostDetailsPageWrapper;

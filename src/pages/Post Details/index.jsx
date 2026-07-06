@@ -29,7 +29,7 @@ import CommentAction from "../../components/PostDetailsPageComponents/CommentAct
 import CommentDrawer from "../../components/PostDetailsPageComponents/CommentDrawer";
 
 function PostDetailsPage() {
-  const { slug, id } = useParams();
+  const { slug } = useParams();
   const { userInfo } = useContext(UserContext);
   const { requestHandler } = useRequestHandler();
   const [isShowFullImg, setIsShowFullImg] = useState(false);
@@ -132,7 +132,7 @@ function PostDetailsPage() {
   const getBlogDetails = async () => {
     setIsLoading(true);
     try {
-      const response = await requestHandler(`/blogs/${slug}/${id}`);
+      const response = await requestHandler(`/blogs/${slug}`);
       const result = await response.json();
 
       if (response?.status === 200 && result?.data?.blog) {

@@ -118,13 +118,13 @@ function App() {
                   <Route path="tags" element={<TopicSection />} />
                   <Route path="lists" element={<ListSection />} />
                 </Route>
-                <Route path="profile/:username/list/:slug/:listId" element={<ListDetailsPage />} />
+                <Route path="profile/:username/list/:slug" element={<ListDetailsPage />} />
                 <Route path="publication/:slug" element={<PublicationDetailsWrapper />} />
                 <Route path="publication/:slug/followers" element={<PublicationFollowers />} />
                 <Route path="publication/:slug/manage/inbox" element={<PublicationInbox />} />
                 <Route path="tag/:slug" element={<TopicDetails />} />
                 <Route path=":slug/settings" element={<PublicationSettingsWrapper />} />
-                <Route path=":slug/:id" element={<PostDetailsPageWrapper />} />
+                <Route path=":slug" element={<PostDetailsPageWrapper />} />
               </Route>
               <Route path="/*" element={<NotFoundPage />} />
             </Routes>

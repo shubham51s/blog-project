@@ -37,7 +37,7 @@ function HeaderComp() {
         {/* right section */}
         <div className="flex">
           <div className="margin-14 flex" style={{ marginLeft: 0 }}>
-            <Link className="no-underline border-0 cursor-pointer m-0 p-0 opacity-75 transition-all duration-300 ease-in-out hover:opacity-100" to="/new-story">
+            <Link to="/new-story" className="no-underline border-0 cursor-pointer m-0 p-0 opacity-75 transition-all duration-300 ease-in-out hover:opacity-100" to="/new-story">
               <div className="relative color-4 custom-line-h-1 flex items-center font-normal">
                 <FiEdit className="width-10 height-5 align-middle color-6" />
                 <div className="margin-9 color-6 custom-fs-1 font-normal" style={{ marginBlock: 0, marginRight: 0 }}>

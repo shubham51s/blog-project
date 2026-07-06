@@ -20,12 +20,12 @@ function Clapped({ item }) {
             </div> */}
           <span className="opacity-[0.7] transition-all duration-75 ease group-hover:opacity-100"> clapped to</span>{" "}
           {item.entityType === "blog" && (
-            <Link to={`/${item.entity.slug}/${item.entity._id}`} className="color16">
+            <Link to={`/${item.entity.slug}`} className="color16">
               {item.entity.previewTitle}
             </Link>
           )}
           {item.entityType === "list" && (
-            <Link to={`/profile/${userInfo.username}/list/${item.entity.slug}/${item.entity._id}`} className="color16">
+            <Link to={`/profile/${userInfo.username}/list/${item.entity.slug}`} className="color16">
               {item.entity.name}
             </Link>
           )}

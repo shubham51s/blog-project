@@ -177,9 +177,9 @@ function RightSectionComp({ user, setUser }) {
                     <span className="font-10 font-medium color-3 line20">Lists</span>
                     <div className="margin-37"></div>
                     {user.publicLists.slice(0, 3).map((item) => (
-                      <ListComp list={item} key={item._id} />
+                      <ListComp list={item} user={user} key={item._id} />
                     ))}
-                    <p className="font-4 color-3 opacity-[0.85] line20 font-normal transition-all duration-75 ease-in-out hover:opacity-100">
+                    <p className="font-4 color-3 opacity-[0.85] line20 font-medium transition-all duration-75 ease-in-out hover:opacity-100">
                       <Link to="lists" className="cursor-pointer m-0 p-0 no-underline">
                         View All
                       </Link>

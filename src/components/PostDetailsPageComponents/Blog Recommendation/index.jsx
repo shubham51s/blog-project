@@ -72,10 +72,10 @@ function BlogRecommendComp({ blog }) {
             <div className="margin-17 bdr-8 w-full" style={{ marginTop: 0, borderTop: 0, borderInline: 0 }}></div>
             {relatedBlogs.length >= 4 && (
               <div className="flex">
-                <Link className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-medium opacity-[0.9] transition-all duration-75 ease hover:opacity-100 capitalize">{`See all from ${blog.author.name}`}</Link>
+                <Link to={`/profile/${blog.author.username}`} className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-medium opacity-[0.9] transition-all duration-75 ease hover:opacity-100 capitalize">{`See all from ${blog.author.name}`}</Link>
                 {blog.publication && (
                   <div className="margin-21" style={{ marginRight: 0, marginBlock: 0 }}>
-                    <Link className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-medium opacity-[0.9] transition-all duration-75 ease hover:opacity-100 capitalize">{`See all from ${blog.publication.name}`}</Link>
+                    <Link to={`/publication/${blog.publication.slug}`} className="no-underline border-radius-9 bdr-7 text-center padding-5 box-border color-6 custom-fs-1 inline-block custom-line-h-1 font-medium opacity-[0.9] transition-all duration-75 ease hover:opacity-100 capitalize">{`See all from ${blog.publication.name}`}</Link>
                   </div>
                 )}
               </div>

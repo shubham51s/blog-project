@@ -15,7 +15,7 @@ function BlogComp({ item }) {
       {blog && (
         <tr className="bdr-5" style={{ borderInline: 0, borderBottom: 0 }}>
           <td className="table-cell padding70" style={{ paddingInline: 0 }}>
-            <Link to={`/${blog.slug}/${blog._id}`} className="w-full min-w-0 overflow-hidden relative cursor-pointer">
+            <Link to={`/${blog.slug}`} className="w-full min-w-0 overflow-hidden relative cursor-pointer">
               <div className="margin58 width69 flex items-start custom-gap-2" style={{ marginLeft: 0, marginBlock: 0 }}>
                 <div>
                   <div className="relative z-[2] cursor-pointer m-0 p-0 height-54 width70">

@@ -22,7 +22,7 @@ function ListItem({ blog }) {
                   <Link to={`/me/stats/post/${blog._id}`} className="padding50">
                     <span className="color-4 custom-fs-1 line20 font-normal">•</span>
                   </Link>
-                  <Link to={`/${blog.slug}/${blog._id}`} className="underline cursor-pointer m-0 p-0">
+                  <Link to={`/${blog.slug}`} className="underline cursor-pointer m-0 p-0">
                     View story
                   </Link>
                 </div>

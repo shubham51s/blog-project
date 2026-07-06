@@ -197,7 +197,7 @@ function ListItem({ item, list, updateRemovedListItem }) {
                           <div className="flex">
                             <div className="break-words grow shrink basis-auto">
                               <div className="">
-                                <Link to={`/${listItem.blog.slug}/${listItem.blog._id}`} className="flex flex-col">
+                                <Link to={`/${listItem.blog.slug}`} className="flex flex-col">
                                   <h2 className="letter-spacing-6 line-clamp-3 height-19 line-h-9 font-11 font-bold overflow-hidden color-3 m-0">{listItem.blog.previewTitle}</h2>
                                   <div className="custom-px-2" style={{ paddingBottom: 0 }}>
                                     <h3 className="height-15 line-clamp-2 font-10 overflow-hidden color-4 line20 font-normal m-0">{listItem.blog.previewSubtitle}</h3>
@@ -207,7 +207,7 @@ function ListItem({ item, list, updateRemovedListItem }) {
                               <div className="w-full padding72" style={{ paddingBottom: 0 }}>
                                 <span className="font-4 color-4 line20 font-normal">
                                   <div className="flex justify-between height-50">
-                                    <Link to={`/${listItem.blog.slug}/${listItem.blog._id}`} className="flex custom-gap-2 items-center">
+                                    <Link to={`/${listItem.blog.slug}`} className="flex custom-gap-2 items-center">
                                       <span className="">{formatUTCToLocalDate(listItem.blog.updatedAt)}</span>
                                       <div className="height-51 width-28 relative flex items-center">
                                         <div className="relative flex items-center custom-gap-2 no-underline">
@@ -240,7 +240,7 @@ function ListItem({ item, list, updateRemovedListItem }) {
                             </div>
 
                             <div className="margin-25 shrink-0" style={{ marginRight: 0, marginBlock: 0 }}>
-                              <Link to={`/${listItem.blog.slug}/${listItem.blog._id}`} className="block no-underline">
+                              <Link to={`/${listItem.blog.slug}`} className="block no-underline">
                                 <img loading="lazy" src={listItem.blog.previewImg ? getImageUrl(listItem.blog.previewImg) : errImg} className="border-radius-5 width-29 height-52" />
                               </Link>
                             </div>

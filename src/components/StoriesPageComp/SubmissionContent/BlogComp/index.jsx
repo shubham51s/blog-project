@@ -14,18 +14,13 @@ function BlogComp({ item }) {
   const navigate = useNavigate();
   const [blog, setBlog] = useState(item);
 
-  const handleBlogClick = () => {
-    const title = blog.previewTitle.split(" ").join("-");
-    navigate(`/${title}/${blog._id}`);
-  };
-
   return (
     <>
       {blog && (
         <tr className="bdr-5" style={{ borderInline: 0, borderBottom: 0 }}>
           <td className="table-cell padding70" style={{ paddingInline: 0 }}>
             <div className="w-full min-w-0 overflow-hidden relative cursor-pointer">
-              <Link to={`/${blog.slug}/${blog._id}`} className="margin58 width69 flex items-start custom-gap-2" style={{ marginLeft: 0, marginBlock: 0 }}>
+              <Link to={`/${blog.slug}`} className="margin58 width69 flex items-start custom-gap-2" style={{ marginLeft: 0, marginBlock: 0 }}>
                 <div>
                   <div className="relative z-[2] cursor-pointer m-0 p-0 height-54 width70">
                     <img loading="lazy" src={blog.previewImg ? getImageUrl(blog.previewImg) : noPreviewImg} className="w-full object-cover object-center aspect-[3/2] border-radius-5 align-middle" />
