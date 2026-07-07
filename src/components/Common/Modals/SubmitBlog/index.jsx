@@ -142,7 +142,7 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true, c
       const response = await requestHandler("/blogs/submit-to-publication", "POST", params);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.blogId && result?.data?.slug) {
+      if (response?.status === 200 && result?.data?.slug) {
         showToast("Blog submitted successfully.");
         if (isNaviate) navigate(`/${result.data.slug}`);
         handleOnSubmission();
@@ -167,7 +167,7 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true, c
   }, []);
 
   return createPortal(
-    <div className="custom-bg-8 fixed overflow-x-hidden overflow-y-auto text-center top-0 left-0 right-0 min-h-screen flex z-[999]">
+    <div className="fixed z-[9999] custom-bg-8 flex text-center top-0 left-0 right-0 h-screen overflow-x-hidden overflow-y-auto">
       {/* select publication */}
       {((blogLoader && !blog) || (!blogLoader && blog)) && tab === 0 && <SubmitToPublication handlePublicationSelection={handlePublicationSelection} />}
       {/* confirm submit */}

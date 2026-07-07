@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { urlBasePath } from "../constants/constant";
+import { appChannel, broadcastAction } from "../utils/authChannel";
 
 const FollowingContext = createContext();
 
@@ -36,7 +37,9 @@ const FollowingProvider = ({ children }) => {
   };
 
   const addUserFollowing = (userId) => {
-    if (userId) setFollowingUsers((prev) => ({ ...prev, [userId]: true }));
+    if (userId) {
+      setFollowingUsers((prev) => ({ ...prev, [userId]: true }));
+    }
   };
 
   const removeFollowingUser = (userId) => {
@@ -48,6 +51,24 @@ const FollowingProvider = ({ children }) => {
       });
     }
   };
+
+  useEffect(() => {
+    const handleAppMessage = (event) => {
+      const { type, payload } = event.data;
+
+      if (type === "followUser") {
+        addUserFollowing(payload.id);
+      } else if (type === "unfollowUser") {
+        removeFollowingUser(payload.id);
+      }
+    };
+
+    appChannel.addEventListener("message", handleAppMessage);
+
+    return () => {
+      appChannel.removeEventListener("message", handleAppMessage);
+    };
+  }, []);
 
   return <FollowingContext.Provider value={{ isFetchUserLoader, followingUsers, fetchFollowingAuthorIds, addUserFollowing, removeFollowingUser }}>{children}</FollowingContext.Provider>;
 };

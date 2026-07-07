@@ -29,6 +29,7 @@ import CommentAction from "../../components/PostDetailsPageComponents/CommentAct
 import CommentDrawer from "../../components/PostDetailsPageComponents/CommentDrawer";
 
 function PostDetailsPage() {
+  const rootUrl = window.location.origin;
   const { slug } = useParams();
   const { userInfo } = useContext(UserContext);
   const { requestHandler } = useRequestHandler();
@@ -73,15 +74,22 @@ function PostDetailsPage() {
   const undoMyClaps = async () => {
     try {
       const response = await requestHandler(`/claps/${blog._id}`, "DELETE");
-      // const result = await response.json();
+      const result = await response.json();
 
       if (response?.status === 200) {
         setClapDetails((prev) => ({ ...prev, myClaps: 0, totalClaps: blog.clapsCount - myPrevClapsCount >= 0 ? blog.clapsCount - myPrevClapsCount : 0 }));
         setBlog((prev) => ({ ...prev, clapsCount: prev.clapsCount - myPrevClapsCount >= 0 ? prev.clapsCount - myPrevClapsCount : 0 }));
         setMyPrevClapsCount(0);
+        return true;
+      } else {
+        showToast(resul?.message || "Some error occured.");
       }
+
+      return false;
     } catch (err) {
       console.error(err);
+      showToast("Some error occured.");
+      return false;
     }
   };
 
@@ -158,6 +166,17 @@ function PostDetailsPage() {
     }
   };
 
+  const handleCopyLink = async () => {
+    try {
+      const text = `${rootUrl}/${blog.slug}`;
+      await navigator.clipboard.writeText(text);
+      showToast("Link copied");
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     getBlogDetails();
@@ -168,6 +187,10 @@ function PostDetailsPage() {
         setDefaultLoader(false);
       }, defaultLoaderTime);
     }
+
+    return () => {
+      if (readingTimeout.current) clearTimeout(readingTimeout.current);
+    };
   }, []);
 
   return (
@@ -237,7 +260,7 @@ function PostDetailsPage() {
                               <SaveBlog item={blog} handleToggleBlogSaveInParent={handleToggleBlogSaveInParent} />
                             </div>
                             <div className="margin-12 shrink-0 inline-block" style={{ marginLeft: 0 }}>
-                              <button className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-75 ease cursor-pointer hover:opacity-100">
+                              <button onClick={handleCopyLink} className="padding-6 padding-36 color-6 m-0 opacity-[0.65] transition-all duration-75 ease cursor-pointer hover:opacity-100">
                                 <Tooltip arrow placement="top" enterDelay={300} title="Share">
                                   <div className="width-13 aspect-square">
                                     <GoShare className="w-full h-full" />
@@ -245,7 +268,7 @@ function PostDetailsPage() {
                                 </Tooltip>
                               </button>
                             </div>
-                            <MoreOptionsComp blog={blog} clapDetails={clapDetails} undoMyClaps={undoMyClaps} />
+                            <MoreOptionsComp blog={blog} setBlog={setBlog} clapDetails={clapDetails} undoMyClaps={undoMyClaps} />
                           </div>
                         </div>
                       </div>
@@ -275,7 +298,7 @@ function PostDetailsPage() {
                       <SaveBlog item={blog} handleToggleBlogSaveInParent={handleToggleBlogSaveInParent} />
                     </div>
                     <div className="margin-18 grow-0 shrink-0 basis-auto" style={{ marginLeft: 0 }}>
-                      <button className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-75 ease cursor-pointer hover:opacity-100">
+                      <button onClick={handleCopyLink} className="padding-6 padding-36 m-0 opacity-[0.7] transition-all duration-75 ease cursor-pointer hover:opacity-100">
                         <Tooltip arrow placement="top" enterDelay={300} title="Share">
                           <div className="width-13 aspect-square">
                             <GoShare className="w-full h-full" />
@@ -283,7 +306,7 @@ function PostDetailsPage() {
                         </Tooltip>
                       </button>
                     </div>
-                    <MoreOptionsComp blog={blog} clapDetails={clapDetails} undoMyClaps={undoMyClaps} />
+                    <MoreOptionsComp blog={blog} setBlog={setBlog} clapDetails={clapDetails} undoMyClaps={undoMyClaps} />
                   </div>
                 </div>
               </div>

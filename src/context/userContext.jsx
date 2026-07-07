@@ -7,6 +7,7 @@ import { showToast } from "../utils/toaster";
 import { PublicationContext } from "./publication";
 import { MuteContext } from "./mute";
 import { CommonContext } from "./commonContext";
+import { appChannel } from "../utils/authChannel";
 
 const UserContext = createContext();
 
@@ -104,13 +105,13 @@ const UserProvider = ({ children }) => {
   };
 
   const handleFocusChange = () => {
-    if (document.visibilityState === "visible" && isLoggedIn.current && Date.now() - lastDataFetched.current > 5 * 60 * 1000) {
+    if (document.visibilityState === "visible" && isLoggedIn.current && Date.now() - lastDataFetched.current > 30 * 60 * 1000) {
       lastDataFetched.current = Date.now();
       fetchFollowingAuthorIds();
       fetchFollowingPublicationIds();
       fetchMutedUsersAndPublications();
     }
-    if (document.visibilityState === "visible" && isLoggedIn.current && Date.now() - lastDataFetched.current > 120 * 60 * 1000) {
+    if (document.visibilityState === "visible" && isLoggedIn.current && Date.now() - lastDataFetched.current > 5 * 60 * 1000) {
       fetchMyLists();
     }
   };
@@ -121,6 +122,22 @@ const UserProvider = ({ children }) => {
     window.addEventListener("visibilitychange", handleFocusChange);
     return () => {
       window.removeEventListener("visibilitychange", handleFocusChange);
+    };
+  }, []);
+
+  // created broadcast channel for sync login / logout across multiple open tabs for consistancy
+  useEffect(() => {
+    const handleAppMessage = (data) => {
+      const type = event.data.type;
+      if (type === "login" || type === "logout") {
+        window.location.reload();
+      }
+    };
+
+    appChannel.addEventListener("message", handleAppMessage);
+
+    return () => {
+      document.removeEventListener("message", handleAppMessage);
     };
   }, []);
 

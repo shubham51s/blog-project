@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { urlBasePath } from "../constants/constant";
+import { appChannel } from "../utils/authChannel";
 
 const PublicationContext = createContext();
 
@@ -48,6 +49,24 @@ const PublicationProvider = ({ children }) => {
       });
     }
   };
+
+  useEffect(() => {
+    const handleAppMessage = (event) => {
+      const { type, payload } = event.data;
+
+      if (type === "followPublication") {
+        addFollowingPublication(payload.id);
+      } else if (type === "unfollowPublication") {
+        removeFollowingPublication(payload.id);
+      }
+    };
+
+    appChannel.addEventListener("message", handleAppMessage);
+
+    return () => {
+      appChannel.removeEventListener("message", handleAppMessage);
+    };
+  }, []);
 
   return <PublicationContext.Provider value={{ isPublicationLoader, followingPublication, fetchFollowingPublicationIds, addFollowingPublication, removeFollowingPublication }}>{children}</PublicationContext.Provider>;
 };

@@ -1,8 +1,33 @@
 import React, { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
+import { showToast } from "../../../utils/toaster";
+import { useRequestHandler } from "../../../hooks/requestHandler";
+import { useNavigate } from "react-router-dom";
 
-function ConfirmDeletePublicationModal({ closeModal }) {
+function ConfirmDeletePublicationModal({ closeModal, publication }) {
+  const { requestHandler } = useRequestHandler();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
+  const deletePublication = async () => {
+    setIsLoading(true);
+    try {
+      const response = await requestHandler("/publication/delete", "POST", { publicationId: publication._id });
+      const result = await response.json();
+
+      if (response?.status === 200) {
+        showToast("Publication deleted successfully.");
+        navigate("/");
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Some error occured.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div onClick={closeModal} disabled={isLoading} className="fixed text-center inset-0 z-[900] flex bg13 w-full">
@@ -19,7 +44,7 @@ function ConfirmDeletePublicationModal({ closeModal }) {
           Are you sure you want to delete this publication?
         </div>
         <div>
-          <button className="text-[#0F730C] bdr22 border-[#0F730C] margin-10 margin73 padding-38 custom-fs-1 text-center cursor-pointer whitespace-nowrap select-none font-normal padding-20 border-radius-9 transition-all duration-75 ease opacity-[0.95] hover:opacity-100" style={{ marginTop: 0, marginLeft: 0 }}>
+          <button onClick={deletePublication} className="text-[#0F730C] bdr22 border-[#0F730C] margin-10 margin73 padding-38 custom-fs-1 text-center cursor-pointer whitespace-nowrap select-none font-normal padding-20 border-radius-9 transition-all duration-75 ease opacity-[0.95] hover:opacity-100" style={{ marginTop: 0, marginLeft: 0 }}>
             Confirm
           </button>
           <button onClick={closeModal} disabled={isLoading} className="color-3 bdr17-hover margin-10 margin73 padding-38 custom-fs-1 text-center cursor-pointer whitespace-nowrap select-none font-normal padding-20 border-radius-9 transition-all duration-300 ease opacity-[0.9]" style={{ marginTop: 0, marginLeft: 0, marginRight: 0 }}>

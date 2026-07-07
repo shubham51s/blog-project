@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../../components/NewPublication/Header";
 import NameInput from "../../components/NewPublication/Inputs/Name";
 import DescriptionInput from "../../components/NewPublication/Inputs/Description";
@@ -9,9 +9,11 @@ import { showToast } from "../../utils/toaster";
 import { useRequestHandler } from "../../hooks/requestHandler";
 import { useNavigate } from "react-router-dom";
 import { scrollToTop } from "../../utils/common";
+import { PublicationContext } from "../../context/publication";
 
 function NewPublication() {
   const { requestHandler } = useRequestHandler();
+  const { addFollowingPublication } = useContext(PublicationContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [publication, setPublication] = useState({
@@ -38,12 +40,13 @@ function NewPublication() {
       const response = await requestHandler("/publication/create-new", "POST", params);
       const result = await response.json();
 
-      if (response?.status === 200 && result?.data?.slug) {
-        navigate(`/publication/${result.data.slug}`);
-        return;
-      }
+      if (response?.status === 200 && result?.data?.publication?.slug) {
+        if (result.data.publication._id) addFollowingPublication(result.data.publication._id);
 
-      showToast(result?.message || "Some error occured.");
+        navigate(`/publication/${result.data.publication.slug}`);
+      } else {
+        showToast(result?.message || "Some error occured.");
+      }
     } catch (err) {
       console.error(err);
       showToast("Some error occured.");

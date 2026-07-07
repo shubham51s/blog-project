@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useRequestHandler } from "../hooks/requestHandler";
+import { appChannel } from "../utils/authChannel";
 
 const MuteContext = createContext();
 
@@ -92,6 +93,28 @@ const MuteProvider = ({ children }) => {
     fetchMutedUserIds();
     fetchMutedPublicationIds();
   };
+
+  useEffect(() => {
+    const handleAppMessage = (event) => {
+      const { type, payload } = event.data;
+
+      if (type === "muteUser") {
+        addMutedUser(payload.id);
+      } else if (type === "unmuteUser") {
+        removeMutedUser(payload.id);
+      } else if (type === "mutePublication") {
+        addMutedPublication(payload.id);
+      } else if (type === "unmutePublication") {
+        removeMutedPublication(payload.id);
+      }
+    };
+
+    appChannel.addEventListener("message", handleAppMessage);
+
+    return () => {
+      appChannel.removeEventListener("message", handleAppMessage);
+    };
+  }, []);
 
   return <MuteContext.Provider value={{ muteLoader, mutedUsers, mutedPublications, fetchMutedUsersAndPublications, addMutedUser, removeMutedUser, addMutedPublication, removeMutedPublication }}>{children}</MuteContext.Provider>;
 };

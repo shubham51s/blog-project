@@ -5,6 +5,7 @@ import { UserContext } from "../../../../context/userContext";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import ButtonSpinner from "../../ButtonSpinner";
 import { showToast } from "../../../../utils/toaster";
+import { broadcastLogout } from "../../../../utils/authChannel";
 
 function DeleteAccountModal({ isShowModal, handleCloseModal }) {
   const { userInfo } = useContext(UserContext);
@@ -38,6 +39,7 @@ function DeleteAccountModal({ isShowModal, handleCloseModal }) {
 
       if (response?.status === 200) {
         showToast(result.message);
+        broadcastLogout();
         window.location.reload();
       } else {
         showToast(result?.message || "Some error occured.");

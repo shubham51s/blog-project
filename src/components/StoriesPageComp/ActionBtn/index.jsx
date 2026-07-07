@@ -9,16 +9,21 @@ import { showToast } from "../../../utils/toaster";
 
 function ActionBtn({ blog, setBlog }) {
   const rootUrl = window.location.origin;
-  const [isOpen, setIsOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
 
   const handleCopyLink = async () => {
     try {
-      const text = `${rootUrl}/${blog.slug}/${blog._id}`;
+      const text = `${rootUrl}/${blog.slug}`;
       await navigator.clipboard.writeText(text);
       showToast("Link copied");
-      setIsOpen(false);
+      closePopup();
     } catch (err) {
-      console.error("Failed to copy", err);
+      console.error(err);
+      showToast("Some error occured.");
     }
   };
 
@@ -27,7 +32,7 @@ function ActionBtn({ blog, setBlog }) {
   };
 
   return (
-    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+    <Popover.Root open={isPopupOpen} onOpenChange={setIsPopupOpen}>
       <Popover.Trigger className="cursor-pointer m-0 p-0 color-3 opacity-[0.85] transition-all duration-200 linear hover:opacity-100">
         <div className="width-13 aspect-square">
           <MdMoreHoriz className="w-full h-full" />
@@ -51,11 +56,11 @@ function ActionBtn({ blog, setBlog }) {
                 <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
               </li>
               <Edit blog={blog} />
-              {(!blog.publication || (blog.publication && (blog.publicationInfo.status === "withdrawn" || blog.publicationInfo.status === "declined"))) && <SubmitToPublicationBtn blog={blog} />}
+              <SubmitToPublicationBtn blog={blog} closePopup={closePopup} setBlog={setBlog} />
               <li className="custom-px-2">
                 <div className="bdr-5" style={{ borderBottom: 0, borderInline: 0 }}></div>
               </li>
-              <DeleteBlogBtn blog={blog} handleAfterBlogDelete={handleAfterBlogDelete} />
+              <DeleteBlogBtn blog={blog} handleAfterBlogDelete={handleAfterBlogDelete} closePopup={closePopup} />
             </ul>
           </div>
         </Popover.Content>

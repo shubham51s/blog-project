@@ -4,7 +4,7 @@ import NotificationSection from "../../components/Notification/NotificationSecti
 
 function NotificationPage() {
   return (
-    <div className="width-18 m-auto flex justify-evenly">
+    <div className="width-18 m-auto flex justify-evenly h-full">
       <NotificationSection />
       <HomeRightSectionComp />
     </div>

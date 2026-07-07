@@ -13,7 +13,7 @@ function ActionBtn({ blog, setBlog }) {
 
   const handleCopyLink = async () => {
     try {
-      const text = `${rootUrl}/${blog.slug}/${blog._id}`;
+      const text = `${rootUrl}/${blog.slug}`;
       await navigator.clipboard.writeText(text);
       showToast("Link copied");
       setIsOpen(false);

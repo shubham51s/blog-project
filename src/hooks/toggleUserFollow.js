@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useRequestHandler } from "./requestHandler";
 import { FollowingContext } from "../context/followingContext";
 import { showToast } from "../utils/toaster";
+import { broadcastAction } from "../utils/authChannel";
 
 export function useToggleUserFollow() {
   const { requestHandler } = useRequestHandler();
@@ -19,6 +20,7 @@ export function useToggleUserFollow() {
 
       if (response?.status === 200) {
         showToast(`Success! You're now following ${user.name}.`);
+        broadcastAction("followUser", { id: user._id });
       } else {
         removeFollowingUser(user._id);
         showToast(result?.message || "Some error occured");
@@ -45,6 +47,7 @@ export function useToggleUserFollow() {
 
       if (response?.status === 200) {
         showToast(`You unfollowed ${user.name}..`);
+        broadcastAction("unfollowUser", { id: user._id });
       } else {
         addUserFollowing(user._id);
         showToast(result?.message || "Some error occured");

@@ -38,7 +38,7 @@ function ActionBtn({ publication }) {
         </div>
       )}
 
-      {isShowModal && <ConfirmDeletePublicationModal closeModal={closeModal} />}
+      {isShowModal && <ConfirmDeletePublicationModal publication={publication} closeModal={closeModal} />}
     </>
   );
 }

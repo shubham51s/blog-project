@@ -14,6 +14,7 @@ import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { FiMoreHorizontal } from "react-icons/fi";
 import PublicationListItem from "./PublicationListItem";
 import { scrollToTop } from "../../../../utils/common";
+import { broadcastLogout } from "../../../../utils/authChannel";
 
 function ProfileHeaderComp() {
   const { requestHandler } = useRequestHandler();
@@ -25,6 +26,7 @@ function ProfileHeaderComp() {
     try {
       const response = await requestHandler("/users/logout");
       if (response?.status === 200) {
+        broadcastLogout();
         window.location.reload();
       } else {
         const msg = "Some error occured";

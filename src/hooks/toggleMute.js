@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useRequestHandler } from "./requestHandler";
 import { showToast } from "../utils/toaster";
 import { MuteContext } from "../context/mute";
+import { broadcastAction } from "../utils/authChannel";
 
 export function useToggleMute() {
   const { requestHandler } = useRequestHandler();
@@ -22,6 +23,7 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${user.name} has been muted. You will no longer see their stories on your homepage.`);
+        broadcastAction("muteUser", { id: user._id });
       } else {
         showToast(result?.message || "Some error occured.");
         removeMutedUser(user._id);
@@ -51,6 +53,7 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${user.name} has been unmuted.`);
+        broadcastAction("unmuteUser", { id: user._id });
       } else {
         showToast(result?.message || "Some error occured");
         addMutedUser(user._id);
@@ -81,6 +84,7 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${publication.name} has been muted. You will no longer see their stories on your homepage.`);
+        broadcastAction("mutePublication", { id: publication._id });
       } else {
         showToast(result?.message || "Some error occured.");
         removeMutedPublication(publication._id);
@@ -110,6 +114,7 @@ export function useToggleMute() {
 
       if (response?.status === 200) {
         showToast(`${publication.name} has been unmuted.`);
+        broadcastAction("unmutePublication", { id: publication._id });
       } else {
         showToast(result?.message || "Some error occured");
         addMutedPublication(publication._id);

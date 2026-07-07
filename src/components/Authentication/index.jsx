@@ -22,6 +22,7 @@ import { showToast } from "../../utils/toaster";
 import { useRequestHandler } from "../../hooks/requestHandler";
 import { FcGoogle } from "react-icons/fc";
 import { GoogleLogin } from "@react-oauth/google";
+import { broadcastLogin } from "../../utils/authChannel";
 
 function LoginSignupComp() {
   const { requestHandler } = useRequestHandler();
@@ -208,6 +209,7 @@ function LoginSignupComp() {
 
       if (response?.status === 200) {
         verifyAuthentication();
+        broadcastLogin();
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -239,6 +241,7 @@ function LoginSignupComp() {
           setIsTopicsTabActive(true);
         } else {
           verifyAuthentication();
+          broadcastLogin();
         }
       } else {
         showToast(result?.message || "Some error occured.");
@@ -297,6 +300,7 @@ function LoginSignupComp() {
 
       if (response?.status === 201) {
         verifyAuthentication();
+        broadcastLogin();
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -330,6 +334,7 @@ function LoginSignupComp() {
 
       if (response?.status === 201) {
         verifyAuthentication();
+        broadcastLogin();
       } else {
         showToast(result?.message || "Some error occured.");
       }

@@ -20,6 +20,7 @@ import ClappedUsersList from "../../components/ListDetailsComp/ClappedUsersList"
 import NotFoundComp from "../../components/Common/NotFound";
 import { defaultLoaderTime } from "../../constants/constant";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { motion, AnimatePresence } from "motion/react";
 
 function ListDetailsPage() {
   const { username, slug } = useParams();
@@ -36,6 +37,7 @@ function ListDetailsPage() {
   const [isCommentDrawerOpen, setIsCommentDrawerOpen] = useState(false);
   const [isDefaultLoader, setIsDefaultLoader] = useState(true);
   const listId = useRef(null);
+  const [floatingClaps, setFloatingClaps] = useState([]);
 
   const [clapDetails, setClapDetails] = useState({
     total: 0,
@@ -131,7 +133,7 @@ function ListDetailsPage() {
   };
 
   const handleAddClapsBtnClick = () => {
-    if (list.myClaps >= 50 || loaders.clapLoader) return;
+    if (list.myClaps >= 50) return;
     clapsClickedCount.current++;
     setClapDetails((prev) => {
       const newTotal = list.clapsCount - list.myClaps + Math.min(list.myClaps + clapsClickedCount.current, 50);
@@ -141,9 +143,23 @@ function ListDetailsPage() {
       };
     });
 
+    const id = Date.now();
+    setFloatingClaps((prev) => [
+      ...prev,
+      {
+        id,
+        x: Math.random() * 16 - 8,
+      },
+    ]);
+
+    setTimeout(() => {
+      setFloatingClaps((prev) => prev.filter((item) => item.id !== id));
+    }, 700);
+
     if (addClapTimeout.current) clearTimeout(addClapTimeout.current);
     addClapTimeout.current = setTimeout(() => {
       addClaps();
+      addClapTimeout.current = null;
     }, 800);
   };
 
@@ -287,14 +303,56 @@ function ListDetailsPage() {
                           <div className="flex items-center">
                             <div className="margin-12" style={{ marginLeft: 0 }}>
                               <div className="flex items-center">
-                                <div className="select-none margin-19 relative" style={{ marginLeft: 0, marginBlock: 0 }}>
+                                <div className="select-none margin-19 relative items-center" style={{ marginLeft: 0, marginBlock: 0 }}>
                                   {userInfo._id !== list.user._id && (
-                                    <Tooltip placement="top" arrow title="Clap">
-                                      <div onClick={handleAddClapsBtnClick} className="width-13 cursor-pointer aspect-square opacity-[0.95] transition-all duration-75 ease hover:opacity-100">
+                                    <>
+                                      <motion.button
+                                        onClick={handleAddClapsBtnClick}
+                                        whileTap={{ scale: 0.88 }}
+                                        whileHover={{ scale: 1.1 }}
+                                        transition={{
+                                          type: "spring",
+                                          stiffness: 450,
+                                          damping: 18,
+                                        }}
+                                        disabled={loaders.clapLoader}
+                                        className="width-13 cursor-pointer aspect-square opacity-[0.95] transition-all duration-75 ease hover:opacity-100"
+                                      >
                                         {!list.myClaps > 0 && <PiHandsClappingLight className="w-full h-full" />}
                                         {list.myClaps > 0 && <PiHandsClappingFill className="w-full h-full" />}
-                                      </div>
-                                    </Tooltip>
+                                      </motion.button>
+                                      <AnimatePresence>
+                                        {floatingClaps.map((item) => (
+                                          <motion.div
+                                            key={item.id}
+                                            initial={{
+                                              opacity: 0,
+                                              y: 0,
+                                              scale: 0.8,
+                                            }}
+                                            animate={{
+                                              opacity: 1,
+                                              y: -35,
+                                              scale: 1,
+                                            }}
+                                            exit={{
+                                              opacity: 0,
+                                              y: -55,
+                                              scale: 0.9,
+                                            }}
+                                            transition={{
+                                              duration: 0.6,
+                                            }}
+                                            className="absolute left-1/2 -translate-x-1/2 pointer-events-none font-semibold font-9 text-green-400"
+                                            style={{
+                                              x: item.x,
+                                            }}
+                                          >
+                                            +1
+                                          </motion.div>
+                                        ))}
+                                      </AnimatePresence>
+                                    </>
                                   )}
                                   {userInfo._id === list.user._id && (
                                     <div className="width-13 aspect-square cursor-not-allowed opacity-[0.95]">

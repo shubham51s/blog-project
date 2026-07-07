@@ -94,7 +94,7 @@ function MoreButton({ user, setUser, list, setList, filterOutDeletedList }) {
 
   const handleCopyLink = async () => {
     try {
-      const listName = `${rootUrl}/profile/${user.username}/list/${list.slug}/${list._id}`;
+      const listName = `${rootUrl}/profile/${user.username}/list/${list.slug}`;
       await navigator.clipboard.writeText(listName);
       showToast("Link copied");
       setIsPopupOpen(false);

@@ -88,8 +88,7 @@ function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
 
   const handleCopyLink = async () => {
     try {
-      const text = `${rootUrl}/profile/${list.user.username}/list/${list.name.toLowerCase().split(" ").join("-")}/${list._id}`;
-
+      const text = `${rootUrl}/profile/${list.user.username}/list/${list.slug}`;
       await navigator.clipboard.writeText(text);
       showToast("Link copied");
       setIsPopupOpen(false);
@@ -232,7 +231,6 @@ function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
       const params = {
         listId: list._id,
       };
-
       const response = await requestHandler("/list/claps/remove", "POST", params);
       const result = await response.json();
 
@@ -240,6 +238,7 @@ function MoreButton({ list, setList, fetchListDetails, setClapDetails }) {
         const newTotal = list.clapsCount - list.myClaps;
         setList((prev) => ({ ...prev, clapsCount: newTotal, myClaps: 0 }));
         setClapDetails((prev) => ({ ...prev, total: newTotal }));
+        setIsPopupOpen(false);
       } else {
         showToast("Some error occured");
       }

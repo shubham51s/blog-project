@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useRequestHandler } from "./requestHandler";
 import { showToast } from "../utils/toaster";
 import { PublicationContext } from "../context/publication";
+import { broadcastAction } from "../utils/authChannel";
 
 export function useTogglePublicationFollow() {
   const { requestHandler } = useRequestHandler();
@@ -19,6 +20,7 @@ export function useTogglePublicationFollow() {
 
       if (response?.status === 200) {
         showToast(`Success! You're now following ${publication.name}.`);
+        broadcastAction("followPublication", { id: publication._id });
       } else {
         removeFollowingPublication(publication._id);
         showToast(result?.message || "Some error occured");
@@ -45,6 +47,7 @@ export function useTogglePublicationFollow() {
 
       if (response?.status === 200) {
         showToast(`You unfollowed ${publication.name}..`);
+        broadcastAction("unfollowPublication", { id: publication._id });
       } else {
         addFollowingPublication(publication._id);
         showToast(result?.message || "Some error occured");

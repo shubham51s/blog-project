@@ -50,10 +50,10 @@ function SearchHomeComp() {
         signal: controller.signal,
       });
 
-      if (response?.status === 401) {
-        window.location.reload();
-        return;
-      }
+      // if (response?.status === 401) {
+      //   window.location.reload();
+      //   return;
+      // }
 
       const result = await response.json();
 

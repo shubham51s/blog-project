@@ -4,6 +4,7 @@ import * as Popover from "@radix-ui/react-popover";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { showToast } from "../../../../utils/toaster";
+import { broadcastLogout } from "../../../../utils/authChannel";
 
 function ProfileSection() {
   const { requestHandler } = useRequestHandler();
@@ -47,6 +48,7 @@ function ProfileSection() {
       const result = await response.json();
 
       if (response?.status === 200) {
+        broadcastLogout();
         window.location.reload();
       } else {
         showToast(result?.message || "Some error occured.", "error");
