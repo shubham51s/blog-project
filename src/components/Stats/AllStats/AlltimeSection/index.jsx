@@ -32,22 +32,22 @@ function AllTimeSection() {
       name: "Oldest",
       value: "oldest",
     },
-    {
-      name: "Most viewed",
-      value: "most-viewed",
-    },
-    {
-      name: "Least viewed",
-      value: "least-viewed",
-    },
-    {
-      name: "Most read",
-      value: "most-read",
-    },
-    {
-      name: "Least read",
-      value: "least-read",
-    },
+    // {
+    //   name: "Most viewed",
+    //   value: "most-viewed",
+    // },
+    // {
+    //   name: "Least viewed",
+    //   value: "least-viewed",
+    // },
+    // {
+    //   name: "Most read",
+    //   value: "most-read",
+    // },
+    // {
+    //   name: "Least read",
+    //   value: "least-read",
+    // },
   ]);
   const [selected, setSelected] = useState(optionsArr[0]);
 

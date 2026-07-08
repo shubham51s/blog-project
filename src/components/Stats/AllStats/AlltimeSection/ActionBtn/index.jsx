@@ -44,7 +44,7 @@ function ActionBtn({ isLoading, selected, optionsArr, handleSelectionChange }) {
                 </li>
               ))}
 
-              <li className="margin68 bdr-8" style={{ borderBottom: 0, borderInline: 0 }}></li>
+              <li className="margin68 bdr-8 hidden" style={{ borderBottom: 0, borderInline: 0 }}></li>
 
               {optionsArr.slice(2, 4).map((item) => (
                 <li key={item.value} onClick={() => handleSelection(item)} className={`flex items-center justify-between flex-wrap color-3 cursor-pointer padding-7 transition-all duration-75 ease opacity-[0.75] hover:opacity-100`}>
@@ -59,7 +59,7 @@ function ActionBtn({ isLoading, selected, optionsArr, handleSelectionChange }) {
                 </li>
               ))}
 
-              <li className="margin68 bdr-8" style={{ borderBottom: 0, borderInline: 0 }}></li>
+              <li className="margin68 bdr-8 hidden" style={{ borderBottom: 0, borderInline: 0 }}></li>
 
               {optionsArr.slice(4, 6).map((item) => (
                 <li key={item.value} onClick={() => handleSelection(item)} className={`flex items-center justify-between flex-wrap color-3 cursor-pointer padding-7 transition-all duration-75 ease opacity-[0.75] hover:opacity-100`}>
