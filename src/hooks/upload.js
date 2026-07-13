@@ -1,19 +1,25 @@
 import { useRequestHandler } from "./requestHandler";
+import imageCompression from "browser-image-compression";
 
 export function useImageUpload() {
   const { requestHandler } = useRequestHandler();
-  async function uploadImage(file, blobUrl = "") {
+  async function uploadImage(file, options = {}, blobUrl = "") {
     try {
       // 1. Get signature from backend
       const response = await requestHandler("/upload/get-signature");
       const result = await response.json();
+
+      const compressedFile = await imageCompression(file, options);
+
+      console.log("original: ", file.size); // original
+      console.log("compressed: ", compressedFile.size); // compressed
 
       if (response?.status === 200) {
         const { timestamp, signature, api_key, cloud_name, folder } = result;
 
         // 2. Prepare form data
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("file", compressedFile);
         formData.append("api_key", api_key);
         formData.append("timestamp", timestamp);
         formData.append("signature", signature);

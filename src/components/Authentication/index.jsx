@@ -23,9 +23,11 @@ import { useRequestHandler } from "../../hooks/requestHandler";
 import { FcGoogle } from "react-icons/fc";
 import { GoogleLogin } from "@react-oauth/google";
 import { broadcastLogin } from "../../utils/authChannel";
+import { useNavigate } from "react-router-dom";
 
 function LoginSignupComp() {
   const { requestHandler } = useRequestHandler();
+  const navigate = useNavigate();
   const { setIsShowLoginPopup, isLoginTabActive, setIsLoginTabActive, verifyAuthentication } = useContext(UserContext);
 
   const sliderOptions = {
@@ -333,8 +335,9 @@ function LoginSignupComp() {
       const result = await response.json();
 
       if (response?.status === 201) {
-        verifyAuthentication();
-        broadcastLogin();
+        showToast("Account created! Check your email to verify your account.");
+        handleLoginTypeChange();
+        handleCloseTopicsTab();
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -398,8 +401,8 @@ function LoginSignupComp() {
         {/* right section */}
         <div className="w-[50%] max-w-[50%] h-full relative overflow-hidden">
           {/* login */}
-          <div className={`w-full h-full flex items-center transition-all ease duration-75 absolute ${isLoginTabActive && !isTopicsTabActive ? "translate-x-0 visible pointer-events-auto" : "-translate-x-full invisible pointer-events-none"}`}>
-            <div className="padding65 padding66 w-full h-full flex flex-col items-center justify-start">
+          <div className={`w-full h-full flex items-center justify-center overflow-y-auto hide-scrollbar transition-all ease duration-75 absolute ${isLoginTabActive && !isTopicsTabActive ? "translate-x-0 visible pointer-events-auto" : "-translate-x-full invisible pointer-events-none"}`}>
+            <div className="padding66 w-full flex flex-col items-center justify-start">
               <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-normal select-none" style={{ marginTop: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
                 Welcome back.
               </h3>
@@ -454,6 +457,14 @@ function LoginSignupComp() {
                 </div>
               </div>
 
+              <div className="w-full flex items-center justify-end margin-6" style={{ marginBottom: 0 }}>
+                <p className="color-3 custom-line-h-1 margin-6 font-normal custom-fs-1" style={{ marginBottom: 0 }}>
+                  <button onClick={() => navigate("/forgot-password")} className="underline cursor-pointer m-0 p-0">
+                    Forgot password?
+                  </button>
+                </p>
+              </div>
+
               <div className="border-radius-9 margin65" style={{ marginInline: 0 }}>
                 <GoogleLogin
                   onSuccess={(credentialResponse) => {
@@ -465,7 +476,7 @@ function LoginSignupComp() {
                 />
               </div>
 
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center shrink-0">
                 <p className="color-3 custom-line-h-1 margin-6 font-normal custom-fs-1" style={{ marginBottom: 0 }}>
                   No account?{" "}
                   <button onClick={handleLoginTypeChange} disabled={isLoading} className="underline cursor-pointer m-0 p-0">
@@ -483,11 +494,8 @@ function LoginSignupComp() {
           </div>
 
           {/* signup */}
-          <div
-            className={`w-full h-full flex items-center transition-all ease duration-75 absolute ${isLoginTabActive ? "translate-x-full invisible pointer-events-none" : isTopicsTabActive ? (googleCredential ? "translate-x-full invisible pointer-events-none" : "-translate-x-full invisible pointer-events-none") : "translate-x-0 visible pointer-events-auto"}
-`}
-          >
-            <div className="padding-18 padding60 w-full h-full flex flex-col items-center justify-start">
+          <div className={`w-full h-full flex items-center justify-center overflow-y-auto hide-scrollbar transition-all ease duration-75 absolute ${isLoginTabActive ? "translate-x-full invisible pointer-events-none" : isTopicsTabActive ? (googleCredential ? "translate-x-full invisible pointer-events-none" : "-translate-x-full invisible pointer-events-none") : "translate-x-0 visible pointer-events-auto"}`}>
+            <div className="padding60 w-full flex flex-col items-center justify-start">
               <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-normal  select-none" style={{ marginTop: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
                 Join Medium.
               </h3>
@@ -612,7 +620,7 @@ function LoginSignupComp() {
                   </button>
                 </p>
               </div>
-              <div className="height-2 margin-8 flex items-center w-full justify-center" style={{ marginInline: 0, marginBottom: 0 }}>
+              <div className="shrink-0 height-2 margin-8 flex items-center w-full justify-center" style={{ marginInline: 0, marginBottom: 0 }}>
                 <button onClick={handleSignupBtnClick} disabled={isLoading} className={`h-full w-full flex items-center justify-center custom-gap-3 custom-bg-7 font-normal color-5 font-10 rounded-full opacity-[0.85] transition-all ease duration-75 ${isLoading ? "" : "cursor-pointer hover:opacity-100"}`}>
                   {isLoading && <CircularProgress size={22} />}
                   Submit

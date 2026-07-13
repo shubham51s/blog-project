@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
@@ -7,6 +7,7 @@ function Notification() {
   const { pathname } = useLocation();
   const { requestHandler } = useRequestHandler();
   const [count, setCount] = useState(0);
+  const timeoutRef = useRef(null);
 
   const getUnreadNotificationCount = async () => {
     try {
@@ -15,6 +16,14 @@ function Notification() {
 
       if (response?.status === 200 && result?.data?.count) {
         setCount(result.data.count);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(
+          () => {
+            getUnreadNotificationCount();
+            timeoutRef.current = null;
+          },
+          1000 * 60 * 2,
+        );
       }
     } catch (err) {
       console.error(err);
@@ -23,6 +32,10 @@ function Notification() {
 
   useEffect(() => {
     getUnreadNotificationCount();
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
   return (

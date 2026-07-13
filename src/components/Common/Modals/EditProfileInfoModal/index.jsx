@@ -164,8 +164,13 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
       setLoaders((prev) => ({ ...prev, profile: true }));
       setIsLoading(true);
       try {
+        const options = {
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 512,
+          useWebWorker: true,
+        };
         // if (user.public_id) deleteImages([user.public_id]);
-        const result = await uploadImage(file);
+        const result = await uploadImage(file, options);
 
         if (result?.status === 200) {
           setUser((prev) => ({ ...prev, profile: result.data.url, public_id: result.data.public_id }));
@@ -194,8 +199,13 @@ function EditProfileInfoModal({ isShowModal, handleCloseModal }) {
       setLoaders((prev) => ({ ...prev, cover: true }));
       setIsLoading(true);
       try {
+        const options = {
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 512,
+          useWebWorker: true,
+        };
         // if (user.coverPublicId) deleteImages([user.coverPublicId]);
-        const result = await uploadImage(file);
+        const result = await uploadImage(file, options);
 
         if (result?.status === 200) {
           setUser((prev) => ({ ...prev, coverImg: result.data.public_id }));

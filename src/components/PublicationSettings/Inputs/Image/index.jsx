@@ -17,8 +17,13 @@ function ImageInput({ publication, setPublication }) {
     if (file) {
       setIsLoading(true);
       try {
+        const options = {
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 512,
+          useWebWorker: true,
+        };
         // if (user.public_id) deleteImages([user.public_id]);
-        const result = await uploadImage(file);
+        const result = await uploadImage(file, options);
 
         if (result?.status === 200) {
           setPublication((prev) => ({ ...prev, profileImg: result.data.url, public_id: result.data.public_id }));

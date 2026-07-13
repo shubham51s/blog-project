@@ -125,7 +125,7 @@ function HomeMainContentComp() {
             <div className="flex justify-center">
               <div className="w-full min-w-0 max-width-2 margin-12">
                 <div className="padding-18 pb-0">
-                  <div className="box-shadow-2 overflow-hidden relative">
+                  <div className="overflow-hidden relative">
                     <div className="flex padding-18 w-full">
                       <div className="flex items-center overflow-y-hidden overflow-x-auto bdr-5 w-full" style={{ borderTop: 0, borderInline: 0 }}>
                         {/* active topic border & all pending */}

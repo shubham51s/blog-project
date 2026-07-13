@@ -115,7 +115,12 @@ function WriteBlogComp({ blog, setBlog, saveDraft, images, setImages }) {
   if (!editor) return null;
 
   const handleImageUpload = async (file, blobUrl) => {
-    const result = await uploadImage(file, blobUrl);
+    const options = {
+      maxSizeMB: 0.5,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+    const result = await uploadImage(file, options, blobUrl);
 
     if (result?.status !== 200) {
       showToast("Failed to upload image", "error");

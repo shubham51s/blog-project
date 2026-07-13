@@ -261,7 +261,7 @@ function MyFollowing() {
       </div>
       {isShowTopicModal && <ViewAllFollowingTopics handleCloseTopicModal={handleCloseTopicModal} topicsCount={topicsCount} onToggleInterest={onToggleInterest} />}
       {isShowUserModal && <ViewAllFollowingUsers usersCount={usersCount} handleCloseUserModal={handleCloseUserModal} onFollowStatusChange={onFollowStatusChange} />}
-      {isShowPublicationModal && <ViewAllFollowingPublications count={usersCount} handleClosePublicationModal={handleClosePublicationModal} onPublicationFollowStatusChange={onPublicationFollowStatusChange} />}
+      {isShowPublicationModal && <ViewAllFollowingPublications count={publicationsCount} handleClosePublicationModal={handleClosePublicationModal} onPublicationFollowStatusChange={onPublicationFollowStatusChange} />}
     </>
   );
 }

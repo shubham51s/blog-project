@@ -2408,7 +2408,7 @@ img {
 
 /* } */
 
-@media only screen and (min-width: 1280px) {
+@media (min-width: 1280px) {
   .ProseMirror img {
     margin-block: 21px;
     border-radius: 3px;
@@ -3803,7 +3803,8 @@ img {
   }
 
   .padding66 {
-    padding-inline: 37px;
+    /* padding-inline: 37px; */
+    padding-inline: 27px;
   }
 
   .padding67 {
@@ -4256,7 +4257,7 @@ img {
 }
 
 /* my laptop breakpoint is 1536 × 864 */
-@media only screen and (min-width: 1536px) {
+@media (min-width: 1536px) {
   .ProseMirror img {
     margin-block: 25px;
     border-radius: 4px;
@@ -6103,7 +6104,7 @@ img {
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media (min-width: 1920px) {
   .ProseMirror img {
     margin-block: 31px;
     border-radius: 5px;
@@ -7950,7 +7951,7 @@ img {
   }
 }
 
-@media only screen and (min-width: 2560px) {
+@media (min-width: 2560px) {
   .ProseMirror img {
     margin-block: 42px;
     border-radius: 7px;

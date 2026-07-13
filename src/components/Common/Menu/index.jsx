@@ -61,7 +61,7 @@ function MenuComp() {
   ];
 
   const isActiveTab = (id) => {
-    if (id === 0) return !pathname.includes("/me/lists") && !pathname.includes("/profile") && !pathname.includes("/me/stories");
+    if (id === 0) return pathname === "/";
     if (id === 1) return pathname.includes("/me/lists");
     if (id === 2) return pathname.includes(`/profile/${userInfo.username}`);
     if (id === 3) return pathname.includes("/me/stories");

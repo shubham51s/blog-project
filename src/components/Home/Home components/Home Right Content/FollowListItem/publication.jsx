@@ -45,7 +45,7 @@ function PublicationListItem({ item }) {
             </div>
             <Link to={`/publication/${item.slug}`}>
               <div className="margin44 break-words">
-                <p className="height-15 font-4 color-4 font-normal line20 m-0 line-clamp-2">Writer & Developer from Northern Germany. https://byburk.net</p>
+                <p className="height-15 font-4 color-4 font-normal line20 m-0 line-clamp-2 first-letter:uppercase">{item.description}</p>
               </div>
             </Link>
           </div>

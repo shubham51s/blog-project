@@ -85,7 +85,7 @@ function RightSection({ publication }) {
         <div className="width-22 width-21 padding-24 padding75 custom-bg-8 min-h-full bdr-5" style={{ borderRight: 0, borderBlock: 0 }}>
           <div className="relative inline-block w-full h-full">
             <div className="sticky top2">
-              <div className="min-h-full flex flex-col">
+              <div className="height-11 flex flex-col overflow-y-auto hide-scrollbar">
                 <div className="grow shrink-0 basis-auto">
                   <div className="margin-22" style={{ marginBottom: 0, marginInline: 0 }}>
                     <div className="padding-42">

@@ -43,7 +43,7 @@ function UserListItem({ item }) {
             {item.bio && (
               <Link to={`/profile/${item.username}`}>
                 <div className="margin44 break-words">
-                  <p className="height-15 font-4 color-4 font-normal line20 m-0 line-clamp-2">{item.bio}</p>
+                  <p className="height-15 font-4 color-4 font-normal line20 m-0 line-clamp-2 first-letter:uppercase">{item.bio}</p>
                 </div>
               </Link>
             )}
