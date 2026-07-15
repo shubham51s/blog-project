@@ -74,7 +74,7 @@ function DeleteAccountModal({ isShowModal, handleCloseModal }) {
 
         <div className="margin60">
           <div className="color-3 custom-fs-1 line20 font-normal m-0">
-            <div>We're sorry to see you go. Once your account is deleted, all of your content will be permanently gone, including your profile, stories, publications, notes, and responses. Deleting your Medium account will not delete any Stripe account you have connected to your Medium account.</div>
+            <div>We're sorry to see you go. Once your account is deleted, all of your content will be permanently gone, including your profile, stories, publications, notes, and responses. Deleting your StoryNest account will not delete any Stripe account you have connected to your StoryNest account.</div>
           </div>
         </div>
 

@@ -75,7 +75,7 @@ function WriteBlogComp({ blog, setBlog, saveDraft, images, setImages }) {
         placeholder: "Tell your story...",
       }),
       CharacterCount.configure({
-        limit: 30000,
+        limit: 10000000,
       }),
     ],
     content: "",

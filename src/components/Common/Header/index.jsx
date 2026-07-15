@@ -30,7 +30,7 @@ function HeaderComp() {
           </div>
           <div className="width-6 flex items-center"></div>
           <Link to="/" className="border-0 no-underline m-0 p-0 flex font-bold padding-6 font-2" style={{ paddingBlock: 0, paddingLeft: 0 }}>
-            Medium
+            StoryNest
           </Link>
           <SearchHomeComp />
         </div>

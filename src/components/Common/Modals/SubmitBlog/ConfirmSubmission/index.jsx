@@ -109,7 +109,7 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publ
             )}
 
             <p className="font-10 font-normal custom-line-h-1 color10 margin-11 margin47 p-0" style={{ marginInline: 0 }}>
-              <b>Note:</b> Changes here will affect how your story appears in public places like Medium's homepage and in subscribers' inboxes — not the contents of the story itself.
+              <b>Note:</b> Changes here will affect how your story appears in public places like StoryNest's homepage and in subscribers' inboxes — not the contents of the story itself.
             </p>
           </div>
 

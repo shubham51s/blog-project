@@ -71,11 +71,13 @@ function App() {
               <Route path="/verify-email" element={<EmailVerification />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password?" element={<ResetPassword />} />
-              <Route path="/new-story" element={<CreatePostPage />} />
-              <Route path="p/:draftId/edit" element={<CreatePostPage />} />
+              {/* <Route path="/new-story" element={<CreatePostPage />} /> */}
+              {/* <Route path="p/:draftId/edit" element={<CreatePostPage />} /> */}
               <Route path="/" element={<MainComp />}>
                 // nested routes
                 <Route index element={<HomePageProtected />} />
+                <Route path="new-story" element={<CreatePostPage />} />
+                <Route path="p/:draftId/edit" element={<CreatePostPage />} />
                 <Route path="new-publication" element={<NewPublication />} />
                 <Route path="me" element={<MePageWrapper />}>
                   <Route index element={<MePageDefaultComp />} />

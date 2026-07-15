@@ -91,7 +91,7 @@ function BlogRecommendComp({ blog }) {
           <div className="min-w-0 w-full max-width-2 margin-2">
             <div className="padding-44 padding-45">
               <div className="custom-margin-b-1 margin-37">
-                <h2 className="letter-spacing-8 line-h-9 font-11 font-semibold color-3 m-0 p-0">Recommended from Medium</h2>
+                <h2 className="letter-spacing-8 line-h-9 font-11 font-semibold color-3 m-0 p-0">Recommended from StoryNest</h2>
               </div>
               <div className="margin-38 width-39 flex flex-wrap items-stretch">
                 {recommendedBlogs.slice(0, 6).map((item) => (

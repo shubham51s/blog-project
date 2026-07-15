@@ -12,7 +12,7 @@ function NoData() {
               <div className="custom-h-2 aspect-square inline-block mb-[-8px]">
                 <MdOutlineBookmarkAdd className="w-full h-full" />
               </div>{" "}
-              on any Medium story to get started.
+              on any StoryNest story to get started.
             </h3>
           </div>
         </div>

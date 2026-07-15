@@ -120,7 +120,7 @@ function SubmitToPublication({ handlePublicationSelection }) {
             <div className="flex flex-col items-center gap10 text-center">
               <h2 className="color-3 tracking-tight line-h12 font15 font-normal m-0">Submit to a publication</h2>
               <div className="width91">
-                <p className="line20 custom-fs-1 color-4 font-normal m-0">Medium publications are shared spaces for stories written around a common theme or topic, usually by multiple writers. You can submit to any publication you follow, as long as it's currently accepting stories.</p>
+                <p className="line20 custom-fs-1 color-4 font-normal m-0">StoryNest publications are shared spaces for stories written around a common theme or topic, usually by multiple writers. You can submit to any publication you follow, as long as it's currently accepting stories.</p>
               </div>
             </div>
 

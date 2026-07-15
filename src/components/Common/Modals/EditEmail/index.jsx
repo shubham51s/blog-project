@@ -91,7 +91,7 @@ function EditEmailModal({ isShowModal, handleCloseModal }) {
                 <input ref={emailRef} disabled={isLoading} type="text" value={email} onChange={(e) => handleInputChange(e.target.value)} onFocus={() => handleFocusChange(true)} onBlur={() => handleFocusChange(false)} className="p-0 grow shrink basis-0 outline-none border-none w-full m-0 color-3 font-semibold" />
               </div>
               <div className="flex justify-between margin-9" style={{ marginBottom: 0, marginInline: 0 }}>
-                {isValidEmail && <span className="font-4 color-4 w-full line20 font-normal">You can sign into Medium with this email address.</span>}
+                {isValidEmail && <span className="font-4 color-4 w-full line20 font-normal">You can sign into StoryNest with this email address.</span>}
                 {!isValidEmail && <span className="font-4 text-[#C94A4A] w-full line20 font-normal">Please enter a valid email.</span>}
               </div>
             </div>

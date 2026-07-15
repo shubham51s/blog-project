@@ -145,7 +145,7 @@ function MyReadingHistory() {
                       <div className="padding-42 padding89">
                         <h2 className="font-10 font-medium color-3 line20 m-0">You haven't read any stories yet</h2>
                       </div>
-                      <p className="color-4 custom-fs-1 line20 font-normal m-0">Stories you've read on Medium will appear here.</p>
+                      <p className="color-4 custom-fs-1 line20 font-normal m-0">Stories you've read on StoryNest will appear here.</p>
                     </div>
                   )}
 

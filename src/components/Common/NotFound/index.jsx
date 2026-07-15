@@ -50,7 +50,7 @@ function NotFoundComp() {
             <h2 className="line-h12 font15 color-6 font-normal m-0">Out of nothing, something.</h2>
           </div>
           <div className="margin-37" style={{ marginBottom: 0, marginInline: 0 }}>
-            <div className="font-10 font-light">You can find (just about) anything on Medium — apparently even a page that doesn’t exist. Maybe these stories will take you somewhere new?</div>
+            <div className="font-10 font-light">You can find (just about) anything on StoryNest — apparently even a page that doesn’t exist. Maybe these stories will take you somewhere new?</div>
           </div>
           <div className="margin-37" style={{ marginBottom: 0, marginInline: 0 }}>
             <div className="font-10 font-light">

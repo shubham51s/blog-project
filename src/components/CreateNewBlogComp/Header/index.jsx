@@ -14,7 +14,7 @@ function WriteBlogHeader({ blog, handlePublishBlogBtnClick, images }) {
         <div className="relative z-[500] grow shink basis-auto flex justify-start items-center">
           <div>
             <Link to="/" className="color-3 border-0 no-underline m-0 p-0 flex font-bold padding-6 font-2" style={{ paddingBlock: 0, paddingLeft: 0 }}>
-              Medium
+              StoryNest
             </Link>
           </div>
           {!pathname.includes("new-story") && (

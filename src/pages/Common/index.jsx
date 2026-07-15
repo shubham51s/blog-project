@@ -1,52 +1,48 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { Outlet, useLocation, useMatch } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import HomeDefaultComp from "../../components/Home/DefaultComp";
 import LoginSignupComp from "../../components/Authentication";
 import HeaderComp from "../../components/Common/Header";
-import { Outlet, useLocation, useParams } from "react-router-dom";
 import MenuComp from "../../components/Common/Menu";
 
 function MainComp() {
   const { pathname } = useLocation();
   const { isUserLoggedIn, isShowLoginPopup } = useContext(UserContext);
-  const [isMenu, setIsMenu] = useState(true);
-  const { slug } = useParams();
 
-  useEffect(() => {
-    const path = pathname.split("/").join("");
+  const isEditDraftPage = !!useMatch("/p/:draftId/edit");
+  const isUserSettingsPage = !!useMatch("/:slug/settings");
+  const showHeader = pathname !== "/new-story" && !isEditDraftPage;
+  const showMenu = pathname !== "/new-publication" && !isUserSettingsPage;
 
-    if (path === "new-publication" && isMenu) {
-      setIsMenu(false);
-    } else if (slug && pathname.includes("/settings") && isMenu) {
-      setIsMenu(false);
-    } else {
-      if (!isMenu) setIsMenu(true);
-    }
-  }, [pathname]);
+  if (!isUserLoggedIn) {
+    return (
+      <>
+        {isShowLoginPopup && <LoginSignupComp />}
+        <HomeDefaultComp />
+      </>
+    );
+  }
+
+  if (!showHeader) {
+    return <Outlet />;
+  }
 
   return (
-    <>
-      {!isUserLoggedIn && (
-        <>
-          {isShowLoginPopup && <LoginSignupComp />}
-          <HomeDefaultComp />
-        </>
-      )}
-      {isUserLoggedIn && (
-        <div className="custom-bg-8">
-          <HeaderComp />
-          {isMenu && (
-            <div className="flex">
-              <MenuComp />
-              <div className="width-17 grow shrink basis-auto">
-                <Outlet />
-              </div>
-            </div>
-          )}
-          {!isMenu && <Outlet />}
+    <div className="custom-bg-8">
+      <HeaderComp />
+
+      {showMenu ? (
+        <div className="flex">
+          <MenuComp />
+          <div className="width-17 grow shrink basis-auto">
+            <Outlet />
+          </div>
         </div>
+      ) : (
+        <Outlet />
       )}
-    </>
+    </div>
   );
 }
 

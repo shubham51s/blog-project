@@ -59,7 +59,7 @@ function ImageInput({ publication, setPublication }) {
             Change avatar
           </button>
         )}
-        <div className="color10 custom-fs-1 leading-[1.4]">The avatar appears with your stories across Medium.</div>
+        <div className="color10 custom-fs-1 leading-[1.4]">The avatar appears with your stories across StoryNest.</div>
         <div className="color10 custom-fs-1 leading-[1.4]">
           <span className="font-semibold">Recommended size:</span> Square, at least 1000 pixels per side
         </div>

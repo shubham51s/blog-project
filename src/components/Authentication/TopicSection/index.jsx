@@ -13,7 +13,7 @@ function TopicInputSection({ handleCloseTopicsTab, handleFinishSignuBtnClick }) 
 
         <div className="padding-18 padding60 color-3 w-full h-full flex flex-col items-center justify-start">
           <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-medium select-none padding-37" style={{ marginTop: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
-            Medium
+            StoryNest
           </h3>
           <div className="w-full padding-37"></div>
           <div className="padding-37 flex items-center justify-center w-full">

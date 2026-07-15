@@ -83,7 +83,7 @@ function AboutPage() {
               <div className="margin-4">
                 <h2 className="letter-spacing-1 line-h-4 font-5 color-7 m-0">Everyone has a story to tell</h2>
               </div>
-              <p className="letter-spacing-2 line-h-5 font-6 color-5 m-0">Medium is a home for human stories and ideas. Here, anyone can share knowledge and wisdom with the world—without having to build a mailing list or a following first. The internet is noisy and chaotic; Medium is quiet yet full of insight. It’s simple, beautiful, collaborative, and helps you find the right readers for whatever you have to say.</p>
+              <p className="letter-spacing-2 line-h-5 font-6 color-5 m-0">StoryNest is a home for human stories and ideas. Here, anyone can share knowledge and wisdom with the world—without having to build a mailing list or a following first. The internet is noisy and chaotic; StoryNest is quiet yet full of insight. It’s simple, beautiful, collaborative, and helps you find the right readers for whatever you have to say.</p>
               <br />
               <br />
               <blockquote className="color-8 letter-spacing-3 line-h-6 font-7 font-light m-0">
@@ -93,9 +93,9 @@ function AboutPage() {
               <br />
               <p className="letter-spacing-2 line-h-5 font-6 color-5 m-0">We believe that what you read and write matters. Words can divide or empower us, inspire or discourage us. In a world where the most sensational and surface-level stories often win, we’re building a system that rewards depth, nuance, and time well spent. A space for thoughtful conversation more than drive-by takes, and substance over packaging.</p>
               <br />
-              <p className="letter-spacing-2 line-h-5 font-6 color-5 m-0">Over 100 million people connect and share their wisdom on Medium every month. They’re software developers, amateur novelists, product designers, CEOs, and anyone burning with a story they need to get out into the world. They write about what they’re working on, what’s keeping them up at night, what they’ve lived through, and what they’ve learned that the rest of us might want to know too.</p>
+              <p className="letter-spacing-2 line-h-5 font-6 color-5 m-0">Over 100 million people connect and share their wisdom on StoryNest every month. They’re software developers, amateur novelists, product designers, CEOs, and anyone burning with a story they need to get out into the world. They write about what they’re working on, what’s keeping them up at night, what they’ve lived through, and what they’ve learned that the rest of us might want to know too.</p>
               <br />
-              <p className="letter-spacing-2 line-h-5 font-6 color-5 m-0">Instead of selling ads or selling your data, we’re supported by a growing community of over a million Medium members who believe in our mission. If you’re new here, start reading . Dive deeper into whatever matters to you. Find a post that helps you learn something new, or reconsider something familiar—and then write your story</p>
+              <p className="letter-spacing-2 line-h-5 font-6 color-5 m-0">Instead of selling ads or selling your data, we’re supported by a growing community of over a million StoryNest members who believe in our mission. If you’re new here, start reading . Dive deeper into whatever matters to you. Find a post that helps you learn something new, or reconsider something familiar—and then write your story</p>
             </div>
           </section>
           {/* footer */}

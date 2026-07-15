@@ -129,7 +129,7 @@ function About() {
           </div>
 
           <div className="padding-3" style={{ paddingTop: 0, paddingInline: 0 }}>
-            {user && <span className="color-4 custom-fs-1 line20 font-normal">Medium member since {formatMonthYearFromUTC(user.createdAt)}</span>}
+            {user && <span className="color-4 custom-fs-1 line20 font-normal">StoryNest member since {formatMonthYearFromUTC(user.createdAt)}</span>}
             {!user && <Skeleton className="color-4 custom-fs-1 line20 font-normal" width={50} height={20} />}
           </div>
 

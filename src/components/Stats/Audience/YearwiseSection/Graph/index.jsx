@@ -61,7 +61,7 @@ function AudienceGraph({ isLoading, stats, totalFollowers, selected, prevMonthFo
         <div className="margin-22" style={{ marginLeft: 0, marginBlock: 0 }}>
           <h2 className="font-3 line-h-8 font-semibold color-3 m-0">Followers</h2>
           <div className="width44 margin44">
-            <p className="font-10 line-h-8 color-4 font-normal m-0">Readers who follow you on Medium. This excludes deactivated, deleted, or suspended users.</p>
+            <p className="font-10 line-h-8 color-4 font-normal m-0">Readers who follow you on StoryNest. This excludes deactivated, deleted, or suspended users.</p>
           </div>
           <div className="margin51">
             <div className="flex custom-gap-7 max-w-full">

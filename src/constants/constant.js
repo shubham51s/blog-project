@@ -56,6 +56,6 @@ const footerOptions = [
 
 const defaultLoaderTime = 333;
 const defaultLimit = 20;
-const appName = "Medium";
+const appName = "StoryNest";
 
 export { urlBasePath, footerOptions, defaultLoaderTime, defaultLimit, appName };
