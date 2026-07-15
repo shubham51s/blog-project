@@ -1,4 +1,4 @@
-const urlBasePath = "https://storynest-backend-r2u8.onrender.com";
+const urlBasePath = "https://storynest-backend-r2u8.onrender.com/api/v1";
 
 const footerOptions = [
   {
