@@ -1,5 +1,6 @@
-const urlBasePath = "https://storynest-backend-r2u8.onrender.com/api/v1";
-// live url
+// const urlBasePath = "http://localhost:3000/api/v1";
+const urlBasePath = "https://storynest-rg3u.onrender.com/api/v1";
+// const urlBasePath = "https://storynest-backend-r2u8.onrender.com/api/v1";
 
 const footerOptions = [
   {
@@ -57,6 +58,6 @@ const footerOptions = [
 
 const defaultLoaderTime = 333;
 const defaultLimit = 20;
-const appName = "StoryNest";
+const appName = "Medium";
 
 export { urlBasePath, footerOptions, defaultLoaderTime, defaultLimit, appName };
