@@ -64,7 +64,7 @@ function PublicationListItem({ item }) {
                 {followingPublication[item._id] && (
                   <button onClick={handleUnfollow} disabled={isLoading} className="flex items-center justify-center bdr17-hover padding-20 padding-28 border-radius-7 bg-transparent cursor-pointer m-0 transition-all duration-500 ease">
                     <span className="color-3 custom-fs-1 custom-line-h-1 w-full font-normal">
-                      <span className="break-words inline-block">Unfollow</span>
+                      <span className="break-words inline-block">Following</span>
                     </span>
                   </button>
                 )}
