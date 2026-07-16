@@ -11,9 +11,6 @@ export function useImageUpload() {
 
       const compressedFile = await imageCompression(file, options);
 
-      console.log("original: ", file.size); // original
-      console.log("compressed: ", compressedFile.size); // compressed
-
       if (response?.status === 200) {
         const { timestamp, signature, api_key, cloud_name, folder } = result;
 
