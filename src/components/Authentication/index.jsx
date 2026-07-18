@@ -335,9 +335,12 @@ function LoginSignupComp() {
       const result = await response.json();
 
       if (response?.status === 201) {
-        showToast("Account created! Check your email to verify your account.");
-        handleLoginTypeChange();
-        handleCloseTopicsTab();
+        verifyAuthentication();
+        broadcastLogin();
+
+        // showToast("Account created! Check your email to verify your account.");
+        // handleLoginTypeChange();
+        // handleCloseTopicsTab();
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -457,13 +460,15 @@ function LoginSignupComp() {
                 </div>
               </div>
 
-              <div className="w-full flex items-center justify-end margin-6" style={{ marginBottom: 0 }}>
-                <p className="color-3 custom-line-h-1 margin-6 font-normal custom-fs-1" style={{ marginBottom: 0 }}>
-                  <button onClick={() => navigate("/forgot-password")} className="underline cursor-pointer m-0 p-0">
-                    Forgot password?
-                  </button>
-                </p>
-              </div>
+              {false && (
+                <div className="w-full flex items-center justify-end margin-6" style={{ marginBottom: 0 }}>
+                  <p className="color-3 custom-line-h-1 margin-6 font-normal custom-fs-1" style={{ marginBottom: 0 }}>
+                    <button onClick={() => navigate("/forgot-password")} className="underline cursor-pointer m-0 p-0">
+                      Forgot password?
+                    </button>
+                  </p>
+                </div>
+              )}
 
               <div className="border-radius-9 margin65" style={{ marginInline: 0 }}>
                 <GoogleLogin
