@@ -65,7 +65,6 @@ function LoginSignupComp() {
   const [selectedTopic, setSelectedTopic] = useState([]);
   const [topics, setTopics] = useState([]);
   const [googleCredential, setGoogleCredential] = useState(null);
-
   const [userDetails, setUserDetails] = useState({ ...defaultUserInput });
   const [errDetails, setErrDetails] = useState({ ...defaultErrMsg });
 
