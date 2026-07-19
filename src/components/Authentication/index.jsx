@@ -69,6 +69,17 @@ function LoginSignupComp() {
   const [userDetails, setUserDetails] = useState({ ...defaultUserInput });
   const [errDetails, setErrDetails] = useState({ ...defaultErrMsg });
 
+  const createAutoEngagement = async () => {
+    try {
+      await requestHandler("/follow/auto-follow-engagement");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      verifyAuthentication();
+      broadcastLogin();
+    }
+  };
+
   const handleInputChange = (type, val) => {
     if (type === "firstName") {
       setUserDetails((prev) => ({ ...prev, firstName: val }));
@@ -301,8 +312,7 @@ function LoginSignupComp() {
       const result = await response.json();
 
       if (response?.status === 201) {
-        verifyAuthentication();
-        broadcastLogin();
+        createAutoEngagement();
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -335,8 +345,7 @@ function LoginSignupComp() {
       const result = await response.json();
 
       if (response?.status === 201) {
-        verifyAuthentication();
-        broadcastLogin();
+        createAutoEngagement();
 
         // showToast("Account created! Check your email to verify your account.");
         // handleLoginTypeChange();
@@ -476,7 +485,7 @@ function LoginSignupComp() {
                     loginWithGoogle(credentialResponse);
                   }}
                   onError={() => {
-                    console.log("Login Failed");
+                    console.error("Login Failed");
                   }}
                 />
               </div>
