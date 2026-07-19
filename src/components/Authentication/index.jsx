@@ -71,7 +71,8 @@ function LoginSignupComp() {
 
   const createAutoEngagement = async () => {
     try {
-      await requestHandler("/follow/auto-follow-engagement");
+      const response = await requestHandler("/follow/auto-follow-engagement");
+      const result = await response.json();
     } catch (err) {
       console.error(err);
     } finally {
@@ -312,7 +313,7 @@ function LoginSignupComp() {
       const result = await response.json();
 
       if (response?.status === 201) {
-        createAutoEngagement();
+        await createAutoEngagement();
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -345,7 +346,7 @@ function LoginSignupComp() {
       const result = await response.json();
 
       if (response?.status === 201) {
-        createAutoEngagement();
+        await createAutoEngagement();
 
         // showToast("Account created! Check your email to verify your account.");
         // handleLoginTypeChange();
