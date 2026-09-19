@@ -168,7 +168,7 @@ function ListItem({ comment, setBlog, setRecentComments }) {
                             </ul>
                           )}
 
-                          {comment.user._id !== userInfo._id && (
+                          {comment.user._id !== userInfo._id && false && (
                             <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
                               <li className="padding-1 custom-fs-1 color-4 font-normal">
                                 <button className="text-[#c94a4a] cursor-pointer m-0 p-0">Report response...</button>
