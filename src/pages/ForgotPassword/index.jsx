@@ -29,6 +29,7 @@ function ForgotPassword() {
       const response = await requestHandler("/users/forgot-password", "POST", { email });
       const result = await response.json();
 
+      console.log("result: ", result);
       if (response?.status === 200) {
         if (result?.message) showToast(result.message, "success");
       } else {

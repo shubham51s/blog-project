@@ -4,7 +4,6 @@ import { MdOutlineMoreHoriz } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import FollowingComp from "./FollowingComp";
 import ListComp from "./ListComp";
-import { footerOptions } from "../../../constants/constant";
 import { UserContext } from "../../../context/userContext";
 import Skeleton from "react-loading-skeleton";
 import { useRequestHandler } from "../../../hooks/requestHandler";

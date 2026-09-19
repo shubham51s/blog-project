@@ -67,7 +67,6 @@ const UserProvider = ({ children }) => {
         credentials: "include",
         method: "GET",
       });
-      const result = await response.json();
 
       if (response?.status === 200) {
         verifyAuthentication();

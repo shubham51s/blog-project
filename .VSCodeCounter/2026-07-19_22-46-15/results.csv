@@ -1,0 +1,345 @@
+"filename", "language", "JavaScript", "JSON", "JavaScript JSX", "HTML", "PostCSS", "XML", "Markdown", "comment", "blank", "total"
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\README.md", "Markdown", 0, 0, 0, 0, 0, 0, 2, 0, 2, 4
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\constants.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\eslint.config.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 29, 2, 31
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\index.html", "HTML", 0, 0, 0, 17, 0, 0, 0, 0, 4, 21
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\package-lock.json", "JSON", 0, 6225, 0, 0, 0, 0, 0, 0, 1, 6226
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\package.json", "JSON", 0, 52, 0, 0, 0, 0, 0, 0, 1, 53
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\public\vite.svg", "XML", 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\App.jsx", "JavaScript JSX", 0, 0, 134, 0, 0, 0, 0, 4, 4, 142
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Authentication\TopicSection\index.jsx", "JavaScript JSX", 0, 0, 41, 0, 0, 0, 0, 0, 7, 48
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Authentication\index.jsx", "JavaScript JSX", 0, 0, 613, 0, 0, 0, 0, 8, 69, 690
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\BreakLine\index.jsx", "JavaScript JSX", 0, 0, 9, 0, 0, 0, 0, 0, 3, 12
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\Delete\index.jsx", "JavaScript JSX", 0, 0, 27, 0, 0, 0, 0, 0, 6, 33
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\Edit\index.jsx", "JavaScript JSX", 0, 0, 43, 0, 0, 0, 0, 0, 7, 50
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\FollowAuthor\index.jsx", "JavaScript JSX", 0, 0, 53, 0, 0, 0, 0, 0, 9, 62
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\FollowPublication\index.jsx", "JavaScript JSX", 0, 0, 51, 0, 0, 0, 0, 0, 7, 58
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\HideResponses\index.jsx", "JavaScript JSX", 0, 0, 65, 0, 0, 0, 0, 0, 9, 74
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\MuteAuthor\index.jsx", "JavaScript JSX", 0, 0, 45, 0, 0, 0, 0, 0, 8, 53
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\MutePublication\index.jsx", "JavaScript JSX", 0, 0, 43, 0, 0, 0, 0, 0, 8, 51
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\RemoveHistoryItem\index.jsx", "JavaScript JSX", 0, 0, 50, 0, 0, 0, 0, 0, 6, 56
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\ReportStory\index.jsx", "JavaScript JSX", 0, 0, 27, 0, 0, 0, 0, 0, 6, 33
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\StoryStats\index.jsx", "JavaScript JSX", 0, 0, 18, 0, 0, 0, 0, 0, 4, 22
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\BlogActions\SubmitToPublication\index.jsx", "JavaScript JSX", 0, 0, 56, 0, 0, 0, 0, 0, 8, 64
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\ButtonSpinner\index.jsx", "JavaScript JSX", 0, 0, 5, 0, 0, 0, 0, 0, 3, 8
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Buttons\ToggleBlogSave\ListItem\index.jsx", "JavaScript JSX", 0, 0, 84, 0, 0, 0, 0, 0, 14, 98
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Buttons\ToggleBlogSave\index.jsx", "JavaScript JSX", 0, 0, 119, 0, 0, 0, 0, 1, 17, 137
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Header\Notification\index.jsx", "JavaScript JSX", 0, 0, 52, 0, 0, 0, 0, 0, 9, 61
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Header\ProfileComp\PublicationListItem\index.jsx", "JavaScript JSX", 0, 0, 26, 0, 0, 0, 0, 0, 3, 29
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Header\ProfileComp\index.jsx", "JavaScript JSX", 0, 0, 181, 0, 0, 0, 0, 0, 15, 196
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Header\SearchComp\ExploreSection\ListItem\index.jsx", "JavaScript JSX", 0, 0, 33, 0, 0, 0, 0, 0, 3, 36
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Header\SearchComp\ExploreSection\index.jsx", "JavaScript JSX", 0, 0, 62, 0, 0, 0, 0, 0, 5, 67
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Header\SearchComp\index.jsx", "JavaScript JSX", 0, 0, 257, 0, 0, 0, 0, 12, 28, 297
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Header\index.jsx", "JavaScript JSX", 0, 0, 52, 0, 0, 0, 0, 2, 6, 60
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Menu\Following\ListItem\index.jsx", "JavaScript JSX", 0, 0, 19, 0, 0, 0, 0, 0, 3, 22
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Menu\Following\index.jsx", "JavaScript JSX", 0, 0, 85, 0, 0, 0, 0, 1, 10, 96
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Menu\index.jsx", "JavaScript JSX", 0, 0, 99, 0, 0, 0, 0, 1, 11, 111
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\BlockedUserModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 54, 0, 0, 0, 0, 0, 6, 60
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\BlockedUserModal\index.jsx", "JavaScript JSX", 0, 0, 104, 0, 0, 0, 0, 0, 10, 114
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\ConfirmDeclineBlogSubmission\index.jsx", "JavaScript JSX", 0, 0, 76, 0, 0, 0, 0, 0, 7, 83
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\ConfirmDeleteBlog\index.jsx", "JavaScript JSX", 0, 0, 78, 0, 0, 0, 0, 0, 7, 85
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\CreateNewList\index.jsx", "JavaScript JSX", 0, 0, 153, 0, 0, 0, 0, 2, 13, 168
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\DeleteAccountModal\index.jsx", "JavaScript JSX", 0, 0, 106, 0, 0, 0, 0, 0, 14, 120
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\DeleteReadingHistory\index.jsx", "JavaScript JSX", 0, 0, 56, 0, 0, 0, 0, 2, 6, 64
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\DisableComments\index.jsx", "JavaScript JSX", 0, 0, 79, 0, 0, 0, 0, 0, 7, 86
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\EditEmail\index.jsx", "JavaScript JSX", 0, 0, 113, 0, 0, 0, 0, 0, 14, 127
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\EditProfileInfoModal\index.jsx", "JavaScript JSX", 0, 0, 363, 0, 0, 0, 0, 8, 43, 414
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\EditUsername\index.jsx", "JavaScript JSX", 0, 0, 150, 0, 0, 0, 0, 0, 25, 175
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\ManagePublication\PublicationListItem\index.jsx", "JavaScript JSX", 0, 0, 53, 0, 0, 0, 0, 0, 3, 56
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\ManagePublication\index.jsx", "JavaScript JSX", 0, 0, 114, 0, 0, 0, 0, 0, 14, 128
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\ReportBlog\index.jsx", "JavaScript JSX", 0, 0, 166, 0, 0, 0, 0, 0, 14, 180
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\SubmitBlog\ConfirmSubmission\index.jsx", "JavaScript JSX", 0, 0, 185, 0, 0, 0, 0, 0, 23, 208
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\SubmitBlog\SubmitToPublication\NoData\index.jsx", "JavaScript JSX", 0, 0, 23, 0, 0, 0, 0, 0, 4, 27
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\SubmitBlog\SubmitToPublication\PublicationListItem\index.jsx", "JavaScript JSX", 0, 0, 31, 0, 0, 0, 0, 0, 4, 35
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\SubmitBlog\SubmitToPublication\PublicationListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 28, 0, 0, 0, 0, 0, 4, 32
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\SubmitBlog\SubmitToPublication\index.jsx", "JavaScript JSX", 0, 0, 157, 0, 0, 0, 0, 0, 22, 179
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Modals\SubmitBlog\index.jsx", "JavaScript JSX", 0, 0, 168, 0, 0, 0, 0, 4, 27, 199
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\NotFound\Blog\index.jsx", "JavaScript JSX", 0, 0, 43, 0, 0, 0, 0, 0, 3, 46
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\NotFound\index.jsx", "JavaScript JSX", 0, 0, 75, 0, 0, 0, 0, 2, 8, 85
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\Spinner\index.jsx", "JavaScript JSX", 0, 0, 5, 0, 0, 0, 0, 0, 3, 8
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Common\globalLoader.jsx", "JavaScript JSX", 0, 0, 10, 0, 0, 0, 0, 0, 3, 13
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\CreateNewBlogComp\Header\ProfileSection\index.jsx", "JavaScript JSX", 0, 0, 126, 0, 0, 0, 0, 0, 6, 132
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\CreateNewBlogComp\Header\index.jsx", "JavaScript JSX", 0, 0, 65, 0, 0, 0, 0, 0, 5, 70
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\CreateNewBlogComp\WriteBlogComp\index.jsx", "JavaScript JSX", 0, 0, 263, 0, 0, 0, 0, 2, 42, 307
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\DefaultComp\index.jsx", "JavaScript JSX", 0, 0, 140, 0, 0, 0, 0, 1, 11, 152
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Main Content\Blog Comp\MoreComponent\index.jsx", "JavaScript JSX", 0, 0, 65, 0, 0, 0, 0, 0, 6, 71
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Main Content\Blog Comp\ShowLessComp\index.jsx", "JavaScript JSX", 0, 0, 191, 0, 0, 0, 0, 1, 25, 217
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Main Content\Blog Comp\index.jsx", "JavaScript JSX", 0, 0, 143, 0, 0, 0, 0, 7, 8, 158
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Main Content\Blog Comp\skeleton.jsx", "JavaScript JSX", 0, 0, 64, 0, 0, 0, 0, 2, 5, 71
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Main Content\No Content\index.jsx", "JavaScript JSX", 0, 0, 20, 0, 0, 0, 0, 0, 3, 23
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Main Content\index.jsx", "JavaScript JSX", 0, 0, 175, 0, 0, 0, 0, 8, 16, 199
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Right Content\FollowListItem\publication.jsx", "JavaScript JSX", 0, 0, 75, 0, 0, 0, 0, 0, 6, 81
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Right Content\FollowListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 43, 0, 0, 0, 0, 0, 4, 47
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Right Content\FollowListItem\user.jsx", "JavaScript JSX", 0, 0, 74, 0, 0, 0, 0, 0, 6, 80
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Right Content\StaffListItem\index.jsx", "JavaScript JSX", 0, 0, 35, 0, 0, 0, 0, 0, 3, 38
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Right Content\StaffListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 41, 0, 0, 0, 0, 0, 3, 44
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Right Content\TopicListItem\index.jsx", "JavaScript JSX", 0, 0, 12, 0, 0, 0, 0, 0, 3, 15
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Right Content\TopicListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 17, 0, 0, 0, 0, 0, 3, 20
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Home\Home components\Home Right Content\index.jsx", "JavaScript JSX", 0, 0, 127, 0, 0, 0, 0, 12, 8, 147
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\LibraryComp\MyLists\CreateListBanner\index.jsx", "JavaScript JSX", 0, 0, 65, 0, 0, 0, 0, 0, 8, 73
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\LibraryComp\ReadingHistory\Loader\index.jsx", "JavaScript JSX", 0, 0, 60, 0, 0, 0, 0, 0, 6, 66
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\LibraryComp\ReadingHistory\ReadingHistoryItem\MoreButton\index.jsx", "JavaScript JSX", 0, 0, 61, 0, 0, 0, 0, 0, 5, 66
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\LibraryComp\ReadingHistory\ReadingHistoryItem\index.jsx", "JavaScript JSX", 0, 0, 146, 0, 0, 0, 0, 0, 7, 153
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\LibraryComp\SavedListItem\MoreButton\index.jsx", "JavaScript JSX", 0, 0, 43, 0, 0, 0, 0, 0, 5, 48
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\LibraryComp\SavedListItem\Save\index.jsx", "JavaScript JSX", 0, 0, 74, 0, 0, 0, 0, 2, 12, 88
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\LibraryComp\SavedListItem\index.jsx", "JavaScript JSX", 0, 0, 81, 0, 0, 0, 0, 7, 7, 95
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\LibraryComp\SectionHeader\index.jsx", "JavaScript JSX", 0, 0, 61, 0, 0, 0, 0, 0, 8, 69
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ListDetailsComp\ClappedUsersList\ClappedUser\index.jsx", "JavaScript JSX", 0, 0, 75, 0, 0, 0, 0, 0, 11, 86
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ListDetailsComp\ClappedUsersList\index.jsx", "JavaScript JSX", 0, 0, 131, 0, 0, 0, 0, 3, 21, 155
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ListDetailsComp\CommentDrawer\CommentList\index.jsx", "JavaScript JSX", 0, 0, 208, 0, 0, 0, 0, 0, 17, 225
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ListDetailsComp\CommentDrawer\index.jsx", "JavaScript JSX", 0, 0, 221, 0, 0, 0, 0, 0, 23, 244
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ListDetailsComp\List\BlogMoreBtn\index.jsx", "JavaScript JSX", 0, 0, 168, 0, 0, 0, 0, 0, 22, 190
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ListDetailsComp\List\index.jsx", "JavaScript JSX", 0, 0, 264, 0, 0, 0, 0, 3, 18, 285
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ListDetailsComp\MoreButton\index.jsx", "JavaScript JSX", 0, 0, 311, 0, 0, 0, 0, 4, 37, 352
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ListDetailsComp\NoData\index.jsx", "JavaScript JSX", 0, 0, 22, 0, 0, 0, 0, 0, 3, 25
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ListDetailsComp\SaveListButton\index.jsx", "JavaScript JSX", 0, 0, 72, 0, 0, 0, 0, 0, 12, 84
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Me\DefaultComp\index.jsx", "JavaScript JSX", 0, 0, 12, 0, 0, 0, 0, 0, 5, 17
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\NewPublication\Header\index.jsx", "JavaScript JSX", 0, 0, 23, 0, 0, 0, 0, 0, 3, 26
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\NewPublication\Inputs\Description\index.jsx", "JavaScript JSX", 0, 0, 25, 0, 0, 0, 0, 0, 7, 32
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\NewPublication\Inputs\Editor\index.jsx", "JavaScript JSX", 0, 0, 90, 0, 0, 0, 0, 0, 13, 103
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\NewPublication\Inputs\Image\index.jsx", "JavaScript JSX", 0, 0, 81, 0, 0, 0, 0, 1, 12, 94
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\NewPublication\Inputs\Name\index.jsx", "JavaScript JSX", 0, 0, 38, 0, 0, 0, 0, 0, 8, 46
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\NewPublication\Inputs\Topic\index.jsx", "JavaScript JSX", 0, 0, 72, 0, 0, 0, 0, 0, 10, 82
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\NewPublication\Inputs\Writer\index.jsx", "JavaScript JSX", 0, 0, 86, 0, 0, 0, 0, 0, 10, 96
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Notification\NotificationSection\ListItem\Reasons\Clap\index.jsx", "JavaScript JSX", 0, 0, 33, 0, 0, 0, 0, 3, 4, 40
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Notification\NotificationSection\ListItem\Reasons\Follow\index.jsx", "JavaScript JSX", 0, 0, 27, 0, 0, 0, 0, 3, 5, 35
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Notification\NotificationSection\ListItem\Reasons\Responded\index.jsx", "JavaScript JSX", 0, 0, 33, 0, 0, 0, 0, 3, 5, 41
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Notification\NotificationSection\ListItem\index.jsx", "JavaScript JSX", 0, 0, 23, 0, 0, 0, 0, 0, 3, 26
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Notification\NotificationSection\index.jsx", "JavaScript JSX", 0, 0, 115, 0, 0, 0, 0, 3, 14, 132
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\About\Author\index.jsx", "JavaScript JSX", 0, 0, 105, 0, 0, 0, 0, 0, 6, 111
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\About\Publication\index.jsx", "JavaScript JSX", 0, 0, 102, 0, 0, 0, 0, 0, 6, 108
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\Blog Comp\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 52, 0, 0, 0, 0, 0, 5, 57
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\Blog Comp\index.jsx", "JavaScript JSX", 0, 0, 113, 0, 0, 0, 0, 0, 5, 118
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\Blog Recommendation\index.jsx", "JavaScript JSX", 0, 0, 118, 0, 0, 0, 0, 5, 12, 135
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\ClapAction\index.jsx", "JavaScript JSX", 0, 0, 171, 0, 0, 0, 0, 1, 16, 188
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\ClappedUserListModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 81, 0, 0, 0, 0, 0, 7, 88
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\ClappedUserListModal\index.jsx", "JavaScript JSX", 0, 0, 129, 0, 0, 0, 0, 5, 16, 150
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\CommentAction\index.jsx", "JavaScript JSX", 0, 0, 57, 0, 0, 0, 0, 0, 7, 64
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\CommentDrawer\ListItem\index.jsx", "JavaScript JSX", 0, 0, 221, 0, 0, 0, 0, 0, 15, 236
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\CommentDrawer\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 45, 0, 0, 0, 0, 0, 3, 48
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\CommentDrawer\index.jsx", "JavaScript JSX", 0, 0, 230, 0, 0, 0, 0, 3, 23, 256
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\Comments comp\ListItem\index.jsx", "JavaScript JSX", 0, 0, 219, 0, 0, 0, 0, 0, 16, 235
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\Comments comp\index.jsx", "JavaScript JSX", 0, 0, 192, 0, 0, 0, 0, 1, 19, 212
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\FollowBtn\index.jsx", "JavaScript JSX", 0, 0, 54, 0, 0, 0, 0, 0, 6, 60
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\MoreOptionsComp\index.jsx", "JavaScript JSX", 0, 0, 82, 0, 0, 0, 0, 0, 7, 89
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\PublicationLeftSection\index.jsx", "JavaScript JSX", 0, 0, 86, 0, 0, 0, 0, 0, 6, 92
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PostDetailsPageComponents\ViewImage\index.jsx", "JavaScript JSX", 0, 0, 22, 0, 0, 0, 0, 1, 7, 30
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\FollowersSection\index.jsx", "JavaScript JSX", 0, 0, 88, 0, 0, 0, 0, 0, 9, 97
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\FollowingSection\index.jsx", "JavaScript JSX", 0, 0, 85, 0, 0, 0, 0, 0, 13, 98
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\HomeSection\BlogComp\MoreButtonComp\index.jsx", "JavaScript JSX", 0, 0, 56, 0, 0, 0, 0, 0, 5, 61
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\HomeSection\BlogComp\index.jsx", "JavaScript JSX", 0, 0, 150, 0, 0, 0, 0, 3, 6, 159
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\HomeSection\BlogComp\skeleton.jsx", "JavaScript JSX", 0, 0, 68, 0, 0, 0, 0, 2, 5, 75
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\ListSection\ListComp\MoreButton\index.jsx", "JavaScript JSX", 0, 0, 288, 0, 0, 0, 0, 4, 38, 330
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\ListSection\ListComp\Save\index.jsx", "JavaScript JSX", 0, 0, 73, 0, 0, 0, 0, 0, 10, 83
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\ListSection\ListComp\index.jsx", "JavaScript JSX", 0, 0, 81, 0, 0, 0, 0, 0, 6, 87
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\ListSection\ListComp\skeleton.jsx", "JavaScript JSX", 0, 0, 57, 0, 0, 0, 0, 0, 4, 61
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\ListSection\ListModals\delete.jsx", "JavaScript JSX", 0, 0, 58, 0, 0, 0, 0, 0, 6, 64
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\ListSection\ListModals\edit.jsx", "JavaScript JSX", 0, 0, 131, 0, 0, 0, 0, 0, 10, 141
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\ListSection\ListModals\hideResponses.jsx", "JavaScript JSX", 0, 0, 58, 0, 0, 0, 0, 0, 6, 64
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\ListSection\ListModals\makePrivate.jsx", "JavaScript JSX", 0, 0, 58, 0, 0, 0, 0, 0, 6, 64
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\RightSection\FollowingComp\index.jsx", "JavaScript JSX", 0, 0, 179, 0, 0, 0, 0, 0, 18, 197
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\RightSection\ListComp\index.jsx", "JavaScript JSX", 0, 0, 43, 0, 0, 0, 0, 0, 4, 47
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\ProfileComp\RightSection\index.jsx", "JavaScript JSX", 0, 0, 184, 0, 0, 0, 0, 11, 16, 211
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\BlogSection\ListItem\index.jsx", "JavaScript JSX", 0, 0, 64, 0, 0, 0, 0, 0, 4, 68
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\BlogSection\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 55, 0, 0, 0, 0, 0, 5, 60
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\BlogSection\index.jsx", "JavaScript JSX", 0, 0, 160, 0, 0, 0, 0, 0, 17, 177
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\EditorsList\ListItem\index.jsx", "JavaScript JSX", 0, 0, 83, 0, 0, 0, 0, 2, 10, 95
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\EditorsList\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 39, 0, 0, 0, 0, 0, 4, 43
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\EditorsList\index.jsx", "JavaScript JSX", 0, 0, 85, 0, 0, 0, 0, 1, 12, 98
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\Header\index.jsx", "JavaScript JSX", 0, 0, 102, 0, 0, 0, 0, 0, 14, 116
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\Header\skeleton.jsx", "JavaScript JSX", 0, 0, 34, 0, 0, 0, 0, 0, 5, 39
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\InboxBtn\index.jsx", "JavaScript JSX", 0, 0, 16, 0, 0, 0, 0, 0, 3, 19
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\MangePublicationBtn\index.jsx", "JavaScript JSX", 0, 0, 38, 0, 0, 0, 0, 0, 3, 41
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationDetails\NoData\index.jsx", "JavaScript JSX", 0, 0, 25, 0, 0, 0, 0, 0, 3, 28
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationFollowers\Header\index.jsx", "JavaScript JSX", 0, 0, 32, 0, 0, 0, 0, 0, 3, 35
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationFollowers\MainSection\ListItem\index.jsx", "JavaScript JSX", 0, 0, 81, 0, 0, 0, 0, 0, 12, 93
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationFollowers\MainSection\index.jsx", "JavaScript JSX", 0, 0, 82, 0, 0, 0, 0, 0, 12, 94
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationFollowers\RightSection\ListItem\index.jsx", "JavaScript JSX", 0, 0, 73, 0, 0, 0, 0, 0, 10, 83
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationFollowers\RightSection\index.jsx", "JavaScript JSX", 0, 0, 128, 0, 0, 0, 0, 0, 15, 143
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationInbox\Common\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 76, 0, 0, 0, 0, 0, 7, 83
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationInbox\Published\BlogComp\index.jsx", "JavaScript JSX", 0, 0, 114, 0, 0, 0, 0, 3, 9, 126
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationInbox\Published\index.jsx", "JavaScript JSX", 0, 0, 92, 0, 0, 0, 0, 2, 11, 105
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationInbox\Submissions\BlogComp\StatusAction\index.jsx", "JavaScript JSX", 0, 0, 96, 0, 0, 0, 0, 1, 11, 108
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationInbox\Submissions\BlogComp\index.jsx", "JavaScript JSX", 0, 0, 110, 0, 0, 0, 0, 3, 9, 122
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationInbox\Submissions\index.jsx", "JavaScript JSX", 0, 0, 92, 0, 0, 0, 0, 1, 11, 104
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationInbox\skeleton.jsx", "JavaScript JSX", 0, 0, 68, 0, 0, 0, 0, 2, 6, 76
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationSettings\DeletePublicationModal\index.jsx", "JavaScript JSX", 0, 0, 54, 0, 0, 0, 0, 0, 6, 60
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationSettings\Header\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 41, 0, 0, 0, 0, 0, 6, 47
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationSettings\Header\index.jsx", "JavaScript JSX", 0, 0, 27, 0, 0, 0, 0, 0, 4, 31
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationSettings\Inputs\Description\index.jsx", "JavaScript JSX", 0, 0, 25, 0, 0, 0, 0, 0, 7, 32
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationSettings\Inputs\Editor\index.jsx", "JavaScript JSX", 0, 0, 90, 0, 0, 0, 0, 0, 13, 103
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationSettings\Inputs\Image\index.jsx", "JavaScript JSX", 0, 0, 81, 0, 0, 0, 0, 1, 12, 94
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationSettings\Inputs\Name\index.jsx", "JavaScript JSX", 0, 0, 38, 0, 0, 0, 0, 0, 8, 46
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationSettings\Inputs\Topic\index.jsx", "JavaScript JSX", 0, 0, 72, 0, 0, 0, 0, 0, 10, 82
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\PublicationSettings\Inputs\Writer\index.jsx", "JavaScript JSX", 0, 0, 86, 0, 0, 0, 0, 0, 10, 96
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Common\NavSection\index.jsx", "JavaScript JSX", 0, 0, 62, 0, 0, 0, 0, 0, 6, 68
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Common\PublicationListItem\index.jsx", "JavaScript JSX", 0, 0, 73, 0, 0, 0, 0, 0, 9, 82
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Common\RightSection\ListItem\index.jsx", "JavaScript JSX", 0, 0, 73, 0, 0, 0, 0, 0, 11, 84
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Common\RightSection\index.jsx", "JavaScript JSX", 0, 0, 69, 0, 0, 0, 0, 0, 8, 77
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Common\TopicListItem\index.jsx", "JavaScript JSX", 0, 0, 98, 0, 0, 0, 0, 0, 10, 108
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Common\UserListItem\index.jsx", "JavaScript JSX", 0, 0, 77, 0, 0, 0, 0, 0, 11, 88
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Following\AllFollowingPublicationsModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 80, 0, 0, 0, 0, 0, 7, 87
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Following\AllFollowingPublicationsModal\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 31, 0, 0, 0, 0, 0, 5, 36
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Following\AllFollowingPublicationsModal\index.jsx", "JavaScript JSX", 0, 0, 79, 0, 0, 0, 0, 0, 11, 90
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Following\ViewAllFollowingModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 76, 0, 0, 0, 0, 0, 11, 87
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Following\ViewAllFollowingModal\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 31, 0, 0, 0, 0, 0, 5, 36
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Following\ViewAllFollowingModal\index.jsx", "JavaScript JSX", 0, 0, 79, 0, 0, 0, 0, 0, 11, 90
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Following\ViewFollowingTopicsModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 97, 0, 0, 0, 0, 0, 9, 106
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Following\ViewFollowingTopicsModal\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 29, 0, 0, 0, 0, 0, 4, 33
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Following\ViewFollowingTopicsModal\index.jsx", "JavaScript JSX", 0, 0, 61, 0, 0, 0, 0, 0, 9, 70
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Mute\PublicationListItem\index.jsx", "JavaScript JSX", 0, 0, 71, 0, 0, 0, 0, 0, 7, 78
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Mute\UserListItem\index.jsx", "JavaScript JSX", 0, 0, 71, 0, 0, 0, 0, 0, 7, 78
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Mute\ViewAllMutedPublicationsModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 76, 0, 0, 0, 0, 0, 7, 83
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Mute\ViewAllMutedPublicationsModal\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 31, 0, 0, 0, 0, 0, 5, 36
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Mute\ViewAllMutedPublicationsModal\index.jsx", "JavaScript JSX", 0, 0, 86, 0, 0, 0, 0, 0, 12, 98
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Mute\ViewAllMutedUsersModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 78, 0, 0, 0, 0, 0, 7, 85
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Mute\ViewAllMutedUsersModal\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 31, 0, 0, 0, 0, 0, 5, 36
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Mute\ViewAllMutedUsersModal\index.jsx", "JavaScript JSX", 0, 0, 86, 0, 0, 0, 0, 0, 11, 97
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Suggestion\ViewAllPublicationSuggestionModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 80, 0, 0, 0, 0, 0, 7, 87
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Suggestion\ViewAllPublicationSuggestionModal\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 29, 0, 0, 0, 0, 0, 4, 33
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Suggestion\ViewAllPublicationSuggestionModal\index.jsx", "JavaScript JSX", 0, 0, 80, 0, 0, 0, 0, 0, 11, 91
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Suggestion\ViewAllTopicsSuggestionModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 95, 0, 0, 0, 0, 0, 9, 104
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Suggestion\ViewAllTopicsSuggestionModal\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 29, 0, 0, 0, 0, 0, 4, 33
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Suggestion\ViewAllTopicsSuggestionModal\index.jsx", "JavaScript JSX", 0, 0, 62, 0, 0, 0, 0, 0, 9, 71
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Suggestion\ViewAllUserSuggestionModal\ListItem\index.jsx", "JavaScript JSX", 0, 0, 74, 0, 0, 0, 0, 0, 11, 85
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Suggestion\ViewAllUserSuggestionModal\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 31, 0, 0, 0, 0, 0, 5, 36
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Recommendation\Suggestion\ViewAllUserSuggestionModal\index.jsx", "JavaScript JSX", 0, 0, 80, 0, 0, 0, 0, 0, 10, 90
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\Lists\index.jsx", "JavaScript JSX", 0, 0, 72, 0, 0, 0, 0, 1, 13, 86
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\NoContent\index.jsx", "JavaScript JSX", 0, 0, 11, 0, 0, 0, 0, 0, 3, 14
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\People\ListItem\index.jsx", "JavaScript JSX", 0, 0, 81, 0, 0, 0, 0, 0, 6, 87
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\People\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 50, 0, 0, 0, 0, 0, 3, 53
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\People\index.jsx", "JavaScript JSX", 0, 0, 71, 0, 0, 0, 0, 0, 12, 83
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\Publications\ListItem\index.jsx", "JavaScript JSX", 0, 0, 79, 0, 0, 0, 0, 0, 6, 85
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\Publications\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 50, 0, 0, 0, 0, 0, 3, 53
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\Publications\index.jsx", "JavaScript JSX", 0, 0, 71, 0, 0, 0, 0, 0, 12, 83
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\RecentSearch\ListItem\index.jsx", "JavaScript JSX", 0, 0, 24, 0, 0, 0, 0, 0, 4, 28
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\RecentSearch\index.jsx", "JavaScript JSX", 0, 0, 40, 0, 0, 0, 0, 0, 5, 45
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\Stories\index.jsx", "JavaScript JSX", 0, 0, 71, 0, 0, 0, 0, 0, 12, 83
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\Topics\ListItem\index.jsx", "JavaScript JSX", 0, 0, 12, 0, 0, 0, 0, 0, 3, 15
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\Topics\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 17, 0, 0, 0, 0, 0, 3, 20
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Search\Topics\index.jsx", "JavaScript JSX", 0, 0, 44, 0, 0, 0, 0, 0, 9, 53
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\BlockedUserSection\index.jsx", "JavaScript JSX", 0, 0, 23, 0, 0, 0, 0, 0, 5, 28
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\DeleteAccountSection\index.jsx", "JavaScript JSX", 0, 0, 30, 0, 0, 0, 0, 0, 5, 35
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\EmailSection\index.jsx", "JavaScript JSX", 0, 0, 28, 0, 0, 0, 0, 0, 6, 34
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\HeaderSection\index.jsx", "JavaScript JSX", 0, 0, 61, 0, 0, 0, 0, 1, 8, 70
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\ManagePublicationSection\index.jsx", "JavaScript JSX", 0, 0, 30, 0, 0, 0, 0, 0, 6, 36
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\MutedSection\index.jsx", "JavaScript JSX", 0, 0, 28, 0, 0, 0, 0, 0, 4, 32
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\ProfileInfoSection\index.jsx", "JavaScript JSX", 0, 0, 36, 0, 0, 0, 0, 0, 6, 42
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\RecommendationSection\index.jsx", "JavaScript JSX", 0, 0, 31, 0, 0, 0, 0, 0, 4, 35
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\SignoutAllSessionSection\index.jsx", "JavaScript JSX", 0, 0, 41, 0, 0, 0, 0, 0, 6, 47
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Settings\UsernameSection\index.jsx", "JavaScript JSX", 0, 0, 29, 0, 0, 0, 0, 0, 6, 35
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\AllStats\AlltimeSection\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 75, 0, 0, 0, 0, 0, 10, 85
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\AllStats\AlltimeSection\ListItem\index.jsx", "JavaScript JSX", 0, 0, 46, 0, 0, 0, 0, 0, 3, 49
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\AllStats\AlltimeSection\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 35, 0, 0, 0, 0, 0, 3, 38
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\AllStats\AlltimeSection\index.jsx", "JavaScript JSX", 0, 0, 131, 0, 0, 0, 0, 17, 14, 162
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\AllStats\MonthwiseSection\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 54, 0, 0, 0, 0, 0, 6, 60
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\AllStats\MonthwiseSection\Stats\index.jsx", "JavaScript JSX", 0, 0, 65, 0, 0, 0, 0, 0, 4, 69
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\AllStats\MonthwiseSection\ViewsGraph\index.jsx", "JavaScript JSX", 0, 0, 76, 0, 0, 0, 0, 0, 15, 91
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\AllStats\MonthwiseSection\index.jsx", "JavaScript JSX", 0, 0, 131, 0, 0, 0, 0, 6, 18, 155
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\Audience\AllTimeSection\StatsSection\index.jsx", "JavaScript JSX", 0, 0, 70, 0, 0, 0, 0, 0, 4, 74
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\Audience\AllTimeSection\index.jsx", "JavaScript JSX", 0, 0, 71, 0, 0, 0, 0, 4, 8, 83
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\Audience\YearwiseSection\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 53, 0, 0, 0, 0, 0, 5, 58
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\Audience\YearwiseSection\Graph\index.jsx", "JavaScript JSX", 0, 0, 106, 0, 0, 0, 0, 14, 15, 135
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\Audience\YearwiseSection\index.jsx", "JavaScript JSX", 0, 0, 116, 0, 0, 0, 0, 0, 19, 135
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\BlogStats\Blog\index.jsx", "JavaScript JSX", 0, 0, 76, 0, 0, 0, 0, 0, 4, 80
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\BlogStats\MonthwiseSection\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 55, 0, 0, 0, 0, 0, 6, 61
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\BlogStats\MonthwiseSection\Graphs\Engagement\index.jsx", "JavaScript JSX", 0, 0, 130, 0, 0, 0, 0, 2, 12, 144
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\BlogStats\MonthwiseSection\Graphs\Reads\index.jsx", "JavaScript JSX", 0, 0, 119, 0, 0, 0, 0, 0, 13, 132
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\BlogStats\MonthwiseSection\Graphs\Views\index.jsx", "JavaScript JSX", 0, 0, 86, 0, 0, 0, 0, 0, 13, 99
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\BlogStats\MonthwiseSection\index.jsx", "JavaScript JSX", 0, 0, 149, 0, 0, 0, 0, 4, 16, 169
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\BlogStats\StatsSection\index.jsx", "JavaScript JSX", 0, 0, 69, 0, 0, 0, 0, 1, 4, 74
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\Stats\Common\HeaderMenu\index.jsx", "JavaScript JSX", 0, 0, 41, 0, 0, 0, 0, 0, 5, 46
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\StoriesPageComp\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 66, 0, 0, 0, 0, 0, 7, 73
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\StoriesPageComp\DraftsContent\BlogComp\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 78, 0, 0, 0, 0, 0, 7, 85
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\StoriesPageComp\DraftsContent\BlogComp\index.jsx", "JavaScript JSX", 0, 0, 60, 0, 0, 0, 0, 2, 7, 69
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\StoriesPageComp\DraftsContent\index.jsx", "JavaScript JSX", 0, 0, 96, 0, 0, 0, 0, 0, 11, 107
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\StoriesPageComp\PublishedContent\BlogComp\index.jsx", "JavaScript JSX", 0, 0, 103, 0, 0, 0, 0, 2, 7, 112
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\StoriesPageComp\PublishedContent\index.jsx", "JavaScript JSX", 0, 0, 90, 0, 0, 0, 0, 2, 11, 103
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\StoriesPageComp\SubmissionContent\BlogComp\index.jsx", "JavaScript JSX", 0, 0, 118, 0, 0, 0, 0, 3, 9, 130
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\StoriesPageComp\SubmissionContent\index.jsx", "JavaScript JSX", 0, 0, 198, 0, 0, 0, 0, 2, 17, 217
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\StoriesPageComp\skeleton.jsx", "JavaScript JSX", 0, 0, 68, 0, 0, 0, 0, 2, 6, 76
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\TopicDetails\BlogSection\ListItem\ActionBtn\index.jsx", "JavaScript JSX", 0, 0, 52, 0, 0, 0, 0, 0, 5, 57
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\TopicDetails\BlogSection\ListItem\index.jsx", "JavaScript JSX", 0, 0, 133, 0, 0, 0, 0, 1, 9, 143
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\TopicDetails\BlogSection\ListItem\skeleton.jsx", "JavaScript JSX", 0, 0, 55, 0, 0, 0, 0, 0, 5, 60
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\TopicDetails\BlogSection\index.jsx", "JavaScript JSX", 0, 0, 160, 0, 0, 0, 0, 0, 17, 177
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\TopicDetails\Header\index.jsx", "JavaScript JSX", 0, 0, 79, 0, 0, 0, 0, 0, 8, 87
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\TopicDetails\Header\skeleton.jsx", "JavaScript JSX", 0, 0, 18, 0, 0, 0, 0, 0, 5, 23
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\components\TopicDetails\NoData\index.jsx", "JavaScript JSX", 0, 0, 25, 0, 0, 0, 0, 0, 3, 28
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\constants\constant.js", "JavaScript", 57, 0, 0, 0, 0, 0, 0, 1, 5, 63
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\context\commonContext.jsx", "JavaScript JSX", 0, 0, 28, 0, 0, 0, 0, 0, 7, 35
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\context\followingContext.jsx", "JavaScript JSX", 0, 0, 63, 0, 0, 0, 0, 0, 16, 79
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\context\listContext.jsx", "JavaScript JSX", 0, 0, 40, 0, 0, 0, 0, 0, 12, 52
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\context\mute.jsx", "JavaScript JSX", 0, 0, 102, 0, 0, 0, 0, 0, 23, 125
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\context\publication.jsx", "JavaScript JSX", 0, 0, 61, 0, 0, 0, 0, 0, 16, 77
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\context\userContext.jsx", "JavaScript JSX", 0, 0, 130, 0, 0, 0, 0, 1, 20, 151
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\hooks\onlineStatus.js", "JavaScript", 25, 0, 0, 0, 0, 0, 0, 0, 8, 33
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\hooks\requestHandler.js", "JavaScript", 43, 0, 0, 0, 0, 0, 0, 0, 10, 53
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\hooks\toggleMute.js", "JavaScript", 116, 0, 0, 0, 0, 0, 0, 0, 20, 136
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\hooks\togglePublicationFollow.js", "JavaScript", 56, 0, 0, 0, 0, 0, 0, 0, 11, 67
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\hooks\toggleUserFollow.js", "JavaScript", 56, 0, 0, 0, 0, 0, 0, 0, 11, 67
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\hooks\upload.js", "JavaScript", 61, 0, 0, 0, 0, 0, 0, 3, 13, 77
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\hooks\useInfiniteScroll.js", "JavaScript", 30, 0, 0, 0, 0, 0, 0, 0, 9, 39
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\index.css", "PostCSS", 0, 0, 0, 0, 7381, 0, 0, 28, 2390, 9799
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\main.jsx", "JavaScript JSX", 0, 0, 47, 0, 0, 0, 0, 2, 2, 51
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\About\index.jsx", "JavaScript JSX", 0, 0, 111, 0, 0, 0, 0, 3, 7, 121
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Common\index.jsx", "JavaScript JSX", 0, 0, 42, 0, 0, 0, 0, 0, 8, 50
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Common\indexBack.jsx", "JavaScript JSX", 0, 0, 48, 0, 0, 0, 0, 0, 6, 54
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Create post\index.jsx", "JavaScript JSX", 0, 0, 151, 0, 0, 0, 0, 0, 23, 174
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\EmailVerification\index.jsx", "JavaScript JSX", 0, 0, 85, 0, 0, 0, 0, 0, 14, 99
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Error\index.jsx", "JavaScript JSX", 0, 0, 20, 0, 0, 0, 0, 5, 6, 31
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\ForgotPassword\index.jsx", "JavaScript JSX", 0, 0, 83, 0, 0, 0, 0, 0, 11, 94
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Home\Home Protected\index.jsx", "JavaScript JSX", 0, 0, 12, 0, 0, 0, 0, 3, 4, 19
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Library\Home\index.jsx", "JavaScript JSX", 0, 0, 69, 0, 0, 0, 0, 2, 11, 82
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Library\ReadingHistory\index.jsx", "JavaScript JSX", 0, 0, 120, 0, 0, 0, 0, 5, 18, 143
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Library\SavedLists\index.jsx", "JavaScript JSX", 0, 0, 78, 0, 0, 0, 0, 1, 11, 90
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Library\index.jsx", "JavaScript JSX", 0, 0, 34, 0, 0, 0, 0, 0, 6, 40
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\ListDetails\index.jsx", "JavaScript JSX", 0, 0, 404, 0, 0, 0, 0, 5, 34, 443
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Me\index.jsx", "JavaScript JSX", 0, 0, 10, 0, 0, 0, 0, 0, 4, 14
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\NewPublication\index.jsx", "JavaScript JSX", 0, 0, 123, 0, 0, 0, 0, 4, 18, 145
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\NoInternet\index.jsx", "JavaScript JSX", 0, 0, 21, 0, 0, 0, 0, 5, 6, 32
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Not found\index.jsx", "JavaScript JSX", 0, 0, 9, 0, 0, 0, 0, 0, 3, 12
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Notification\index.jsx", "JavaScript JSX", 0, 0, 12, 0, 0, 0, 0, 0, 3, 15
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Post Details\index.jsx", "JavaScript JSX", 0, 0, 303, 0, 0, 0, 0, 9, 31, 343
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Post Details\pageWrapper.jsx", "JavaScript JSX", 0, 0, 8, 0, 0, 0, 0, 0, 4, 12
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Post Details\skeleton.jsx", "JavaScript JSX", 0, 0, 66, 0, 0, 0, 0, 2, 4, 72
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Profile\About\index.jsx", "JavaScript JSX", 0, 0, 140, 0, 0, 0, 0, 4, 17, 161
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Profile\CommonLayout\index.jsx", "JavaScript JSX", 0, 0, 176, 0, 0, 0, 0, 2, 12, 190
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Profile\Follower\index.jsx", "JavaScript JSX", 0, 0, 108, 0, 0, 0, 0, 0, 15, 123
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Profile\Following\index.jsx", "JavaScript JSX", 0, 0, 127, 0, 0, 0, 0, 0, 14, 141
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Profile\Home\index.jsx", "JavaScript JSX", 0, 0, 71, 0, 0, 0, 0, 1, 10, 82
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Profile\List\index.jsx", "JavaScript JSX", 0, 0, 38, 0, 0, 0, 0, 0, 6, 44
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Profile\index.jsx", "JavaScript JSX", 0, 0, 8, 0, 0, 0, 0, 0, 4, 12
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Publication\Followers\index.jsx", "JavaScript JSX", 0, 0, 48, 0, 0, 0, 0, 7, 10, 65
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Publication\Inbox\index.jsx", "JavaScript JSX", 0, 0, 114, 0, 0, 0, 0, 5, 15, 134
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Publication\PublicationDetails\index.jsx", "JavaScript JSX", 0, 0, 54, 0, 0, 0, 0, 1, 9, 64
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Publication\PublicationDetails\wrapper.jsx", "JavaScript JSX", 0, 0, 8, 0, 0, 0, 0, 0, 4, 12
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Publication\Settings\index.jsx", "JavaScript JSX", 0, 0, 161, 0, 0, 0, 0, 6, 22, 189
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Publication\Settings\wrapper.jsx", "JavaScript JSX", 0, 0, 8, 0, 0, 0, 0, 0, 4, 12
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Recommendation\Following\index.jsx", "JavaScript JSX", 0, 0, 245, 0, 0, 0, 0, 4, 21, 270
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Recommendation\Muted\index.jsx", "JavaScript JSX", 0, 0, 144, 0, 0, 0, 0, 4, 14, 162
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Recommendation\ReadingHistory\index.jsx", "JavaScript JSX", 0, 0, 143, 0, 0, 0, 0, 6, 24, 173
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Recommendation\Suggestions\index.jsx", "JavaScript JSX", 0, 0, 175, 0, 0, 0, 0, 3, 20, 198
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\ResetPassword\index.jsx", "JavaScript JSX", 0, 0, 181, 0, 0, 0, 0, 0, 18, 199
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Search\index.jsx", "JavaScript JSX", 0, 0, 90, 0, 0, 0, 0, 3, 8, 101
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Search\wrapper.jsx", "JavaScript JSX", 0, 0, 9, 0, 0, 0, 0, 0, 4, 13
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Settings\Account\index.jsx", "JavaScript JSX", 0, 0, 24, 0, 0, 0, 0, 0, 3, 27
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Settings\CommonLayout\index.jsx", "JavaScript JSX", 0, 0, 21, 0, 0, 0, 0, 0, 4, 25
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Settings\Publishing\index.jsx", "JavaScript JSX", 0, 0, 10, 0, 0, 0, 0, 0, 3, 13
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Settings\Security\index.jsx", "JavaScript JSX", 0, 0, 10, 0, 0, 0, 0, 0, 3, 13
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Stats\AllStats\index.jsx", "JavaScript JSX", 0, 0, 24, 0, 0, 0, 0, 0, 3, 27
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Stats\Audience\index.jsx", "JavaScript JSX", 0, 0, 23, 0, 0, 0, 0, 0, 3, 26
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Stats\Blog\index.jsx", "JavaScript JSX", 0, 0, 65, 0, 0, 0, 0, 4, 9, 78
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Stats\index.jsx", "JavaScript JSX", 0, 0, 6, 0, 0, 0, 0, 0, 3, 9
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\Stories\index.jsx", "JavaScript JSX", 0, 0, 101, 0, 0, 0, 0, 5, 12, 118
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\pages\TopicDetails\index.jsx", "JavaScript JSX", 0, 0, 52, 0, 0, 0, 0, 1, 9, 62
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\utils\authChannel.js", "JavaScript", 18, 0, 0, 0, 0, 0, 0, 0, 5, 23
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\utils\common.js", "JavaScript", 32, 0, 0, 0, 0, 0, 0, 0, 8, 40
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\utils\dates.js", "JavaScript", 88, 0, 0, 0, 0, 0, 0, 2, 28, 118
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\utils\getFullDate.js", "JavaScript", 13, 0, 0, 0, 0, 0, 0, 0, 2, 15
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\utils\monthDateFormatter.js", "JavaScript", 34, 0, 0, 0, 0, 0, 0, 0, 10, 44
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\utils\monthDateLongFormatter.js", "JavaScript", 34, 0, 0, 0, 0, 0, 0, 0, 10, 44
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\utils\refreshToken.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\src\utils\toaster.js", "JavaScript", 13, 0, 0, 0, 0, 0, 0, 0, 3, 16
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\vercel.json", "JSON", 0, 8, 0, 0, 0, 0, 0, 0, 1, 9
+"c:\Users\shubh\OneDrive\Desktop\Blog MERN Project\frontend\vite.config.js", "JavaScript", 6, 0, 0, 0, 0, 0, 0, 0, 2, 8
+"Total", "-", 685, 6285, 26083, 17, 7381, 1, 2, 394, 5600, 46448

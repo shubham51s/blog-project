@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { footerOptions } from "../../../../constants/constant";
 import ListItem from "./ListItem";
 import { useRequestHandler } from "../../../../hooks/requestHandler";
 import { useInfiniteScroll } from "../../../../hooks/useInfiniteScroll";
 
 function RightSection() {
+  const footerOptions = [];
   const { requestHandler } = useRequestHandler();
   const [users, setUsers] = useState([]);
 

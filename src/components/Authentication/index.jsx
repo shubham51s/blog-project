@@ -7,7 +7,7 @@ import slidingImg2 from "../../assets/images/slidingImg2.jpeg";
 import slidingImg3 from "../../assets/images/slidingImg3.jpeg";
 import slidingImg4 from "../../assets/images/slidingImg4.jpeg";
 import Slider from "react-slick";
-import TextField from "@mui/material/TextField";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -20,15 +20,17 @@ import Select from "react-select";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { showToast } from "../../utils/toaster";
 import { useRequestHandler } from "../../hooks/requestHandler";
-import { FcGoogle } from "react-icons/fc";
 import { GoogleLogin } from "@react-oauth/google";
 import { broadcastLogin } from "../../utils/authChannel";
 import { useNavigate } from "react-router-dom";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function LoginSignupComp() {
   const { requestHandler } = useRequestHandler();
   const navigate = useNavigate();
   const { setIsShowLoginPopup, isLoginTabActive, setIsLoginTabActive, verifyAuthentication } = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState({ login: false, signup1: false, signup2: false });
 
   const sliderOptions = {
     dots: true, // show dots
@@ -181,6 +183,7 @@ function LoginSignupComp() {
     setErrDetails({ ...defaultErrMsg });
     setIsLoginTabActive(!isLoginTabActive);
     setSelectedTopic([]);
+    setShowPassword((prev) => ({ ...prev, login: false, signup1: false, signup2: false }));
   };
 
   const preSignup = async () => {
@@ -295,6 +298,10 @@ function LoginSignupComp() {
     }
   };
 
+  const togglePassVisibility = (type) => {
+    setShowPassword((prev) => ({ ...prev, [type]: !prev[type] }));
+  };
+
   const googleSignup = async (interests) => {
     setIsLoading(true);
     try {
@@ -312,7 +319,7 @@ function LoginSignupComp() {
       const result = await response.json();
 
       if (response?.status === 201) {
-        await createAutoEngagement();
+        createAutoEngagement();
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -345,11 +352,11 @@ function LoginSignupComp() {
       const result = await response.json();
 
       if (response?.status === 201) {
-        await createAutoEngagement();
+        // createAutoEngagement();
 
-        // showToast("Account created! Check your email to verify your account.");
-        // handleLoginTypeChange();
-        // handleCloseTopicsTab();
+        showToast("Account created! Check your email to verify.");
+        handleLoginTypeChange();
+        handleCloseTopicsTab();
       } else {
         showToast(result?.message || "Some error occured.");
       }
@@ -454,7 +461,7 @@ function LoginSignupComp() {
                     fullWidth
                     placeholder="Enter password"
                     className="w-full h-full font-10"
-                    type="password"
+                    type={showPassword.login ? "text" : "password"}
                     value={userDetails.password}
                     onChange={(e) => handleInputChange("password", e.target.value)}
                     error={errDetails.password}
@@ -465,19 +472,28 @@ function LoginSignupComp() {
                         height: "100%",
                       },
                     }}
+                    slotProps={{
+                      input: {
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton onClick={() => togglePassVisibility("login")} edge="end" aria-label={showPassword.login ? "Hide password" : "Show password"}>
+                              {showPassword.login ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
                   />
                 </div>
               </div>
 
-              {false && (
-                <div className="w-full flex items-center justify-end margin-6" style={{ marginBottom: 0 }}>
-                  <p className="color-3 custom-line-h-1 margin-6 font-normal custom-fs-1" style={{ marginBottom: 0 }}>
-                    <button onClick={() => navigate("/forgot-password")} className="underline cursor-pointer m-0 p-0">
-                      Forgot password?
-                    </button>
-                  </p>
-                </div>
-              )}
+              <div className="w-full flex items-center justify-end margin-6" style={{ marginBottom: 0 }}>
+                <p className="color-3 custom-line-h-1 margin-6 font-normal custom-fs-1" style={{ marginBottom: 0 }}>
+                  <button onClick={() => navigate("/forgot-password")} className="underline cursor-pointer m-0 p-0">
+                    Forgot password?
+                  </button>
+                </p>
+              </div>
 
               <div className="border-radius-9 margin65" style={{ marginInline: 0 }}>
                 <GoogleLogin
@@ -575,7 +591,7 @@ function LoginSignupComp() {
                   fullWidth
                   placeholder="Enter password"
                   className="w-full h-full font-10"
-                  type="password"
+                  type={showPassword.signup1 ? "text" : "password"}
                   value={userDetails.password}
                   onChange={(e) => handleInputChange("password", e.target.value)}
                   error={errDetails.password}
@@ -586,6 +602,17 @@ function LoginSignupComp() {
                       height: "100%",
                     },
                   }}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => togglePassVisibility("signup1")} edge="end" aria-label={showPassword.signup1 ? "Hide password" : "Show password"}>
+                            {showPassword.signup1 ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
                 />
               </div>
 
@@ -594,7 +621,7 @@ function LoginSignupComp() {
                   fullWidth
                   placeholder="Confirm password"
                   className="w-full h-full font-10"
-                  type="password"
+                  type={showPassword.signup2 ? "text" : "password"}
                   value={userDetails.confirmPass}
                   onChange={(e) => handleInputChange("confirmPass", e.target.value)}
                   error={errDetails.confirmPass}
@@ -605,26 +632,39 @@ function LoginSignupComp() {
                       height: "100%",
                     },
                   }}
-                />
-              </div>
-              <div className="w-full height-2 flex items-center gap-4 margin53 select-none color-4">
-                <FormLabel
-                  className="font-10"
-                  sx={{
-                    color: "inherit",
-                    "&.Mui-focused": {
-                      color: "inherit",
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => togglePassVisibility("signup2")} edge="end" aria-label={showPassword.signup2 ? "Hide password" : "Show password"}>
+                            {showPassword.signup2 ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
                     },
                   }}
-                >
-                  Gender:{" "}
-                </FormLabel>
-                <RadioGroup value={userDetails.gender} onChange={(e) => setUserDetails((prev) => ({ ...prev, gender: e.target.value }))} row name="gender">
-                  <FormControlLabel className="font-10" value="male" control={<Radio />} label="Male" />
-                  <FormControlLabel className="font-10" value="female" control={<Radio />} label="Female" />
-                  <FormControlLabel className="font-10" value="other" control={<Radio />} label="Other" />
-                </RadioGroup>
+                />
               </div>
+              {false && (
+                <div className="w-full height-2 flex items-center gap-4 margin53 select-none color-4">
+                  <FormLabel
+                    className="font-10"
+                    sx={{
+                      color: "inherit",
+                      "&.Mui-focused": {
+                        color: "inherit",
+                      },
+                    }}
+                  >
+                    Gender:{" "}
+                  </FormLabel>
+                  <RadioGroup value={userDetails.gender} onChange={(e) => setUserDetails((prev) => ({ ...prev, gender: e.target.value }))} row name="gender">
+                    <FormControlLabel className="font-10" value="male" control={<Radio />} label="Male" />
+                    <FormControlLabel className="font-10" value="female" control={<Radio />} label="Female" />
+                    <FormControlLabel className="font-10" value="other" control={<Radio />} label="Other" />
+                  </RadioGroup>
+                </div>
+              )}
 
               <div className="flex items-center justify-center margin53">
                 <p className="color-3 custom-line-h-1 m-0 font-normal custom-fs-1" style={{ marginBottom: 0 }}>
