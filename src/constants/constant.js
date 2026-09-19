@@ -4,7 +4,7 @@ const urlBasePath = "https://blog-project-backend-production.up.railway.app/api/
 
 const footerOptions = [];
 
-const defaultLoaderTime = 333;
+const defaultLoaderTime = 133;
 const defaultLimit = 20;
 const appName = "StoryNest";
 
