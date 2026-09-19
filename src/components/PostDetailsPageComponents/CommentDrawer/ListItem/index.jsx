@@ -144,42 +144,44 @@ function ListItem({ item, setBlog, setRecentComments }) {
                       </p>
                     </div>
                   </div>
-                  <div className="inline-block">
-                    <Popover.Root>
-                      <Popover.Trigger>
-                        <div className="custom-px-2 padding-36 cursor-pointer m-0">
-                          <div className="width-13 aspect-square">
-                            <IoIosMore className="w-full h-full" />
+                  {comment.user._id === userInfo._id && (
+                    <div className="inline-block">
+                      <Popover.Root>
+                        <Popover.Trigger>
+                          <div className="custom-px-2 padding-36 cursor-pointer m-0">
+                            <div className="width-13 aspect-square">
+                              <IoIosMore className="w-full h-full" />
+                            </div>
                           </div>
-                        </div>
-                      </Popover.Trigger>
-                      <Popover.Content side="bottom" align="middle" sideOffset={1}>
-                        <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
-                          {comment.user._id === userInfo._id && (
-                            <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
-                              <li className="padding-1 custom-fs-1 color-4 font-normal">
-                                <button onClick={handleEditBtnClick} disabled={isLoading} className="color-3 cursor-pointer m-0 p-0 opacity-[0.9] transition-all duration-75 ease-in hover:opacity-100">
-                                  Edit response
-                                </button>
-                              </li>
-                              <li className="padding-1 custom-fs-1 color-4 font-normal">
-                                <button onClick={() => handleDeleteComment()} disabled={isLoading} className="text-[#c94a4a] cursor-pointer m-0 p-0">
-                                  Delete response
-                                </button>
-                              </li>
-                            </ul>
-                          )}
-                          {comment.user._id !== userInfo._id && false && (
-                            <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
-                              <li className="padding-1 custom-fs-1 color-4 font-normal">
-                                <button className="text-[#c94a4a] cursor-pointer m-0 p-0">Report response...</button>
-                              </li>
-                            </ul>
-                          )}
-                        </div>
-                      </Popover.Content>
-                    </Popover.Root>
-                  </div>
+                        </Popover.Trigger>
+                        <Popover.Content side="bottom" align="middle" sideOffset={1}>
+                          <div className="box-shadow-4 border-radius-3 box-border custom-bg-8">
+                            {comment.user._id === userInfo._id && (
+                              <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
+                                <li className="padding-1 custom-fs-1 color-4 font-normal">
+                                  <button onClick={handleEditBtnClick} disabled={isLoading} className="color-3 cursor-pointer m-0 p-0 opacity-[0.9] transition-all duration-75 ease-in hover:opacity-100">
+                                    Edit response
+                                  </button>
+                                </li>
+                                <li className="padding-1 custom-fs-1 color-4 font-normal">
+                                  <button onClick={() => handleDeleteComment()} disabled={isLoading} className="text-[#c94a4a] cursor-pointer m-0 p-0">
+                                    Delete response
+                                  </button>
+                                </li>
+                              </ul>
+                            )}
+                            {comment.user._id !== userInfo._id && (
+                              <ul className="padding-6 flex flex-col items-stretch list-none m-0" style={{ paddingInline: 0 }}>
+                                <li className="padding-1 custom-fs-1 color-4 font-normal">
+                                  <button className="text-[#c94a4a] cursor-pointer m-0 p-0">Report response...</button>
+                                </li>
+                              </ul>
+                            )}
+                          </div>
+                        </Popover.Content>
+                      </Popover.Root>
+                    </div>
+                  )}
                 </div>
                 <div className="margin-35 break-words" style={{ marginBottom: 0, marginInline: 0 }}>
                   <div className="padding-27">
