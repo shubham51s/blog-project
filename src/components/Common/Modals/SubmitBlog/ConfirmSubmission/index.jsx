@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import Select from "react-select";
-import { showToast } from "../../../../../utils/toaster";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
 import { getImageUrl } from "../../../../../utils/common";
+import { showToast } from "../../../../../utils/toaster";
 
 function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publishBlog, edited }) {
   const [isChangePreviewImg, setIsChangePreviewImg] = useState(false);
@@ -30,9 +30,14 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publ
   };
 
   const handleChange = (selected) => {
-    setBlog((prev) => ({ ...prev, selectedTopic: [] }));
-    if (selected.length <= 5) setBlog((prev) => ({ ...prev, selectedTopic: selected }));
-    else showToast("You can select upto 5 topics");
+    console.log("selected: ", selected.length);
+    // setBlog((prev) => ({ ...prev, selectedTopic: [] }));
+
+    if (selected.length > 5) {
+      showToast("You can select upto 5 topics");
+      return;
+    }
+    setBlog((prev) => ({ ...prev, selectedTopic: selected }));
   };
 
   const handlePublishBtnClick = async () => {
