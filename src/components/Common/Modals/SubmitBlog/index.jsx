@@ -167,7 +167,7 @@ function SubmitBlogModal({ id, setIsShowSubmitModal, tabNo = 0, edited = true, c
   }, []);
 
   return createPortal(
-    <div className="fixed z-[9999] custom-bg-8 flex text-center top-0 left-0 right-0 h-screen overflow-x-hidden overflow-y-auto">
+    <div className="fixed z-[1000] custom-bg-8 flex text-center top-0 left-0 right-0 h-screen overflow-x-hidden overflow-y-auto">
       {/* select publication */}
       {((blogLoader && !blog) || (!blogLoader && blog)) && tab === 0 && <SubmitToPublication handlePublicationSelection={handlePublicationSelection} />}
       {/* confirm submit */}

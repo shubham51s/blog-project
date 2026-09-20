@@ -13,7 +13,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
-import { urlBasePath } from "../../constants/constant";
+import { demo, urlBasePath } from "../../constants/constant";
 import { IoMdClose } from "react-icons/io";
 import infinity from "../../assets/images/infinity.png";
 import Select from "react-select";
@@ -69,10 +69,6 @@ function LoginSignupComp() {
   const [googleCredential, setGoogleCredential] = useState(null);
   const [userDetails, setUserDetails] = useState({ ...defaultUserInput });
   const [errDetails, setErrDetails] = useState({ ...defaultErrMsg });
-  const demo = {
-    email: "storynestdemo1@gmail.com",
-    password: "test@123",
-  };
 
   const createAutoEngagement = async () => {
     try {
@@ -85,7 +81,6 @@ function LoginSignupComp() {
       broadcastLogin();
     }
   };
-
   const handleInputChange = (type, val) => {
     if (type === "firstName") {
       setUserDetails((prev) => ({ ...prev, firstName: val }));

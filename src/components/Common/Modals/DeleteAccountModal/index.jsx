@@ -6,6 +6,7 @@ import { useRequestHandler } from "../../../../hooks/requestHandler";
 import ButtonSpinner from "../../ButtonSpinner";
 import { showToast } from "../../../../utils/toaster";
 import { broadcastLogout } from "../../../../utils/authChannel";
+import { demo } from "../../../../constants/constant";
 
 function DeleteAccountModal({ isShowModal, handleCloseModal }) {
   const { userInfo } = useContext(UserContext);
@@ -32,6 +33,11 @@ function DeleteAccountModal({ isShowModal, handleCloseModal }) {
   };
 
   const deleteUser = async () => {
+    if (userInfo.email === demo.email) {
+      showToast("Demo accounts cannot be deleted.", "error");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await requestHandler("/users/delete", "DELETE");

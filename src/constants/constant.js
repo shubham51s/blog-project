@@ -6,5 +6,9 @@ const footerOptions = [];
 const defaultLoaderTime = 133;
 const defaultLimit = 20;
 const appName = "StoryNest";
+const demo = {
+  email: "storynestdemo1@gmail.com",
+  password: "test@123",
+};
 
-export { urlBasePath, footerOptions, defaultLoaderTime, defaultLimit, appName };
+export { urlBasePath, footerOptions, defaultLoaderTime, defaultLimit, appName, demo };
