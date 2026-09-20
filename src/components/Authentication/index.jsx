@@ -81,6 +81,7 @@ function LoginSignupComp() {
       broadcastLogin();
     }
   };
+
   const handleInputChange = (type, val) => {
     if (type === "firstName") {
       setUserDetails((prev) => ({ ...prev, firstName: val }));
