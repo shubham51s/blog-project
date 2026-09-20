@@ -69,6 +69,10 @@ function LoginSignupComp() {
   const [googleCredential, setGoogleCredential] = useState(null);
   const [userDetails, setUserDetails] = useState({ ...defaultUserInput });
   const [errDetails, setErrDetails] = useState({ ...defaultErrMsg });
+  const demo = {
+    email: "storynestdemo1@gmail.com",
+    password: "test@123",
+  };
 
   const createAutoEngagement = async () => {
     try {
@@ -393,6 +397,11 @@ function LoginSignupComp() {
     }
   };
 
+  const getDemoCredentials = () => {
+    handleInputChange("email", demo.email);
+    handleInputChange("password", demo.password);
+  };
+
   useEffect(() => {
     getAllTopics();
   }, []);
@@ -425,6 +434,14 @@ function LoginSignupComp() {
               <h3 className="flex items-center justify-center letter-spacing-4 line-h-5 font-7 color-6 font-normal select-none" style={{ marginTop: 0, marginInline: 0, paddingTop: 0, paddingInline: 0 }}>
                 Welcome back.
               </h3>
+
+              <div className="w-full flex items-center margin-11 custom-gap-1" style={{ marginBottom: 0, marginInline: 0 }}>
+                <p className="custom-line-h-1 font-medium custom-fs-1">
+                  <button disabled={userDetails.email === demo.email && userDetails.password === demo.password} onClick={getDemoCredentials} className={`underline cursor-pointer m-0 p-0 text-red-500 transition-all duration-75 ease hover:text-red-600 ${userDetails.email === demo.email && userDetails.password === demo.password ? "invisible" : "visible"}`}>
+                    Use Demo Credentials
+                  </button>
+                </p>
+              </div>
 
               <div className="w-full margin53">
                 <FormLabel htmlFor="email" className="font-10">
