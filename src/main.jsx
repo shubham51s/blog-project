@@ -12,6 +12,8 @@ import PublicationProvider from "./context/publication.jsx";
 import MuteProvider from "./context/mute.jsx";
 import CommonProvider from "./context/commonContext.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Provider } from "react-redux";
+import { store } from "./app/store.js";
 
 const GOOGLE_CLIENT_ID = "880995115374-i13rse5lkl8on7vlkm7951kugfetle2h.apps.googleusercontent.com";
 
@@ -25,7 +27,9 @@ createRoot(document.getElementById("root")).render(
             <CommonProvider>
               <UserProvider>
                 <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-                  <App />
+                  <Provider store={store}>
+                    <App />
+                  </Provider>
                 </GoogleOAuthProvider>
                 <Toaster
                   position="top-center"
