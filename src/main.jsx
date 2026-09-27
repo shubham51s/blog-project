@@ -12,7 +12,8 @@ import PublicationProvider from "./context/publication.jsx";
 import MuteProvider from "./context/mute.jsx";
 import CommonProvider from "./context/commonContext.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { GOOGLE_CLIENT_ID } from "../constants.js";
+
+const GOOGLE_CLIENT_ID = "880995115374-i13rse5lkl8on7vlkm7951kugfetle2h.apps.googleusercontent.com";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
