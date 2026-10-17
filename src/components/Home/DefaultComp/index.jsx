@@ -76,19 +76,22 @@ function UnauthenticatedHome() {
                     </div>
                   </div>
 
-                  <div className="inline-block">
-                    <div className="custom-m-r">
-                      <p className="color-3 custom-fs-1 font-sans">
-                        <a onClick={() => handleLoginBtnClick("login")} ref={loginRef} className="cursor-pointer m-0 p-0 ">
-                          Sign
-                        </a>
-                      </p>
+                  {/* temporary hidden  */}
+                  {false && (
+                    <div className="inline-block">
+                      <div className="custom-m-r">
+                        <p className="color-3 custom-fs-1 font-sans">
+                          <a onClick={() => handleLoginBtnClick("login")} ref={loginRef} className="cursor-pointer m-0 p-0 ">
+                            Sign
+                          </a>
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div>
                     <span>
-                      <a className="cursor-pointer m-0 p-0" onClick={handleShowSignupBtnClick} ref={signupRef}>
+                      <a className="cursor-pointer m-0 p-0" /*onClick={handleShowSignupBtnClick} */ onClick={() => handleLoginBtnClick("login")} ref={signupRef}>
                         <button id="SignupBtn" className="cursor-pointer transition-colors color-2 duration-300 ease-linear text-center no-underline inline-block bdr-1 rounded-full custom-bdr-1 custom-bg-1 fill-white custom-px-2 custom-py-2 custom-line-h-1 custom-fs-1">
                           Get started
                         </button>
