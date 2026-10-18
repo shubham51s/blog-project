@@ -11,9 +11,12 @@ function MainComp() {
   const { isUserLoggedIn, isShowLoginPopup } = useContext(UserContext);
 
   const isEditDraftPage = !!useMatch("/p/:draftId/edit");
-  const isUserSettingsPage = !!useMatch("/:slug/settings");
+  // const isUserSettingsPage = !!useMatch("/:slug/settings")
+  const match = useMatch("/:slug/settings");
+  const isPublicationSettings = !!(match && match.params.slug !== "me");
   const showHeader = pathname !== "/new-story" && !isEditDraftPage;
-  const showMenu = pathname !== "/new-publication" && !isUserSettingsPage;
+  const showMenu = pathname !== "/new-publication" && !isPublicationSettings;
+  // const showMenu = pathname !== "/new-publication";
 
   if (!isUserLoggedIn) {
     return (
