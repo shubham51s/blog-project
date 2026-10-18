@@ -16,36 +16,36 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 const GOOGLE_CLIENT_ID = "880995115374-i13rse5lkl8on7vlkm7951kugfetle2h.apps.googleusercontent.com";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <MuteProvider>
-        <PublicationProvider>
-          <FollowingProvider>
-            <ListProvider>
-              <CommonProvider>
-                <UserProvider>
-                  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-                    <App />
-                  </GoogleOAuthProvider>
-                  <Toaster
-                    position="top-center"
-                    toastOptions={{
-                      duration: 3000,
-                      style: {
-                        background: "#111",
-                        color: "#fff",
-                        borderRadius: "4px",
-                        fontSize: "14px",
-                        padding: "12px 24px",
-                      },
-                    }}
-                  />
-                </UserProvider>
-              </CommonProvider>
-            </ListProvider>
-          </FollowingProvider>
-        </PublicationProvider>
-      </MuteProvider>
-    </BrowserRouter>
-  </StrictMode>,
+  // <StrictMode>
+  <BrowserRouter>
+    <MuteProvider>
+      <PublicationProvider>
+        <FollowingProvider>
+          <ListProvider>
+            <CommonProvider>
+              <UserProvider>
+                <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                  <App />
+                </GoogleOAuthProvider>
+                <Toaster
+                  position="top-center"
+                  toastOptions={{
+                    duration: 3000,
+                    style: {
+                      background: "#111",
+                      color: "#fff",
+                      borderRadius: "4px",
+                      fontSize: "14px",
+                      padding: "12px 24px",
+                    },
+                  }}
+                />
+              </UserProvider>
+            </CommonProvider>
+          </ListProvider>
+        </FollowingProvider>
+      </PublicationProvider>
+    </MuteProvider>
+  </BrowserRouter>,
+  // </StrictMode>,
 );
