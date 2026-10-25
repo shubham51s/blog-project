@@ -8,7 +8,7 @@ import { FaRegFileAlt } from "react-icons/fa";
 import { GoPerson } from "react-icons/go";
 import { IoStatsChartOutline } from "react-icons/io5";
 import { IoStatsChartSharp } from "react-icons/io5";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { UserContext } from "../../../context/userContext";
 import { GoPersonFill } from "react-icons/go";
 import { useRequestHandler } from "../../../hooks/requestHandler";
@@ -18,7 +18,6 @@ import { scrollToTop } from "../../../utils/common";
 function MenuComp() {
   const { isShowMenu } = useContext(UserContext);
   const { pathname } = useLocation();
-  const navigate = useNavigate();
   const container = useRef(null);
   const { userInfo } = useContext(UserContext);
 

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Outlet, useLocation, useMatch } from "react-router-dom";
+import { Outlet, useLocation, useMatch, useParams } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import HomeDefaultComp from "../../components/Home/DefaultComp";
 import LoginSignupComp from "../../components/Authentication";
@@ -15,7 +15,7 @@ function MainComp() {
   const match = useMatch("/:slug/settings");
   const isPublicationSettings = !!(match && match.params.slug !== "me");
   const showHeader = pathname !== "/new-story" && !isEditDraftPage;
-  const showMenu = pathname !== "/new-publication" && !isPublicationSettings;
+  const showMenu = pathname !== "/new-publication" && pathname !== "/chat" && !isPublicationSettings;
   // const showMenu = pathname !== "/new-publication";
 
   if (!isUserLoggedIn) {

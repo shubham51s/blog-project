@@ -48,6 +48,7 @@ import SearchPageWrapper from "../pages/Search/wrapper";
 import EmailVerification from "../pages/EmailVerification";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
+import ChatPage from "../pages/Chat";
 
 function AppRoutes() {
   return (
@@ -64,6 +65,7 @@ function AppRoutes() {
         <Route path="new-story" element={<CreatePostPage />} />
         <Route path="p/:draftId/edit" element={<CreatePostPage />} />
         <Route path="new-publication" element={<NewPublication />} />
+        <Route path="chat" element={<ChatPage />} />
         <Route path="me" element={<MePageWrapper />}>
           <Route index element={<MePageDefaultComp />} />
           <Route path="lists" element={<LibraryPage />}>
