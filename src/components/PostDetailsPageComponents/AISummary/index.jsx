@@ -15,7 +15,6 @@ function BlogSummary({ blog, fullSummary, setFullSummary, handleClose }) {
     setTypingIndex(0);
 
     try {
-      controller.value = new AbortController();
       const response = await requestHandler(`/blogs/get-ai-summary/${blog._id}`);
       const result = await response.json();
 
@@ -25,8 +24,9 @@ function BlogSummary({ blog, fullSummary, setFullSummary, handleClose }) {
       } else {
         setStatus("error");
       }
-    } catch {
+    } catch (err) {
       setStatus("error");
+      console.error(err);
     }
   };
 
