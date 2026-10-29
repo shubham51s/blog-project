@@ -27,6 +27,7 @@ import FollowBtn from "../../components/PostDetailsPageComponents/FollowBtn";
 import ViewFullImage from "../../components/PostDetailsPageComponents/ViewImage";
 import CommentAction from "../../components/PostDetailsPageComponents/CommentAction";
 import CommentDrawer from "../../components/PostDetailsPageComponents/CommentDrawer";
+import AiSummaryBtn from "../../components/PostDetailsPageComponents/AISummary/button";
 
 function PostDetailsPage() {
   const rootUrl = window.location.origin;
@@ -137,6 +138,15 @@ function PostDetailsPage() {
     }
   };
 
+  const getAiBlogSummary = async (blogId) => {
+    try {
+      const response = await requestHandler(`/blogs/get-ai-summary/${blogId}`);
+      const result = await response.json();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const getBlogDetails = async () => {
     setIsLoading(true);
     try {
@@ -149,6 +159,7 @@ function PostDetailsPage() {
         getMyClapsCount(blog._id);
         setBlog(blog);
         readBlog(blog._id);
+        getAiBlogSummary(blog._id);
       }
     } catch (err) {
       console.error(err);
@@ -161,9 +172,7 @@ function PostDetailsPage() {
   // to update saved blogs in parent also (to sync, not required in every parent but for some cases like blog details page where there are 2 button for save blog so to sync both)
   const handleToggleBlogSaveInParent = (type, listId) => {
     if (type === "add") setBlog((prev) => ({ ...prev, lists: [...prev.lists, listId] }));
-    if (type === "remove") {
-      setBlog((prev) => ({ ...prev, lists: prev.lists.filter((item) => item !== listId) }));
-    }
+    if (type === "remove") setBlog((prev) => ({ ...prev, lists: prev.lists.filter((item) => item !== listId) }));
   };
 
   const handleCopyLink = async () => {
@@ -329,7 +338,7 @@ function PostDetailsPage() {
           {blog && <BlogRecommendComp blog={blog} />}
         </div>
       )}
-
+      {blog && <AiSummaryBtn blog={blog} />}
       {(defaultLoader || isLoading) && <BlogDetailsSkeletonComp />}
       {!defaultLoader && !isLoading && !blog && <NotFoundComp />}
       {/* full screen image view */}

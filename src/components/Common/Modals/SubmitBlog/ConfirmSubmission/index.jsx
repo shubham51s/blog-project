@@ -30,7 +30,6 @@ function ConfirmBlogSubmission({ blog, setBlog, allTopics, handleTabChange, publ
   };
 
   const handleChange = (selected) => {
-    console.log("selected: ", selected.length);
     // setBlog((prev) => ({ ...prev, selectedTopic: [] }));
 
     if (selected.length > 5) {

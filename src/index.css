@@ -2418,6 +2418,60 @@ img {
 
 /* } */
 
+/* ai summary button related */
+
+.ai-summary-button {
+  position: fixed;
+  isolation: isolate;
+  background: white;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.ai-summary-button::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--ai-border-angle, 0deg),
+      #10b981,
+      #06b6d4,
+      #8b5cf6,
+      #ec4899,
+      #10b981);
+  z-index: -1;
+  animation: ai-border-rotate 4s linear infinite;
+}
+
+.ai-summary-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: white;
+  z-index: -1;
+}
+
+@keyframes ai-border-rotate {
+  to {
+    --ai-border-angle: 360deg;
+  }
+}
+
+@property --ai-border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-summary-button::before {
+    animation: none;
+  }
+}
+
+
+
 @media only screen and (min-width: 1280px) {
   .ProseMirror img {
     margin-block: 24px;
