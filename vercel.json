@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/v1/:path*",
-      "destination": "https://blog-project-backend-production.up.railway.app/api/v1/:path*"
+      "destination": "https://storynest-rg3u.onrender.com/api/v1/:path*"
     },
     {
       "source": "/(.*)",
