@@ -7,6 +7,7 @@ import { defaultLoaderTime } from "../../../../constants/constant";
 import { useInfiniteScroll } from "../../../../hooks/useInfiniteScroll";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import * as Popover from "@radix-ui/react-popover";
+import AIChatbot from "./Chatbot";
 
 function HomeMainContentComp() {
   const { requestHandler } = useRequestHandler();
@@ -101,6 +102,11 @@ function HomeMainContentComp() {
     }, defaultLoaderTime);
   };
 
+  const handleViewResults = ({ count, query }) => {
+    console.log("Total results:", count);
+    console.log("Search query:", query);
+  };
+
   useEffect(() => {
     getBlogs();
 
@@ -112,7 +118,6 @@ function HomeMainContentComp() {
   }, []);
 
   return (
-    // <main className="width-20 h-full overflow-y-auto grow flex-shrink basis-auto block">
     <>
       <main className="width-20 grow shrink basis-auto block">
         <div className="block">
@@ -191,6 +196,7 @@ function HomeMainContentComp() {
           </div>
         </div>
       </main>
+      <AIChatbot onViewResults={handleViewResults} />
     </>
   );
 }
